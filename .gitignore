@@ -1,0 +1,4 @@
+/node_modules
+/dist
+/examples/**/package-lock.json
+/examples/**/node_modules

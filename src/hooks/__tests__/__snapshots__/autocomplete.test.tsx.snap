@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`it throws an error if the places library is missing 1`] = `
+[
+  "Google Maps Places library is missing. Please add the places library to the props of the <ApiProvider> component.",
+]
+`;

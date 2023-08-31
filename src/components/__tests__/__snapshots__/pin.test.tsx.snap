@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`pin view logs an error when used outside of AdvancedMarker 1`] = `
+[
+  "The <Pin> component can only be used inside <AdvancedMarker>.",
+]
+`;

@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`it throws an error if the distance matrix service library is missing 1`] = `
+[
+  "Google Maps Distance Matrix library is missing.",
+]
+`;

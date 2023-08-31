@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`throws an exception when rendering outside API provider 1`] = `"<Map> can only be used inside an <ApiProvider> component."`;

@@ -1,0 +1,30 @@
+[
+  {
+    "type": "category",
+    "label": "Overview",
+    "items": ["README", "whats-new", "upgrade-guide", "contributing"]
+  },
+  {
+    "type": "category",
+    "label": "API Reference",
+    "items": [
+      "api-reference/components/api-provider",
+      "api-reference/components/map",
+      "api-reference/components/info-window",
+      "api-reference/components/marker",
+      "api-reference/components/advanced-marker-element",
+      "api-reference/components/pin-element",
+
+      "api-reference/hooks/useGoogleMap",
+      "api-reference/hooks/useDistanceMatrixService",
+      "api-reference/hooks/useDirectionsService",
+      "api-reference/hooks/useAutocompleteService",
+      "api-reference/hooks/usePlacesService",
+      "api-reference/hooks/useStreetViewPanorama",
+      "api-reference/hooks/useMaxZoomService",
+      "api-reference/hooks/useAutocomplete",
+      "api-reference/hooks/useElevationService",
+      "api-reference/hooks/useGeocodingService"
+    ]
+  }
+]
