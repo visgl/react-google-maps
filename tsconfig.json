@@ -12,7 +12,6 @@
     "esModuleInterop": true,
     "moduleResolution": "node",
     "skipLibCheck": true,
-    "plugins": [{"name": "typescript-plugin-css-modules"}],
     "paths": {
       "@vis.gl/react-google-maps": ["./src"]
     }

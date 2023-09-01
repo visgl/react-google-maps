@@ -8,10 +8,30 @@ import React, {
 
 import {GoogleMapsApiLoader} from '../libraries/google-maps-api-loader';
 
+export enum APILoadingStatus {
+  NOT_LOADED = 'NOT_LOADED',
+  LOADING = 'LOADING',
+  LOADED = 'LOADED',
+  FAILED = 'FAILED'
+}
+
+const {NOT_LOADED, LOADING, LOADED, FAILED} = APILoadingStatus;
+
 /**
- * API Provider types
+ * API Provider context
  */
-export interface APILoadingOptions {
+export interface APIProviderContextValue {
+  status: APILoadingStatus;
+  mapInstances: Record<string, google.maps.Map>;
+  addMapInstance: (map: google.maps.Map, id?: string) => void;
+  removeMapInstance: (id?: string) => void;
+  clearMapInstances: () => void;
+}
+
+export const APIProviderContext =
+  React.createContext<APIProviderContextValue | null>(null);
+
+export type APIProviderProps = {
   /**
    * apiKey must be provided to load the Google Maps JavaScript API. To create an API key, see: https://developers.google.com/maps/documentation/javascript/get-api-key
    * Part of:
@@ -45,40 +65,11 @@ export interface APILoadingOptions {
    * Part of: https://developers.google.com/maps/documentation/javascript/url-params
    */
   authReferrerPolicy?: string;
-}
-
-export enum APILoadingStatus {
-  NOT_LOADED = 'NOT_LOADED',
-  LOADING = 'LOADING',
-  LOADED = 'LOADED',
-  FAILED = 'FAILED'
-}
-
-const {NOT_LOADED, LOADING, LOADED, FAILED} = APILoadingStatus;
-
-/**
- * API Provider context
- */
-export interface APIProviderContextValue {
-  status: APILoadingStatus;
-  mapInstances: Record<string, google.maps.Map>;
-  addMapInstance: (map: google.maps.Map, id?: string) => void;
-  removeMapInstance: (id?: string) => void;
-  clearMapInstances: () => void;
-}
-
-export const APIProviderContext =
-  React.createContext<APIProviderContextValue | null>(null);
-
-/**
- * Props for the API Provider component
- */
-export interface APIProviderProps extends APILoadingOptions {
   /**
    * A function that can be used to execute code after the Google Maps JavaScript API has been loaded.
    */
   onLoad?: () => void;
-}
+};
 
 /**
  * local hook to manage access to map-instances.
@@ -142,7 +133,6 @@ function useGoogleMapsApiLoader(props: APIProviderProps): APILoadingStatus {
         }
       })();
     },
-    // FIXME: changes to onLoad callback aren't handled. Maybe remove that functionality?
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [apiKey, librariesString, serializedParams]
   );

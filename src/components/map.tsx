@@ -26,7 +26,7 @@ export const GoogleMapsContext =
 /**
  * Props for the Google Maps Map Component
  */
-export interface MapProps extends google.maps.MapOptions {
+export type MapProps = google.maps.MapOptions & {
   style?: CSSProperties;
   /**
    * Adds custom style to the map by passing a css class.
@@ -58,7 +58,7 @@ export interface MapProps extends google.maps.MapOptions {
    * Initial View State from deck.gl
    */
   initialViewState?: Record<string, unknown>;
-}
+};
 
 /**
  * Component to render a Google Maps map

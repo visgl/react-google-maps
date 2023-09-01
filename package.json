@@ -1,35 +1,38 @@
 {
   "name": "@vis.gl/react-google-maps",
   "version": "0.0.1",
-  "description": "React components and hooks for using Google Maps .",
+  "description": "React components and hooks for Google Maps.",
   "source": "src/index.ts",
   "main": "dist/index.umd.js",
   "module": "dist/index.modern.mjs",
   "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ubilabs/internal-google-maps-react-hooks-copy.git"
+    "url": "git+https://github.com/visgl/react-google-maps.git"
   },
   "bugs": {
-    "url": "https://github.com/ubilabs/internal-google-maps-react-hooks-copy/issues"
+    "url": "https://github.com/visgl/react-google-maps/issues"
   },
-  "homepage": "https://github.com/ubilabs/internal-google-maps-react-hooks-copy#readme",
+  "homepage": "https://github.com/visgl/react-google-maps#readme",
   "license": "MIT",
   "scripts": {
-    "build": "run-p build:*",
+    "clean": "rm -rf ./dist",
+    "build": "npm-run-all clean -p build:*",
     "start": "run-p start:*",
-    "build:microbundle": "rm -rf dist/* && microbundle -o dist/index.js -f modern,umd --globals react=React,react-dom=ReactDOM --jsx React.createElement --no-compress --tsconfig tsconfig.build.json",
-    "start:microbundle": "rm -rf dist/* && microbundle watch -o dist/index.js -f modern,umd --globals react=React,react-dom=ReactDOM --jsx React.createElement --no-compress --tsconfig tsconfig.build.json",
-    "linter": "eslint 'src/**/*.{ts,tsx}'",
-    "typecheck": "tsc --project tsconfig.json --noEmit",
-    "formatter": "prettier --check ./src ./examples",
-    "test": "jest && npm run linter && npm run typecheck && npm run formatter",
-    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
-    "preversion": "npm run test",
-    "version": "npm run changelog && git checkout -b chore/release-${npm_pa ckage_version} && git add packages/library",
-    "postversion": "git push -u origin chore/release-${npm_package_version} && git push --tags --no-verify",
-    "prepublishOnly": "npm run test && npm run build"
+    "build:microbundle": "microbundle -o dist/index.js -f modern,umd --globals react=React,react-dom=ReactDOM --jsx React.createElement --no-compress --tsconfig tsconfig.build.json",
+    "start:microbundle": "microbundle watch -o dist/index.js -f modern,umd --globals react=React,react-dom=ReactDOM --jsx React.createElement --no-compress --tsconfig tsconfig.build.json",
+    "test:linter": "eslint 'src/**/*.{ts,tsx}'",
+    "test:tsc": "tsc --project tsconfig.json --noEmit",
+    "test:prettier": "prettier --check ./src ./examples",
+    "test:unit": "jest",
+    "test": "npm-run-all -p test:linter test:prettier test:tsc -s test:unit",
+    "prepublishOnly": "npm run test && npm run build",
+    "prepack": "npm-run-all clean build"
   },
+  "files": [
+    "./src",
+    "./dist"
+  ],
   "keywords": [
     "React",
     "React components",

@@ -140,6 +140,4 @@ const MyComponent = () => {
 
 ## Examples
 
-Explore
-our [examples directory on GitHub](https://github.com/ubilabs/internal-google-maps-react-hooks-copy/tree/main/packages/examples)
-for full implementation examples.
+Explore our [examples directory on GitHub](./examples) for full implementation examples.
