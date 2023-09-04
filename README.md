@@ -34,13 +34,13 @@ inside all components.
 
 ```tsx
 import React from 'react';
-import {APIProvider, Map, Marker, InfoWindow} from '@vis.gl/react-google-maps';
+import {APIProvider, Map, Marker} from '@vis.gl/react-google-maps';
 
 function App() {
   const position = {lat: 53.54992, lng: 10.00678};
 
   return (
-    <APIProvider googleMapsAPIKey={'YOUR API KEY HERE'}>
+    <APIProvider apiKey={'YOUR API KEY HERE'}>
       <Map center={position} zoom={10}>
         <Marker position={position} />
       </Map>
@@ -118,7 +118,7 @@ Inside another component, accessing the map instances:
 
 ```tsx
 import React, {useEffect} from 'react';
-import {useMap} from '@vis.gl/react-google-maps-hooks';
+import {useMap} from '@vis.gl/react-google-maps';
 
 const MyComponent = () => {
   const mapOne = useMap('map-1');
@@ -137,17 +137,20 @@ const MyComponent = () => {
 ## Using other libraries of the Google Maps API
 
 Besides rendering maps, the Google Maps API has a lot of additional libraries
-for things like geocoding, routing, the places API and a lot more.
-
-These libraries are not loaded by default, which is why this module provides
-a hook `useMapsLibrary()` to handle loading of those libraries.
+for things like geocoding, routing, the places API and a lot more. These libraries
+are not loaded by default, which is why this module provides a hook
+`useMapsLibrary()` to handle loading of those libraries.
 
 For example, if you want to write a component that needs to use the
 `google.maps.places.PlacesService` class, you can implement it like this:
 
 ```tsx
+import {useMapsLibrary} from '@vis.gl/react-google-maps';
+
 const MyComponent = () => {
-  // triggers loading the places library and
+  // triggers loading the places library and returns true once complete (the
+  // component calling the hook gets automatically re-rendered when this is
+  // the case)
   const placesApiLoaded = useMapsLibrary('places');
   const [placesService, setPlacesService] = useState(null);
 
@@ -169,7 +172,7 @@ const MyComponent = () => {
 };
 ```
 
-Or you can create your own hook for this:
+Or you can extract your own hook from this:
 
 ```tsx
 function usePlacesService() {
@@ -184,6 +187,18 @@ function usePlacesService() {
 
   return placesService;
 }
+
+const MyComponent = () => {
+  const placesService = usePlacesService();
+
+  useEffect(() => {
+    if (!placesService) return;
+
+    // ... use placesService ...
+  }, [placesService]);
+
+  return <></>;
+};
 ```
 
 ## Examples
