@@ -6,52 +6,36 @@ instance.
 
 ## Setup
 
-To use the Advanced Marker View component make sure to add `marker` in the libraries array.
-Also, it is necessary to add a custom `mapId` to the map options. To see how this works,
-check out the following tutorial:
+To use the Advanced Marker View component, it is necessary to add a custom `mapId`
+to the map options. To see how this works, check out the following tutorial:
 [Use Map IDs](https://developers.google.com/maps/documentation/get-map-id).
 
 ### APIProvider and Map setup to implement the Advanced Marker View component
 
 ```tsx
-<APIProvider
-  apiKey={loadingOptions.apiKey}
-  // Add marker library here
-  libraries={['marker']}
-  // Add version beta here
-  version={'beta'}>
-  <Map
-    zoom={10}
-    center={{lat, lng}}
-    // Add custom mapId here
-    mapId={'<Your custom MapId here>'}>
-    // Advanced Marker View here
-  </Map>
+<APIProvider apiKey={loadingOptions.apiKey}>
+    <Map
+        zoom={10}
+        center={{lat, lng}}
+        mapId={'<Your custom MapId here>'}>
+
+        <AdvancedMarker position={{...}} />
+    </Map>
 </APIProvider>
 ```
 
 ## Usage
 
 Advanced Marker Element can either be as a standalone component or be customized with
-the [Pin Element component](./pin-element.md) or be displayed with custom HTML.
+the [Pin Element component](./pin.md) or be displayed with custom HTML.
 
 ### Simple Advanced Marker Element implementation
 
 See also: https://developers.google.com/maps/documentation/javascript/adding-a-google-map
 
 ```tsx
-import React, {FunctionComponent} from 'react';
-import {
-  APIProvider,
-  Map,
-  AdvancedMarker
-} from '@vis.gl/react-google-maps-components';
-
 const App = () => (
-  <APIProvider
-    apiKey={'Your API key here'}
-    libraries={['marker']}
-    version={'beta'}>
+  <APIProvider apiKey={'Your API key here'}>
     <Map
       zoom={12}
       center={{lat: 53.54992, lng: 10.00678}}
@@ -68,18 +52,8 @@ export default App;
 See also: https://developers.google.com/maps/documentation/javascript/advanced-markers/basic-customization
 
 ```tsx
-import React, {FunctionComponent} from 'react';
-import {
-  APIProvider,
-  Map,
-  AdvancedMarker
-} from '@vis.gl/react-google-maps-components';
-
-const App: FunctionComponent<Record<string, unknown>> = () => (
-  <APIProvider
-    apiKey={'Your API key here'}
-    libraries={['marker']}
-    version={'beta'}>
+const App = () => (
+  <APIProvider apiKey={'Your API key here'}>
     <Map
       zoom={12}
       center={{lat: 53.54992, lng: 10.00678}}
@@ -98,18 +72,8 @@ export default App;
 See also: https://developers.google.com/maps/documentation/javascript/advanced-markers/html-markers
 
 ```tsx
-import React, {FunctionComponent} from 'react';
-import {
-  APIProvider,
-  Map,
-  AdvancedMarker
-} from '@vis.gl/react-google-maps-components';
-
-const App: FunctionComponent<Record<string, unknown>> = () => (
-  <APIProvider
-    apiKey={'Your API key here'}
-    libraries={['marker']}
-    version={'beta'}>
+const App = () => (
+  <APIProvider apiKey={'Your API key here'}>
     <Map
       zoom={12}
       center={{lat: 53.54992, lng: 10.00678}}
@@ -135,18 +99,8 @@ see
 also: https://developers.google.com/maps/documentation/javascript/advanced-markers/accessible-markers#make_a_marker_draggable
 
 ```tsx
-import React, {FunctionComponent} from 'react';
-import {
-  APIProvider,
-  Map,
-  AdvancedMarker
-} from '@vis.gl/react-google-maps-components';
-
-const App: FunctionComponent<Record<string, unknown>> = () => (
-  <APIProvider
-    apiKey={'Your API key here'}
-    libraries={['marker']}
-    version={'beta'}>
+const App = () => (
+  <APIProvider apiKey={'Your API key here'}>
     <Map
       zoom={12}
       center={{lat: 53.54992, lng: 10.00678}}

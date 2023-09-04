@@ -12,8 +12,8 @@
       "api-reference/components/map",
       "api-reference/components/info-window",
       "api-reference/components/marker",
-      "api-reference/components/advanced-marker-element",
-      "api-reference/components/pin-element",
+      "api-reference/components/advanced-marker",
+      "api-reference/components/pin",
 
       "api-reference/hooks/useGoogleMap",
       "api-reference/hooks/useDistanceMatrixService",
