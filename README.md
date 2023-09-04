@@ -20,7 +20,7 @@ and [Libraries](https://developers.google.com/maps/documentation/javascript#libr
 ## Installation
 
 ```sh
-npm install @vis.gl/react-google-maps -D
+npm install --save @vis.gl/react-google-maps -D
 ```
 
 ## Map Usage
@@ -41,12 +41,8 @@ function App() {
 
   return (
     <APIProvider googleMapsAPIKey={'YOUR API KEY HERE'}>
-      <Map zoom={10} center={position}>
-        <Marker position={position}>
-          <InfoWindow>
-            <p>I am open.</p>
-          </InfoWindow>
-        </Marker>
+      <Map center={position} zoom={10}>
+        <Marker position={position} />
       </Map>
     </APIProvider>
   );
@@ -60,8 +56,8 @@ export default App;
 The `APIProvider` is used to load the Google Maps JavaScript API at the top level of the app component and provides a
 context that holds all map instances that can be accessed via the `useMap` hook.
 
-It is possible to use one or multiple `Map` components inside the `APIProvider`. Make sure to pass the id of the map to
-the `useMap` hook when using multiple maps.
+It is possible to use one or multiple `Map` components inside the `APIProvider`.
+Make sure to pass the id of the map to the `useMap` hook when using multiple maps.
 
 ### Hook usage with one Map component
 
@@ -136,6 +132,58 @@ const MyComponent = () => {
 
   return <></>;
 };
+```
+
+## Using other libraries of the Google Maps API
+
+Besides rendering maps, the Google Maps API has a lot of additional libraries
+for things like geocoding, routing, the places API and a lot more.
+
+These libraries are not loaded by default, which is why this module provides
+a hook `useMapsLibrary()` to handle loading of those libraries.
+
+For example, if you want to write a component that needs to use the
+`google.maps.places.PlacesService` class, you can implement it like this:
+
+```tsx
+const MyComponent = () => {
+  // triggers loading the places library and
+  const placesApiLoaded = useMapsLibrary('places');
+  const [placesService, setPlacesService] = useState(null);
+
+  useEffect(() => {
+    if (!placesApiLoaded) return;
+
+    // when placesApiLoaded is true, the library can be accessed via the
+    // global `google.maps` namespace.
+    setPlacesService(new google.maps.places.PlacesService());
+  }, [placesApiLoaded]);
+
+  useEffect(() => {
+    if (!placesService) return;
+
+    // ...use placesService...
+  }, [placesService]);
+
+  return <></>;
+};
+```
+
+Or you can create your own hook for this:
+
+```tsx
+function usePlacesService() {
+  const placesApiLoaded = useMapsLibrary('places');
+  const [placesService, setPlacesService] = useState(null);
+
+  useEffect(() => {
+    if (!placesApiLoaded) return;
+
+    setPlacesService(new google.maps.places.PlacesService());
+  }, [placesApiLoaded]);
+
+  return placesService;
+}
 ```
 
 ## Examples
