@@ -63,18 +63,12 @@ export const GetStartedLink = styled.a`
   font-weight: bold;
   margin: 24px 0;
   padding: 0 4rem;
-  pointer-events: all;
   display: inline-block;
   text-decoration: none;
   transition: background-color 250ms ease-in, color 250ms ease-in;
   border: solid 2px var(--ifm-color-primary);
   color: var(--ifm-color-gray-200);
-  border-image: linear-gradient(
-    to right,
-    var(--ifm-color-gray-700) 0%,
-    var(--ifm-color-gray-400) 100%
-  );
-  border-image-slice: 2;
+
   &:visited {
     color: var(--ifm-color-gray-200);
   }

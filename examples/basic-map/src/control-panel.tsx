@@ -3,9 +3,10 @@ import * as React from 'react';
 function ControlPanel() {
   return (
     <div className="control-panel">
-      <h3>Example Template</h3>
+      <h3>Basic Map</h3>
       <p>
-        Add a brief description of the example here and update the link below
+        The simplest example possible, just rendering a google map with some
+        settings adjusted.
       </p>
       <div className="source-link">
         <a

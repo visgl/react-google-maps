@@ -7,7 +7,7 @@ import Layout from '@theme/Layout';
 const HeroExample = styled.div`
   background-image: url(images/hero.jpg);
   background-size: cover;
-  background-position: center;
+  background-position: top center;
   height: 100%;
 `;
 
@@ -36,7 +36,6 @@ const TextContainer = styled.div`
   hr {
     border: none;
     background: #e1e8f0;
-    height: 1px;
     margin: 24px 0 0;
     width: 32px;
     height: 2px;
