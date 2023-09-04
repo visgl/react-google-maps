@@ -55,25 +55,25 @@ function App() {
 export default App;
 ```
 
-## Usage of the `useGoogleMap` hook
+## Usage of the `useMap` hook
 
 The `APIProvider` is used to load the Google Maps JavaScript API at the top level of the app component and provides a
-context that holds all map instances that can be accessed via the `useGoogleMap` hook.
+context that holds all map instances that can be accessed via the `useMap` hook.
 
 It is possible to use one or multiple `Map` components inside the `APIProvider`. Make sure to pass the id of the map to
-the `useGoogleMap` hook when using multiple maps.
+the `useMap` hook when using multiple maps.
 
 ### Hook usage with one Map component
 
-The `useGoogleMap()` hook can be used to directly access the `google.maps.Map` instance created by a `<Map>` component
+The `useMap()` hook can be used to directly access the `google.maps.Map` instance created by a `<Map>` component
 in your application.
 
 ```tsx
 import React, {useEffect} from 'react';
-import {APIProvider, useGoogleMap} from '@vis.gl/react-google-maps';
+import {APIProvider, useMap} from '@vis.gl/react-google-maps';
 
 const MyComponent = () => {
-  const map = useGoogleMap();
+  const map = useMap();
 
   useEffect(() => {
     if (!map) return;
@@ -122,11 +122,11 @@ Inside another component, accessing the map instances:
 
 ```tsx
 import React, {useEffect} from 'react';
-import {useGoogleMap} from '@vis.gl/react-google-maps-hooks';
+import {useMap} from '@vis.gl/react-google-maps-hooks';
 
 const MyComponent = () => {
-  const mapOne = useGoogleMap('map-1');
-  const mapTwo = useGoogleMap('map-2');
+  const mapOne = useMap('map-1');
+  const mapTwo = useMap('map-2');
 
   useEffect(() => {
     if (!mapOne || !mapTwo) return;

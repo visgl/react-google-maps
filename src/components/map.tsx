@@ -39,7 +39,7 @@ export type MapProps = google.maps.MapOptions & {
   initialBounds?: google.maps.LatLngBounds | google.maps.LatLngBoundsLiteral;
   /**
    * An id that is added to the map. Needed when using more than one Map component.
-   * This is also needed to reference the map inside the useGoogleMap hook.
+   * This is also needed to reference the map inside the useMap hook.
    */
   id?: string;
   /**

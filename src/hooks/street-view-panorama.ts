@@ -1,7 +1,7 @@
 /* eslint-disable complexity */
 import {useEffect, useState} from 'react';
 import {useApiIsLoaded} from './api-loading-status';
-import {useGoogleMap} from './map-instance';
+import {useMap} from './map-instance';
 
 export interface StreetViewPanoramaProps {
   mapId?: string;
@@ -19,7 +19,7 @@ export const useStreetViewPanorama = (
 ): google.maps.StreetViewPanorama | null => {
   const {mapId, divElement, position, pov, zoom} = props;
   const googleMapsAPIIsLoaded = useApiIsLoaded();
-  const map = useGoogleMap(mapId);
+  const map = useMap(mapId);
 
   const [streetViewPanorama, setStreetViewPanorama] =
     useState<google.maps.StreetViewPanorama | null>(null);

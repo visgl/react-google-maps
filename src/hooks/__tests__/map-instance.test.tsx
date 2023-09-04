@@ -3,7 +3,7 @@ import '@testing-library/jest-dom';
 import {renderHook} from '@testing-library/react';
 import {initialize, mockInstances} from '@googlemaps/jest-mocks';
 
-import {useGoogleMap} from '../map-instance';
+import {useMap} from '../map-instance';
 import {
   APILoadingStatus,
   APIProviderContext,
@@ -60,7 +60,7 @@ test('returns the parent map instance when called without id', async () => {
     </MockApiContextProvider>
   );
 
-  const {result} = renderHook(() => useGoogleMap(), {wrapper});
+  const {result} = renderHook(() => useMap(), {wrapper});
 
   const map = mockInstances.get(google.maps.Map).at(-1);
 
@@ -80,15 +80,15 @@ test('it should return a map instance by its id', () => {
 
   mockContextValue.mapInstances = {one: map1, two: map2};
 
-  let renderHookResult = renderHook(() => useGoogleMap(), {wrapper});
+  let renderHookResult = renderHook(() => useMap(), {wrapper});
   expect(renderHookResult.result.current).toBe(null);
 
-  renderHookResult = renderHook(() => useGoogleMap('one'), {wrapper});
+  renderHookResult = renderHook(() => useMap('one'), {wrapper});
   expect(renderHookResult.result.current).toBe(map1);
 
-  renderHookResult = renderHook(() => useGoogleMap('two'), {wrapper});
+  renderHookResult = renderHook(() => useMap('two'), {wrapper});
   expect(renderHookResult.result.current).toBe(map2);
 
-  renderHookResult = renderHook(() => useGoogleMap('unknown'), {wrapper});
+  renderHookResult = renderHook(() => useMap('unknown'), {wrapper});
   expect(renderHookResult.result.current).toBe(null);
 });

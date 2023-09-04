@@ -1,7 +1,7 @@
 import {useMemo, useEffect, useCallback} from 'react';
 
 import {useApiIsLoaded} from './api-loading-status';
-import {useGoogleMap} from './map-instance';
+import {useMap} from './map-instance';
 import {assertNotNull} from '../libraries/assert-not-null';
 
 export interface DirectionsServiceHookOptions {
@@ -26,7 +26,7 @@ const useDirectionsRenderer = (
   renderOnMap?: boolean,
   renderOptions?: google.maps.DirectionsRendererOptions
 ) => {
-  const map = useGoogleMap(mapId);
+  const map = useMap(mapId);
 
   // create the renderer instance
   const directionsRenderer = useMemo(

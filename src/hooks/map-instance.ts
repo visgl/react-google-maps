@@ -8,9 +8,7 @@ import {GoogleMapsContext} from '../components/map';
  * identified by id or the parent map instance if no id is specified.
  * Returns null if neither can be found.
  */
-export const useGoogleMap = (
-  id: string | null = null
-): google.maps.Map | null => {
+export const useMap = (id: string | null = null): google.maps.Map | null => {
   const {mapInstances = {}} = useContext(APIProviderContext) || {};
   const {map} = useContext(GoogleMapsContext) || {};
 

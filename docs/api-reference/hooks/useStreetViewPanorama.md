@@ -10,7 +10,7 @@ The `StreetViewPanorama` can either be used within a DOM element, like a `<div>`
 ```tsx
 import React, {useEffect} from 'react';
 import {
-  useGoogleMap,
+  useMap,
   useStreetViewPanorama
 } from '@vis.gl/react-google-maps-hooks';
 
@@ -24,7 +24,7 @@ const MyComponent = () => {
     []
   );
 
-  const map = useGoogleMap();
+  const map = useMap();
 
   const position = /** google.maps.LatLng */;
   const pov = /** google.maps.StreetViewPov */;
@@ -44,7 +44,7 @@ or can be created on its own to be used by the map:
 ```tsx
 import React, {useEffect} from 'react';
 import {
-  useGoogleMap,
+  useMap,
   useStreetViewPanorama
 } from '@vis.gl/react-google-maps-hooks';
 

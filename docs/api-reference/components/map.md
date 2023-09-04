@@ -82,7 +82,7 @@ the original default inline style of the map.
 The `initialBounds` property can receive bounds on the initial map load.
 
 When multiple `Map` components are used, it is necessary to apply an id to each Map instance. The id can be used to reference the
-Map instance when using the [`useGoogleMap` hook](../hooks/useGoogleMap.md).
+Map instance when using the [`useMap` hook](../hooks/useMap.md).
 
 ```tsx
 interface MapProps extends google.maps.MapOptions {
@@ -99,5 +99,5 @@ interface MapProps extends google.maps.MapOptions {
 
 To see the Map on the screen, you must set `zoom` and `center` together, or `initialBounds` as options. These
 options can also be set later via `map.setOptions(...)` when the Map instance is accessed via
-the [useGoogleMap hook](../hooks/useGoogleMap.md). The props `viewport`, `viewState` and `initialViewState` are used
+the [useMap hook](../hooks/useMap.md). The props `viewport`, `viewState` and `initialViewState` are used
 for an integration with the [DeckGL React Component](https://deck.gl/docs/get-started/using-with-react) and the Map.

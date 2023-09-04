@@ -15,7 +15,7 @@
       "api-reference/components/advanced-marker",
       "api-reference/components/pin",
 
-      "api-reference/hooks/useGoogleMap",
+      "api-reference/hooks/useMap",
       "api-reference/hooks/useApiIsLoaded",
       "api-reference/hooks/useMapsLibrary",
       "api-reference/hooks/useDistanceMatrixService",

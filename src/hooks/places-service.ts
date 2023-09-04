@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 
 import {useApiIsLoaded} from './api-loading-status';
-import {useGoogleMap} from './map-instance';
+import {useMap} from './map-instance';
 
 export interface PlacesServiceProps {
   mapId?: string;
@@ -16,7 +16,7 @@ export const usePlacesService = (
 ): google.maps.places.PlacesService | null => {
   const {mapId, attributionContainer} = props;
   const isApiLoaded = useApiIsLoaded();
-  const map = useGoogleMap(mapId);
+  const map = useMap(mapId);
 
   const [placesService, setPlacesService] =
     useState<google.maps.places.PlacesService | null>(null);

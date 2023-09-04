@@ -1,4 +1,4 @@
-# `useGoogleMap` Hook
+# `useMap` Hook
 
 React hook to get access to any [google.maps.Map][gmp-map-ref]
 instance within the APIProvider.
@@ -7,12 +7,12 @@ instance within the APIProvider.
 
 ## Usage
 
-When there is only a single map within the `<APIProvider>`, the `useGoogleMap()` hook
+When there is only a single map within the `<APIProvider>`, the `useMap()` hook
 can be called without any arguments and the `<Map>` doesn't need an id.
 
 ```tsx
 const MyComponent = () => {
-  const map = useGoogleMap();
+  const map = useMap();
 
   useEffect(() => {
     if (!map) return;
@@ -34,13 +34,13 @@ const App = () => {
 ```
 
 If there are multiple `<Map>` components in the APIProvider, they are only retrievable
-using the `useGoogleMap()` hook when the hook is either called from a child-component of
+using the `useMap()` hook when the hook is either called from a child-component of
 the map or when an explicit id is specified on both the map and as a parameter of
-the `useGoogleMap()` hook.
+the `useMap()` hook.
 
 ```tsx
 const MyComponent = () => {
-  const map = useGoogleMap('one-of-my-maps');
+  const map = useMap('one-of-my-maps');
 
   useEffect(() => {
     if (!map) return;
