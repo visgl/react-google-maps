@@ -13,6 +13,7 @@ import {createPortal} from 'react-dom';
 import {GoogleMapsContext} from './map';
 
 import type {Ref, PropsWithChildren} from 'react';
+import {useMapsLibrary} from '../hooks/api-loading-status';
 
 export interface AdvancedMarkerContextValue {
   marker: google.maps.marker.AdvancedMarkerElement;
@@ -47,6 +48,7 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
     useState<HTMLDivElement | null>(null);
 
   const map = useContext(GoogleMapsContext)?.map;
+  const markersLibraryReady = useMapsLibrary('marker');
 
   const {
     children,
@@ -66,7 +68,7 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
 
   // create marker instance and add it to the map when map becomes available
   useEffect(() => {
-    if (!map) return;
+    if (!map || !markersLibraryReady) return;
 
     const marker = new google.maps.marker.AdvancedMarkerElement();
     marker.map = map;
@@ -89,7 +91,7 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
       setMarker(null);
       setContentContainer(null);
     };
-  }, [map, numChilds]);
+  }, [map, markersLibraryReady, numChilds]);
 
   // bind all marker events
   useEffect(() => {

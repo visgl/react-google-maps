@@ -16,6 +16,8 @@
       "api-reference/components/pin",
 
       "api-reference/hooks/useGoogleMap",
+      "api-reference/hooks/useApiIsLoaded",
+      "api-reference/hooks/useMapsLibrary",
       "api-reference/hooks/useDistanceMatrixService",
       "api-reference/hooks/useDirectionsService",
       "api-reference/hooks/useAutocompleteService",

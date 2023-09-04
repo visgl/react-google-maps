@@ -16,6 +16,8 @@ let createMarkerSpy: jest.Mock;
 beforeEach(() => {
   initialize();
 
+  google.maps.importLibrary = jest.fn(() => Promise.resolve()) as never;
+
   // Create wrapper component
   wrapper = ({children}: {children: React.ReactNode}) => (
     <APIProvider apiKey={'apikey'}>

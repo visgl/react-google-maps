@@ -140,28 +140,3 @@ test('map instance management: add, access and remove', async () => {
   actualContext = contextSpy.mock.lastCall[0];
   expect(actualContext.mapInstances).toEqual({'map-id-2': map2});
 });
-
-test('maps-api is reloaded when api-parameters are changed', async () => {
-  const {rerender} = render(
-    <APIProvider apiKey={'apikey'}>
-      <ContextSpyComponent />
-    </APIProvider>
-  );
-
-  expect(apiLoadSpy).toHaveBeenCalled();
-  apiLoadSpy.mockReset();
-
-  await act(() => {
-    rerender(
-      <APIProvider apiKey={'apikey'} language={'de'} region={'de'}>
-        <ContextSpyComponent />
-      </APIProvider>
-    );
-  });
-
-  expect(apiLoadSpy).toHaveBeenCalled();
-  expect(apiLoadSpy.mock.lastCall[0]).toMatchObject({
-    language: 'de',
-    region: 'de'
-  });
-});

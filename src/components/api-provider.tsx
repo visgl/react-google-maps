@@ -1,6 +1,7 @@
 import React, {
   PropsWithChildren,
   ReactElement,
+  useCallback,
   useEffect,
   useMemo,
   useState
@@ -22,6 +23,8 @@ const {NOT_LOADED, LOADING, LOADED, FAILED} = APILoadingStatus;
  */
 export interface APIProviderContextValue {
   status: APILoadingStatus;
+  loadedLibraries: Set<string>;
+  importLibrary: typeof google.maps.importLibrary;
   mapInstances: Record<string, google.maps.Map>;
   addMapInstance: (map: google.maps.Map, id?: string) => void;
   removeMapInstance: (id?: string) => void;
@@ -99,10 +102,13 @@ function useMapInstances() {
  * local hook to handle the loading of the maps API, returns the current loading status
  * @param props
  */
-function useGoogleMapsApiLoader(props: APIProviderProps): APILoadingStatus {
-  const {onLoad, apiKey, libraries, ...otherApiParams} = props;
+function useGoogleMapsApiLoader(props: APIProviderProps) {
+  const {onLoad, apiKey, libraries = [], ...otherApiParams} = props;
 
   const [status, setStatus] = useState<APILoadingStatus>(NOT_LOADED);
+  const [loadedLibraries, setLoadedLibraries] = useState<Set<string>>(
+    new Set()
+  );
 
   const librariesString = useMemo(() => libraries?.join(','), [libraries]);
   const serializedParams = useMemo(
@@ -123,6 +129,7 @@ function useGoogleMapsApiLoader(props: APIProviderProps): APILoadingStatus {
           });
 
           setStatus(LOADED);
+          setLoadedLibraries(new Set(['maps', ...libraries]));
 
           if (onLoad) {
             onLoad();
@@ -137,7 +144,27 @@ function useGoogleMapsApiLoader(props: APIProviderProps): APILoadingStatus {
     [apiKey, librariesString, serializedParams]
   );
 
-  return status;
+  const importLibrary: typeof google.maps.importLibrary = useCallback(
+    async (name: string) => {
+      if (!google?.maps?.importLibrary) {
+        throw new Error(
+          'importLibrary was called before google.maps.importLibrary was defined'
+        );
+      }
+
+      const res = await window.google.maps.importLibrary(name);
+      setLoadedLibraries(new Set([...loadedLibraries, name]));
+
+      return res;
+    },
+    []
+  );
+
+  return {
+    status,
+    loadedLibraries,
+    importLibrary
+  };
 }
 
 /**
@@ -150,7 +177,8 @@ export const APIProvider = (
   const {mapInstances, addMapInstance, removeMapInstance, clearMapInstances} =
     useMapInstances();
 
-  const status = useGoogleMapsApiLoader(loaderProps);
+  const {status, loadedLibraries, importLibrary} =
+    useGoogleMapsApiLoader(loaderProps);
 
   return (
     <APIProviderContext.Provider
@@ -159,7 +187,9 @@ export const APIProvider = (
         addMapInstance,
         removeMapInstance,
         clearMapInstances,
-        status
+        status,
+        loadedLibraries,
+        importLibrary
       }}>
       {children}
     </APIProviderContext.Provider>

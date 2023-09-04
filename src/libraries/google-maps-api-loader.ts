@@ -33,7 +33,7 @@ export class GoogleMapsApiLoader {
    * @param params
    */
   static async load(params: ApiParams): Promise<void> {
-    const libraries = params.libraries?.split(',') || [];
+    const libraries = params.libraries ? params.libraries.split(',') : [];
     const serializedParams = this.serializeParams(params);
 
     if (!window.google?.maps?.importLibrary) {
