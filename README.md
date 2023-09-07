@@ -1,4 +1,4 @@
-# React Comnponents for the Google Maps API
+# React Components for the Google Maps API
 
 [![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/visgl/react-google-maps/tree/main/LICENSE)
 
@@ -11,7 +11,7 @@ The map instance can only be accessed, if a `Map` component is used inside the `
 
 ## Description
 
-This is a Typescript / Javascript library to integrate the Google Maps Javascript API into your React application.
+This is a Typescript / JavaScript library to integrate the Google Maps JavaScript API into your React application.
 It comes with a collection of React components to create maps, markers and infowindows, and a set of
 hooks to use some of the Google Maps
 API [Services](https://developers.google.com/maps/documentation/javascript#services)
