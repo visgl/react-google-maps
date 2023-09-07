@@ -64,9 +64,8 @@ const App = () => {
         {/* simple positioned infowindow */}
         <InfoWindow position={{lat: 40, lng: 0}} maxWidth={200}>
           <p>
-            This is the content for another infowindow with arbitrary
-            <em>HTML</em> and
-            <em>react</em>-elements.
+            This is the content for another infowindow with <em>HTML</em>
+            -elements.
           </p>
         </InfoWindow>
 

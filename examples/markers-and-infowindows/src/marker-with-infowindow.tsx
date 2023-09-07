@@ -11,19 +11,21 @@ export const MarkerWithInfowindow = () => {
 
   return (
     <>
+      ,
       <AdvancedMarker
         ref={markerRef}
         onClick={() => setInfowindowOpen(true)}
-        position={{lat: 0, lng: -20}}
+        position={{lat: 28, lng: -82}}
         title={'AdvancedMarker that opens an Infowindow when clicked.'}
       />
-
       {infowindowOpen && (
         <InfoWindow
           anchor={marker}
-          maxWidth={160}
+          maxWidth={200}
           onCloseClick={() => setInfowindowOpen(false)}>
-          This is some content for the InfoWindow!
+          This is an example for the{' '}
+          <code style={{whiteSpace: 'nowrap'}}>&lt;AdvancedMarker /&gt;</code>{' '}
+          combined with an Infowindow.
         </InfoWindow>
       )}
     </>
