@@ -1,4 +1,4 @@
-# `useMapsLibrary` Hook
+# `useApiIsLoaded` Hook
 
 React hook to check if the Google Maps (core-) API has finished loading.
 
