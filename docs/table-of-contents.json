@@ -2,7 +2,13 @@
   {
     "type": "category",
     "label": "Overview",
-    "items": ["README", "whats-new", "upgrade-guide", "contributing"]
+    "items": [
+      "README",
+      "get-started",
+      "whats-new",
+      "upgrade-guide",
+      "contributing"
+    ]
   },
   {
     "type": "category",
