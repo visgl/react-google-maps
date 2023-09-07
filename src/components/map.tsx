@@ -33,7 +33,7 @@ export type MapProps = google.maps.MapOptions & {
    */
   className?: string;
   /**
-   * Adds initial bounds to the map
+   * Adds initial bounds to the map as an alternative to specifying the center/zoom of the map.
    * Calls the fitBounds method internally https://developers.google.com/maps/documentation/javascript/reference/map?hl=en#Map-Methods
    */
   initialBounds?: google.maps.LatLngBounds | google.maps.LatLngBoundsLiteral;

@@ -1,6 +1,6 @@
-# Google Maps React
+# React Comnponents for the Google Maps API
 
-[![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/ubilabs/google-maps-react-hooks/tree/main/LICENSE)
+[![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/visgl/react-google-maps/tree/main/LICENSE)
 
 A library to integrate the Google Maps JavaScript API into React Applications
 using simple components or hooks.
