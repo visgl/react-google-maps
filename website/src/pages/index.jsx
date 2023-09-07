@@ -89,7 +89,7 @@ export default function IndexPage() {
                 deck.gl
               </a>{' '}
               to render performant and compelling 2D and 3D WebGL visualizations
-              on top of your Mapbox GL JS based maps.
+              on top of your Google Maps JavaScript API-based maps.
             </p>
           </TextContainer>
         </div>
