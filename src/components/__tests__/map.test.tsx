@@ -64,10 +64,13 @@ test('map instance is created after api is loaded', async () => {
   expect(createMapSpy).toHaveBeenCalled();
 });
 
-test("doesn't register map when no id is specified", () => {
+test("map is registered as 'default' when no id is specified", () => {
   render(<GoogleMap />, {wrapper});
 
-  expect(mockContextValue.addMapInstance).not.toHaveBeenCalled();
+  expect(mockContextValue.addMapInstance).toHaveBeenCalledWith(
+    mockInstances.get(google.maps.Map).at(-1),
+    undefined
+  );
 });
 
 test('throws an exception when rendering outside API provider', () => {
