@@ -8,7 +8,7 @@ const sidebars = {
     {
       type: 'category',
       label: 'Examples',
-      items: ['basic-map', 'markers-and-infowindows']
+      items: ['basic-map', 'markers-and-infowindows', 'change-map-id']
     }
   ]
 };
