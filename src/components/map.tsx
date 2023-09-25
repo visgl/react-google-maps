@@ -168,9 +168,7 @@ function useMapInstanceHandlerEffects(
       }
 
       return () => {
-        if (!container || !apiIsLoaded) {
-          return;
-        }
+        if (!container || !apiIsLoaded) return;
 
         google.maps.event.clearInstanceListeners(container);
 
@@ -179,7 +177,6 @@ function useMapInstanceHandlerEffects(
         }
 
         setMap(null);
-        setContainer(null);
       };
     },
 
@@ -210,7 +207,7 @@ function useMapInstanceHandlerEffects(
       //   here, since those are updated in google maps internally or using the
       //   viewState parameter externally.
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const {center, zoom, heading, tilt, ...otherOptions} = mapOptions;
+      const {center, zoom, heading, tilt, mapId, ...otherOptions} = mapOptions;
 
       map.setOptions(otherOptions);
     },
