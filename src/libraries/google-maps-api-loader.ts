@@ -26,7 +26,10 @@ const MAPS_API_BASE_URL = 'https://maps.googleapis.com/maps/api/js';
  */
 export class GoogleMapsApiLoader {
   /**
-   * Loads the Google Maps API with the specified parameters and reloads it if necessary.
+   * Loads the Google Maps API with the specified parameters.
+   * Since the maps library can only be loaded once per page, this will
+   * produce a warning when called multiple times with different
+   * parameters.
    *
    * The returned promise resolves when loading completes
    * and rejects in case of an error or when the loading was aborted.
