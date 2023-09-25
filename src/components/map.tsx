@@ -152,10 +152,7 @@ function useMapInstanceHandlerEffects(
       const {addMapInstance, removeMapInstance} = context;
       const newMap = new google.maps.Map(container, mapOptions);
       setMap(newMap);
-
-      if (id) {
-        addMapInstance(newMap, id);
-      }
+      addMapInstance(newMap, id);
 
       if (onLoadMap) {
         google.maps.event.addListenerOnce(newMap, 'idle', () => {
@@ -172,11 +169,8 @@ function useMapInstanceHandlerEffects(
 
         google.maps.event.clearInstanceListeners(container);
 
-        if (id) {
-          removeMapInstance(id);
-        }
-
         setMap(null);
+        removeMapInstance(id);
       };
     },
 
