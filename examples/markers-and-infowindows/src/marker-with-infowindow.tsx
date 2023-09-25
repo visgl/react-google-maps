@@ -11,7 +11,6 @@ export const MarkerWithInfowindow = () => {
 
   return (
     <>
-      ,
       <AdvancedMarker
         ref={markerRef}
         onClick={() => setInfowindowOpen(true)}
