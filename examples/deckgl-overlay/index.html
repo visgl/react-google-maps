@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <title>Example: deck.gl Interleaved Overlay</title>
+
+    <style>
+      body {
+        margin: 0;
+      }
+      #app {
+        width: 100vw;
+        height: 100vh;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module">
+      import {renderToDom} from './src/app';
+      renderToDom(document.querySelector('#app'));
+    </script>
+  </body>
+</html>
