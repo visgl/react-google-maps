@@ -1,23 +1,25 @@
-# React Components for the Google Maps API
+# React Components for the Google Maps JavaScript API
 
 [![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/visgl/react-google-maps/tree/main/LICENSE)
 
 A library to integrate the Google Maps JavaScript API into React Applications
 using simple components or hooks.
 
-The hooks provide the possibility to access different Google Maps services and libraries, as well as the map instance
+The hooks provide the possibility to access different Google Maps Platform services and libraries, as well as the map instance
 itself inside all components that are wrapped inside the `APIProvider`.
 The map instance can only be accessed, if a `Map` component is used inside the `APIProvider`.
 
 ## Description
 
-This is a Typescript / JavaScript library to integrate the Google Maps JavaScript API into your React application.
+This is a Typescript / JavaScript library to integrate the Maps JavaScript API into your React application.
 It comes with a collection of React components to create maps, markers and infowindows, and a set of
-hooks to use some of the Google Maps
+hooks to use some of the Maps JavaScript
 API [Services](https://developers.google.com/maps/documentation/javascript#services)
-and [Libraries](https://developers.google.com/maps/documentation/javascript#libraries).
+and [Libraries](https://developers.google.com/maps/documentation/javascript/libraries).
 
 ## Installation
+
+This library is available via npm as the package [@vis.gl/react-google-maps](https://www.npmjs.com/package/@vis.gl/react-google-maps).
 
 ```sh
 npm install --save @vis.gl/react-google-maps -D
@@ -53,7 +55,7 @@ export default App;
 
 ## Usage of the `useMap` hook
 
-The `APIProvider` is used to load the Google Maps JavaScript API at the top level of the app component and provides a
+The `APIProvider` is used to load the Maps JavaScript API at the top level of the app component and provides a
 context that holds all map instances that can be accessed via the `useMap` hook.
 
 It is possible to use one or multiple `Map` components inside the `APIProvider`.
@@ -134,12 +136,12 @@ const MyComponent = () => {
 };
 ```
 
-## Using other libraries of the Google Maps API
+## Using other libraries of the Google Maps JavaScript API
 
-Besides rendering maps, the Google Maps API has a lot of additional libraries
-for things like geocoding, routing, the places API and a lot more. These libraries
+Besides rendering maps, the Maps JavaScript API has a lot of [additional libraries](https://developers.google.com/maps/documentation/javascript/libraries)
+for things like geocoding, routing, the Places API, Street View, and a lot more. These libraries
 are not loaded by default, which is why this module provides a hook
-`useMapsLibrary()` to handle loading of those libraries.
+`useMapsLibrary()` to handle dynamic loading of those libraries.
 
 For example, if you want to write a component that needs to use the
 `google.maps.places.PlacesService` class, you can implement it like this:
