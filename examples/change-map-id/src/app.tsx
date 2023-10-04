@@ -2,35 +2,92 @@ import React, {useState} from 'react';
 import {createRoot} from 'react-dom/client';
 
 import {
-  AdvancedMarker,
+  Marker,
   APIProvider,
   InfoWindow,
   Map,
-  useAdvancedMarkerRef
+  useMarkerRef
 } from '@vis.gl/react-google-maps';
 import ControlPanel from './control-panel';
 
 const API_KEY = process.env.GOOGLE_MAPS_API_KEY as string;
 
-const MAP_IDS = {
-  light: {label: 'Light', mapId: '49ae42fed52588c3'},
-  dark: {label: 'Dark', mapId: '739af084373f96fe'}
+const MapTypeId = {
+  HYBRID: 'hybrid',
+  ROADMAP: 'roadmap',
+  SATELLITE: 'satellite',
+  TERRAIN: 'terrain'
+};
+export type MapConfig = {
+  id: string;
+  label: string;
+  mapId?: string;
+  mapTypeId?: string;
 };
 
+const MAP_CONFIGS: MapConfig[] = [
+  {
+    id: 'light',
+    label: 'Light',
+    mapId: '49ae42fed52588c3',
+    mapTypeId: MapTypeId.ROADMAP
+  },
+  {
+    id: 'dark',
+    label: 'Dark',
+    mapId: '739af084373f96fe',
+    mapTypeId: MapTypeId.ROADMAP
+  },
+  {
+    id: 'satellite',
+    label: 'Satellite (no mapId)',
+    mapTypeId: MapTypeId.SATELLITE
+  },
+  {
+    id: 'hybrid',
+    label: 'Hybrid (no mapId)',
+    mapTypeId: MapTypeId.HYBRID
+  },
+  {
+    id: 'terrain',
+    label: 'Terrain (no mapId)',
+    mapTypeId: MapTypeId.TERRAIN
+  },
+  {
+    id: 'satellite2',
+    label: 'Satellite ("light" mapId)',
+    mapId: '49ae42fed52588c3',
+    mapTypeId: MapTypeId.SATELLITE
+  },
+  {
+    id: 'hybrid2',
+    label: 'Hybrid ("light" mapId)',
+    mapId: '49ae42fed52588c3',
+    mapTypeId: MapTypeId.HYBRID
+  },
+  {
+    id: 'terrain2',
+    label: 'Terrain ("light" mapId)',
+    mapId: '49ae42fed52588c3',
+    mapTypeId: MapTypeId.TERRAIN
+  }
+];
+
 const App = () => {
-  const [mapId, setMapId] = useState(MAP_IDS.light.mapId);
+  const [mapConfig, setMapConfig] = useState<MapConfig>(MAP_CONFIGS[0]);
   const [infowindowOpen, setInfowindowOpen] = useState(true);
-  const [markerRef, marker] = useAdvancedMarkerRef();
+  const [markerRef, marker] = useMarkerRef();
 
   return (
     <APIProvider apiKey={API_KEY}>
       <Map
-        mapId={mapId}
+        mapId={mapConfig.mapId}
+        mapTypeId={mapConfig.mapTypeId}
         center={{lat: 22, lng: 0}}
         zoom={3}
         gestureHandling={'greedy'}
         disableDefaultUI={true}>
-        <AdvancedMarker
+        <Marker
           ref={markerRef}
           onClick={() => setInfowindowOpen(true)}
           position={{lat: 28, lng: -82}}
@@ -48,9 +105,11 @@ const App = () => {
       </Map>
 
       <ControlPanel
-        mapIds={MAP_IDS}
-        selectedMapId={mapId}
-        setSelectedMapId={setMapId}
+        mapConfigs={MAP_CONFIGS}
+        mapConfigId={mapConfig.id}
+        onMapConfigIdChange={id =>
+          setMapConfig(MAP_CONFIGS.find(s => s.id === id)!)
+        }
       />
     </APIProvider>
   );
