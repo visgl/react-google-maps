@@ -12,6 +12,7 @@
     <style>
       body {
         margin: 0;
+        font-family: sans-serif;
       }
       #app {
         width: 100vw;
@@ -22,6 +23,7 @@
   <body>
     <div id="app" style=""></div>
     <script type="module">
+      import '../../website/src/styles.css';
       import {renderToDom} from './src/app';
       renderToDom(document.querySelector('#app'));
     </script>
