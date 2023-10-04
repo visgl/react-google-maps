@@ -1,15 +1,16 @@
 import * as React from 'react';
+import type {MapConfig} from './app';
 
 type ControlPanelProps = {
-  mapIds: {[key: string]: {label: string; mapId: string}};
-  selectedMapId: string;
-  setSelectedMapId: (id: string) => void;
+  mapConfigs: MapConfig[];
+  mapConfigId: string;
+  onMapConfigIdChange: (id: string) => void;
 };
 
 function ControlPanel({
-  mapIds,
-  selectedMapId,
-  setSelectedMapId
+  mapConfigs,
+  mapConfigId,
+  onMapConfigIdChange
 }: ControlPanelProps) {
   return (
     <div className="control-panel">
@@ -25,12 +26,12 @@ function ControlPanel({
       </p>
 
       <div>
-        <label>MapId:</label>
+        <label>Map Configuration</label>
         <select
-          value={selectedMapId}
-          onChange={ev => setSelectedMapId(ev.target.value)}>
-          {Object.entries(mapIds).map(([key, {label, mapId}]) => (
-            <option key={key} value={mapId}>
+          value={mapConfigId}
+          onChange={ev => onMapConfigIdChange(ev.target.value)}>
+          {mapConfigs.map(({id, label}) => (
+            <option key={id} value={id}>
               {label}
             </option>
           ))}
@@ -39,7 +40,7 @@ function ControlPanel({
 
       <div className="source-link">
         <a
-          href="https://github.com/visgl/react-google-maps/tree/main/examples/_template"
+          href="https://github.com/visgl/react-google-maps/tree/main/examples/change-map-id"
           target="_new">
           View Code ↗
         </a>
