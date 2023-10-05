@@ -44,23 +44,18 @@ function useMarker(props: MarkerProps) {
   // create marker instance and add to the map once the map is available
   useEffect(() => {
     if (!map) {
-      if (map === undefined) {
+      if (map === undefined)
         console.error('<Marker> has to be inside a Map component.');
-      }
 
       return;
     }
 
-    const m = new google.maps.Marker(markerOptions);
-    m.setMap(map);
-    setMarker(m);
+    const newMarker = new google.maps.Marker(markerOptions);
+    newMarker.setMap(map);
+    setMarker(newMarker);
 
-    // remove from map on unmount
     return () => {
-      if (marker) {
-        marker.setMap(null);
-      }
-
+      newMarker.setMap(null);
       setMarker(null);
     };
   }, [map]);
