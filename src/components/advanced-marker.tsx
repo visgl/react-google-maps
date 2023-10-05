@@ -70,24 +70,23 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
   useEffect(() => {
     if (!map || !markersLibraryReady) return;
 
-    const marker = new google.maps.marker.AdvancedMarkerElement();
-    marker.map = map;
+    const newMarker = new google.maps.marker.AdvancedMarkerElement();
+    newMarker.map = map;
 
-    setMarker(marker);
+    setMarker(newMarker);
 
     // create container for marker content if there are children
     if (numChilds > 0) {
       const el = document.createElement('div');
       if (className) el.classList.add(className);
 
-      marker.content = el;
+      newMarker.content = el;
 
       setContentContainer(el);
     }
 
     return () => {
-      if (marker) marker.map = null;
-
+      newMarker.map = null;
       setMarker(null);
       setContentContainer(null);
     };
