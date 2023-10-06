@@ -87,17 +87,22 @@ const App = () => {
   const [markerRef, marker] = useAdvancedMarkerRef();
   const [infowindowShown, setInfowindowShown] = useState(false);
 
+  const toggleInfoWindow = () =>
+    setInfowindowShown(previousState => !previousState);
+
+  const closeInfoWindow = () => setInfowindowShown(false);
+
   return (
     <APIProvider apiKey={'Your API key here'}>
       <Map zoom={12} center={{lat: 53.54992, lng: 10.00678}}>
         <AdvancedMarker
           ref={markerRef}
           position={{lat: 53.54992, lng: 10.00678}}
-          onClick={setInfowindowShown(!infowindowShown)}
+          onClick={toggleInfoWindow}
         />
 
         {infowindowShown && (
-          <InfoWindow anchor={marker} onCloseClick={setInfowindowShown(false)}>
+          <InfoWindow anchor={marker} onCloseClick={closeInfoWindow}>
             You can drag and drop me.
           </InfoWindow>
         )}
