@@ -10,7 +10,7 @@ function ControlPanel() {
       </p>
       <div className="source-link">
         <a
-          href="https://github.com/visgl/react-google-maps/tree/main/examples/_template"
+          href="https://github.com/visgl/react-google-maps/tree/main/examples/basic-map"
           target="_new">
           View Code ↗
         </a>
