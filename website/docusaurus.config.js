@@ -30,7 +30,7 @@ const config = {
           path: '../docs',
           sidebarPath: resolve('./src/docs-sidebar.js'),
           editUrl:
-            'https://github.com/visgl/react-google-maps/tree/master/website'
+            'https://github.com/visgl/react-google-maps/tree/main/website'
         },
         theme: {
           customCss: [resolve('./src/styles.css')]
@@ -135,7 +135,7 @@ const config = {
               },
               {
                 label: 'Starter templates',
-                href: 'https://github.com/visgl/react-google-maps/tree/master/examples/get-started'
+                href: 'https://github.com/visgl/react-google-maps/blob/main/docs/get-started.md'
               }
             ]
           },
