@@ -136,6 +136,73 @@ const MyComponent = () => {
 };
 ```
 
+## Using other libraries of the Google Maps JavaScript API
+
+Besides rendering maps, the Maps JavaScript API has a lot of [additional libraries](https://developers.google.com/maps/documentation/javascript/libraries)
+for things like geocoding, routing, the Places API, Street View, and a lot more. These libraries
+are not loaded by default, which is why this module provides a hook
+`useMapsLibrary()` to handle dynamic loading of those libraries.
+
+For example, if you want to write a component that needs to use the
+`google.maps.places.PlacesService` class, you can implement it like this:
+
+```tsx
+import {useMapsLibrary} from '@vis.gl/react-google-maps';
+
+const MyComponent = () => {
+  // triggers loading the places library and returns true once complete (the
+  // component calling the hook gets automatically re-rendered when this is
+  // the case)
+  const placesApiLoaded = useMapsLibrary('places');
+  const [placesService, setPlacesService] = useState(null);
+
+  useEffect(() => {
+    if (!placesApiLoaded) return;
+
+    // when placesApiLoaded is true, the library can be accessed via the
+    // global `google.maps` namespace.
+    setPlacesService(new google.maps.places.PlacesService());
+  }, [placesApiLoaded]);
+
+  useEffect(() => {
+    if (!placesService) return;
+
+    // ...use placesService...
+  }, [placesService]);
+
+  return <></>;
+};
+```
+
+Or you can extract your own hook from this:
+
+```tsx
+function usePlacesService() {
+  const placesApiLoaded = useMapsLibrary('places');
+  const [placesService, setPlacesService] = useState(null);
+
+  useEffect(() => {
+    if (!placesApiLoaded) return;
+
+    setPlacesService(new google.maps.places.PlacesService());
+  }, [placesApiLoaded]);
+
+  return placesService;
+}
+
+const MyComponent = () => {
+  const placesService = usePlacesService();
+
+  useEffect(() => {
+    if (!placesService) return;
+
+    // ... use placesService ...
+  }, [placesService]);
+
+  return <></>;
+};
+```
+
 ## Examples
 
 Explore our [examples directory on GitHub](./examples) for full implementation examples.
