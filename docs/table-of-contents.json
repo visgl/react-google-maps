@@ -24,15 +24,9 @@
       "api-reference/hooks/useMap",
       "api-reference/hooks/useApiIsLoaded",
       "api-reference/hooks/useMapsLibrary",
-      "api-reference/hooks/useDistanceMatrixService",
       "api-reference/hooks/useDirectionsService",
-      "api-reference/hooks/useAutocompleteService",
-      "api-reference/hooks/usePlacesService",
       "api-reference/hooks/useStreetViewPanorama",
-      "api-reference/hooks/useMaxZoomService",
-      "api-reference/hooks/useAutocomplete",
-      "api-reference/hooks/useElevationService",
-      "api-reference/hooks/useGeocodingService"
+      "api-reference/hooks/useAutocomplete"
     ]
   }
 ]
