@@ -6,13 +6,13 @@ PRs and bug reports are welcome, and we are actively looking for new maintainers
 
 ## Setting Up Dev Environment
 
-The **master** branch is the active development branch.
+The **main** branch is the active development branch.
 
 Building react-google-maps locally from the source requires node.js `>=8`.
 We use npm to manage the dependencies.
 
 ```bash
-git checkout master
+git checkout main
 npm install
 npm run test
 ```
@@ -28,7 +28,7 @@ npm run test
 
 Any intended change to the code base must open a [pull request](https://help.github.com/articles/creating-a-pull-request/) and be approved. 
 
-Generally speaking, all PRs are open against the `master` branch, unless the feature being affected no longer exists on master.
+Generally speaking, all PRs are open against the `main` branch, unless the feature being affected no longer exists on main.
 
 ### PR Checklist
 
