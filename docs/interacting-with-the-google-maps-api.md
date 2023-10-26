@@ -91,19 +91,20 @@ For example, if you want to write a component that needs to use the
 import {useMapsLibrary} from '@vis.gl/react-google-maps';
 
 const MyComponent = () => {
-  // triggers loading the places library and returns true once complete (the
+  // triggers loading the places library and returns the API Object once complete (the
   // component calling the hook gets automatically re-rendered when this is
   // the case)
-  const placesApiLoaded = useMapsLibrary('places');
+  const placesLibrary = useMapsLibrary('places');
+
   const [placesService, setPlacesService] = useState(null);
 
   useEffect(() => {
-    if (!placesApiLoaded) return;
+    if (!placesLibrary) return;
 
-    // when placesApiLoaded is true, the library can be accessed via the
-    // global `google.maps` namespace.
-    setPlacesService(new google.maps.places.PlacesService());
-  }, [placesApiLoaded]);
+    // when placesLibrary is loaded, the library can be accessed via the
+    // placesLibrary API object
+    setPlacesService(new placesLibrary.PlacesService());
+  }, [placesLibrary]);
 
   useEffect(() => {
     if (!placesService) return;
@@ -119,14 +120,14 @@ Or you can extract your own hook from this:
 
 ```tsx
 function usePlacesService() {
-  const placesApiLoaded = useMapsLibrary('places');
+  const placesLibrary = useMapsLibrary('places');
   const [placesService, setPlacesService] = useState(null);
 
   useEffect(() => {
-    if (!placesApiLoaded) return;
+    if (!placesLibrary) return;
 
-    setPlacesService(new google.maps.places.PlacesService());
-  }, [placesApiLoaded]);
+    setPlacesService(new placesLibrary.PlacesService());
+  }, [placesLibrary]);
 
   return placesService;
 }
