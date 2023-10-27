@@ -1,6 +1,6 @@
 import {useState, useRef, useEffect} from 'react';
 
-import {useApiIsLoaded} from './api-loading-status';
+import {useApiIsLoaded} from './use-api-is-loaded';
 
 export interface AutocompleteProps {
   inputField: HTMLInputElement | null;

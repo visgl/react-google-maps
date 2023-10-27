@@ -13,7 +13,7 @@ import {createPortal} from 'react-dom';
 import {GoogleMapsContext} from './map';
 
 import type {Ref, PropsWithChildren} from 'react';
-import {useMapsLibrary} from '../hooks/api-loading-status';
+import {useMapsLibrary} from '../hooks/use-maps-library';
 
 export interface AdvancedMarkerContextValue {
   marker: google.maps.marker.AdvancedMarkerElement;

@@ -1,7 +1,7 @@
 /* eslint-disable complexity */
 import {useEffect, useState} from 'react';
-import {useApiIsLoaded} from './api-loading-status';
-import {useMap} from './map-instance';
+import {useApiIsLoaded} from './use-api-is-loaded';
+import {useMap} from './use-map';
 
 export interface StreetViewPanoramaProps {
   mapId?: string;

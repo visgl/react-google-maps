@@ -4,6 +4,7 @@ import React, {
   useCallback,
   useEffect,
   useMemo,
+  useReducer,
   useState
 } from 'react';
 
@@ -18,12 +19,13 @@ export enum APILoadingStatus {
 
 const {NOT_LOADED, LOADING, LOADED, FAILED} = APILoadingStatus;
 
-/**
- * API Provider context
- */
+type ImportLibraryFunction = typeof google.maps.importLibrary;
+type GoogleMapsLibrary = Awaited<ReturnType<ImportLibraryFunction>>;
+type LoadedLibraries = {[name: string]: GoogleMapsLibrary};
+
 export interface APIProviderContextValue {
   status: APILoadingStatus;
-  loadedLibraries: Set<string>;
+  loadedLibraries: LoadedLibraries;
   importLibrary: typeof google.maps.importLibrary;
   mapInstances: Record<string, google.maps.Map>;
   addMapInstance: (map: google.maps.Map, id?: string) => void;
@@ -106,14 +108,41 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
   const {onLoad, apiKey, libraries = [], ...otherApiParams} = props;
 
   const [status, setStatus] = useState<APILoadingStatus>(NOT_LOADED);
-  const [loadedLibraries, setLoadedLibraries] = useState<Set<string>>(
-    new Set()
+  const [loadedLibraries, addLoadedLibrary] = useReducer(
+    (
+      loadedLibraries: LoadedLibraries,
+      action: {name: keyof LoadedLibraries; value: LoadedLibraries[string]}
+    ) => {
+      return {...loadedLibraries, [action.name]: action.value};
+    },
+    {}
   );
 
   const librariesString = useMemo(() => libraries?.join(','), [libraries]);
   const serializedParams = useMemo(
     () => JSON.stringify(otherApiParams),
     [otherApiParams]
+  );
+
+  const importLibrary: typeof google.maps.importLibrary = useCallback(
+    async (name: string) => {
+      if (loadedLibraries[name]) {
+        return loadedLibraries[name];
+      }
+
+      if (!google?.maps?.importLibrary) {
+        throw new Error(
+          '[api-provider-internal] importLibrary was called before ' +
+            'google.maps.importLibrary was defined.'
+        );
+      }
+
+      const res = await window.google.maps.importLibrary(name);
+      addLoadedLibrary({name, value: res});
+
+      return res;
+    },
+    []
   );
 
   useEffect(
@@ -129,7 +158,10 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
           });
 
           setStatus(LOADED);
-          setLoadedLibraries(new Set(['maps', ...libraries]));
+
+          for (const name of ['core', 'maps', ...libraries]) {
+            await importLibrary(name);
+          }
 
           if (onLoad) {
             onLoad();
@@ -142,22 +174,6 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [apiKey, librariesString, serializedParams]
-  );
-
-  const importLibrary: typeof google.maps.importLibrary = useCallback(
-    async (name: string) => {
-      if (!google?.maps?.importLibrary) {
-        throw new Error(
-          'importLibrary was called before google.maps.importLibrary was defined'
-        );
-      }
-
-      const res = await window.google.maps.importLibrary(name);
-      setLoadedLibraries(new Set([...loadedLibraries, name]));
-
-      return res;
-    },
-    []
   );
 
   return {

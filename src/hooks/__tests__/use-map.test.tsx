@@ -3,7 +3,7 @@ import '@testing-library/jest-dom';
 import {renderHook} from '@testing-library/react';
 import {initialize, mockInstances} from '@googlemaps/jest-mocks';
 
-import {useMap} from '../map-instance';
+import {useMap} from '../use-map';
 import {
   APILoadingStatus,
   APIProviderContext,
@@ -28,7 +28,7 @@ beforeEach(() => {
 
   mockContextValue = {
     importLibrary: jest.fn(),
-    loadedLibraries: new Set(),
+    loadedLibraries: {},
     status: APILoadingStatus.LOADED,
     mapInstances: {},
     addMapInstance: jest.fn(),

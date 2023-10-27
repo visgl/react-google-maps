@@ -12,7 +12,7 @@ import React, {
 
 import {APIProviderContext, APIProviderContextValue} from './api-provider';
 
-import {useApiIsLoaded} from '../hooks/api-loading-status';
+import {useApiIsLoaded} from '../hooks/use-api-is-loaded';
 import {logErrorOnce} from '../libraries/errors';
 
 // Google Maps context

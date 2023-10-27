@@ -24,7 +24,7 @@ beforeEach(() => {
 
   mockContextValue = {
     importLibrary: jest.fn(),
-    loadedLibraries: new Set(),
+    loadedLibraries: {},
     status: APILoadingStatus.LOADED,
     mapInstances: {},
     addMapInstance: jest.fn(),
