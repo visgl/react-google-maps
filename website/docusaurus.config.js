@@ -2,8 +2,15 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
-const lightCodeTheme = require('prism-react-renderer/themes/github');
-const darkCodeTheme = require('prism-react-renderer/themes/dracula');
+let lightCodeTheme = null;
+let darkCodeTheme = null;
+
+try {
+  // prism-react-renderer is a dependency of @docusaurus/theme-common
+  lightCodeTheme = require('prism-react-renderer/themes/github');
+  darkCodeTheme = require('prism-react-renderer/themes/dracula');
+} catch (err) {}
+
 // const webpack = require('webpack');
 const {resolve} = require('path');
 const webpack = require('webpack');
