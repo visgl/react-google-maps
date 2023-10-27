@@ -1,0 +1,46 @@
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+name: Release Please
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - id: release
+        name: Release Please
+        uses: google-github-actions/release-please-action@v3
+
+        with:
+          release-type: node
+          package-name: @visgl/react-google-maps
+          bump-minor-pre-major: true
+
+      # Below are the actions for actual npm publishing when a release-branch was merged.
+
+      - if: ${{ steps.release.outputs.release_created }}
+        name: Checkout
+        uses: actions/checkout@v3
+
+      - if: ${{ steps.release.outputs.release_created }}
+        name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: npm
+
+      - if: ${{ steps.release.outputs.release_created }}
+        name: Install Dependencies
+        run: npm ci
+
+      - if: ${{ steps.release.outputs.release_created }}
+        name: Publish
+        # npm publish will trigger the build via the prepack hook
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NODE_AUTH_TOKEN}}
