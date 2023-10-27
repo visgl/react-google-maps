@@ -7,7 +7,9 @@ import {
   APIProviderContext,
   APIProviderContextValue
 } from '../../components/api-provider';
-import {useApiIsLoaded, useApiLoadingStatus} from '../api-loading-status';
+
+import {useApiLoadingStatus} from '../use-api-loading-status';
+import {useApiIsLoaded} from '../use-api-is-loaded';
 
 let wrapper: ({children}: {children: React.ReactNode}) => JSX.Element | null;
 let mockContextValue: jest.MockedObject<APIProviderContextValue>;
@@ -16,7 +18,7 @@ beforeEach(() => {
 
   mockContextValue = {
     importLibrary: jest.fn(),
-    loadedLibraries: new Set(),
+    loadedLibraries: {},
     status: APILoadingStatus.LOADED,
     mapInstances: {},
     addMapInstance: jest.fn(),

@@ -3,6 +3,9 @@ import {act, render, screen} from '@testing-library/react';
 import {initialize} from '@googlemaps/jest-mocks';
 import '@testing-library/jest-dom';
 
+// FIXME: this should no longer be needed with the next version of @googlemaps/jest-mocks
+import {importLibraryMock} from '../../libraries/__mocks__/lib/import-library-mock';
+
 import {
   APILoadingStatus,
   APIProvider,
@@ -10,7 +13,7 @@ import {
   APIProviderContextValue
 } from '../api-provider';
 import {ApiParams} from '../../libraries/google-maps-api-loader';
-import {useApiIsLoaded} from '../../hooks/api-loading-status';
+import {useApiIsLoaded} from '../../hooks/use-api-is-loaded';
 
 const apiLoadSpy = jest.fn();
 const apiUnloadSpy = jest.fn();
@@ -29,6 +32,7 @@ jest.mock('../../libraries/google-maps-api-loader', () => {
   class GoogleMapsApiLoader {
     static async load(params: ApiParams): Promise<void> {
       apiLoadSpy(params);
+      google.maps.importLibrary = importLibraryMock;
       return new Promise(resolve => (triggerMapsApiLoaded = resolve));
     }
     static unload() {

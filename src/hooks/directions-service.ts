@@ -1,7 +1,7 @@
 import {useMemo, useEffect, useCallback} from 'react';
 
-import {useApiIsLoaded} from './api-loading-status';
-import {useMap} from './map-instance';
+import {useApiIsLoaded} from './use-api-is-loaded';
+import {useMap} from './use-map';
 import {assertNotNull} from '../libraries/assert-not-null';
 
 export interface DirectionsServiceHookOptions {
