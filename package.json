@@ -22,7 +22,7 @@
     "build:microbundle": "microbundle -o dist/index.js -f modern,umd --globals react=React,react-dom=ReactDOM --jsx React.createElement --jsxFragment React.Fragment --no-compress --tsconfig tsconfig.build.json",
     "start:microbundle": "microbundle watch -o dist/index.js -f modern,umd --globals react=React,react-dom=ReactDOM --jsx React.createElement --jsxFragment React.Fragment --no-compress --tsconfig tsconfig.build.json",
     "test:linter": "eslint 'src/**/*.{ts,tsx}'",
-    "test:tsc": "tsc --project tsconfig.json --noEmit",
+    "test:tsc": "tsc --project tsconfig.test.json --noEmit",
     "test:prettier": "prettier --check ./src ./examples",
     "test:unit": "jest",
     "test": "npm-run-all -p test:linter test:prettier test:tsc -s test:unit",
