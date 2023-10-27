@@ -1,12 +1,24 @@
 # https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
 version: 2
 updates:
-  - package-ecosystem: "npm"
-    directory: "/"
+  - package-ecosystem: 'npm'
+    labels: ['dependencies']
+    directory: '/'
     schedule:
-      interval: "weekly"
-  
-  - package-ecosystem: "npm"
-    directory: "./website"
+      interval: 'weekly'
+    groups:
+      dependencies:
+        update-types:
+          - 'minor'
+          - 'patch'
+
+  - package-ecosystem: 'npm'
+    labels: ['dependencies', 'website']
+    directory: './website'
     schedule:
-      interval: "weekly"
+      interval: 'weekly'
+    groups:
+      dependencies:
+        update-types:
+          - 'minor'
+          - 'patch'
