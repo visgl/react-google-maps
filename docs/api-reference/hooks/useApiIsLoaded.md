@@ -1,10 +1,10 @@
 # `useApiIsLoaded` Hook
 
-React hook to check if the Google Maps (core-) API has finished loading.
-
-## Usage
+React hook to check if the Maps JavaScript API has finished loading.
 
 ```tsx
+import {useApiIsLoaded} from '@visgl/react-google-maps';
+
 const MyComponent = () => {
   const apiIsLoaded = useApiIsLoaded();
 
@@ -19,20 +19,14 @@ const MyComponent = () => {
 };
 ```
 
-```tsx
-const MyComponent = () => {
-  const librariesLoaded = useMapsLibrary('places', 'geocoding', 'routes');
+## Signature
 
-  useEffect(() => {
-    if (!librariesLoaded) return;
+`useApiIsLoaded(): boolean`
 
-    // ...
-  }, [librariesLoaded]);
+Returns a boolean indicating if the Maps JavaScript API completed loading.
 
-  // ...
-};
-```
+## Source
 
-## Return value
+[`src/hooks/use-api-is-loaded.tsx`][src]
 
-Returns a boolean indicating if all the specified libraries have been loaded.
+[src]: https://github.com/visgl/react-google-maps/blob/main/src/hooks/use-api-is-loaded.tsx
