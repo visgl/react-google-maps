@@ -1,42 +1,38 @@
 # `useMapsLibrary` Hook
 
-React hook to trigger loading of different [Google Maps API libraries][gmp-libraries].
+React hook to get access to the different [Google Maps API libraries][gmp-libraries].
+This is essentially a react-version of the `google.maps.importLibrary` function.
+
+```tsx
+const MyComponent = () => {
+  const placesLib = useMapsLibrary('places');
+
+  useEffect(() => {
+    if (!placesLib) return;
+
+    const svc = new placesLib.PlacesService();
+    // ...
+  }, [placesLib]);
+
+  // ...
+};
+```
+
+## Signature
+
+`useMapsLibrary(name: string): google.maps.XxxLibrary`
+
+Returns the library object as it is returned by `google.maps.importLibrary`.
+
+### Parameters
+
+#### `name`: string (required)
+
+The name of the library that should be loaded
+
+## Source
+
+[`src/hooks/use-maps-library.tsx`][src]
 
 [gmp-libraries]: https://developers.google.com/maps/documentation/javascript/libraries
-
-## Usage
-
-```tsx
-const MyComponent = () => {
-  const placesApiLoaded = useMapsLibrary('places');
-  const [placesService, setPlacesService] = useState(null);
-
-  useEffect(() => {
-    if (!placesApiLoaded) return;
-
-    // when placesApiLoaded is true, the library can be accessed via the
-    // global `google.maps` namespace.
-    setPlacesService(new google.maps.places.PlacesService());
-  }, [placesApiLoaded]);
-
-  // ...
-};
-```
-
-```tsx
-const MyComponent = () => {
-  const librariesLoaded = useMapsLibrary('places', 'geocoding', 'routes');
-
-  useEffect(() => {
-    if (!librariesLoaded) return;
-
-    // ...
-  }, [librariesLoaded]);
-
-  // ...
-};
-```
-
-## Return value
-
-Returns a boolean indicating if all the specified libraries have been loaded.
+[src]: https://github.com/visgl/react-google-maps/blob/main/src/hooks/use-maps-library.tsx

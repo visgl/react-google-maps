@@ -13,20 +13,39 @@
   {
     "type": "category",
     "label": "API Reference",
+    "collapsible": true,
+    "collapsed": true,
     "items": [
-      "api-reference/components/api-provider",
-      "api-reference/components/map",
-      "api-reference/components/info-window",
-      "api-reference/components/marker",
-      "api-reference/components/advanced-marker",
-      "api-reference/components/pin",
+      {
+        "type": "category",
+        "label": "Components",
+        "collapsible": true,
+        "collapsed": true,
 
-      "api-reference/hooks/useMap",
-      "api-reference/hooks/useApiIsLoaded",
-      "api-reference/hooks/useMapsLibrary",
-      "api-reference/hooks/useDirectionsService",
-      "api-reference/hooks/useStreetViewPanorama",
-      "api-reference/hooks/useAutocomplete"
+        "items": [
+          "api-reference/components/api-provider",
+          "api-reference/components/map",
+          "api-reference/components/info-window",
+          "api-reference/components/marker",
+          "api-reference/components/advanced-marker",
+          "api-reference/components/pin"
+        ]
+      },
+      {
+        "type": "category",
+        "label": "Hooks",
+        "collapsible": true,
+        "collapsed": true,
+
+        "items": [
+          "api-reference/hooks/useMap",
+          "api-reference/hooks/useApiIsLoaded",
+          "api-reference/hooks/useMapsLibrary",
+          "api-reference/hooks/useDirectionsService",
+          "api-reference/hooks/useStreetViewPanorama",
+          "api-reference/hooks/useAutocomplete"
+        ]
+      }
     ]
   }
 ]
