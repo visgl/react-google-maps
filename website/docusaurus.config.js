@@ -24,8 +24,6 @@ const config = {
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: '/favicon.ico',
-  organizationName: 'visgl',
-  projectName: 'react-google-maps',
   trailingSlash: false,
 
   presets: [
