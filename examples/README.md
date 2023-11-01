@@ -1,4 +1,4 @@
-# Examples for @visgl/react-google-maps
+# Examples for @vis.gl/react-google-maps
 
 The examples here serve multiple purposes. First, they should demonstrate
 the abilities and common patterns for how to achieve things for users of
