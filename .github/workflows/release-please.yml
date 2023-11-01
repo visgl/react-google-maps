@@ -18,7 +18,7 @@ jobs:
 
         with:
           release-type: node
-          package-name: '@visgl/react-google-maps'
+          package-name: '@vis.gl/react-google-maps'
           bump-minor-pre-major: true
 
       # Below are the actions for actual npm publishing when a release-branch was merged.
