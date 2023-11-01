@@ -2,7 +2,7 @@
 
 With the provided components you are able to declaratively create a [Google Map](./api-reference/components/map.md) or a map with [markers](./api-reference/components/marker.md) for example.
 
-Besides that there are three main ways and concepts to interact with the Google Maps API on lower level with this library. You can use the provided `hooks`, the `refs` that are available for some components or use the [useMapsLibrary](./api-reference/hooks/useMapsLibrary.md) hook to tap into other libraries and services of the Google Maps API or craft your own custom hooks.
+Besides that there are three main ways and concepts to interact with the Google Maps API on lower level with this library. You can use the provided hooks, the refs that are available for some components or use the [`useMapsLibrary`](./api-reference/hooks/useMapsLibrary.md) hook to tap into other libraries and services of the Google Maps API or craft your own custom hooks.
 
 ## Hooks
 
