@@ -101,8 +101,8 @@ map-instances, libraries and the loading-status.
 
 The following hooks are built to work with the `APIProvider` Component:
 
-- [`useApiIsLoaded()`](../hooks/useApiIsLoaded.md) and [`useApiLoadingState()`](../hooks/useApiLoadingStatus.md) to check the current loading state of the API.
-- [`useMapsLibrary()`](../hooks/useMapsLibrary.md) to load additional [Maps Libraries][gmp-libs].
+- [`useApiIsLoaded()`](../hooks/use-api-is-loaded.md) and [`useApiLoadingState()`](../hooks/use-api-loading-status.md) to check the current loading state of the API.
+- [`useMapsLibrary()`](../hooks/use-maps-library.md) to load additional [Maps Libraries][gmp-libs].
 
 ## Source
 
