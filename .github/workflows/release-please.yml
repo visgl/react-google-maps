@@ -33,6 +33,7 @@ jobs:
         with:
           node-version: 20
           cache: npm
+          registry-url: 'https://registry.npmjs.org'
 
       - if: ${{ steps.release.outputs.release_created }}
         name: Install Dependencies
