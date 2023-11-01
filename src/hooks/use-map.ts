@@ -12,7 +12,7 @@ export const useMap = (id: string | null = null): google.maps.Map | null => {
   const {mapInstances = {}} = useContext(APIProviderContext) || {};
   const {map} = useContext(GoogleMapsContext) || {};
 
-  // if an if is specified, the corresponding map or null is returned
+  // if an id is specified, the corresponding map or null is returned
   if (id !== null) return mapInstances[id] || null;
 
   // otherwise, return the closest ancestor

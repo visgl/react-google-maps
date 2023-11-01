@@ -23,7 +23,7 @@ Once that is set up, run `npm install` followed by `npm start` to start the deve
 The library can be installed from npm:
 
 ```bash
-npm install --save @vis.gl/react-google-maps
+npm install @vis.gl/react-google-maps
 ```
 
 This module comes with full TypeScript-support out of the box, so no additional module is
@@ -33,7 +33,7 @@ required for the typings.
 
 A minimal example to just render a map looks like this:
 
-```tsx
+```tsx title=index.jsx
 import React from 'react';
 import {createRoot} from 'react-dom/client';
 import {APIProvider, Map} from '@vis.gl/react-google-maps';
