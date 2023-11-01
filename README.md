@@ -100,7 +100,7 @@ Explore our [examples directory on GitHub](./examples) or the
 [api-marker]: https://visgl.github.io/react-google-maps/docs/api-reference/components/marker
 [api-adv-marker]: https://visgl.github.io/react-google-maps/docs/api-reference/components/advanced-marker
 [api-infowindow]: https://visgl.github.io/react-google-maps/docs/api-reference/components/info-window
-[api-use-lib]: https://visgl.github.io/react-google-maps/docs/api-reference/hooks/useMapsLibrary
+[api-use-lib]: https://visgl.github.io/react-google-maps/docs/api-reference/hooks/use-maps-library
 [docs]: https://visgl.github.io/react-google-maps/docs/
 [examples]: https://visgl.github.io/react-google-maps/examples
 [gmp-services]: https://developers.google.com/maps/documentation/javascript#services

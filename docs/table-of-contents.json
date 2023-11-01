@@ -39,12 +39,12 @@
         "collapsed": true,
 
         "items": [
-          "api-reference/hooks/useMap",
-          "api-reference/hooks/useApiIsLoaded",
-          "api-reference/hooks/useMapsLibrary",
-          "api-reference/hooks/useDirectionsService",
-          "api-reference/hooks/useStreetViewPanorama",
-          "api-reference/hooks/useAutocomplete"
+          "api-reference/hooks/use-map",
+          "api-reference/hooks/use-api-is-loaded",
+          "api-reference/hooks/use-maps-library",
+          "api-reference/hooks/use-directions-service",
+          "api-reference/hooks/use-streetview-panorama",
+          "api-reference/hooks/use-autocomplete"
         ]
       }
     ]
