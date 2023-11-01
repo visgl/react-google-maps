@@ -3,7 +3,7 @@
 React hook to check if the Maps JavaScript API has finished loading.
 
 ```tsx
-import {useApiIsLoaded} from '@visgl/react-google-maps';
+import {useApiIsLoaded} from '@vis.gl/react-google-maps';
 
 const MyComponent = () => {
   const apiIsLoaded = useApiIsLoaded();

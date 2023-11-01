@@ -3,7 +3,7 @@
 React hook to get the current status of the API Loader. This can be used to react to loading-errors.
 
 ```tsx
-import {useApiLoadingStatus, APILoadingStatus} from '@visgl/react-google-maps';
+import {useApiLoadingStatus, APILoadingStatus} from '@vis.gl/react-google-maps';
 
 const MyComponent = () => {
   const status = useApiLoadingStatus();
