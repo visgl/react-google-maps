@@ -26,6 +26,7 @@
         "items": [
           "api-reference/components/api-provider",
           "api-reference/components/map",
+          "api-reference/components/map-control",
           "api-reference/components/info-window",
           "api-reference/components/marker",
           "api-reference/components/advanced-marker",
