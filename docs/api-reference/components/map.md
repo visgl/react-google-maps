@@ -9,7 +9,7 @@ a [Map](https://developers.google.com/maps/documentation/javascript/reference/ma
 
 ```tsx
 import React, {FunctionComponent} from 'react';
-import {APIProvider, Map} from '@vis.gl/react-google-maps-components';
+import {APIProvider, Map} from '@vis.gl/react-google-maps';
 
 const App: FunctionComponent<Record<string, unknown>> = () => (
   <APIProvider apiKey={'Your API key here'}>
@@ -25,7 +25,7 @@ Apply an id to each `Map` component when using multiple `Map` components.
 
 ```tsx
 import React, {FunctionComponent} from 'react';
-import {APIProvider, Map} from '@vis.gl/react-google-maps-components';
+import {APIProvider, Map} from '@vis.gl/react-google-maps';
 
 const App: FunctionComponent<Record<string, unknown>> = () => (
   <APIProvider apiKey={'Your API key here'}>
