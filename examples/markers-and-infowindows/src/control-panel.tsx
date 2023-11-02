@@ -2,7 +2,7 @@ import * as React from 'react';
 
 function ControlPanel() {
   return (
-    <div className="control-panel">
+    <div className="control-panel-markers-and-infowindows">
       <h3>Markers and InfoWindows</h3>
       <p>
         This example shows the different ways to add markers and infowindows to
