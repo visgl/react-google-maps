@@ -11,6 +11,7 @@
   right: 0;
   outline: none;
   cursor: auto;
+  box-sizing: border-box;
 
   & h3 {
     font-size: 1.2em;
