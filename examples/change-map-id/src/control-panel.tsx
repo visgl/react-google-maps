@@ -38,7 +38,13 @@ function ControlPanel({
         </select>
       </div>
 
-      <div className="source-link">
+      <div className="links">
+        <a
+          href="https://codesandbox.io/s/github/visgl/react-google-maps/tree/main/examples/change-map-id"
+          target="_new">
+          Try on CodeSandbox ↗
+        </a>
+
         <a
           href="https://github.com/visgl/react-google-maps/tree/main/examples/change-map-id"
           target="_new">

@@ -13,7 +13,13 @@ function ControlPanel() {
         </a>
         ).
       </p>
-      <div className="source-link">
+      <div className="links">
+        <a
+          href="https://codesandbox.io/s/github/visgl/react-google-maps/tree/main/examples/deckgl-overlay"
+          target="_new">
+          Try on CodeSandbox ↗
+        </a>
+
         <a
           href="https://github.com/visgl/react-google-maps/tree/main/examples/deckgl-overlay"
           target="_new">
