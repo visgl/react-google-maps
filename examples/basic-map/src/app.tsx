@@ -4,7 +4,9 @@ import {createRoot} from 'react-dom/client';
 import {APIProvider, Map} from '@vis.gl/react-google-maps';
 import ControlPanel from './control-panel';
 
-const API_KEY = process.env.GOOGLE_MAPS_API_KEY as string;
+import {getApiKey} from './lib/get-api-key';
+
+const API_KEY = getApiKey();
 
 const App = () => (
   <APIProvider apiKey={API_KEY}>

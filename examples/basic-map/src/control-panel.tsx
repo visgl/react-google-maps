@@ -2,7 +2,7 @@ import * as React from 'react';
 
 function ControlPanel() {
   return (
-    <div className="control-panel">
+    <div className="control-panel-basic-map">
       <h3>Basic Map</h3>
       <p>
         The simplest example possible, just rendering a google map with some

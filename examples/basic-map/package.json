@@ -6,7 +6,8 @@
     "vite": "^4.3.9"
   },
   "scripts": {
-    "start": "vite",
+    "start": "vite --open",
+    "start-local": "vite --config ../vite.config.local.js",
     "build": "vite build"
   }
 }

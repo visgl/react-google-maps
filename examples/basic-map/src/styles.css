@@ -1,0 +1,111 @@
+.control-panel-basic-map {
+  font-size: 14px;
+  line-height: 18px;
+  width: 284px;
+  background: #fff;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
+  margin: 24px;
+  padding: 12px 24px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  outline: none;
+  cursor: auto;
+
+  & h3 {
+    font-size: 1.2em;
+    font-weight: 500;
+    margin: 8px 0;
+  }
+
+  & a {
+    display: inline;
+  }
+
+  & p {
+    margin-bottom: 16px;
+  }
+
+  .legend {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+  }
+
+  & hr {
+    margin: 12px -24px;
+  }
+
+  .source-link {
+    text-align: right;
+    margin-top: 8px;
+
+    & a {
+      font-weight: bold;
+      color: #486865;
+      font-size: 11px;
+    }
+  }
+
+  .input {
+    position: relative;
+    display: flex;
+    width: 100%;
+    opacity: 1;
+
+    > * {
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+
+    & label {
+      text-transform: uppercase;
+      width: 50%;
+      margin-right: 10%;
+      color: #486865;
+      margin-bottom: 4px;
+    }
+
+    & input,
+    & a {
+      font-size: 0.9em;
+      display: inline-block;
+      padding: 0 4px;
+      width: 40%;
+      height: 20px;
+      line-height: 1.833;
+    }
+
+    & input[type='checkbox'] {
+      height: auto;
+    }
+
+    & input[type='checkbox'],
+    & input[type='radio'],
+    & input[type='color'] {
+      width: 20%;
+    }
+
+    & input {
+      border: solid 1px #ccc;
+
+      &:disabled {
+        background: #fff;
+      }
+    }
+
+    .tooltip {
+      left: 50%;
+      top: 24px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 200ms;
+    }
+
+    &:hover {
+      .tooltip {
+        opacity: 1;
+      }
+    }
+  }
+}
