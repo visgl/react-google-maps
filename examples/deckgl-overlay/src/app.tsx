@@ -14,8 +14,6 @@ import ControlPanel from './control-panel';
 
 import {getApiKey} from './lib/get-api-key';
 
-const API_KEY = getApiKey();
-
 const App = () => {
   const [data, setData] = useState<GeoJSON | null>(null);
 
@@ -26,7 +24,7 @@ const App = () => {
   }, []);
 
   return (
-    <APIProvider apiKey={API_KEY}>
+    <APIProvider apiKey={getApiKey()}>
       <Map
         center={{lat: 37.74, lng: -122.4}}
         zoom={11}

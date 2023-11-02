@@ -1,5 +1,7 @@
 # Change Map ID
 
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
 import App from 'website-examples/change-map-id/src/app';
 
-<App />
+<BrowserOnly>{() => <App />}</BrowserOnly>

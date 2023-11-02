@@ -16,11 +16,9 @@ import {MarkerWithInfowindow} from './marker-with-infowindow';
 
 import {getApiKey} from './lib/get-api-key';
 
-const API_KEY = getApiKey();
-
 const App = () => {
   return (
-    <APIProvider apiKey={API_KEY} libraries={['marker']}>
+    <APIProvider apiKey={getApiKey()} libraries={['marker']}>
       <Map
         mapId={'bf51a910020fa25a'}
         zoom={3}

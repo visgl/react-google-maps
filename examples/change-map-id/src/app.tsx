@@ -12,8 +12,6 @@ import ControlPanel from './control-panel';
 
 import {getApiKey} from './lib/get-api-key';
 
-const API_KEY = getApiKey();
-
 const MapTypeId = {
   HYBRID: 'hybrid',
   ROADMAP: 'roadmap',
@@ -81,7 +79,7 @@ const App = () => {
   const [markerRef, marker] = useMarkerRef();
 
   return (
-    <APIProvider apiKey={API_KEY}>
+    <APIProvider apiKey={getApiKey()}>
       <Map
         mapId={mapConfig.mapId}
         mapTypeId={mapConfig.mapTypeId}

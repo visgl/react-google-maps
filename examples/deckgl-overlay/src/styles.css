@@ -12,26 +12,26 @@
   outline: none;
   cursor: auto;
   box-sizing: border-box;
+}
 
-  & h3 {
-    font-size: 1.2em;
-    font-weight: 500;
-    margin: 8px 0;
-  }
+.control-panel-deckgl h3 {
+  font-size: 1.2em;
+  font-weight: 500;
+  margin: 8px 0;
+}
 
-  & p {
-    margin-bottom: 16px;
-  }
+.control-panel-deckgl p {
+  margin-bottom: 16px;
+}
 
-  .links {
-    margin-top: 8px;
-    display: flex;
-    justify-content: space-between;
+.control-panel-deckgl .links {
+  margin-top: 8px;
+  display: flex;
+  justify-content: space-between;
+}
 
-    & a {
-      font-weight: bold;
-      color: #486865;
-      font-size: 11px;
-    }
-  }
+.control-panel-deckgl .links a {
+  font-weight: bold;
+  color: #486865;
+  font-size: 11px;
 }

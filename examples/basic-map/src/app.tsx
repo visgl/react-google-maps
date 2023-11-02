@@ -6,10 +6,8 @@ import ControlPanel from './control-panel';
 
 import {getApiKey} from './lib/get-api-key';
 
-const API_KEY = getApiKey();
-
 const App = () => (
-  <APIProvider apiKey={API_KEY}>
+  <APIProvider apiKey={getApiKey()}>
     <Map
       zoom={3}
       center={{lat: 22.54992, lng: 0}}

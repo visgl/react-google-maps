@@ -1,5 +1,7 @@
 # Markers and Infowindows
 
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
 import App from 'website-examples/markers-and-infowindows/src/app';
 
-<App />
+<BrowserOnly>{() => <App />}</BrowserOnly>
