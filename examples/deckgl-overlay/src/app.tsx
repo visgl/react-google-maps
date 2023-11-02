@@ -10,6 +10,7 @@ const DATA_URL =
   'https://raw.githubusercontent.com/visgl/deck.gl-data/master/website/bart.geo.json';
 
 import type {Feature, GeoJSON} from 'geojson';
+import ControlPanel from './control-panel';
 
 const API_KEY = process.env.GOOGLE_MAPS_API_KEY as string;
 
@@ -32,6 +33,7 @@ const App = () => {
         disableDefaultUI={true}>
         <DeckGlOverlay layers={getDeckGlLayers(data)} />
       </Map>
+      <ControlPanel />
     </APIProvider>
   );
 };
