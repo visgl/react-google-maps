@@ -6,7 +6,7 @@ React component to display a [Marker](https://developers.google.com/maps/documen
 
 ```tsx
 import React, {FunctionComponent} from 'react';
-import {APIProvider, Map, Marker} from '@vis.gl/react-google-maps-components';
+import {APIProvider, Map, Marker} from '@vis.gl/react-google-maps';
 
 const App: FunctionComponent<Record<string, unknown>> = () => (
   <APIProvider apiKey={'Your API key here'}>

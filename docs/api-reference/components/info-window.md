@@ -19,11 +19,7 @@ with the map, you can listen for the `onCloseClick` event.
 
 ```tsx
 import React from 'react';
-import {
-  APIProvider,
-  Map,
-  InfoWindow
-} from '@vis.gl/react-google-maps-components';
+import {APIProvider, Map, InfoWindow} from '@vis.gl/react-google-maps';
 
 const App = () => (
   <APIProvider apiKey={'Your API key here'}>
@@ -47,7 +43,7 @@ import {
   Map,
   Marker,
   useMarkerRef
-} from '@vis.gl/react-google-maps-components';
+} from '@vis.gl/react-google-maps';
 
 const App = () => {
   const [markerRef, marker] = useMarkerRef();
@@ -81,7 +77,7 @@ import {
   Map,
   AdvancedMarker,
   useAdvancedMarkerRef
-} from '@vis.gl/react-google-maps-components';
+} from '@vis.gl/react-google-maps';
 
 const App = () => {
   const [markerRef, marker] = useAdvancedMarkerRef();

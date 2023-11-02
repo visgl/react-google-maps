@@ -3,7 +3,7 @@
 The `APIProvider` is our component to load the Google Maps JavaScript API.
 
 This component can be added at any level of the application (typically somewhere
-at the top), and it will render all child components unmodified. 
+at the top), and it will render all child components unmodified.
 
 Besides handling the loading of the Maps JavaScript API, it also provides context
 information and functions for the other components and hooks of this library.
@@ -19,7 +19,7 @@ This has to be provided via the `apiKey` prop:
 
 ```tsx title="app.jsx"
 import React from 'react';
-import {APIProvider} from '@vis.gl/react-google-maps-components';
+import {APIProvider} from '@vis.gl/react-google-maps';
 
 const App = () => (
   <APIProvider apiKey={'Your API key here'}>
