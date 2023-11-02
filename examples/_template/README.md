@@ -19,7 +19,7 @@ To start the example with the local library run
 npm run start-local
 ```
 
-The regular `npm start` task is only used for the standalone versions of the the example (codesandbox for example)
+The regular `npm start` task is only used for the standalone versions of the the example (CodeSandbox for example)
 
 Running the examples locally requires a valid API key for the Google Maps Platform.
 See [the official documentation][get-api-key] on how to create and configure your own key.
