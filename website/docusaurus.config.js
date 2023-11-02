@@ -40,7 +40,8 @@ const config = {
         theme: {
           customCss: [
             resolve('./src/styles.css'),
-            resolve('../examples/basic-map/src/styles.css')
+            resolve('../examples/basic-map/src/styles.css'),
+            resolve('../examples/change-map-id/src/styles.css')
           ]
         }
       })

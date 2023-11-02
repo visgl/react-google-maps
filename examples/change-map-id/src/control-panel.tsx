@@ -13,7 +13,7 @@ function ControlPanel({
   onMapConfigIdChange
 }: ControlPanelProps) {
   return (
-    <div className="control-panel">
+    <div className="control-panel-change-map-id">
       <h3>Change MapIds</h3>
       <p>
         The react-component can switch between multiple mapIds without having to
