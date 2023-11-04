@@ -127,6 +127,7 @@ interface MapProps extends google.maps.MapOptions {
   id?: string;
   style?: CSSProperties;
   className?: string;
+  onClick?: (event: google.maps.Map) => void;
   initialBounds?: google.maps.LatLngBounds | google.maps.LatLngBoundsLiteral;
   onLoadMap?: (map: google.maps.Map) => void;
   viewport?: unknown;

@@ -1,7 +1,7 @@
 /* eslint-disable complexity */
 import React, {
   CSSProperties,
-  PropsWithChildren,
+  ComponentPropsWithRef,
   useCallback,
   useContext,
   useEffect,
@@ -58,12 +58,16 @@ export type MapProps = google.maps.MapOptions & {
    * Initial View State from deck.gl
    */
   initialViewState?: Record<string, unknown>;
+  /**
+   * Callback function that is called when the map is clicked
+   */
+  onClick?: (event: google.maps.Map) => void;
 };
 
 /**
  * Component to render a Google Maps map
  */
-export const Map = (props: PropsWithChildren<MapProps>) => {
+export const Map = (props: MapProps & ComponentPropsWithRef<'div'>) => {
   const {children, id, className, style, viewState, viewport} = props;
 
   const context = useContext(APIProviderContext) as APIProviderContextValue;
@@ -128,6 +132,7 @@ function useMapInstanceHandlerEffects(
   const {
     id,
     initialBounds,
+    onClick,
     onLoadMap,
     // FIXME: this destructuring here leads to mapOptions being a new
     //   object for every render, and we'll be calling map.setOptions() a lot.
@@ -157,6 +162,14 @@ function useMapInstanceHandlerEffects(
       if (onLoadMap) {
         google.maps.event.addListenerOnce(newMap, 'idle', () => {
           onLoadMap(newMap);
+        });
+      }
+
+      if (onClick) {
+        google.maps.event.addListenerOnce(newMap, 'idle', () => {
+          google.maps.event.addListener(newMap, 'click', () => {
+            onClick(newMap);
+          });
         });
       }
 
