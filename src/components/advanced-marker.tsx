@@ -30,13 +30,14 @@ type AdvancedMarkerEventProps = {
 };
 
 export type AdvancedMarkerProps = PropsWithChildren<
-  google.maps.marker.AdvancedMarkerElementOptions &
+  Omit<google.maps.marker.AdvancedMarkerElementOptions, 'gmpDraggable'> &
     AdvancedMarkerEventProps & {
       /**
        * className to add a class to the advanced marker element
        * Can only be used with HTML Marker content
        */
       className?: string;
+      draggable?: boolean;
     }
 >;
 
@@ -58,7 +59,7 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
     onDragStart,
     onDragEnd,
     collisionBehavior,
-    gmpDraggable,
+    draggable,
     position,
     title,
     zIndex
@@ -103,7 +104,7 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
     if (onDragStart) marker.addListener('dragstart', onDragStart);
     if (onDragEnd) marker.addListener('dragend', onDragEnd);
 
-    if ((onDrag || onDragStart || onDragEnd) && !gmpDraggable) {
+    if ((onDrag || onDragStart || onDragEnd) && !draggable) {
       console.warn(
         'You need to set the marker to draggable to listen to drag-events.'
       );
@@ -112,19 +113,19 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
     return () => {
       google.maps.event.clearInstanceListeners(m);
     };
-  }, [marker, gmpDraggable, onClick, onDragStart, onDrag, onDragEnd]);
+  }, [marker, draggable, onClick, onDragStart, onDrag, onDragEnd]);
 
   // update other marker props when changed
   useEffect(() => {
     if (!marker) return;
 
     if (position !== undefined) marker.position = position;
-    if (gmpDraggable !== undefined) marker.gmpDraggable = gmpDraggable;
+    if (draggable !== undefined) marker.gmpDraggable = draggable;
     if (collisionBehavior !== undefined)
       marker.collisionBehavior = collisionBehavior;
     if (zIndex !== undefined) marker.zIndex = zIndex;
     if (typeof title === 'string') marker.title = title;
-  }, [marker, position, gmpDraggable, collisionBehavior, zIndex, title]);
+  }, [marker, position, draggable, collisionBehavior, zIndex, title]);
 
   return [marker, contentContainer] as const;
 }
