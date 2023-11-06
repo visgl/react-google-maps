@@ -49,7 +49,7 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
     useState<HTMLDivElement | null>(null);
 
   const map = useContext(GoogleMapsContext)?.map;
-  const markersLibraryReady = useMapsLibrary('marker');
+  const markerLibrary = useMapsLibrary('marker');
 
   const {
     children,
@@ -69,9 +69,9 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
 
   // create marker instance and add it to the map when map becomes available
   useEffect(() => {
-    if (!map || !markersLibraryReady) return;
+    if (!map || !markerLibrary) return;
 
-    const newMarker = new google.maps.marker.AdvancedMarkerElement();
+    const newMarker = new markerLibrary.AdvancedMarkerElement();
     newMarker.map = map;
 
     setMarker(newMarker);
@@ -91,7 +91,7 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
       setMarker(null);
       setContentContainer(null);
     };
-  }, [map, markersLibraryReady, numChilds]);
+  }, [map, markerLibrary, numChilds]);
 
   // bind all marker events
   useEffect(() => {
