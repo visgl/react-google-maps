@@ -14,7 +14,7 @@
     "styled-components": "^6.1.0"
   },
   "devDependencies": {
-    "@docusaurus/core": "^2.4.3",
+    "@docusaurus/core": "^3.0.0",
     "@docusaurus/plugin-content-docs": "^2.4.3",
     "@docusaurus/preset-classic": "^2.4.3",
     "@easyops-cn/docusaurus-search-local": "^0.36.0",
