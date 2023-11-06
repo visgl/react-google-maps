@@ -14,11 +14,9 @@ import ControlPanel from './control-panel';
 import {MovingMarker} from './moving-marker';
 import {MarkerWithInfowindow} from './marker-with-infowindow';
 
-import {getApiKey} from './lib/get-api-key';
-
 const App = () => {
   return (
-    <APIProvider apiKey={getApiKey()} libraries={['marker']}>
+    <APIProvider apiKey="" libraries={['marker']}>
       <Map
         mapId={'bf51a910020fa25a'}
         zoom={3}

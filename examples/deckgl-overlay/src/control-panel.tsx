@@ -2,7 +2,7 @@ import * as React from 'react';
 
 function ControlPanel() {
   return (
-    <div className="control-panel-deckgl">
+    <div className="control-panel">
       <h3>deck.gl Interleaved Overlay Example</h3>
       <p>
         An example demonstrating how an interleaved deck.gl overlay can be added

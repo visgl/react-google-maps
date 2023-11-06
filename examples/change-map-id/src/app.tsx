@@ -10,8 +10,6 @@ import {
 } from '@vis.gl/react-google-maps';
 import ControlPanel from './control-panel';
 
-import {getApiKey} from './lib/get-api-key';
-
 const MapTypeId = {
   HYBRID: 'hybrid',
   ROADMAP: 'roadmap',
@@ -79,7 +77,7 @@ const App = () => {
   const [markerRef, marker] = useMarkerRef();
 
   return (
-    <APIProvider apiKey={getApiKey()}>
+    <APIProvider apiKey="">
       <Map
         mapId={mapConfig.mapId}
         mapTypeId={mapConfig.mapTypeId}

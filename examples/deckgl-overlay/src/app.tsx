@@ -12,8 +12,6 @@ const DATA_URL =
 import type {Feature, GeoJSON} from 'geojson';
 import ControlPanel from './control-panel';
 
-import {getApiKey} from './lib/get-api-key';
-
 const App = () => {
   const [data, setData] = useState<GeoJSON | null>(null);
 
@@ -24,7 +22,7 @@ const App = () => {
   }, []);
 
   return (
-    <APIProvider apiKey={getApiKey()}>
+    <APIProvider apiKey="">
       <Map
         center={{lat: 37.74, lng: -122.4}}
         zoom={11}
