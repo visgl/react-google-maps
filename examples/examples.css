@@ -1,0 +1,37 @@
+.control-panel {
+  font-size: 14px;
+  line-height: 18px;
+  width: 284px;
+  background: #fff;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
+  margin: 24px;
+  padding: 12px 24px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  outline: none;
+  cursor: auto;
+  box-sizing: border-box;
+}
+
+.control-panel h3 {
+  font-size: 1.2em;
+  font-weight: 500;
+  margin: 8px 0;
+}
+
+.control-panel p {
+  margin-bottom: 16px;
+}
+
+.control-panel .links {
+  margin-top: 8px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.control-panel .links a {
+  font-weight: bold;
+  color: #486865;
+  font-size: 11px;
+}

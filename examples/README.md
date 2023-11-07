@@ -19,8 +19,8 @@ additional scripts to start the example in the context of the library,
 using the library itself and its dependencies instead of those locally
 installed in the example folder.
 
-> In the future, we want to add codesandbox-links for all examples that
-> allow you to instantly start playing around with them.
+All examples should contain a link to a CodeSandbox environment where the
+example can be played with right away.
 
 ## Writing examples
 

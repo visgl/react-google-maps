@@ -10,8 +10,6 @@ import {
 } from '@vis.gl/react-google-maps';
 import ControlPanel from './control-panel';
 
-const API_KEY = process.env.GOOGLE_MAPS_API_KEY as string;
-
 const MapTypeId = {
   HYBRID: 'hybrid',
   ROADMAP: 'roadmap',
@@ -72,6 +70,8 @@ const MAP_CONFIGS: MapConfig[] = [
     mapTypeId: MapTypeId.TERRAIN
   }
 ];
+
+const API_KEY = process.env.GOOGLE_MAPS_API_KEY as string;
 
 const App = () => {
   const [mapConfig, setMapConfig] = useState<MapConfig>(MAP_CONFIGS[0]);
