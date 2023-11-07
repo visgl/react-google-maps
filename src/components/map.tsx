@@ -3,8 +3,6 @@ import React, {
   CSSProperties,
   PropsWithChildren,
   Ref,
-  RefCallback,
-  useCallback,
   useContext,
   useEffect,
   useLayoutEffect,
@@ -18,7 +16,6 @@ import {useApiIsLoaded} from '../hooks/use-api-is-loaded';
 import {logErrorOnce} from '../libraries/errors';
 import {useCallbackRef} from '../libraries/use-callback-ref';
 
-// Google Maps context
 export interface GoogleMapsContextValue {
   map: google.maps.Map | null;
 }
@@ -45,10 +42,6 @@ export type MapProps = google.maps.MapOptions & {
    * This is also needed to reference the map inside the useMap hook.
    */
   id?: string;
-  /**
-   *  A callback function that is called, when the Google Map is loaded.
-   */
-  onLoadMap?: (map: google.maps.Map) => void;
   /**
    * Viewport from deck.gl
    */
@@ -129,33 +122,19 @@ function useMapInstanceHandlerEffects(
   const {
     id,
     initialBounds,
-    onLoadMap,
-    // FIXME: this destructuring here leads to mapOptions being a new
-    //   object for every render, and we'll be calling map.setOptions() a lot.
+
     ...mapOptions
   } = props;
 
   // create the map instance and register it in the context
   useEffect(
     () => {
-      // this will be called a couple of times before the dependencies are
-      // actually ready to create the map
       if (!container || !apiIsLoaded) return;
 
-      // Since we can't know the map-ids used in sibling components during
-      // rendering, we can't check for existing maps with the same id here.
-      // We do have a seperate hook below that keeps an eye on mapIds and will
-      // write an error-message to the console if reused ids are detected.
       const {addMapInstance, removeMapInstance} = context;
       const newMap = new google.maps.Map(container, mapOptions);
       setMap(newMap);
       addMapInstance(newMap, id);
-
-      if (onLoadMap) {
-        google.maps.event.addListenerOnce(newMap, 'idle', () => {
-          onLoadMap(newMap);
-        });
-      }
 
       if (initialBounds) {
         newMap.fitBounds(initialBounds);
@@ -164,6 +143,7 @@ function useMapInstanceHandlerEffects(
       return () => {
         if (!container || !apiIsLoaded) return;
 
+        // remove all event-listeners to minimize memory-leaks
         google.maps.event.clearInstanceListeners(container);
 
         setMap(null);
@@ -171,17 +151,11 @@ function useMapInstanceHandlerEffects(
       };
     },
 
-    // Dependencies need to be inaccurately limited here. The cleanup function
-    // will remove the map-instance with all its internal state, and we can't
-    // have that happening. This is only ok when the id or mapId is changed,
-    // since this requires a new map to be created anyway.
-
     // FIXME: we should rethink if it could be possible to keep the state
     //   around when a map gets re-initialized (id or mapId changed). This
     //   should keep the viewport as it is (so also no initial viewport in
-    //   this case) and any added features should of course stay as well (though
-    //   that is for those components to figure out to always be attached to
-    //   the correct map-instance from the context) .
+    //   this case) and any added features should of course get re-added as
+    //   well.
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [id, container, apiIsLoaded, props.mapId]
@@ -189,9 +163,7 @@ function useMapInstanceHandlerEffects(
 
   // report an error if the same map-id is used multiple times
   useEffect(() => {
-    if (!id) {
-      return;
-    }
+    if (!id) return;
 
     const {mapInstances} = context;
 
