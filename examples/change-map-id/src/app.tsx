@@ -71,13 +71,15 @@ const MAP_CONFIGS: MapConfig[] = [
   }
 ];
 
+const API_KEY = process.env.GOOGLE_MAPS_API_KEY as string;
+
 const App = () => {
   const [mapConfig, setMapConfig] = useState<MapConfig>(MAP_CONFIGS[0]);
   const [infowindowOpen, setInfowindowOpen] = useState(true);
   const [markerRef, marker] = useMarkerRef();
 
   return (
-    <APIProvider apiKey="">
+    <APIProvider apiKey={API_KEY}>
       <Map
         mapId={mapConfig.mapId}
         mapTypeId={mapConfig.mapTypeId}

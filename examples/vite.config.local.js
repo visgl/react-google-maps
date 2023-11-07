@@ -2,7 +2,7 @@ import {defineConfig, loadEnv} from 'vite';
 import {resolve} from 'node:path';
 
 export default defineConfig(({mode}) => {
-  const {GOOGLE_MAPS_API_KEY} = loadEnv(mode, process.cwd(), '');
+  const {GOOGLE_MAPS_API_KEY = ''} = loadEnv(mode, process.cwd(), '');
 
   return {
     define: {

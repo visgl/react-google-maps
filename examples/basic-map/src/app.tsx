@@ -4,8 +4,10 @@ import {createRoot} from 'react-dom/client';
 import {APIProvider, Map} from '@vis.gl/react-google-maps';
 import ControlPanel from './control-panel';
 
+const API_KEY = process.env.GOOGLE_MAPS_API_KEY as string;
+
 const App = () => (
-  <APIProvider apiKey="">
+  <APIProvider apiKey={API_KEY}>
     <Map
       zoom={3}
       center={{lat: 22.54992, lng: 0}}

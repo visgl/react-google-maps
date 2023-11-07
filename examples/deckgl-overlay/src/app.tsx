@@ -12,6 +12,8 @@ const DATA_URL =
 import type {Feature, GeoJSON} from 'geojson';
 import ControlPanel from './control-panel';
 
+const API_KEY = process.env.GOOGLE_MAPS_API_KEY as string;
+
 const App = () => {
   const [data, setData] = useState<GeoJSON | null>(null);
 
@@ -22,7 +24,7 @@ const App = () => {
   }, []);
 
   return (
-    <APIProvider apiKey="">
+    <APIProvider apiKey={API_KEY}>
       <Map
         center={{lat: 37.74, lng: -122.4}}
         zoom={11}

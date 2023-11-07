@@ -14,9 +14,11 @@ import ControlPanel from './control-panel';
 import {MovingMarker} from './moving-marker';
 import {MarkerWithInfowindow} from './marker-with-infowindow';
 
+const API_KEY = process.env.GOOGLE_MAPS_API_KEY as string;
+
 const App = () => {
   return (
-    <APIProvider apiKey="" libraries={['marker']}>
+    <APIProvider apiKey={API_KEY} libraries={['marker']}>
       <Map
         mapId={'bf51a910020fa25a'}
         zoom={3}
