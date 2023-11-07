@@ -1,19 +1,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 // @ts-check
-// Note: type annotations allow type checking and IDEs autocompletion
-
-let lightCodeTheme = null;
-let darkCodeTheme = null;
-
-try {
-  // prism-react-renderer is a dependency of @docusaurus/theme-common
-  lightCodeTheme = require('prism-react-renderer/themes/github');
-  darkCodeTheme = require('prism-react-renderer/themes/dracula');
-} catch (err) {}
 
 // const webpack = require('webpack');
 const {resolve} = require('path');
 const webpack = require('webpack');
+const {themes: prismThemes} = require('prism-react-renderer');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -186,10 +177,13 @@ const config = {
         copyright: `Copyright © ${new Date().getFullYear()} OpenJS Foundation`
       },
       prism: {
-        theme: lightCodeTheme,
-        darkTheme: darkCodeTheme
+        theme: prismThemes.github,
+        darkTheme: prismThemes.dracula
       }
     })
 };
 
-module.exports = config;
+module.exports = async function createConfigAsync() {
+  console.log('cca');
+  return config;
+};
