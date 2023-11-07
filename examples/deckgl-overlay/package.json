@@ -9,6 +9,7 @@
   },
   "scripts": {
     "start": "vite",
+    "start-local": "vite --config ../vite.config.local.js",
     "build": "vite build"
   }
 }

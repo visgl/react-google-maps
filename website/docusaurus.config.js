@@ -29,7 +29,10 @@ const config = {
             'https://github.com/visgl/react-google-maps/tree/main/website'
         },
         theme: {
-          customCss: [resolve('./src/styles.css')]
+          customCss: [
+            resolve('./src/styles.css'),
+            resolve('../examples/examples.css')
+          ]
         }
       })
     ]

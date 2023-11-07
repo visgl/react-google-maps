@@ -5,6 +5,13 @@
   "source": "src/index.ts",
   "main": "dist/index.umd.js",
   "module": "dist/index.modern.mjs",
+  "exports": {
+    ".": {
+      "import": "./dist/index.modern.mjs",
+      "require": "./dist/index.umd.js"
+    },
+    "./examples.css": "./dist/examples.css"
+  },
   "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
@@ -16,9 +23,10 @@
   "homepage": "https://github.com/visgl/react-google-maps#readme",
   "license": "MIT",
   "scripts": {
-    "clean": "rm -rf ./dist",
+    "clean": "rm -rf ./dist && mkdir ./dist",
     "build": "npm-run-all clean -p build:*",
     "start": "run-p start:*",
+    "build:examples": "cp ./examples/examples.css dist",
     "build:microbundle": "microbundle -o dist/index.js -f modern,umd --globals react=React,react-dom=ReactDOM --jsx React.createElement --jsxFragment React.Fragment --no-compress --tsconfig tsconfig.build.json",
     "start:microbundle": "microbundle watch -o dist/index.js -f modern,umd --globals react=React,react-dom=ReactDOM --jsx React.createElement --jsxFragment React.Fragment --no-compress --tsconfig tsconfig.build.json",
     "test:linter": "eslint 'src/**/*.{ts,tsx}'",
@@ -66,6 +74,7 @@
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0",
     "ts-jest": "^29.0.5",
-    "typescript": "^5.1.6"
+    "typescript": "^5.1.6",
+    "vite": "^4.5.0"
   }
 }
