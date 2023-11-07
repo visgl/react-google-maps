@@ -10,8 +10,10 @@ export default defineConfig(({mode}) => {
     },
     resolve: {
       alias: {
-        '@vis.gl/react-google-maps': resolve('../../src/index.ts'),
-        '@examples-css': resolve('../../website/static/styles/examples.css')
+        '@vis.gl/react-google-maps/examples.css': resolve(
+          '../../examples/examples.css'
+        ),
+        '@vis.gl/react-google-maps': resolve('../../src/index.ts')
       }
     }
   };
