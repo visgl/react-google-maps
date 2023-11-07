@@ -7,8 +7,9 @@
   "module": "dist/index.modern.mjs",
   "exports": {
     ".": {
-      "import": "./dist/index.modern.mjs",
-      "require": "./dist/index.umd.js"
+      "require": "./dist/index.umd.js",
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.modern.mjs"
     },
     "./examples.css": "./dist/examples.css"
   },
