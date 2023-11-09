@@ -1,4 +1,4 @@
-import {useEffect} from 'react';
+import {useEffect, useLayoutEffect} from 'react';
 import {MapProps} from '@vis.gl/react-google-maps';
 
 /**
@@ -20,35 +20,31 @@ export function useMapOptions(map: google.maps.Map | null, mapProps: MapProps) {
   useEffect(() => {
     if (!map) return;
 
-    // NOTE: passing a mapId to setOptions triggers an error-message we don't need to see here
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const {mapId, ...opts} = mapOptions;
+    map.setOptions(mapOptions);
+  }, [mapOptions]);
 
-    map.setOptions(opts);
-  }, [mapProps]);
-
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!map || !center) return;
 
-    map.setCenter(center);
+    map.moveCamera({center});
   }, [center]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!map || !Number.isFinite(zoom)) return;
 
-    map.setZoom(zoom as number);
+    map.moveCamera({zoom: zoom as number});
   }, [zoom]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!map || !Number.isFinite(heading)) return;
 
-    map.setHeading(heading as number);
+    map.moveCamera({heading: heading as number});
   }, [heading]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!map || !Number.isFinite(tilt)) return;
 
-    map.setTilt(tilt as number);
+    map.moveCamera({tilt: tilt as number});
   }, [tilt]);
   /* eslint-enable react-hooks/exhaustive-deps */
 }
