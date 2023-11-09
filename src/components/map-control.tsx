@@ -8,6 +8,10 @@ type MapControlProps = PropsWithChildren<{
   position: ControlPosition;
 }>;
 
+/**
+ * Copy of the `google.maps.ControlPosition` constants.
+ * They have to be duplicated here since we can't wait for the maps API to load to be able to use them.
+ */
 export enum ControlPosition {
   TOP_LEFT = 1,
   TOP_CENTER = 2,
