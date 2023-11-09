@@ -29,7 +29,7 @@ module.exports = {
       }
     },
     {
-      files: ['./{src,examples}/*.{ts,mts,cts,tsx}'],
+      files: ['./{src,examples}/**/*.{ts,mts,cts,tsx}'],
       rules: {
         // Some of JS rules don't always work correctly in TS and
         // hence need to be reimported as TS rules
