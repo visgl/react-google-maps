@@ -1,3 +1,24 @@
+> [!IMPORTANT]
+> This project is still in it's alpha phase.
+> 
+> When using it be aware that things may not yet work as expected and can
+> break at any point. Releases happen often, so when you experience problems,
+> make sure you are using the latest version (check with `npm outdated` in
+> your project) before opening an issue.
+> 
+> We are still in a phase where we can easily make bigger changes, so we ask
+> you to please [provide feedback](https://github.com/visgl/react-google-maps/issues/new)
+> on everything you notice - including, but not limited to
+>  - developer experience (installation, typings, sourcemaps, framework integration, ...)
+>  - hard to understand concepts and APIs
+>  - wrong, missing, outdated or inaccurate documentation
+>  - use-cases not covered by the API
+>  - missing features
+>  - and of course any bugs you encounter
+> 
+> Also, feel free to use [GitHub discussions](https://github.com/visgl/react-google-maps/discussions) to ask questions or start a new
+> discussion.
+
 # React Components for the Google Maps JavaScript API
 
 [![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/visgl/react-google-maps/tree/main/LICENSE)
