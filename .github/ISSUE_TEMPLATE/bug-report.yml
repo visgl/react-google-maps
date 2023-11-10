@@ -1,0 +1,60 @@
+name: Bug Report
+description: Something does not work as expected
+title: '[Bug]'
+labels: bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        *Thank you for taking the time to report a bug!*
+        
+        Before reporting, please verify that you are using the latest version of the `@vis.gl/react-google-maps` library.
+        
+        You may find answers faster by searching in [the documentation](https://visgl.github.io/react-google-maps/search) and [existing issues](https://github.com/visgl/react-google-maps/issue).
+        If you are unsure whether it is a bug in your own implementation or the library itself, consider starting a conversation in [Discussions](https://github.com/visgl/react-map-gl/discussions) instead.
+  - type: textarea
+    attributes:
+      label: Description
+      description: What are you experiencing and what did you expect to happen?
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Steps to Reproduce
+      description: |
+        What steps are required to observe this behaviour?
+
+        Providing a Code Sandbox or similar that reproduces the behavior is
+        greatly appreciated and will help to get the issue resolved quickly.
+        If you need a starting point, you can use the "Try in Code Sandbox" 
+        links from any of our examples.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Environment
+      description: |
+        Please provide some information about the environment the issue appears in. 
+
+        Example:
+          - **Library version**: @vis.gl/react-google-maps@1.0.0
+          - **Google maps version**: weekly (whatever is passed to the `version`
+            prop of the APIProvider, default is 'weekly', ideally including the
+            value of `google.maps.version`)
+          - **Browser and Version**: Chrome 119.0
+          - **OS**: Windows 10
+      value: |
+        - Library version:
+        - Google maps version: weekly
+        - Browser and Version:
+        - OS:
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Logs
+      description: Please check the browser console for any relevant errors or warnings and post them here.
+      render: text
+    validations:
+      required: false
