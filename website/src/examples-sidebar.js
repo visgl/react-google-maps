@@ -12,7 +12,8 @@ const sidebars = {
         'basic-map',
         'markers-and-infowindows',
         'change-map-styles',
-        'map-control'
+        'map-control',
+        'directions'
       ]
     }
   ]
