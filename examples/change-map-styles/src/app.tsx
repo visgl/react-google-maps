@@ -8,7 +8,11 @@ import {
   Map,
   useMarkerRef
 } from '@vis.gl/react-google-maps';
+
 import ControlPanel from './control-panel';
+
+import brightColorsStyles from './map-styles/bright-colors';
+import vitaminCStyles from './map-styles/vitamin-c';
 
 const MapTypeId = {
   HYBRID: 'hybrid',
@@ -21,6 +25,7 @@ export type MapConfig = {
   label: string;
   mapId?: string;
   mapTypeId?: string;
+  styles?: google.maps.MapTypeStyle[];
 };
 
 const MAP_CONFIGS: MapConfig[] = [
@@ -50,6 +55,18 @@ const MAP_CONFIGS: MapConfig[] = [
     id: 'terrain',
     label: 'Terrain (no mapId)',
     mapTypeId: MapTypeId.TERRAIN
+  },
+  {
+    id: 'styled1',
+    label: 'Raster / "Bright Colors" (no mapId)',
+    mapTypeId: MapTypeId.ROADMAP,
+    styles: brightColorsStyles
+  },
+  {
+    id: 'styled2',
+    label: 'Raster / "Vitamin C" (no mapId)',
+    mapTypeId: MapTypeId.ROADMAP,
+    styles: vitaminCStyles
   },
   {
     id: 'satellite2',
@@ -85,6 +102,7 @@ const App = () => {
         mapTypeId={mapConfig.mapTypeId}
         center={{lat: 22, lng: 0}}
         zoom={3}
+        styles={mapConfig.styles}
         gestureHandling={'greedy'}
         disableDefaultUI={true}>
         <Marker

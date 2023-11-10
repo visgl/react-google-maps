@@ -1,9 +1,6 @@
-# Basic Google Maps Setup Example
+# Map Styling Example
 
-![image](https://user-images.githubusercontent.com/39244966/208682692-d5b23518-9e51-4a87-8121-29f71e41c777.png)
-
-This is an example to show how to change the map id of a simple Google Maps Map with the `<Map/>` component of the Google Maps React
-library.
+This is an example to demonstrate changing the style of the `<Map/>` component using local and cloud-based map styles as well as map types.
 
 ## Google Maps API key
 

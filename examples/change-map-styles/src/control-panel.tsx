@@ -14,15 +14,16 @@ function ControlPanel({
 }: ControlPanelProps) {
   return (
     <div className="control-panel">
-      <h3>Change MapIds</h3>
+      <h3>Change Map Styles</h3>
       <p>
-        The react-component can switch between multiple mapIds without having to
-        reinitialize.
+        The <code>Map</code> component can switch between multiple styles, even
+        between cloud-based and local styles, on the fly. Switching the mapType
+        is supported as well.
       </p>
       <p>
-        Be aware that, due to the way the Google Maps API works, this creates a
-        new <code>google.maps.Map</code> instance when the mapId is changed,
-        which can cause additional charges.
+        Due to the way the Maps API works, a new <code>google.maps.Map</code>{' '}
+        instance has to be created when the mapId is changed, which could affect
+        the number of paid map-views.
       </p>
 
       <div>
