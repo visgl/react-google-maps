@@ -11,7 +11,7 @@ const sidebars = {
       items: [
         'basic-map',
         'markers-and-infowindows',
-        'change-map-id',
+        'change-map-styles',
         'map-control'
       ]
     }
