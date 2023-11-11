@@ -30,7 +30,7 @@ function Directions() {
   const selected = routes[routeIndex];
   const leg = selected?.legs[0];
 
-  // Initialize direction service and enderer
+  // Initialize directions service and renderer
   useEffect(() => {
     if (!routesLibrary || !map) return;
     setDirectionsService(new routesLibrary.DirectionsService());
