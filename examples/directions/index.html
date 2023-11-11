@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <title>Example:</title>
+
+    <style>
+      body {
+        font-size: 16px;
+        margin: 0;
+        font-family: sans-serif;
+      }
+      #app {
+        width: 100vw;
+        height: 100vh;
+      }
+      h1 {
+        padding: 0.25rem 0px;
+        font-size: 1.5rem;
+      }
+      h2 {
+        padding: 0.25rem 0px;
+        font-size: 1.25rem;
+      }
+      p {
+        font-size: 0.8rem;
+        padding: 0px;
+        padding-bottom: 0.25rem;
+        margin: 0px;
+      }
+      .directions {
+        position: absolute;
+        width: 275px;
+        top: 0px;
+        right: 0px;
+        padding: 1.25rem;
+        padding-top: 0px;
+        margin: 0.25rem;
+        color: white;
+        background-color: #2d3748;
+        border-radius: 0.25rem;
+      }
+      ul {
+        padding: 0px;
+        padding-left: 1.5rem;
+        margin: 0px;
+      }
+      li button {
+        color: #f6e05e;
+        background: none;
+        border: none;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module">
+      import '@vis.gl/react-google-maps/examples.css';
+      import {renderToDom} from './src/app';
+
+      renderToDom(document.querySelector('#app'));
+    </script>
+  </body>
+</html>
