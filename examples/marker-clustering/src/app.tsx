@@ -12,11 +12,13 @@ import type {Marker} from '@googlemaps/markerclusterer';
 import trees from './trees';
 
 const API_KEY = process.env.GOOGLE_MAPS_API_KEY as string;
-const MAP_ID = process.env.GOOGLE_MAPS_MAP_ID as string;
 
 const App = () => (
   <APIProvider apiKey={API_KEY}>
-    <Map center={{lat: 43.64, lng: -79.41}} zoom={10} mapId={MAP_ID}>
+    <Map
+      mapId={'bf51a910020fa25a'}
+      center={{lat: 43.64, lng: -79.41}}
+      zoom={10}>
       <Markers points={trees} />
     </Map>
   </APIProvider>
