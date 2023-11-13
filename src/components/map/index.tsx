@@ -17,6 +17,7 @@ import {useCallbackRef} from '../../libraries/use-callback-ref';
 import {MapEventProps, useMapEvents} from './use-map-events';
 import {useMapOptions} from './use-map-options';
 import {useDeckGLCameraUpdate} from './use-deckgl-camera-update';
+import {useInternalCameraState} from './use-internal-camera-state';
 
 export interface GoogleMapsContextValue {
   map: google.maps.Map | null;
@@ -73,8 +74,9 @@ export const Map = (props: PropsWithChildren<MapProps>) => {
   }
 
   const [map, mapRef] = useMapInstance(props, context);
-  useMapOptions(map, props);
-  useMapEvents(map, props);
+  const cameraStateRef = useInternalCameraState();
+  useMapOptions(map, cameraStateRef, props);
+  useMapEvents(map, cameraStateRef, props);
   useDeckGLCameraUpdate(map, viewState);
 
   const isViewportSet = useMemo(() => Boolean(viewport), [viewport]);

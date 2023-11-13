@@ -150,3 +150,16 @@ describe('creating and updating map instance', () => {
     expect(options).toMatchObject({mapId: 'othermapid'});
   });
 });
+
+describe('map events and event-props', () => {
+  test.todo('events dispatched by the map are received via event-props');
+});
+
+describe('camera updates', () => {
+  test.todo('initial camera state is passed via mapOptions, not moveCamera');
+  test.todo('updated camera state is passed to moveCamera');
+  test.todo("re-renders with unchanged camera state don't trigger moveCamera");
+  test.todo(
+    "re-renders with props received via events don't trigger moveCamera"
+  );
+});
