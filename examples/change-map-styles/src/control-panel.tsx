@@ -41,13 +41,13 @@ function ControlPanel({
 
       <div className="links">
         <a
-          href="https://codesandbox.io/s/github/visgl/react-google-maps/tree/main/examples/change-map-id"
+          href="https://codesandbox.io/s/github/visgl/react-google-maps/tree/main/examples/change-map-styles"
           target="_new">
           Try on CodeSandbox ↗
         </a>
 
         <a
-          href="https://github.com/visgl/react-google-maps/tree/main/examples/change-map-id"
+          href="https://github.com/visgl/react-google-maps/tree/main/examples/change-map-styles"
           target="_new">
           View Code ↗
         </a>
