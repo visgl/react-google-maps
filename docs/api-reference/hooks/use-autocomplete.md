@@ -8,7 +8,7 @@ When initializing the `<APIProvider>`, include the places library like this: `li
 
 ```tsx
 import React, {useRef, useState} from 'react';
-import {useAutocomplete} from '@vis.gl/react-google-maps-hooks';
+import {useAutocomplete} from '@vis.gl/react-google-maps';
 
 const MyComponent = () => {
   const inputRef = useRef(null);
