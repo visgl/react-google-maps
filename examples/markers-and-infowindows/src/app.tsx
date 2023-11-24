@@ -51,7 +51,7 @@ const App = () => {
             borderColor={'#1e89a1'}
             scale={1.4}>
               {/* child gets rendered as 'glyph' element of pin */}
-              <img src="https://www.svgrepo.com/show/522904/info-circle.svg" style={{height: "24px", width: "24px", color: "white", stroke: "#fff", fill: "#fff"}}/>
+              <img src="https://www.svgrepo.com/show/522904/info-circle.svg" style={{height: "24px", width: "24px"}}/>
             </Pin>
         </AdvancedMarker>
 
