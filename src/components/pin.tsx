@@ -1,5 +1,7 @@
-import {useContext, useEffect} from 'react';
+import {Children, PropsWithChildren, useContext, useEffect, useMemo} from 'react';
 import {AdvancedMarkerContext} from './advanced-marker';
+import { createPortal } from 'react-dom';
+import { logErrorOnce } from '../libraries/errors';
 
 /**
  * Props for the Pin component
@@ -9,8 +11,9 @@ export type PinProps = google.maps.marker.PinElementOptions;
 /**
  * Component to render a google maps marker Pin View
  */
-export const Pin = (props: PinProps) => {
+export const Pin = (props: PropsWithChildren<PinProps>) => {
   const advancedMarker = useContext(AdvancedMarkerContext)?.marker;
+  const glyphContainer = useMemo(() => document.createElement('div'), []);
 
   // Create Pin View instance
   useEffect(() => {
@@ -24,15 +27,27 @@ export const Pin = (props: PinProps) => {
       return;
     }
 
+    if (props.glyph && props.children) {
+      logErrorOnce('The <Pin> component only uses children to render the glyph if both the glyph property and children are present.')
+    }
+
+    if (Children.count(props.children) > 1) {
+      logErrorOnce('Passing multiple children to the <Pin> component might lead to unexpected results.')
+    }
+
     const pinViewOptions: google.maps.marker.PinElementOptions = {
       ...props
     };
 
     const pinElement = new google.maps.marker.PinElement(pinViewOptions);
 
+    if (props.children) {
+      pinElement.glyph = glyphContainer;
+    }
+
     // Set content of Advanced Marker View to the Pin View element
     advancedMarker.content = pinElement.element;
   }, [advancedMarker, props]);
 
-  return null;
+  return createPortal(props.children, glyphContainer);
 };
