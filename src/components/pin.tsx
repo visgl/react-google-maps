@@ -41,6 +41,10 @@ export const Pin = (props: PropsWithChildren<PinProps>) => {
 
     const pinElement = new google.maps.marker.PinElement(pinViewOptions);
 
+    /**
+     * Set glyph to glyph container if children are present (rendered via portal).
+     * If both props.glyph and props.children are present, props.children takes priority.
+     *  */
     if (props.children) {
       pinElement.glyph = glyphContainer;
     }
