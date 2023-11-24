@@ -44,15 +44,16 @@ const App = () => {
         </AdvancedMarker>
 
         {/* advanced marker with html pin glyph */}
-        <AdvancedMarker position={{lat: 15, lng: 20}}
+        <AdvancedMarker
+          position={{lat: 15, lng: 20}}
           title={'AdvancedMarker with customized pin.'}>
-          <Pin
-            background={'#22ccff'}
-            borderColor={'#1e89a1'}
-            scale={1.4}>
-              {/* child gets rendered as 'glyph' element of pin */}
-              <img src="https://www.svgrepo.com/show/522904/info-circle.svg" style={{height: "24px", width: "24px"}}/>
-            </Pin>
+          <Pin background={'#22ccff'} borderColor={'#1e89a1'} scale={1.4}>
+            {/* child gets rendered as 'glyph' element of pin */}
+            <img
+              src="https://www.svgrepo.com/show/522904/info-circle.svg"
+              style={{height: '24px', width: '24px'}}
+            />
+          </Pin>
         </AdvancedMarker>
 
         {/* advanced marker with html-content */}

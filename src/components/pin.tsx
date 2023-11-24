@@ -1,7 +1,13 @@
-import {Children, PropsWithChildren, useContext, useEffect, useMemo} from 'react';
+import {
+  Children,
+  PropsWithChildren,
+  useContext,
+  useEffect,
+  useMemo
+} from 'react';
 import {AdvancedMarkerContext} from './advanced-marker';
-import { createPortal } from 'react-dom';
-import { logErrorOnce } from '../libraries/errors';
+import {createPortal} from 'react-dom';
+import {logErrorOnce} from '../libraries/errors';
 
 /**
  * Props for the Pin component
@@ -28,11 +34,15 @@ export const Pin = (props: PropsWithChildren<PinProps>) => {
     }
 
     if (props.glyph && props.children) {
-      logErrorOnce('The <Pin> component only uses children to render the glyph if both the glyph property and children are present.')
+      logErrorOnce(
+        'The <Pin> component only uses children to render the glyph if both the glyph property and children are present.'
+      );
     }
 
     if (Children.count(props.children) > 1) {
-      logErrorOnce('Passing multiple children to the <Pin> component might lead to unexpected results.')
+      logErrorOnce(
+        'Passing multiple children to the <Pin> component might lead to unexpected results.'
+      );
     }
 
     const pinViewOptions: google.maps.marker.PinElementOptions = {
