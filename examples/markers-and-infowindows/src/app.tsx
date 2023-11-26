@@ -50,7 +50,7 @@ const App = () => {
           <Pin background={'#22ccff'} borderColor={'#1e89a1'} scale={1.4}>
             {/* child gets rendered as 'glyph' element of pin */}
             <img
-              src="https://www.svgrepo.com/show/522904/info-circle.svg"
+              src="../assets/info-circle.svg"
               style={{height: '24px', width: '24px'}}
             />
           </Pin>
