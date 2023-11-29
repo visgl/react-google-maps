@@ -11,6 +11,7 @@ const sidebars = {
       items: [
         'basic-map',
         'markers-and-infowindows',
+        'marker-clustering',
         'change-map-styles',
         'map-control',
         'directions'
