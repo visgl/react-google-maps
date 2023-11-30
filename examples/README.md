@@ -46,17 +46,17 @@ created, functions used to prepare data to show should be hidden away.
 
 ### Adding examples to the website
 
-If you are adding an example with no additional dependencies:
+If you are adding an example with **no additional dependencies**:
 
 1. Create the example page in `./website/src/examples/your-example-id.mdx`
 1. Add the example to `./website/src/examples-sidebar.js`
 1. Create a 400x400 px image for the overview page and place it in
-  `./website/static/images/examples/your-example-id.jpg`
+   `./website/static/images/examples/your-example-id.jpg`
 1. The whole website can be started in dev-mode by running `npm i` and `npm start`
-  in the `./website` directory. The website build can be tested by running
-  `npm run build`.
+   in the `./website` directory. The website build can be tested by running
+   `npm run build`.
 
-If you are adding an example with additional dependencies:
+If you are adding an example **with additional dependencies**:
 
 1. Create a 400x400 px image for the overview page and place it in ./website/static/images/examples/your-example-id.jpg
 1. Add the example to `./website/src/examples-sidebar.js` as an [external link](https://docusaurus.io/docs/sidebar/items#sidebar-item-link) to [a CodeSandbox](https://codesandbox.io/docs/learn/devboxes/synced-templates#creating-a-synced-template) based on the title of your new example folder in the `./examples` folder.
