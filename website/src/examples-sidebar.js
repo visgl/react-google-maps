@@ -3,21 +3,27 @@ const sidebars = {
     {
       type: 'doc',
       label: 'Overview',
-      id: 'index'
+      id: 'index',
     },
     {
       type: 'category',
       label: 'Examples',
+      collapsed: false,
       items: [
         'basic-map',
         'markers-and-infowindows',
-        'marker-clustering',
+        // External link
+        {
+          type: 'link',
+          label: 'Marker Clustering',
+          href: 'https://codesandbox.io/s/github/visgl/react-google-maps/tree/main/examples/marker-clustering',
+        },
         'change-map-styles',
         'map-control',
-        'directions'
-      ]
-    }
-  ]
+        'directions',
+      ],
+    },
+  ],
 };
 
 module.exports = sidebars;

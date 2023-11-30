@@ -34,25 +34,29 @@ created, functions used to prepare data to show should be hidden away.
 
 ### Create the example
 
-- you can start off by copying the `./examples/_template` folder for
+- Start off by copying the `./examples/_template` folder for
   your example. This will contain the config-files needed and some
   basic setup that is the same for all examples. The new directory-name will be
   the "example id" and should be in 'kebap-case' (we'll need that id later).
-- you can develop the example independently of the library as a standalone
+- Develop the example independently of the library as a standalone
   mini-application (using `npm i` and `npm start` to start the vite dev-server).
-- you can install additional dependencies. However, in that case, we can't
-  currently include the example on the 'Examples' page of the website (something
-  we could look into, but for now it's not working due to the way the website
-  is built)
-- make sure to also edit the title, description and sourcecode links in the
+- If you install additional dependencies, the "Examples" section of [the website](https://visgl.github.io/react-google-maps/examples/) will not be able to host your example, but you can still [link to a CodeSandbox](https://codesandbox.io/docs/learn/devboxes/synced-templates#creating-a-synced-template) for the example.
+- Edit the title, description and sourcecode links in the
   `README.md`, `index.html`, and `./src/control-panel.tsx` files.
 
 ### Adding examples to the website
 
-- create the example page in `./website/src/examples/your-example-id.mdx`
-- add the example to `./website/src/examples-sidebar.js`
-- create a 400x400 px image for the overview page and place it in
+If you are adding an example with no additional dependencies:
+
+1. Create the example page in `./website/src/examples/your-example-id.mdx`
+1. Add the example to `./website/src/examples-sidebar.js`
+1. Create a 400x400 px image for the overview page and place it in
   `./website/static/images/examples/your-example-id.jpg`
-- the whole website can be started in dev-mode by running `npm i` and `npm start`
+1. The whole website can be started in dev-mode by running `npm i` and `npm start`
   in the `./website` directory. The website build can be tested by running
   `npm run build`.
+
+If you are adding an example with additional dependencies:
+
+1. Create a 400x400 px image for the overview page and place it in ./website/static/images/examples/your-example-id.jpg
+1. Add the example to `./website/src/examples-sidebar.js` as an [external link](https://docusaurus.io/docs/sidebar/items#sidebar-item-link) to [a CodeSandbox](https://codesandbox.io/docs/learn/devboxes/synced-templates#creating-a-synced-template) based on the title of your new example folder in the `./examples` folder.
