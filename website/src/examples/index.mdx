@@ -1,3 +1,8 @@
 import {ExamplesIndex} from '../components';
+import {toKebapCase} from '../utils/to-kebap-case';
 
-<ExamplesIndex getThumbnail={item => `/images/examples/${item.docId || item.label.match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g).join('-').toLowerCase()}.jpg`} />
+<ExamplesIndex
+  getThumbnail={item =>
+    `/images/examples/${item.docId || toKebapCase(item.label)}.jpg`
+  }
+/>
