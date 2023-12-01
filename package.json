@@ -49,6 +49,9 @@
     "Google Maps",
     "Google Maps components"
   ],
+  "dependencies": {
+    "@types/google.maps": "^3.54.10"
+  },
   "peerDependencies": {
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0"
@@ -58,7 +61,6 @@
     "@testing-library/jest-dom": "^6.0.1",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",
-    "@types/google.maps": "^3.50.5",
     "@types/jest": "^29.4.0",
     "@typescript-eslint/eslint-plugin": "^6.4.1",
     "@typescript-eslint/parser": "^6.4.1",
