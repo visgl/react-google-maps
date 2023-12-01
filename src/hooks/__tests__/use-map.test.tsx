@@ -92,3 +92,15 @@ test('it should return a map instance by its id', () => {
   renderHookResult = renderHook(() => useMap('unknown'), {wrapper});
   expect(renderHookResult.result.current).toBe(null);
 });
+
+test('it should log an error when used outside the APIProvider', () => {
+  const consoleErrorSpy = jest
+    .spyOn(console, 'error')
+    .mockImplementation(() => {});
+
+  const res = renderHook(() => useMap());
+  expect(res.result.current).toBe(null);
+
+  expect(consoleErrorSpy).toHaveBeenCalled();
+  expect(consoleErrorSpy.mock.calls).toMatchSnapshot();
+});
