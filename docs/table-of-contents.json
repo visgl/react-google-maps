@@ -5,10 +5,17 @@
     "items": [
       "README",
       "get-started",
-      "interacting-with-the-google-maps-api",
       "whats-new",
       "upgrade-guide",
       "contributing"
+    ]
+  },
+  {
+    "type": "category",
+    "label": "Guides",
+    "items": [
+      "guides/interacting-with-google-maps-api",
+      "guides/deckgl-integration"
     ]
   },
   {

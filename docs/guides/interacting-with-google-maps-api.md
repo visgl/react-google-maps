@@ -1,14 +1,14 @@
 # Interacting with the Google Maps API
 
 With the provided components, you are able to declaratively create a
-[Google Map](./api-reference/components/map.md) or a map with
-[markers](./api-reference/components/marker.md) for example.
+[Google Map](../api-reference/components/map.md) or a map with
+[markers](../api-reference/components/marker.md) for example.
 
 Besides that, there are three main ways and concepts to interact
 with the Google Maps API on lower level with this library.
 You can use the provided hooks, the refs that are available for
 some components or use the
-[`useMapsLibrary`](./api-reference/hooks/use-maps-library.md) hook
+[`useMapsLibrary`](../api-reference/hooks/use-maps-library.md) hook
 to tap into other libraries and services of the Google Maps API or
 craft your own custom hooks.
 
@@ -16,7 +16,7 @@ craft your own custom hooks.
 
 There are several hooks that provide additional functionality for the
 map or maps you create.
-The main one being the [`useMap`](./api-reference/hooks/use-map.md) hook.
+The main one being the [`useMap`](../api-reference/hooks/use-map.md) hook.
 This hooks give you access to the underlying `google.maps.Map` instance.
 Every child component wrapped in the `<APIProvider>...</APIProvider>`
 component has access to the map instance via this hook.
@@ -48,12 +48,12 @@ const App = () => (
 
 Other hooks provide access to different Google Maps API services:
 
-- [useDirectionsService](./api-reference/hooks/use-directions-service.md)
+- [useDirectionsService](../api-reference/hooks/use-directions-service.md)
   for the [Directions Service](https://developers.google.com/maps/documentation/javascript/directions)
-- [useStreetViewPanorama](./api-reference/hooks/use-streetview-panorama.md) for the [Streetview Service](https://developers.google.com/maps/documentation/javascript/streetview)
-- [useAutocomplete](./api-reference/hooks/use-autocomplete.md) for the [Places Widget](https://developers.google.com/maps/documentation/javascript/reference/places-widget)
+- [useStreetViewPanorama](../api-reference/hooks/use-streetview-panorama.md) for the [Streetview Service](https://developers.google.com/maps/documentation/javascript/streetview)
+- [useAutocomplete](../api-reference/hooks/use-autocomplete.md) for the [Places Widget](https://developers.google.com/maps/documentation/javascript/reference/places-widget)
 
-The [useMapsLibrary](./api-reference/hooks/use-maps-library.md) hook can be
+The [useMapsLibrary](../api-reference/hooks/use-maps-library.md) hook can be
 utilized to load other parts of the Google Maps API that are not loaded by default.
 For example, the Places Service or the Geocoding Service.
 [Learn how to use this hook.](#other-google-maps-api-libraries-and-services)
@@ -104,7 +104,7 @@ export default App;
 The Maps JavaScript API has a lot of [additional libraries](https://developers.google.com/maps/documentation/javascript/libraries)
 for things like geocoding, routing, the Places API, Street View, and
 a lot more. These libraries are not loaded by default, which is why this
-module provides a hook [`useMapsLibrary()`](./api-reference/hooks/use-maps-library.md)
+module provides a hook [`useMapsLibrary()`](../api-reference/hooks/use-maps-library.md)
 to handle dynamic loading of those libraries.
 
 For example, if you want to write a component that needs to use the
