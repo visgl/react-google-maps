@@ -1,7 +1,7 @@
 # Introduction
 
 `@vis.gl/react-google-maps` is a collection of [React][react] components and
-hooks for the Google Maps Javascript API. It was first provisioned by the
+hooks for the Google Maps JavaScript API. It was first provisioned by the
 Google Maps Platform team, in order to provide solid integrations between
 React and the Maps JavaScript API inspired by the integration between
 `react-map-gl` and the map renderers based on `mapbox-gl-js`.

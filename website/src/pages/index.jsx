@@ -56,7 +56,7 @@ export default function IndexPage() {
         <div style={{position: 'relative'}}>
           <TextContainer>
             <h2>
-              react-google-maps makes using the Google Maps Javascript API in
+              react-google-maps makes using the Google Maps JavaScript API in
               React applications easy.
             </h2>
             <hr className="short" />

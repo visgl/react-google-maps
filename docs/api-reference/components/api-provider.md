@@ -34,23 +34,23 @@ export default App;
 The props are based on [the parameters][gmp-params] available for the
 'Dynamic Library Import' API which we are using under the hood.
 
-> Note that most of the props below are marked as 'immutable',
+> Note that most of the props below are marked with 'first-render only',
 > which refers to the fact that these can only be specified on
-> first render, changes to the values will not have any effect.
+> first render, later changes to the values will have no effect.
 
 ### Required
 
-#### `apiKey`: string (required, immutable) {#apiKey}
+#### `apiKey`: string (required, first-render only) {#apiKey}
 
 The API Key for the Maps JavaScript API.
 
 ### Optional
 
-#### `version`: string (immutable) {#version}
+#### `version`: string (first-render only) {#version}
 
 The [version][gmp-api-version] to load (defaults to `weekly`).
 
-#### `region`: string (immutable) {#region}
+#### `region`: string (first-render only) {#region}
 
 The [region code][gmp-region] to use. This alters the map's behavior based on a
 given country or territory. Quoting [the official docs][gmp-region]:
@@ -63,13 +63,13 @@ given country or territory. Quoting [the official docs][gmp-region]:
 > local laws by ensuring that the correct region localization is applied for the
 > country in which the application is hosted.
 
-#### `language`: string (immutable) {#language}
+#### `language`: string (first-render only) {#language}
 
 The language to use.
 This affects all text-content on the map, and the responses to service requests.
 The default value is determined per user based on HTTP-headers sent by the Browser.
 
-#### `authReferrerPolicy`: string (immutable) {#authReferrerPolicy}
+#### `authReferrerPolicy`: string (first-render only) {#authReferrerPolicy}
 
 If your API key is configured for an entire subdomain,
 you can set `authReferrerPolicy: "origin"` to limit the amount of data sent
