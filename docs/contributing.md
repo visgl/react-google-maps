@@ -4,11 +4,31 @@
 
 PRs and bug reports are welcome, and we are actively looking for new maintainers.
 
+Please [open a discussion][discussions] or [feature request][feat-req] before starting to work on a new feature. That way we can make sure it fits well with the overall architecture and plans of the library.
+
+[discussions]: https://github.com/visgl/react-google-maps/discussions
+[feat-req]: https://github.com/visgl/react-google-maps/issues/new?assignees=&labels=feature&projects=&template=feature-request.yml&title=%5BFeat%5D
+
+## Development Process
+
+It would be great to have some level of support for most, if not all features of the Google Maps JavaScript API.
+_"Some level of support"_ is intentionally being a bit vague here: Balancing the amount of features included in this library with the effort needed to maintain it (and thus prevent it from decaying) is going to be an ongoing discussion. 
+Features added to the library are permanent, and need a commitment to keep maintaining them, which is why adding features has to be considered carefully.
+
+The focus will be on providing an extensible library of "low-level" abstractions that can be used to implement known and unknown use-cases of the Google Maps API in a React application.
+
+In a lot of cases – especially when a solution needs to have a lot of flexibility (implementing an Autocomplete component for example) and room for opinion (generally everything with a UI) – it is preferrable to provide a "reference implementation" with our examples that users can then copy and adjust to their needs.
+
+This will also be the default procedure for adding functionality to the library:
+A proposed feature should always start as client-side code that can be provided as an example in the library. If implementing the feature is difficult or impossible with the library, that would be an excellent indicator that some abstraction is missing at a lower level and should be added to the library.
+
+If a feature implemented this way proves useful over time we will consider either adding it to the library as a new feature or providing it as a separate library that augments this library.
+
 ## Setting Up Dev Environment
 
 The **main** branch is the active development branch.
 
-Building react-google-maps locally from the source requires node.js `>=8`.
+Building `@vis.gl/react-google-maps` locally from the source requires a current version of node.js.
 We use npm to manage the dependencies.
 
 ```bash
@@ -17,15 +37,21 @@ npm install
 npm run test
 ```
 
-Test:
+Running the full test suite:
 
 ```bash
 npm run test
 ```
 
+Or just the unit-tests:
+
+```bash
+npm run test:unit
+```
+
 ## Pull Requests
 
-Any intended change to the code base must open a [pull request](https://help.github.com/articles/creating-a-pull-request/) and be approved. 
+Any intended change to the code base must open a [pull request](https://help.github.com/articles/creating-a-pull-request/) and be approved by the maintainers. 
 
 Generally speaking, all PRs are open against the `main` branch, unless the feature being affected no longer exists on main.
 
@@ -46,9 +72,10 @@ Generally speaking, all PRs are open against the `main` branch, unless the featu
   + If public APIs are added/modified, describe the intended behavior.
   + If visual/interaction is affected, consider attaching a screenshot/GIF.
 
+
 ## Release
 
-react-google-maps follows the [Semantic Versioning](https://semver.org/) guidelines. Steps for publishing releases can be found [here](https://www.github.com/visgl/tsc/tree/master/developer-process).
+`@vis.gl/react-google-maps` follows the [Semantic Versioning](https://semver.org/) guidelines. Steps for publishing releases can be found [here](https://www.github.com/visgl/tsc/tree/master/developer-process).
 
 
 ## Community Governance
