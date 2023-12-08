@@ -36,10 +36,10 @@
   font-size: 11px;
 }
 
-html[data-theme="dark"] .control-panel {
+html[data-theme='dark'] .control-panel {
   background: var(--ifm-background-color);
 }
 
-html[data-theme="dark"] .gm-style {
+html[data-theme='dark'] .gm-style {
   color: var(--ifm-color-black);
 }
