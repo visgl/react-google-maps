@@ -21,7 +21,6 @@ Test:
 
 ```bash
 npm run test
-
 ```
 
 ## Pull Requests
@@ -33,8 +32,7 @@ Generally speaking, all PRs are open against the `main` branch, unless the featu
 ### PR Checklist
 
 - [ ] Tests
-- `npm run test` must be successful.
-
+  + `npm run test` must be successful.
   + New code should be covered by unit tests whenever possible.
 
 - [ ] Documentation
@@ -47,7 +45,6 @@ Generally speaking, all PRs are open against the `main` branch, unless the featu
   + Label with a milestone (latest release or vNext).
   + If public APIs are added/modified, describe the intended behavior.
   + If visual/interaction is affected, consider attaching a screenshot/GIF.
-
 
 ## Release
 
