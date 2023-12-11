@@ -9,20 +9,40 @@ Please [open a discussion][discussions] or [feature request][feat-req] before st
 [discussions]: https://github.com/visgl/react-google-maps/discussions
 [feat-req]: https://github.com/visgl/react-google-maps/issues/new?assignees=&labels=feature&projects=&template=feature-request.yml&title=%5BFeat%5D
 
+## Goals and Philosophy
+
+It would be great to have some level of support for most, if not all
+features of the Google Maps JavaScript API.
+_"Some level of support"_ is intentionally a bit vague here: Balancing the
+amount of features included in this library with the effort needed to
+maintain it (and thus prevent it from decaying) is going to be an ongoing
+discussion.
+**Features added to the library are permanent**, and need a commitment to
+keep maintaining them, which is why adding features has to be considered
+carefully.
+
+The focus will be on providing an extensible library of **"low-level"
+abstractions** that can be used to implement known and unknown use-cases of
+the Google Maps API in a React application.
+
+In a lot of cases – especially when a solution needs to have a lot of
+flexibility (implementing an Autocomplete component for example) and room
+for opinion (generally everything with a UI) – it is preferrable to provide
+a "reference implementation" with our examples that users can then copy and
+adjust to their needs.
+
 ## Development Process
 
-It would be great to have some level of support for most, if not all features of the Google Maps JavaScript API.
-_"Some level of support"_ is intentionally being a bit vague here: Balancing the amount of features included in this library with the effort needed to maintain it (and thus prevent it from decaying) is going to be an ongoing discussion. 
-Features added to the library are permanent, and need a commitment to keep maintaining them, which is why adding features has to be considered carefully.
+The default procedure for adding functionality to the library is as follows:
 
-The focus will be on providing an extensible library of "low-level" abstractions that can be used to implement known and unknown use-cases of the Google Maps API in a React application.
-
-In a lot of cases – especially when a solution needs to have a lot of flexibility (implementing an Autocomplete component for example) and room for opinion (generally everything with a UI) – it is preferrable to provide a "reference implementation" with our examples that users can then copy and adjust to their needs.
-
-This will also be the default procedure for adding functionality to the library:
-A proposed feature should always start as client-side code that can be provided as an example in the library. If implementing the feature is difficult or impossible with the library, that would be an excellent indicator that some abstraction is missing at a lower level and should be added to the library.
-
-If a feature implemented this way proves useful over time we will consider either adding it to the library as a new feature or providing it as a separate library that augments this library.
+- new features always start as a "reference implementation" in an example
+  (see also the ["Writing Examples" guide](./guides/writing-examples.md)).
+- when implementing the desired feature is challenging or impossible with the
+  library, that would be an excellent indicator that some abstraction is
+  missing at a lower level and should be added to the library.
+- If a new feature proves to be useful and univeral (i.e. it can be used
+  without needing much per-user customization), we will
+  consider adding it to the library or providing it as a separate library.
 
 ## Setting Up Dev Environment
 
@@ -51,32 +71,32 @@ npm run test:unit
 
 ## Pull Requests
 
-Any intended change to the code base must open a [pull request](https://help.github.com/articles/creating-a-pull-request/) and be approved by the maintainers. 
+Any intended change to the code base must open a [pull request](https://help.github.com/articles/creating-a-pull-request/) and be approved by the maintainers.
 
 Generally speaking, all PRs are open against the `main` branch, unless the feature being affected no longer exists on main.
 
 ### PR Checklist
 
 - [ ] Tests
-  + `npm run test` must be successful.
-  + New code should be covered by unit tests whenever possible.
+
+  - `npm run test` must be successful.
+  - New code should be covered by unit tests whenever possible.
 
 - [ ] Documentation
-  + If public APIs are added/modified, update component documentation in `docs/api-reference`.
-  + Breaking changes and deprecations must be added to `docs/upgrade-guide.md`.
-  + Noteworthy new features should be added to `docs/whats-new.md`.
+
+  - If public APIs are added/modified, update component documentation in `docs/api-reference`.
+  - Breaking changes and deprecations must be added to `docs/upgrade-guide.md`.
+  - Noteworthy new features should be added to `docs/whats-new.md`.
 
 - [ ] Description on GitHub
-  + Link to relevant issue.
-  + Label with a milestone (latest release or vNext).
-  + If public APIs are added/modified, describe the intended behavior.
-  + If visual/interaction is affected, consider attaching a screenshot/GIF.
-
+  - Link to relevant issue.
+  - Label with a milestone (latest release or vNext).
+  - If public APIs are added/modified, describe the intended behavior.
+  - If visual/interaction is affected, consider attaching a screenshot/GIF.
 
 ## Release
 
 `@vis.gl/react-google-maps` follows the [Semantic Versioning](https://semver.org/) guidelines. Steps for publishing releases can be found [here](https://www.github.com/visgl/tsc/tree/master/developer-process).
-
 
 ## Community Governance
 
