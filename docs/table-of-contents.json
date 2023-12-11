@@ -15,7 +15,8 @@
     "label": "Guides",
     "items": [
       "guides/interacting-with-google-maps-api",
-      "guides/deckgl-integration"
+      "guides/deckgl-integration",
+      "guides/writing-examples"
     ]
   },
   {
