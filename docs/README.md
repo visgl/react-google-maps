@@ -37,8 +37,8 @@ to as having a _single source of truth_. That could be stored in a parent
 component state, a Redux store, or react-hooks, and let it propagate down
 to the map and any other component.
 
-Ultimately, in the spirit of the [reactive programming paradigm]
-[wiki-reactive] used in React, data from this single source of truth should
+Ultimately, in the spirit of the [reactive programming paradigm][wiki-reactive]
+used in React, data from this single source of truth should
 always flow down the component hierarchy. If components manage their own
 state, as Google Maps is designed to do, we risk the components going out of
 sync.
@@ -54,9 +54,9 @@ initial values, and users will be able to interact with the map without
 requiring the props to be updated. So by default, the map is allowed to
 deviate from the specified values.
 
-However, the [Map][docs-map] component can also be used as a fully [controlled]
-[react-controlled] component. That is, the map's camera will never deviate
-from the props that have been assigned. In this mode, the controls
+However, the [Map][docs-map] component can also be used as a fully
+[controlled][react-controlled] component. That is, the map's camera will never
+deviate from the props that have been assigned. In this mode, the controls
 provided by the map can still be used by listening for the appropriate
 events and updating the state accordingly.
 
