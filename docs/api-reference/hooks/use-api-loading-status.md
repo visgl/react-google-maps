@@ -28,6 +28,6 @@ Returns the current loading-state.
 
 ## Source
 
-[`src/hooks/use-api-loading-status.tsx`][src]
+[`src/hooks/use-api-loading-status.ts`][src]
 
-[src]: https://github.com/visgl/react-google-maps/blob/main/src/hooks/use-api-loading-status.tsx
+[src]: https://github.com/visgl/react-google-maps/blob/main/src/hooks/use-api-loading-status.ts
