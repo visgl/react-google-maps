@@ -27,6 +27,6 @@ Returns a boolean indicating if the Maps JavaScript API completed loading.
 
 ## Source
 
-[`src/hooks/use-api-is-loaded.tsx`][src]
+[`src/hooks/use-api-is-loaded.ts`][src]
 
-[src]: https://github.com/visgl/react-google-maps/blob/main/src/hooks/use-api-is-loaded.tsx
+[src]: https://github.com/visgl/react-google-maps/blob/main/src/hooks/use-api-is-loaded.ts

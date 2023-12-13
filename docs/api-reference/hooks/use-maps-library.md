@@ -32,7 +32,7 @@ The name of the library that should be loaded
 
 ## Source
 
-[`src/hooks/use-maps-library.tsx`][src]
+[`src/hooks/use-maps-library.ts`][src]
 
 [gmp-libraries]: https://developers.google.com/maps/documentation/javascript/libraries
-[src]: https://github.com/visgl/react-google-maps/blob/main/src/hooks/use-maps-library.tsx
+[src]: https://github.com/visgl/react-google-maps/blob/main/src/hooks/use-maps-library.ts

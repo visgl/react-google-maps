@@ -91,7 +91,7 @@ the parent map instance, or the default map instance if there is no parent.
 
 ## Source
 
-[`src/hooks/use-map.tsx`][src]
+[`src/hooks/use-map.ts`][src]
 
-[src]: https://github.com/visgl/react-google-maps/blob/main/src/hooks/use-map.tsx
+[src]: https://github.com/visgl/react-google-maps/blob/main/src/hooks/use-map.ts
 [gmp-map-ref]: https://developers.google.com/maps/documentation/javascript/reference/map#Map
