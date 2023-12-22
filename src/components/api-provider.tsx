@@ -142,7 +142,7 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
 
       return res;
     },
-    []
+    [loadedLibraries]
   );
 
   useEffect(
