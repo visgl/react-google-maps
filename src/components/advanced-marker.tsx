@@ -79,7 +79,7 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
     // create container for marker content if there are children
     if (numChilds > 0) {
       const el = document.createElement('div');
-      if (className) el.classList.add(className);
+      if (className) el.className = className;
 
       newMarker.content = el;
 
