@@ -24,8 +24,7 @@ the library to reflect those values.
 
 ## Props
 
-The MapProps interface extends the [google.maps.MapOptions interface]
-(https://developers.google.com/maps/documentation/javascript/reference/map#MapOptions)
+The MapProps interface extends the [google.maps.MapOptions interface](https://developers.google.com/maps/documentation/javascript/reference/map#MapOptions)
 and includes all possible options available for a Google Maps Platform Map.
 
 Additionally, there are other optional properties for the map component.
