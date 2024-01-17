@@ -94,5 +94,9 @@ test('marker should have a click listener', async () => {
   const markerMocks = mockInstances.get(google.maps.Marker);
   const markerMock = markerMocks[0];
 
-  expect(markerMock.addListener).toHaveBeenCalledWith('click', handleClick);
+  expect(google.maps.event.addListener).toHaveBeenCalledWith(
+    markerMock,
+    'click',
+    handleClick
+  );
 });

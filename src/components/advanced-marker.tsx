@@ -97,12 +97,12 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
   useEffect(() => {
     if (!marker) return;
 
-    const m = marker;
+    const gme = google.maps.event;
 
-    if (onClick) marker.addListener('click', onClick);
-    if (onDrag) marker.addListener('drag', onDrag);
-    if (onDragStart) marker.addListener('dragstart', onDragStart);
-    if (onDragEnd) marker.addListener('dragend', onDragEnd);
+    if (onClick) gme.addListener(marker, 'click', onClick);
+    if (onDrag) gme.addListener(marker, 'drag', onDrag);
+    if (onDragStart) gme.addListener(marker, 'dragstart', onDragStart);
+    if (onDragEnd) gme.addListener(marker, 'dragend', onDragEnd);
 
     if ((onDrag || onDragStart || onDragEnd) && !draggable) {
       console.warn(
@@ -110,8 +110,9 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
       );
     }
 
+    const m = marker;
     return () => {
-      google.maps.event.clearInstanceListeners(m);
+      gme.clearInstanceListeners(m);
     };
   }, [marker, draggable, onClick, onDragStart, onDrag, onDragEnd]);
 

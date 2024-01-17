@@ -63,7 +63,8 @@ export function useMapEvents(
       if (!map) return;
       if (!handler) return;
 
-      const listener = map.addListener(
+      const listener = google.maps.event.addListener(
+        map,
         eventType,
         (ev?: google.maps.MapMouseEvent | google.maps.IconMouseEvent) => {
           const mapEvent = createMapEvent(eventType, map, ev);
