@@ -38,13 +38,19 @@ jobs:
         working-directory: ./website
         run: npm ci
 
-
       - name: Build website
         working-directory: ./website
         run: |
           npm run build
         env:
           GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
+
+      - name: Find and Replace - Examples API Key
+        uses: jacobtomlinson/gha-find-replace@v3
+        with:
+          find: 'process.env.GOOGLE_MAPS_API_KEY'
+          replace: ${{ secrets.GOOGLE_MAPS_API_KEY_EXAMPLES }}
+          include: './website/build/scripts/**'
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2

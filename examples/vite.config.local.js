@@ -10,6 +10,9 @@ export default defineConfig(({mode}) => {
     },
     resolve: {
       alias: {
+        '@vis.gl/react-google-maps/examples.js': resolve(
+          '../../website/static/scripts/examples.js'
+        ),
         '@vis.gl/react-google-maps/examples.css': resolve(
           '../../examples/examples.css'
         ),
