@@ -41,7 +41,7 @@ export class GoogleMapsApiLoader {
 
     // note: if google.maps.importLibrary was defined externally, the params
     //   will be ignored. If it was defined by a previous call to this
-    //   method, we will check that the key and other paramters have not been
+    //   method, we will check that the key and other parameters have not been
     //   changed in between calls.
     if (!window.google?.maps?.importLibrary) {
       window.__googleMapsApiParams__ = serializedParams;
