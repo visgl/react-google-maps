@@ -27,7 +27,7 @@ const MAPS_API_BASE_URL = 'https://maps.googleapis.com/maps/api/js';
 export class GoogleMapsApiLoader {
   /**
    * Loads the Google Maps API with the specified parameters.
-   * Since the maps library can only be loaded once per page, this will
+   * Since the Maps library can only be loaded once per page, this will
    * produce a warning when called multiple times with different
    * parameters.
    *
@@ -39,6 +39,10 @@ export class GoogleMapsApiLoader {
     const libraries = params.libraries ? params.libraries.split(',') : [];
     const serializedParams = this.serializeParams(params);
 
+    // note: if google.maps.importLibrary was defined externally, the params
+    //   will be ignored. If it was defined by a previous call to this
+    //   method, we will check that the key and other paramters have not been
+    //   changed in between calls.
     if (!window.google?.maps?.importLibrary) {
       window.__googleMapsApiParams__ = serializedParams;
       this.initImportLibrary(params);
@@ -115,7 +119,7 @@ export class GoogleMapsApiLoader {
       return apiPromise;
     };
 
-    // for the first load we declare an importLibrary function that will
+    // for the first load, we declare an importLibrary function that will
     // be overwritten once the api is loaded.
     google.maps.importLibrary = libraryName =>
       loadApi(libraryName).then(() => google.maps.importLibrary(libraryName));
