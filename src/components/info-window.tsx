@@ -34,7 +34,7 @@ export const InfoWindow = (props: PropsWithChildren<InfoWindowProps>) => {
     infoWindow.open({map, anchor});
 
     if (onCloseClick) {
-      infoWindow.addListener('closeclick', () => {
+      google.maps.event.addListener(infoWindow, 'closeclick', () => {
         onCloseClick();
       });
     }

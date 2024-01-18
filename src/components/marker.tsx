@@ -67,17 +67,19 @@ function useMarker(props: MarkerProps) {
     const m = marker;
 
     // Add event listeners
-    if (onClick) m.addListener('click', onClick);
-    if (onDrag) m.addListener('drag', onDrag);
-    if (onDragStart) m.addListener('dragstart', onDragStart);
-    if (onDragEnd) m.addListener('dragend', onDragEnd);
-    if (onMouseOver) m.addListener('mouseover', onMouseOver);
-    if (onMouseOut) m.addListener('mouseout', onMouseOut);
+    const gme = google.maps.event;
+
+    if (onClick) gme.addListener(m, 'click', onClick);
+    if (onDrag) gme.addListener(m, 'drag', onDrag);
+    if (onDragStart) gme.addListener(m, 'dragstart', onDragStart);
+    if (onDragEnd) gme.addListener(m, 'dragend', onDragEnd);
+    if (onMouseOver) gme.addListener(m, 'mouseover', onMouseOver);
+    if (onMouseOut) gme.addListener(m, 'mouseout', onMouseOut);
 
     marker.setDraggable(Boolean(draggable));
 
     return () => {
-      google.maps.event.clearInstanceListeners(m);
+      gme.clearInstanceListeners(m);
     };
   }, [
     marker,
