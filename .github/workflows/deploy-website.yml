@@ -50,7 +50,7 @@ jobs:
         with:
           find: 'process.env.GOOGLE_MAPS_API_KEY'
           replace: ${{ secrets.GOOGLE_MAPS_API_KEY_EXAMPLES }}
-          include: './website/build/scripts/**'
+          include: './website/build/scripts/examples.js'
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
