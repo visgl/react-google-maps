@@ -24,12 +24,10 @@
     <div id="app"></div>
     <script type="module">
       import '@vis.gl/react-google-maps/examples.css';
-      import {GOOGLE_MAPS_API_KEY} from '@vis.gl/react-google-maps/examples.js';
+      import '@vis.gl/react-google-maps/examples.js';
       import {renderToDom} from './src/app';
 
-      renderToDom(document.querySelector('#app'), {
-        apiKey: GOOGLE_MAPS_API_KEY
-      });
+      renderToDom(document.querySelector('#app'));
     </script>
   </body>
 </html>
