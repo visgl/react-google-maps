@@ -7,13 +7,13 @@ import '@testing-library/jest-dom';
 import {importLibraryMock} from '../../libraries/__mocks__/lib/import-library-mock';
 
 import {
-  APILoadingStatus,
   APIProvider,
   APIProviderContext,
   APIProviderContextValue
 } from '../api-provider';
 import {ApiParams} from '../../libraries/google-maps-api-loader';
 import {useApiIsLoaded} from '../../hooks/use-api-is-loaded';
+import {APILoadingStatus} from '../../libraries/api-loading-status';
 
 const apiLoadSpy = jest.fn();
 const apiUnloadSpy = jest.fn();
@@ -30,10 +30,21 @@ let triggerMapsApiLoaded: () => void;
 
 jest.mock('../../libraries/google-maps-api-loader', () => {
   class GoogleMapsApiLoader {
-    static async load(params: ApiParams): Promise<void> {
+    static async load(
+      params: ApiParams,
+      onLoadingStatusChange: (s: APILoadingStatus) => void
+    ): Promise<void> {
       apiLoadSpy(params);
+      onLoadingStatusChange(APILoadingStatus.LOADING);
+
       google.maps.importLibrary = importLibraryMock;
-      return new Promise(resolve => (triggerMapsApiLoaded = resolve));
+      return new Promise(
+        resolve =>
+          (triggerMapsApiLoaded = () => {
+            resolve();
+            onLoadingStatusChange(APILoadingStatus.LOADED);
+          })
+      );
     }
     static unload() {
       apiUnloadSpy();

@@ -1,5 +1,5 @@
-import {APILoadingStatus} from '../components/api-provider';
 import {useApiLoadingStatus} from './use-api-loading-status';
+import {APILoadingStatus} from '../libraries/api-loading-status';
 /**
  * Hook to check if the Google Maps API is loaded
  */

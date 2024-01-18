@@ -5,11 +5,11 @@ import {initialize, mockInstances} from '@googlemaps/jest-mocks';
 
 import {useMap} from '../use-map';
 import {
-  APILoadingStatus,
   APIProviderContext,
   APIProviderContextValue
 } from '../../components/api-provider';
 import {Map as GoogleMap} from '../../components/map';
+import {APILoadingStatus} from '../../libraries/api-loading-status';
 
 let MockApiContextProvider: ({
   children
