@@ -27,7 +27,7 @@ export interface GoogleMapsContextValue {
 export const GoogleMapsContext =
   React.createContext<GoogleMapsContextValue | null>(null);
 
-export {
+export type {
   MapCameraChangedEvent,
   MapEvent,
   MapEventProps,
