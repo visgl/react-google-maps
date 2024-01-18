@@ -27,6 +27,13 @@ export interface GoogleMapsContextValue {
 export const GoogleMapsContext =
   React.createContext<GoogleMapsContextValue | null>(null);
 
+export {
+  MapCameraChangedEvent,
+  MapEvent,
+  MapEventProps,
+  MapMouseEvent
+} from './use-map-events';
+
 /**
  * Props for the Google Maps Map Component
  */
