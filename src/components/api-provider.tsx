@@ -9,15 +9,7 @@ import React, {
 } from 'react';
 
 import {GoogleMapsApiLoader} from '../libraries/google-maps-api-loader';
-
-export enum APILoadingStatus {
-  NOT_LOADED = 'NOT_LOADED',
-  LOADING = 'LOADING',
-  LOADED = 'LOADED',
-  FAILED = 'FAILED'
-}
-
-const {NOT_LOADED, LOADING, LOADED, FAILED} = APILoadingStatus;
+import {APILoadingStatus} from '../libraries/api-loading-status';
 
 type ImportLibraryFunction = typeof google.maps.importLibrary;
 type GoogleMapsLibrary = Awaited<ReturnType<ImportLibraryFunction>>;
@@ -77,7 +69,7 @@ export type APIProviderProps = {
 };
 
 /**
- * local hook to manage access to map-instances.
+ * local hook to set up the map-instance management context.
  */
 function useMapInstances() {
   const [mapInstances, setMapInstances] = useState<
@@ -107,7 +99,9 @@ function useMapInstances() {
 function useGoogleMapsApiLoader(props: APIProviderProps) {
   const {onLoad, apiKey, libraries = [], ...otherApiParams} = props;
 
-  const [status, setStatus] = useState<APILoadingStatus>(NOT_LOADED);
+  const [status, setStatus] = useState<APILoadingStatus>(
+    GoogleMapsApiLoader.loadingStatus
+  );
   const [loadedLibraries, addLoadedLibrary] = useReducer(
     (
       loadedLibraries: LoadedLibraries,
@@ -147,17 +141,16 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
 
   useEffect(
     () => {
-      setStatus(LOADING);
-
       (async () => {
         try {
-          await GoogleMapsApiLoader.load({
-            key: apiKey,
-            libraries: librariesString,
-            ...otherApiParams
-          });
-
-          setStatus(LOADED);
+          await GoogleMapsApiLoader.load(
+            {
+              key: apiKey,
+              libraries: librariesString,
+              ...otherApiParams
+            },
+            status => setStatus(status)
+          );
 
           for (const name of ['core', 'maps', ...libraries]) {
             await importLibrary(name);
@@ -168,7 +161,6 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
           }
         } catch (error) {
           console.error('<ApiProvider> failed to load Google Maps API', error);
-          setStatus(FAILED);
         }
       })();
     },

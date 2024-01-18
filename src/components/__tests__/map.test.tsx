@@ -4,11 +4,8 @@ import {initialize, mockInstances} from '@googlemaps/jest-mocks';
 import '@testing-library/jest-dom';
 
 import {Map as GoogleMap} from '../map';
-import {
-  APILoadingStatus,
-  APIProviderContext,
-  APIProviderContextValue
-} from '../api-provider';
+import {APIProviderContext, APIProviderContextValue} from '../api-provider';
+import {APILoadingStatus} from '../../libraries/api-loading-status';
 
 jest.mock('../../libraries/google-maps-api-loader');
 

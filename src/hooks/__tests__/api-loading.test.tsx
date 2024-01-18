@@ -3,13 +3,13 @@ import {initialize} from '@googlemaps/jest-mocks';
 import {renderHook} from '@testing-library/react';
 
 import {
-  APILoadingStatus,
   APIProviderContext,
   APIProviderContextValue
 } from '../../components/api-provider';
 
 import {useApiLoadingStatus} from '../use-api-loading-status';
 import {useApiIsLoaded} from '../use-api-is-loaded';
+import {APILoadingStatus} from '../../libraries/api-loading-status';
 
 let wrapper: ({children}: {children: React.ReactNode}) => JSX.Element | null;
 let mockContextValue: jest.MockedObject<APIProviderContextValue>;

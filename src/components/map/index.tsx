@@ -18,6 +18,8 @@ import {MapEventProps, useMapEvents} from './use-map-events';
 import {useMapOptions} from './use-map-options';
 import {useDeckGLCameraUpdate} from './use-deckgl-camera-update';
 import {useInternalCameraState} from './use-internal-camera-state';
+import {useApiLoadingStatus} from '../../hooks/use-api-loading-status';
+import {APILoadingStatus} from '../../libraries/api-loading-status';
 
 export interface GoogleMapsContextValue {
   map: google.maps.Map | null;
@@ -66,6 +68,7 @@ export const Map = (props: PropsWithChildren<MapProps>) => {
   const {children, id, className, style, viewState, viewport} = props;
 
   const context = useContext(APIProviderContext);
+  const loadingStatus = useApiLoadingStatus();
 
   if (!context) {
     throw new Error(
@@ -92,6 +95,16 @@ export const Map = (props: PropsWithChildren<MapProps>) => {
     [style, isViewportSet]
   );
 
+  if (loadingStatus === APILoadingStatus.AUTH_FAILURE) {
+    return (
+      <div
+        style={{position: 'relative', ...(className ? {} : combinedStyle)}}
+        className={className}>
+        <AuthFailureMessage />
+      </div>
+    );
+  }
+
   return (
     <div
       ref={mapRef}
@@ -108,6 +121,36 @@ export const Map = (props: PropsWithChildren<MapProps>) => {
   );
 };
 Map.deckGLViewProps = true;
+
+const AuthFailureMessage = () => {
+  const style: CSSProperties = {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+    zIndex: 999,
+    display: 'flex',
+    flexFlow: 'column nowrap',
+    textAlign: 'center',
+    justifyContent: 'center',
+    fontSize: '.8rem',
+    color: 'rgba(0,0,0,0.6)',
+    background: '#dddddd',
+    padding: '1rem 1.5rem'
+  };
+
+  return (
+    <div style={style}>
+      <h2>Error: AuthFailure</h2>
+      <p>
+        A problem with your API key prevents the map from rendering correctly.
+        Please make sure the value of the <code>APIProvider.apiKey</code> prop
+        is correct. Check the error-message in the console for further details.
+      </p>
+    </div>
+  );
+};
 
 /**
  * The main hook takes care of creating map-instances and registering them in

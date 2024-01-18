@@ -1,3 +1,5 @@
+import {APILoadingStatus} from './api-loading-status';
+
 export type ApiParams = {
   key: string;
   v?: string;
@@ -12,7 +14,7 @@ export type ApiParams = {
 declare global {
   interface Window {
     __googleMapsCallback__?: () => void;
-    __googleMapsApiParams__?: string;
+    gm_authFailure?: () => void;
   }
 }
 
@@ -25,6 +27,9 @@ const MAPS_API_BASE_URL = 'https://maps.googleapis.com/maps/api/js';
  * allow using the API in an useEffect hook, without worrying about multiple API loads.
  */
 export class GoogleMapsApiLoader {
+  public static loadingStatus: APILoadingStatus = APILoadingStatus.NOT_LOADED;
+  public static serializedApiParams?: string;
+
   /**
    * Loads the Google Maps API with the specified parameters.
    * Since the Maps library can only be loaded once per page, this will
@@ -33,9 +38,11 @@ export class GoogleMapsApiLoader {
    *
    * The returned promise resolves when loading completes
    * and rejects in case of an error or when the loading was aborted.
-   * @param params
    */
-  static async load(params: ApiParams): Promise<void> {
+  static async load(
+    params: ApiParams,
+    onLoadingStatusChange: (status: APILoadingStatus) => void
+  ): Promise<void> {
     const libraries = params.libraries ? params.libraries.split(',') : [];
     const serializedParams = this.serializeParams(params);
 
@@ -43,14 +50,23 @@ export class GoogleMapsApiLoader {
     //   will be ignored. If it was defined by a previous call to this
     //   method, we will check that the key and other parameters have not been
     //   changed in between calls.
+
     if (!window.google?.maps?.importLibrary) {
-      window.__googleMapsApiParams__ = serializedParams;
-      this.initImportLibrary(params);
+      this.serializedApiParams = serializedParams;
+      this.initImportLibrary(params, onLoadingStatusChange);
+    } else {
+      // if serializedApiParams isn't defined the library was loaded externally
+      // and we can only assume that went alright.
+      if (!this.serializedApiParams) {
+        this.loadingStatus = APILoadingStatus.LOADED;
+      }
+
+      onLoadingStatusChange(this.loadingStatus);
     }
 
     if (
-      window.__googleMapsApiParams__ &&
-      window.__googleMapsApiParams__ !== serializedParams
+      this.serializedApiParams &&
+      this.serializedApiParams !== serializedParams
     ) {
       console.warn(
         `The maps API has already been loaded with different ` +
@@ -75,7 +91,10 @@ export class GoogleMapsApiLoader {
     ].join('/');
   }
 
-  private static initImportLibrary(params: ApiParams) {
+  private static initImportLibrary(
+    params: ApiParams,
+    onLoadingStatusChange: (status: APILoadingStatus) => void
+  ) {
     if (!window.google) window.google = {} as never;
     if (!window.google.maps) window.google.maps = {} as never;
 
@@ -105,14 +124,29 @@ export class GoogleMapsApiLoader {
         urlParams.set('callback', '__googleMapsCallback__');
         scriptElement.src = MAPS_API_BASE_URL + `?` + urlParams.toString();
 
-        window.__googleMapsCallback__ = resolve;
+        window.__googleMapsCallback__ = () => {
+          this.loadingStatus = APILoadingStatus.LOADED;
+          onLoadingStatusChange(this.loadingStatus);
+          resolve();
+        };
 
-        scriptElement.onerror = () =>
+        window.gm_authFailure = () => {
+          this.loadingStatus = APILoadingStatus.AUTH_FAILURE;
+          onLoadingStatusChange(this.loadingStatus);
+        };
+
+        scriptElement.onerror = () => {
+          this.loadingStatus = APILoadingStatus.FAILED;
+          onLoadingStatusChange(this.loadingStatus);
           reject(new Error('The Google Maps JavaScript API could not load.'));
+        };
+
         scriptElement.nonce =
           (document.querySelector('script[nonce]') as HTMLScriptElement)
             ?.nonce || '';
 
+        this.loadingStatus = APILoadingStatus.LOADING;
+        onLoadingStatusChange(this.loadingStatus);
         document.head.append(scriptElement);
       });
 
