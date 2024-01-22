@@ -7,7 +7,6 @@ export default defineConfig(({mode}) => {
     define: {
       'process.env.GOOGLE_MAPS_API_KEY': JSON.stringify(GOOGLE_MAPS_API_KEY)
     },
-
     resolve: {
       alias: {
         '@vis.gl/react-google-maps/examples.js':
