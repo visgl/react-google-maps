@@ -12,7 +12,8 @@ const DATA_URL =
 import type {Feature, GeoJSON} from 'geojson';
 import ControlPanel from './control-panel';
 
-const API_KEY = process.env.GOOGLE_MAPS_API_KEY as string;
+const API_KEY =
+  globalThis.GOOGLE_MAPS_API_KEY ?? (process.env.GOOGLE_MAPS_API_KEY as string);
 
 const App = () => {
   const [data, setData] = useState<GeoJSON | null>(null);
