@@ -11,7 +11,8 @@ import {
 import ControlPanel from './control-panel';
 import {CustomZoomControl} from './custom-zoom-control';
 
-const API_KEY = process.env.GOOGLE_MAPS_API_KEY as string;
+const API_KEY =
+  globalThis.GOOGLE_MAPS_API_KEY ?? (process.env.GOOGLE_MAPS_API_KEY as string);
 
 const App = () => {
   const [controlPosition, setControlControlPosition] =

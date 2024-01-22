@@ -11,7 +11,8 @@ import {MarkerClusterer} from '@googlemaps/markerclusterer';
 import type {Marker} from '@googlemaps/markerclusterer';
 import trees from './trees';
 
-const API_KEY = process.env.GOOGLE_MAPS_API_KEY as string;
+const API_KEY =
+  globalThis.GOOGLE_MAPS_API_KEY ?? (process.env.GOOGLE_MAPS_API_KEY as string);
 
 const App = () => (
   <APIProvider apiKey={API_KEY}>
