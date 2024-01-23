@@ -3,7 +3,7 @@
   "scripts": {
     "docusaurus": "docusaurus",
     "start": "docusaurus start",
-    "build": "docusaurus clear && docusaurus build",
+    "build": "bash scripts/install-external-dependencies.sh && docusaurus clear && docusaurus build",
     "swizzle": "docusaurus swizzle",
     "clear": "docusaurus clear",
     "serve": "docusaurus serve"

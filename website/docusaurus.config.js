@@ -187,6 +187,5 @@ const config = {
 };
 
 module.exports = async function createConfigAsync() {
-  console.log('cca');
   return config;
 };
