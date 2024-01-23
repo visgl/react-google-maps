@@ -3,10 +3,11 @@
   "scripts": {
     "docusaurus": "docusaurus",
     "start": "docusaurus start",
-    "build": "bash scripts/install-external-dependencies.sh && docusaurus clear && docusaurus build",
+    "build": "docusaurus clear && docusaurus build",
     "swizzle": "docusaurus swizzle",
     "clear": "docusaurus clear",
-    "serve": "docusaurus serve"
+    "serve": "docusaurus serve",
+    "postinstall": "bash ../scripts/install-examples.sh"
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -19,6 +20,7 @@
     "@docusaurus/preset-classic": "^3.1.0",
     "@easyops-cn/docusaurus-search-local": "^0.40.1",
     "babel-plugin-styled-components": "^2.0.0",
-    "babel-plugin-version-inline": "^1.0.0"
+    "babel-plugin-version-inline": "^1.0.0",
+    "glob": "^10.3.10"
   }
 }
