@@ -1,12 +1,11 @@
 #!/usr/bin/env bash
 
-rootDir="$(cd -P "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+examplesRoot="$(cd -P "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"/examples
+cd $examplesRoot
 
-for d in `find "${rootDir}/examples" -type d -depth 1` ; do
+for d in */; do
   echo ">>> installing example '$(basename $d)'"
-  (
-    cd $d
-    npm ci --silent
-  )
-
+  cd $examplesRoot/$d
+  npm i --silent
 done
+
