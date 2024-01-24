@@ -5,6 +5,7 @@ export * from './components/map';
 export * from './components/map-control';
 export * from './components/marker';
 export * from './components/pin';
+export * from './components/geometry';
 export * from './hooks/use-api-loading-status';
 export * from './hooks/use-api-is-loaded';
 export * from './hooks/use-maps-library';
