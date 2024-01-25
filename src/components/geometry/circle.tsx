@@ -4,7 +4,6 @@ import {
   useContext,
   useEffect,
   useImperativeHandle,
-  useMemo,
   useRef
 } from 'react';
 
@@ -61,12 +60,12 @@ function useCircle(props: CircleProps) {
   // lot of time updating values that didn't change)
   circle.setOptions(circleOptions);
 
-  useMemo(() => {
+  useEffect(() => {
     if (!center) return;
     if (!latLngEquals(center, circle.getCenter())) circle.setCenter(center);
   }, [center]);
 
-  useMemo(() => {
+  useEffect(() => {
     if (radius === undefined || radius === null) return;
     if (radius !== circle.getRadius()) circle.setRadius(radius);
   }, [radius]);
