@@ -56,10 +56,8 @@ test('circle should be initialized', async () => {
   // different ways, but that would require a somewhat working (or at least
   // stateful) maps-API instead of mocks.
   const [circle] = circles;
-  expect(circle.setOptions).toHaveBeenCalledWith({
-    center: {lat: 1, lng: 2},
-    radius: 15000
-  });
+  expect(circle.setCenter).toHaveBeenCalledWith({lat: 1, lng: 2});
+  expect(circle.setRadius).toHaveBeenCalledWith(15000);
 
   expect(circle.setMap).toHaveBeenCalled();
   const setMapMock = circle.setMap as MockedFunction<typeof circle.setMap>;
@@ -82,14 +80,10 @@ test('circle center and radius should update when re-rendering', async () => {
   expect(circles).not.toHaveLength(0);
 
   const circle = circles[0];
-  expect(circle.setOptions).toHaveBeenCalledWith({
-    center: {lat: 1, lng: 2},
-    radius: 15000
-  });
+  expect(circle.setCenter).toHaveBeenCalledWith({lat: 1, lng: 2});
+  expect(circle.setRadius).toHaveBeenCalledWith(15000);
 
   rerender(<GoogleMapsCircle radius={16000} center={{lat: 2, lng: 3}} />);
-  expect(circle.setOptions).toHaveBeenCalledWith({
-    center: {lat: 2, lng: 3},
-    radius: 16000
-  });
+  expect(circle.setCenter).toHaveBeenCalledWith({lat: 2, lng: 3});
+  expect(circle.setRadius).toHaveBeenCalledWith(16000);
 });

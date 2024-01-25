@@ -11,6 +11,7 @@ import {
 import {GoogleMapsContext} from '../map';
 
 import type {Ref} from 'react';
+import {latLngEquals} from '../../libraries/lat-lng-equals';
 
 type CircleEventProps = {
   onClick?: (e: google.maps.MapMouseEvent) => void;
@@ -37,6 +38,8 @@ function useCircle(props: CircleProps) {
     onMouseOut,
     onRadiusChanged,
     onCenterChanged,
+    radius,
+    center,
     ...circleOptions
   } = props;
   // This is here to avoid triggering the useEffect below when the callbacks change (which happen if the user didn't memoize them)
@@ -56,9 +59,17 @@ function useCircle(props: CircleProps) {
   // update circleOptions (note the dependencies aren't properly checked
   // here, we just assume that setOptions is smart enough to not waste a
   // lot of time updating values that didn't change)
+  circle.setOptions(circleOptions);
+
   useMemo(() => {
-    circle.setOptions(circleOptions);
-  }, [circle, circleOptions]);
+    if (!center) return;
+    if (!latLngEquals(center, circle.getCenter())) circle.setCenter(center);
+  }, [center]);
+
+  useMemo(() => {
+    if (radius === undefined || radius === null) return;
+    if (radius !== circle.getRadius()) circle.setRadius(radius);
+  }, [radius]);
 
   const map = useContext(GoogleMapsContext)?.map;
 
@@ -119,7 +130,7 @@ function useCircle(props: CircleProps) {
 export const Circle = forwardRef((props: CircleProps, ref: CircleRef) => {
   const circle = useCircle(props);
 
-  useImperativeHandle(ref, () => circle, []);
+  useImperativeHandle(ref, () => circle);
 
   return null;
 });
