@@ -25,6 +25,10 @@ The library can be installed from npm:
 ```bash
 npm install @vis.gl/react-google-maps
 ```
+or
+```bash
+yarn add @vis.gl/react-google-maps
+```
 
 This module comes with full TypeScript-support out of the box, so no additional module is
 required for the typings.
