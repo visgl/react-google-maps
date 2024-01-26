@@ -5,6 +5,7 @@ import React, {
   Ref,
   useContext,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useState
 } from 'react';
@@ -16,10 +17,16 @@ import {logErrorOnce} from '../../libraries/errors';
 import {useCallbackRef} from '../../libraries/use-callback-ref';
 import {MapEventProps, useMapEvents} from './use-map-events';
 import {useMapOptions} from './use-map-options';
-import {useDeckGLCameraUpdate} from './use-deckgl-camera-update';
-import {useInternalCameraState} from './use-internal-camera-state';
+import {useTrackedCameraStateRef} from './use-tracked-camera-state-ref';
 import {useApiLoadingStatus} from '../../hooks/use-api-loading-status';
 import {APILoadingStatus} from '../../libraries/api-loading-status';
+import {
+  DeckGlCompatProps,
+  useDeckGLCameraUpdate
+} from './use-deckgl-camera-update';
+import {isLatLngLiteral} from '../../libraries/is-lat-lng-literal';
+import {useMapCameraParams} from './use-map-camera-params';
+import {AuthFailureMessage} from './auth-failure-message';
 
 export interface GoogleMapsContextValue {
   map: google.maps.Map | null;
@@ -34,45 +41,28 @@ export type {
   MapMouseEvent
 } from './use-map-events';
 
+export type MapCameraProps = {
+  center: google.maps.LatLngLiteral;
+  zoom: number;
+  heading: number;
+  tilt: number;
+};
+
 /**
  * Props for the Google Maps Map Component
  */
 export type MapProps = google.maps.MapOptions &
-  MapEventProps & {
-    style?: CSSProperties;
-    /**
-     * Adds custom style to the map by passing a css class.
-     */
-    className?: string;
-    /**
-     * Adds initial bounds to the map as an alternative to specifying the center/zoom of the map.
-     * Calls the fitBounds method internally https://developers.google.com/maps/documentation/javascript/reference/map?hl=en#Map-Methods
-     */
-    initialBounds?: google.maps.LatLngBounds | google.maps.LatLngBoundsLiteral;
-    /**
-     * An id that is added to the map. Needed when using more than one Map component.
-     * This is also needed to reference the map inside the useMap hook.
-     */
+  MapEventProps &
+  DeckGlCompatProps & {
     id?: string;
-    /**
-     * Viewport from deck.gl
-     */
-    viewport?: unknown;
-    /**
-     * View state from deck.gl
-     */
-    viewState?: Record<string, unknown>;
-    /**
-     * Initial View State from deck.gl
-     */
-    initialViewState?: Record<string, unknown>;
+    style?: CSSProperties;
+    className?: string;
+    initialBounds?: google.maps.LatLngBounds | google.maps.LatLngBoundsLiteral;
+    controlled?: boolean;
   };
 
-/**
- * Component to render a Google Maps map
- */
 export const Map = (props: PropsWithChildren<MapProps>) => {
-  const {children, id, className, style, viewState, viewport} = props;
+  const {children, id, className, style, controlled = false} = props;
 
   const context = useContext(APIProviderContext);
   const loadingStatus = useApiLoadingStatus();
@@ -84,22 +74,92 @@ export const Map = (props: PropsWithChildren<MapProps>) => {
   }
 
   const [map, mapRef] = useMapInstance(props, context);
-  const cameraStateRef = useInternalCameraState();
-  useMapOptions(map, cameraStateRef, props);
-  useMapEvents(map, cameraStateRef, props);
-  useDeckGLCameraUpdate(map, viewState);
+  const cameraStateRef = useTrackedCameraStateRef();
 
-  const isViewportSet = useMemo(() => Boolean(viewport), [viewport]);
+  useMapCameraParams(map, cameraStateRef, props);
+  useMapEvents(map, cameraStateRef, props);
+  useMapOptions(map, props);
+
+  const isDeckGlControlled = useDeckGLCameraUpdate(map, props);
+
+  // disable interactions with the map for controlled modes
+  useEffect(() => {
+    if (!map) return;
+
+    // fixme: this doesn't seem to belong here (and it's mostly there for convenience anyway).
+    //   The reasoning is that a deck.gl canvas will be put on top of the map, rendering
+    //   any default map controls pretty much useless
+    if (isDeckGlControlled) {
+      map.setOptions({disableDefaultUI: true});
+    }
+
+    // disable all control-inputs when map is controlled
+    if (isDeckGlControlled || controlled) {
+      map.setOptions({
+        gestureHandling: 'none',
+        keyboardShortcuts: false
+      });
+    }
+
+    return () => {
+      map.setOptions({
+        gestureHandling: props.gestureHandling,
+        keyboardShortcuts: props.keyboardShortcuts
+      });
+    };
+  }, [
+    map,
+    isDeckGlControlled,
+    controlled,
+    props.gestureHandling,
+    props.keyboardShortcuts
+  ]);
+
+  // in controlled mode, any change to the camera state that isn't reflected in the props has to be prevented
+  const center = props.center
+    ? isLatLngLiteral(props.center)
+      ? props.center
+      : props.center.toJSON()
+    : null;
+
+  let lat: number | null = null;
+  let lng: number | null = null;
+  if (center && Number.isFinite(center.lat) && Number.isFinite(center.lng)) {
+    lat = center.lat as number;
+    lng = center.lng as number;
+  }
+
+  const cameraOptions: google.maps.CameraOptions = useMemo(() => {
+    return {
+      center: {lat: lat ?? 0, lng: lng ?? 0},
+      zoom: props.zoom ?? 0,
+      heading: props.heading ?? 0,
+      tilt: props.tilt ?? 0
+    };
+  }, [lat, lng, props.zoom, props.heading, props.tilt]);
+
+  // controlled mode: reject all camera changes that don't correspond to changes in props
+  useLayoutEffect(() => {
+    if (!map || !controlled) return;
+
+    map.moveCamera(cameraOptions);
+    const listener = map.addListener('bounds_changed', () => {
+      map.moveCamera(cameraOptions);
+    });
+
+    return () => listener.remove();
+  }, [map, controlled, cameraOptions]);
+
   const combinedStyle: CSSProperties = useMemo(
     () => ({
       width: '100%',
       height: '100%',
-
       // when using deckgl, the map should be sent to the back
-      zIndex: isViewportSet ? -1 : 0,
+      zIndex: isDeckGlControlled ? -1 : 0,
+
       ...style
     }),
-    [style, isViewportSet]
+    [style, isDeckGlControlled]
   );
 
   if (loadingStatus === APILoadingStatus.AUTH_FAILURE) {
@@ -128,36 +188,6 @@ export const Map = (props: PropsWithChildren<MapProps>) => {
   );
 };
 Map.deckGLViewProps = true;
-
-const AuthFailureMessage = () => {
-  const style: CSSProperties = {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
-    zIndex: 999,
-    display: 'flex',
-    flexFlow: 'column nowrap',
-    textAlign: 'center',
-    justifyContent: 'center',
-    fontSize: '.8rem',
-    color: 'rgba(0,0,0,0.6)',
-    background: '#dddddd',
-    padding: '1rem 1.5rem'
-  };
-
-  return (
-    <div style={style}>
-      <h2>Error: AuthFailure</h2>
-      <p>
-        A problem with your API key prevents the map from rendering correctly.
-        Please make sure the value of the <code>APIProvider.apiKey</code> prop
-        is correct. Check the error-message in the console for further details.
-      </p>
-    </div>
-  );
-};
 
 /**
  * The main hook takes care of creating map-instances and registering them in
@@ -188,6 +218,7 @@ function useMapInstance(
 
       const {addMapInstance, removeMapInstance} = context;
       const newMap = new google.maps.Map(container, mapOptions);
+
       setMap(newMap);
       addMapInstance(newMap, id);
 
@@ -205,12 +236,6 @@ function useMapInstance(
         removeMapInstance(id);
       };
     },
-
-    // FIXME: we should rethink if it could be possible to keep the state
-    //   around when a map gets re-initialized (id or mapId changed). This
-    //   should keep the viewport as it is (so also no initial viewport in
-    //   this case) and any added features should of course get re-added as
-    //   well.
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [id, container, apiIsLoaded, props.mapId]

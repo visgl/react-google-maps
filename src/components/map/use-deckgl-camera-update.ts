@@ -1,4 +1,19 @@
-import {useLayoutEffect} from 'react';
+import {useLayoutEffect, useMemo} from 'react';
+
+export type DeckGlCompatProps = {
+  /**
+   * Viewport from deck.gl
+   */
+  viewport?: unknown;
+  /**
+   * View state from deck.gl
+   */
+  viewState?: Record<string, unknown>;
+  /**
+   * Initial View State from deck.gl
+   */
+  initialViewState?: Record<string, unknown>;
+};
 
 /**
  * Internal hook that updates the camera when deck.gl viewState changes.
@@ -6,21 +21,13 @@ import {useLayoutEffect} from 'react';
  */
 export function useDeckGLCameraUpdate(
   map: google.maps.Map | null,
-  viewState: Record<string, unknown> | undefined
+  props: DeckGlCompatProps
 ) {
-  useLayoutEffect(() => {
-    if (!map || !viewState) {
-      return;
-    }
+  const {viewport, viewState} = props;
+  const isDeckGlControlled = useMemo(() => Boolean(viewport), [viewport]);
 
-    // FIXME: this should probably be extracted into a seperate hook that only
-    //  runs once when first seeing a deck.gl viewState update and resets
-    //  again. Maybe even use a seperate prop (`<Map controlled />`) instead.
-    map.setOptions({
-      gestureHandling: 'none',
-      keyboardShortcuts: false,
-      disableDefaultUI: true
-    });
+  useLayoutEffect(() => {
+    if (!map || !viewState) return;
 
     const {
       latitude,
@@ -37,4 +44,6 @@ export function useDeckGLCameraUpdate(
       zoom: zoom + 1
     });
   }, [map, viewState]);
+
+  return isDeckGlControlled;
 }
