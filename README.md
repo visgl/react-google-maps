@@ -38,6 +38,12 @@ This library is available on npm as [`@vis.gl/react-google-maps`][npm-package].
 npm install @vis.gl/react-google-maps
 ```
 
+or
+
+```sh
+yarn add @vis.gl/react-google-maps
+```
+
 _(PowerShell users: since `@` has a special meaning in PowerShell, the
 package name has to be quoted)_
 
