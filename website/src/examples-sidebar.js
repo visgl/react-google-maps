@@ -3,7 +3,7 @@ const sidebars = {
     {
       type: 'doc',
       label: 'Overview',
-      id: 'index',
+      id: 'index'
     },
     {
       type: 'category',
@@ -12,18 +12,14 @@ const sidebars = {
       items: [
         'basic-map',
         'markers-and-infowindows',
-        // External link
-        {
-          type: 'link',
-          label: 'Marker Clustering',
-          href: 'https://codesandbox.io/s/github/visgl/react-google-maps/tree/main/examples/marker-clustering',
-        },
+        'marker-clustering',
         'change-map-styles',
         'map-control',
         'directions',
-      ],
-    },
-  ],
+        'deckgl-overlay'
+      ]
+    }
+  ]
 };
 
 module.exports = sidebars;

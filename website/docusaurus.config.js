@@ -5,6 +5,7 @@
 const {resolve} = require('path');
 const webpack = require('webpack');
 const {themes: prismThemes} = require('prism-react-renderer');
+const {globSync} = require('glob');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -44,7 +45,11 @@ const config = {
       {
         debug: true,
         resolve: {
-          modules: [resolve('node_modules'), resolve('../node_modules')],
+          modules: [
+            resolve('node_modules'),
+            resolve('../node_modules'),
+            ...globSync('../examples/*/node_modules')
+          ],
           alias: {
             '@vis.gl/react-google-maps': resolve('../src'),
             'website-examples': resolve('../examples'),
@@ -187,6 +192,5 @@ const config = {
 };
 
 module.exports = async function createConfigAsync() {
-  console.log('cca');
   return config;
 };

@@ -1,8 +1,8 @@
 {
   "type": "module",
   "dependencies": {
-    "@deck.gl/google-maps": "^8.9.30",
-    "@deck.gl/layers": "^8.9.30",
+    "@deck.gl/google-maps": "^8.9.34",
+    "deck.gl": "^8.9.34",
     "@vis.gl/react-google-maps": "*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
