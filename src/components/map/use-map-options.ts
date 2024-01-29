@@ -1,7 +1,7 @@
 import {useEffect, useLayoutEffect} from 'react';
 import {MapProps} from '@vis.gl/react-google-maps';
 import {InternalCameraStateRef} from './use-internal-camera-state';
-import {isLatLngLiteral} from '../../libraries/is-lat-lng-literal';
+import {isLatLngLiteral} from '../../libraries/lat-lng-utils';
 
 /**
  * Internal hook to update the map-options and camera parameters when

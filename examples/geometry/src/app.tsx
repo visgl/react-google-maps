@@ -1,13 +1,8 @@
 import React from 'react';
 import {createRoot} from 'react-dom/client';
 
-import {
-  APIProvider,
-  Map,
-  Circle,
-  Polygon,
-  Marker
-} from '@vis.gl/react-google-maps';
+import {APIProvider, Map, Marker} from '@vis.gl/react-google-maps';
+import {Circle, Polygon} from './components';
 import ControlPanel from './control-panel';
 import CircleControlPanel from './circle-control-panel';
 

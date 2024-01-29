@@ -6,7 +6,8 @@ React component to display a [Circle](https://developers.google.com/maps/documen
 
 ```tsx
 import React, {FunctionComponent} from 'react';
-import {APIProvider, Map, Circle} from '@vis.gl/react-google-maps';
+import {APIProvider, Map} from '@vis.gl/react-google-maps';
+import {Circle} from './components/circle';
 
 const App: FunctionComponent<Record<string, unknown>> = () => (
   <APIProvider apiKey={'Your API key here'}>

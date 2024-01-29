@@ -1,3 +1,12 @@
+export function isLatLngLiteral(
+  obj: unknown
+): obj is google.maps.LatLngLiteral {
+  if (!obj || typeof obj !== 'object') return false;
+  if (!('lat' in obj && 'lng' in obj)) return false;
+
+  return Number.isFinite(obj.lat) && Number.isFinite(obj.lng);
+}
+
 export function latLngEquals(
   a: google.maps.LatLngLiteral | google.maps.LatLng | undefined | null,
   b: google.maps.LatLngLiteral | google.maps.LatLng | undefined | null

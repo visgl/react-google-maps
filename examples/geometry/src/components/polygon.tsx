@@ -8,10 +8,9 @@ import {
   useRef
 } from 'react';
 
-import {GoogleMapsContext} from '../map';
+import {GoogleMapsContext, useMapsLibrary} from '@vis.gl/react-google-maps';
 
 import type {Ref} from 'react';
-import {useMapsLibrary} from '../../hooks/use-maps-library';
 
 type PolygonEventProps = {
   onClick?: (e: google.maps.MapMouseEvent) => void;

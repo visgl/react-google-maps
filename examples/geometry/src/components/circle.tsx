@@ -7,10 +7,8 @@ import {
   useRef
 } from 'react';
 
-import {GoogleMapsContext} from '../map';
-
 import type {Ref} from 'react';
-import {latLngEquals} from '../../libraries/lat-lng-equals';
+import {GoogleMapsContext, latLngEquals} from '@vis.gl/react-google-maps';
 
 type CircleEventProps = {
   onClick?: (e: google.maps.MapMouseEvent) => void;

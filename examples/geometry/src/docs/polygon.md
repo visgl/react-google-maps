@@ -6,7 +6,8 @@ React component to display a [Polygon](https://developers.google.com/maps/docume
 
 ```tsx
 import React, {FunctionComponent} from 'react';
-import {APIProvider, Map, Polygon} from '@vis.gl/react-google-maps';
+import {APIProvider, Map} from '@vis.gl/react-google-maps';
+import {Polygon} from './components/polygon';
 
 const App: FunctionComponent<Record<string, unknown>> = () => (
   <APIProvider apiKey={'Your API key here'}>
