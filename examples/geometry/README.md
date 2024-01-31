@@ -1,5 +1,7 @@
 # Geometry Example
 
+![image](https://github.com/ArielBenichou/react-google-maps/assets/21100652/d32d7052-0ec0-4f2f-84a2-d31e6629dfa6)
+
 This is an example to show how to setup a Google Maps Map with some geometry component, notably the `<Circle />` and `<Polygon />` components.
 
 ## Usage
