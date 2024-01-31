@@ -14,3 +14,4 @@ export * from './hooks/directions-service';
 export * from './hooks/street-view-panorama';
 
 export {limitTiltRange} from './libraries/limit-tilt-range';
+export * from './libraries/lat-lng-utils';
