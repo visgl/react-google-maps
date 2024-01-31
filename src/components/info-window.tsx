@@ -1,5 +1,11 @@
 /* eslint-disable complexity */
-import React, {PropsWithChildren, useContext, useEffect, useState} from 'react';
+import React, {
+  PropsWithChildren,
+  useContext,
+  useEffect,
+  useRef,
+  useState
+} from 'react';
 import {createPortal} from 'react-dom';
 
 import {GoogleMapsContext} from './map';
@@ -19,6 +25,7 @@ export const InfoWindow = (props: PropsWithChildren<InfoWindowProps>) => {
   const {children, anchor, onCloseClick, ...infoWindowOptions} = props;
   const map = useContext(GoogleMapsContext)?.map;
 
+  const infoWindowRef = useRef<google.maps.InfoWindow | null>(null);
   const [contentContainer, setContentContainer] =
     useState<HTMLDivElement | null>(null);
 
@@ -26,31 +33,68 @@ export const InfoWindow = (props: PropsWithChildren<InfoWindowProps>) => {
   useEffect(() => {
     if (!map) return;
 
-    const infoWindow = new google.maps.InfoWindow(infoWindowOptions);
+    const newInfowindow = new google.maps.InfoWindow(infoWindowOptions);
 
     // Add content to info window
     const el = document.createElement('div');
-    infoWindow.setContent(el);
-    infoWindow.open({map, anchor});
+    newInfowindow.setContent(el);
 
-    if (onCloseClick) {
-      google.maps.event.addListener(infoWindow, 'closeclick', () => {
-        onCloseClick();
-      });
-    }
-
+    infoWindowRef.current = newInfowindow;
     setContentContainer(el);
 
     // Cleanup info window and event listeners on unmount
     return () => {
-      google.maps.event.clearInstanceListeners(infoWindow);
+      google.maps.event.clearInstanceListeners(newInfowindow);
 
-      infoWindow.close();
+      newInfowindow.close();
       el.remove();
 
       setContentContainer(null);
     };
-  }, [map, children, anchor]);
+    // We don't want to re-render a whole new infowindow
+    // when the options change to prevent flickering.
+    // Update of infoWindow options is handled in the useEffect below.
+    // Excluding infoWindowOptions from dependency array on purpose here.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [map, children]);
+
+  // Update infoWindowOptions
+  useEffect(() => {
+    infoWindowRef.current?.setOptions(infoWindowOptions);
+  }, [infoWindowOptions]);
+
+  // Handle the close click callback
+  useEffect(() => {
+    if (!infoWindowRef.current) return;
+
+    let listener: google.maps.MapsEventListener | null = null;
+
+    if (onCloseClick) {
+      listener = google.maps.event.addListener(
+        infoWindowRef.current,
+        'closeclick',
+        onCloseClick
+      );
+    }
+
+    return () => {
+      if (listener) listener.remove();
+    };
+  }, [onCloseClick]);
+
+  // Open info window after content container is set
+  useEffect(() => {
+    // anchor === null means an anchor is defined but not ready yet.
+    if (!contentContainer || !infoWindowRef.current || anchor === null) return;
+
+    const openOptions: google.maps.InfoWindowOpenOptions = {map};
+
+    if (anchor) {
+      openOptions.anchor = anchor;
+    }
+
+    infoWindowRef.current.open(openOptions);
+  }, [contentContainer, infoWindowRef, anchor, map]);
 
   return (
     <>{contentContainer !== null && createPortal(children, contentContainer)}</>

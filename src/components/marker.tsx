@@ -58,6 +58,10 @@ function useMarker(props: MarkerProps) {
       newMarker.setMap(null);
       setMarker(null);
     };
+    // We do not want to re-render the whole marker when the options change.
+    // Marker options update is handled in a useEffect below.
+    // Excluding markerOptions from dependency array on purpose here.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [map]);
 
   // attach and re-attach event-handlers when any of the properties change

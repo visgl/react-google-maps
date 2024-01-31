@@ -91,7 +91,18 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
       setMarker(null);
       setContentContainer(null);
     };
+    // We do not want to re-render the whole marker when the className changes
+    // because that causes a short flickering of the marker.
+    // The className update is handled in the useEffect below.
+    // Excluding the className from the dependency array onm purpose here
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [map, markerLibrary, numChilds]);
+
+  // update className of advanced marker element
+  useEffect(() => {
+    if (!contentContainer) return;
+    contentContainer.className = className ?? '';
+  }, [contentContainer, className]);
 
   // bind all marker events
   useEffect(() => {

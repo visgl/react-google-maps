@@ -61,7 +61,7 @@ export const MapControl = ({children, position}: MapControlProps) => {
       const index = controls.getArray().indexOf(controlContainer);
       controls.removeAt(index);
     };
-  }, [map, position]);
+  }, [controlContainer, map, position]);
 
   return createPortal(children, controlContainer);
 };
