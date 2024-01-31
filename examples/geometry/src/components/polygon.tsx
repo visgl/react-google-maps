@@ -107,9 +107,10 @@ function usePolygon(props: PolygonProps) {
       ['mouseover', 'onMouseOver'],
       ['mouseout', 'onMouseOut']
     ].forEach(([eventName, eventCallback]) => {
-      gme.addListener(polygon, eventName, (e: google.maps.MapMouseEvent) =>
-        callbacks.current[eventCallback]?.(e)
-      );
+      gme.addListener(polygon, eventName, (e: google.maps.MapMouseEvent) => {
+        const callback = callbacks.current[eventCallback];
+        if (callback) callback(e);
+      });
     });
 
     return () => {

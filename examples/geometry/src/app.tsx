@@ -4,9 +4,8 @@ import {createRoot} from 'react-dom/client';
 import {APIProvider, Map, Marker} from '@vis.gl/react-google-maps';
 import {Circle, Polygon} from './components';
 import ControlPanel from './control-panel';
-import CircleControlPanel from './circle-control-panel';
 
-import {POLYGONS} from './polygons';
+import {POLYGONS} from './encoded-polygon-data';
 
 const API_KEY =
   globalThis.GOOGLE_MAPS_API_KEY ?? (process.env.GOOGLE_MAPS_API_KEY as string);
@@ -51,8 +50,7 @@ const App = () => {
           draggable
         />
       </Map>
-      <ControlPanel />
-      <CircleControlPanel
+      <ControlPanel
         center={center}
         radius={radius}
         onCenterChanged={setCenter}

@@ -100,9 +100,10 @@ function useCircle(props: CircleProps) {
       ['mouseover', 'onMouseOver'],
       ['mouseout', 'onMouseOut']
     ].forEach(([eventName, eventCallback]) => {
-      gme.addListener(circle, eventName, (e: google.maps.MapMouseEvent) =>
-        callbacks.current[eventCallback]?.(e)
-      );
+      gme.addListener(circle, eventName, (e: google.maps.MapMouseEvent) => {
+        const callback = callbacks.current[eventCallback];
+        if (callback) callback(e);
+      });
     });
     gme.addListener(circle, 'radius_changed', () => {
       const newRadius = circle.getRadius();
