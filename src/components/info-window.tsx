@@ -25,7 +25,7 @@ export const InfoWindow = (props: PropsWithChildren<InfoWindowProps>) => {
   const {children, anchor, onCloseClick, ...infoWindowOptions} = props;
   const map = useContext(GoogleMapsContext)?.map;
 
-  const infoWindow = useRef<google.maps.InfoWindow | null>(null);
+  const infoWindowRef = useRef<google.maps.InfoWindow | null>(null);
   const [contentContainer, setContentContainer] =
     useState<HTMLDivElement | null>(null);
 
@@ -39,7 +39,7 @@ export const InfoWindow = (props: PropsWithChildren<InfoWindowProps>) => {
     const el = document.createElement('div');
     newInfowindow.setContent(el);
 
-    infoWindow.current = newInfowindow;
+    infoWindowRef.current = newInfowindow;
     setContentContainer(el);
 
     // Cleanup info window and event listeners on unmount
@@ -60,18 +60,18 @@ export const InfoWindow = (props: PropsWithChildren<InfoWindowProps>) => {
 
   // Update infoWindowOptions
   useEffect(() => {
-    infoWindow.current?.setOptions(infoWindowOptions);
+    infoWindowRef.current?.setOptions(infoWindowOptions);
   }, [infoWindowOptions]);
 
   // Handle the close click callback
   useEffect(() => {
-    if (!infoWindow.current) return;
+    if (!infoWindowRef.current) return;
 
     let listener: google.maps.MapsEventListener | null = null;
 
     if (onCloseClick) {
       listener = google.maps.event.addListener(
-        infoWindow.current,
+        infoWindowRef.current,
         'closeclick',
         onCloseClick
       );
@@ -85,7 +85,7 @@ export const InfoWindow = (props: PropsWithChildren<InfoWindowProps>) => {
   // Open info window after content container is set
   useEffect(() => {
     // anchor === null means an anchor is defined but not ready yet.
-    if (!contentContainer || !infoWindow.current || anchor === null) return;
+    if (!contentContainer || !infoWindowRef.current || anchor === null) return;
 
     const openOptions: google.maps.InfoWindowOpenOptions = {map};
 
@@ -93,8 +93,8 @@ export const InfoWindow = (props: PropsWithChildren<InfoWindowProps>) => {
       openOptions.anchor = anchor;
     }
 
-    infoWindow.current.open(openOptions);
-  }, [contentContainer, infoWindow, anchor, map]);
+    infoWindowRef.current.open(openOptions);
+  }, [contentContainer, infoWindowRef, anchor, map]);
 
   return (
     <>{contentContainer !== null && createPortal(children, contentContainer)}</>
