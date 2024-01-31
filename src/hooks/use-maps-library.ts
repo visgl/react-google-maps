@@ -34,7 +34,7 @@ export function useMapsLibrary(name: string) {
     // The returned promise is ignored, since importLibrary will update loadedLibraries
     // list in the context, triggering a re-render.
     void ctx.importLibrary(name);
-  }, [apiIsLoaded, ctx?.importLibrary]);
+  }, [apiIsLoaded, ctx, name]);
 
   return ctx?.loadedLibraries[name] || null;
 }
