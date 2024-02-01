@@ -121,7 +121,10 @@ export class GoogleMapsApiLoader {
           urlParams.set(urlParamName, value);
         }
         urlParams.set('libraries', library);
+        urlParams.set('loading', 'async');
         urlParams.set('callback', '__googleMapsCallback__');
+
+        scriptElement.async = true;
         scriptElement.src = MAPS_API_BASE_URL + `?` + urlParams.toString();
 
         window.__googleMapsCallback__ = () => {
