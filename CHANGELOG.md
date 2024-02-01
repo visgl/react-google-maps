@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.4](https://github.com/visgl/react-google-maps/compare/v0.5.3...v0.5.4) (2024-02-01)
+
+
+### Bug Fixes
+
+* prevent passing empty parameters to ApiLoader ([#193](https://github.com/visgl/react-google-maps/issues/193)) ([0601753](https://github.com/visgl/react-google-maps/commit/0601753c03539dc1180272b31aafab911ebe9c2c))
+
 ## [0.5.3](https://github.com/visgl/react-google-maps/compare/v0.5.2...v0.5.3) (2024-02-01)
 
 
