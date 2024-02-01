@@ -73,7 +73,7 @@ test('passes parameters to GoogleMapsAPILoader', () => {
   expect(apiLoadSpy.mock.lastCall[0]).toMatchObject({
     key: 'apikey',
     libraries: 'places,marker',
-    version: 'beta',
+    v: 'beta',
     language: 'en',
     region: 'us',
     authReferrerPolicy: 'origin'
