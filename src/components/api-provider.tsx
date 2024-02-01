@@ -8,7 +8,10 @@ import React, {
   useState
 } from 'react';
 
-import {GoogleMapsApiLoader} from '../libraries/google-maps-api-loader';
+import {
+  ApiParams,
+  GoogleMapsApiLoader
+} from '../libraries/google-maps-api-loader';
 import {APILoadingStatus} from '../libraries/api-loading-status';
 
 type ImportLibraryFunction = typeof google.maps.importLibrary;
@@ -143,15 +146,11 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
     () => {
       (async () => {
         try {
-          await GoogleMapsApiLoader.load(
-            {
-              key: apiKey,
-              v: version,
-              libraries: librariesString,
-              ...otherApiParams
-            },
-            status => setStatus(status)
-          );
+          const params: ApiParams = {key: apiKey, ...otherApiParams};
+          if (version) params.v = version;
+          if (librariesString?.length > 0) params.libraries = librariesString;
+
+          await GoogleMapsApiLoader.load(params, status => setStatus(status));
 
           for (const name of ['core', 'maps', ...libraries]) {
             await importLibrary(name);

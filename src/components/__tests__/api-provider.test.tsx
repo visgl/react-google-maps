@@ -80,6 +80,13 @@ test('passes parameters to GoogleMapsAPILoader', () => {
   });
 });
 
+test('passes parameters to GoogleMapsAPILoader', () => {
+  render(<APIProvider apiKey={'apikey'}></APIProvider>);
+
+  const actual = apiLoadSpy.mock.lastCall[0];
+  expect(Object.keys(actual)).toMatchObject(['key']);
+});
+
 test('renders inner components', async () => {
   const LoadingStatus = () => {
     const mapsLoaded = useApiIsLoaded();
