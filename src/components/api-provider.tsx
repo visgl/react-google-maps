@@ -97,7 +97,7 @@ function useMapInstances() {
  * @param props
  */
 function useGoogleMapsApiLoader(props: APIProviderProps) {
-  const {onLoad, apiKey, libraries = [], ...otherApiParams} = props;
+  const {onLoad, apiKey, version, libraries = [], ...otherApiParams} = props;
 
   const [status, setStatus] = useState<APILoadingStatus>(
     GoogleMapsApiLoader.loadingStatus
@@ -114,8 +114,8 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
 
   const librariesString = useMemo(() => libraries?.join(','), [libraries]);
   const serializedParams = useMemo(
-    () => JSON.stringify(otherApiParams),
-    [otherApiParams]
+    () => JSON.stringify({apiKey, version, ...otherApiParams}),
+    [apiKey, version, otherApiParams]
   );
 
   const importLibrary: typeof google.maps.importLibrary = useCallback(
@@ -146,6 +146,7 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
           await GoogleMapsApiLoader.load(
             {
               key: apiKey,
+              v: version,
               libraries: librariesString,
               ...otherApiParams
             },
