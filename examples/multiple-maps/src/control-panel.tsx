@@ -5,8 +5,8 @@ function ControlPanel() {
     <div className="control-panel">
       <h3>Synchronized Maps</h3>
       <p>
-        Shows how to use controlled and interactive mode while synchronizing
-        multiople map instances.
+        Shows how to use the controlled map component to synchronize multiple
+        map instances.
       </p>
 
       <div className="links">
