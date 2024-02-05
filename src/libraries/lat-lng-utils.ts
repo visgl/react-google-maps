@@ -21,8 +21,7 @@ export function latLngEquals(
 export function toLatLngLiteral(
   obj: google.maps.LatLngLiteral | google.maps.LatLng
 ): google.maps.LatLngLiteral {
-  return {
-    lat: typeof obj.lat === 'function' ? obj.lat() : obj.lat,
-    lng: typeof obj.lng === 'function' ? obj.lng() : obj.lng
-  };
+  if (isLatLngLiteral(obj)) return obj;
+
+  return obj.toJSON();
 }

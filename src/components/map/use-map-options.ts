@@ -1,4 +1,4 @@
-import {MapProps} from '@vis.gl/react-google-maps';
+import {MapProps} from '../map';
 import {useDeepCompareEffect} from '../../libraries/use-deep-compare-effect';
 
 const mapOptionKeys = new Set([

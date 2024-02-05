@@ -40,7 +40,6 @@ const App = () => {
               mapId={'49ae42fed52588c3'}
               disableDefaultUI
               onCameraChanged={isActive ? handleCameraChange : undefined}
-              controlled={!isActive}
               onMouseover={() => setActiveMap(i)}
               {...cameraState}></Map>
           );

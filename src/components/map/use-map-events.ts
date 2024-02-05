@@ -1,8 +1,4 @@
 import {useEffect} from 'react';
-import {
-  CameraStateRef,
-  trackDispatchedEvent
-} from './use-tracked-camera-state-ref';
 
 /**
  * Handlers for all events that could be emitted by map-instances.
@@ -45,7 +41,6 @@ export type MapEventProps = Partial<{
  */
 export function useMapEvents(
   map: google.maps.Map | null,
-  cameraStateRef: CameraStateRef,
   props: MapEventProps
 ) {
   // note: calling a useEffect hook from within a loop is prohibited by the
@@ -68,15 +63,12 @@ export function useMapEvents(
         map,
         eventType,
         (ev?: google.maps.MapMouseEvent | google.maps.IconMouseEvent) => {
-          const mapEvent = createMapEvent(eventType, map, ev);
-          trackDispatchedEvent(mapEvent, cameraStateRef);
-
-          handler(mapEvent);
+          handler(createMapEvent(eventType, map, ev));
         }
       );
 
       return () => listener.remove();
-    }, [map, cameraStateRef, eventType, handler]);
+    }, [map, eventType, handler]);
   }
 }
 

@@ -1,18 +1,14 @@
 import {useLayoutEffect} from 'react';
 import {CameraStateRef} from './use-tracked-camera-state-ref';
-import {MapProps} from '@vis.gl/react-google-maps';
-import {isLatLngLiteral} from '../../libraries/is-lat-lng-literal';
+import {toLatLngLiteral} from '../../libraries/lat-lng-utils';
+import {MapProps} from '../map';
 
 export function useMapCameraParams(
   map: google.maps.Map | null,
   cameraStateRef: CameraStateRef,
   mapProps: MapProps
 ) {
-  const center = mapProps.center
-    ? isLatLngLiteral(mapProps.center)
-      ? mapProps.center
-      : mapProps.center.toJSON()
-    : null;
+  const center = mapProps.center ? toLatLngLiteral(mapProps.center) : null;
 
   let lat: number | null = null;
   let lng: number | null = null;
@@ -32,14 +28,17 @@ export function useMapCameraParams(
     ? (mapProps.tilt as number)
     : null;
 
-  /* eslint-disable react-hooks/exhaustive-deps --
-   *
-   * The following effects aren't triggered when the map is changed.
-   * In that case, the values will be or have been passed to the map
-   * constructor via mapOptions.
-   */
+  // the following effect runs for every render of the map component and checks
+  // if there are differences between the known state of the map instance
+  // (cameraStateRef, which is updated by all bounds_changed events) and the
+  // desired state in the props.
+
   useLayoutEffect(() => {
     if (!map) return;
+
+    // when the map was configured with an initialCameraProps instead
+    // of center/zoom/..., we skip all camera updates here
+    if (mapProps.initialCameraProps) return;
 
     const nextCamera: google.maps.CameraOptions = {};
     let needsUpdate = false;
@@ -72,5 +71,5 @@ export function useMapCameraParams(
     if (needsUpdate) {
       map.moveCamera(nextCamera);
     }
-  }, [cameraStateRef, lat, lng, zoom, heading, tilt]);
+  });
 }
