@@ -14,7 +14,7 @@ When using the [Google Maps Autocomplete widget][autocomplete-widget] you provid
 
 When you need complete control over every aspect of your autocomplete you can choose to build your own by utilizing the [Autocomplete Service][autocomplete-service] for fetching query predictions and the [Places Service][place-details] for fetching the place details.
 
-When building you own you are completely free but also responsible for the user experience of the autocomplete. You are also responsible for handling the autocomplete session with a [Session token][session-token]. This can easily be overlooked and may lead to not expected surprises when it comes to billing.
+When building your own you are completely free but also responsible for the user experience of the autocomplete. You are also responsible for handling the autocomplete session with a [Session token][session-token]. This can easily be overlooked and may lead to unexpected surprises when it comes to billing.
 
 ### 3) Third Party Select Widget
 
