@@ -67,20 +67,5 @@ export function useMapInstance(
     [container, apiIsLoaded, id, props.mapId]
   );
 
-  // report an error if the same map-id is used multiple times
-  // useEffect(() => {
-  //   if (!id) return;
-  //
-  //   const {mapInstances} = context;
-  //
-  //   if (mapInstances[id] && mapInstances[id] !== map) {
-  //     logErrorOnce(
-  //       `The map id '${id}' seems to have been used multiple times. ` +
-  //         'This can lead to unexpected problems when accessing the maps. ' +
-  //         'Please use unique ids for all <Map> components.'
-  //     );
-  //   }
-  // }, [id, context, map]);
-
   return [map, containerRef] as const;
 }
