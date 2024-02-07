@@ -56,6 +56,7 @@ const App = () => {
               id={`map-${i}`}
               mapId={MAP_IDS[i]}
               disableDefaultUI
+              gestureHandling={'greedy'}
               onCameraChanged={isActive ? handleCameraChange : undefined}
               onMouseover={() => setActiveMap(i)}
               {...cameraState}></Map>
