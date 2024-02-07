@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.6.0](https://github.com/visgl/react-google-maps/compare/v0.5.4...v0.6.0) (2024-02-07)
+
+
+### ⚠ BREAKING CHANGES
+
+* The behaviour of the props controlling camera parameters (center, zoom, heading and tilt) changed. Unless you are using controlled props, you have to change the prop names from e.g. `center` to `defaultCenter` (the same goes for `zoom`, `heading` and `tilt`).
+
+### Code Refactoring
+
+* improved state-handling implementation ([#181](https://github.com/visgl/react-google-maps/issues/181)) ([904b918](https://github.com/visgl/react-google-maps/commit/904b918427da071477ed4bb8c2c65006b35dff88))
+
 ## [0.5.4](https://github.com/visgl/react-google-maps/compare/v0.5.3...v0.5.4) (2024-02-01)
 
 
