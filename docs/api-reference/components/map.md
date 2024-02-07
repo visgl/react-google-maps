@@ -91,8 +91,8 @@ The map doesn't have any strictly required props, but center and zoom-level have
 to be provided in some way for the map to render. This can be done
 
 - by specifying both the `center` and `zoom` props,
-- by specifying the `initialCameraProps` prop with `center` and `zoom`,
-- or by specifying the map-region to be shown with the `initialBounds` prop.
+- by specifying both the `defaultCenter` and `defaultZoom` props,
+- or by specifying the map-region to be shown with the `defaultBounds` prop.
 
 ### General Props
 
@@ -157,10 +157,10 @@ The initial state of the camera. This can be used to leave the map
 component in uncontrolled mode. When both a default-value and a controlled
 value are present for a parameter, the controlled value takes precedence.
 
-#### `initialBounds`: [google.maps.LatLngBoundsLiteral][gmp-llb]
+#### `defaultBounds`: [google.maps.LatLngBoundsLiteral][gmp-llb]
 
 An alternative way to specify the region that should initially be visible on
-the map. Has otherwise the same effect as `initialCameraProps`.
+the map. Has otherwise the same effect as `defaultCenter` and `defaultZoom`.
 
 #### `controlled`: boolean
 
