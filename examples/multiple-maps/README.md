@@ -1,7 +1,7 @@
 # Synchronized Maps
 
-Shows how to use controlled and interactive mode while synchronizing
-multiople map instances.
+Shows how to use controlled mode and camera-events to synchronize
+multiple map instances.
 
 ## Google Maps API key
 
