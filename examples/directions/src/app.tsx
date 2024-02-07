@@ -13,7 +13,11 @@ const API_KEY =
 
 const App = () => (
   <APIProvider apiKey={API_KEY}>
-    <Map center={{lat: 43.65, lng: -79.38}} zoom={9} fullscreenControl={false}>
+    <Map
+      defaultCenter={{lat: 43.65, lng: -79.38}}
+      defaultZoom={9}
+      gestureHandling={'greedy'}
+      fullscreenControl={false}>
       <Directions />
     </Map>
   </APIProvider>

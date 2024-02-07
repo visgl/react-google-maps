@@ -92,10 +92,14 @@ the hooks and components in this library.
 The context contains functions and data needed to register and retrieve
 map-instances, libraries and the loading-status.
 
-> Client code should never need to interact with the context directly, always
-> use the corresponding hooks instead.
-> If you feel like you need to directly access the context, please file a
-> bug report about this.
+:::note
+
+Client code should never need to interact with the context directly, always
+use the corresponding hooks instead.
+If you feel like you need to directly access the context, please file a
+bug report about this.
+
+:::
 
 ## Hooks
 

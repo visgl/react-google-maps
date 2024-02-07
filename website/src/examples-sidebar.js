@@ -18,7 +18,8 @@ const sidebars = {
         'autocomplete',
         'map-control',
         'directions',
-        'deckgl-overlay'
+        'deckgl-overlay',
+        'multiple-maps'
       ]
     }
   ]

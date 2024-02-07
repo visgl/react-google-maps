@@ -42,6 +42,10 @@ beforeEach(() => {
       super(...args);
     }
   };
+
+  // no idea why the implementation in @googlemaps/jest-mocks doesn't work as it is,
+  // but this helps:
+  google.maps.event.addListener = jest.fn(() => ({remove: jest.fn()}));
 });
 
 afterEach(() => {

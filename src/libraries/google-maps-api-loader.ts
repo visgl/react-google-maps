@@ -50,7 +50,6 @@ export class GoogleMapsApiLoader {
     //   will be ignored. If it was defined by a previous call to this
     //   method, we will check that the key and other parameters have not been
     //   changed in between calls.
-
     if (!window.google?.maps?.importLibrary) {
       this.serializedApiParams = serializedParams;
       this.initImportLibrary(params, onLoadingStatusChange);

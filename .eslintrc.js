@@ -50,7 +50,11 @@ module.exports = {
         '@typescript-eslint/no-dupe-class-members': ['error'],
 
         // We encourage explicit typing, e.g `field: string = ''`
-        '@typescript-eslint/no-inferrable-types': 'off'
+        '@typescript-eslint/no-inferrable-types': 'off',
+        '@typescript-eslint/no-unused-vars': [
+          'warn',
+          {ignoreRestSiblings: true, destructuredArrayIgnorePattern: '^_'}
+        ]
       },
       parserOptions: {project: ['**/tsconfig.json']}
     },

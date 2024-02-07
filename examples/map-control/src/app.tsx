@@ -23,11 +23,13 @@ const App = () => {
 
   return (
     <APIProvider apiKey={API_KEY}>
+      {/* note that we can also use a mix of controlled (zoom) an
+          uncontrolled (center) properties here */}
       <Map
         disableDefaultUI={true}
         gestureHandling={'greedy'}
         mapId={'49ae42fed52588c3'}
-        center={center}
+        defaultCenter={center}
         zoom={zoom}
         onZoomChanged={ev => setZoom(ev.detail.zoom)}>
         <MapControl position={ControlPosition.TOP_LEFT}>

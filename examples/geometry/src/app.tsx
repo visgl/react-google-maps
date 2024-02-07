@@ -24,8 +24,8 @@ const App = () => {
   return (
     <APIProvider apiKey={API_KEY}>
       <Map
-        zoom={10}
-        center={INITIAL_CENTER}
+        defaultCenter={INITIAL_CENTER}
+        defaultZoom={10}
         gestureHandling={'greedy'}
         disableDefaultUI={true}>
         <Marker

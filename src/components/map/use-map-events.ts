@@ -1,8 +1,4 @@
 import {useEffect} from 'react';
-import {
-  InternalCameraStateRef,
-  trackDispatchedEvent
-} from './use-internal-camera-state';
 
 /**
  * Handlers for all events that could be emitted by map-instances.
@@ -15,6 +11,7 @@ export type MapEventProps = Partial<{
   onTiltChanged: (event: MapCameraChangedEvent) => void;
   onZoomChanged: (event: MapCameraChangedEvent) => void;
   onProjectionChanged: (event: MapCameraChangedEvent) => void;
+  onCameraChanged: (event: MapCameraChangedEvent) => void;
 
   // mouse / touch / pointer events
   onClick: (event: MapMouseEvent) => void;
@@ -44,7 +41,6 @@ export type MapEventProps = Partial<{
  */
 export function useMapEvents(
   map: google.maps.Map | null,
-  cameraStateRef: InternalCameraStateRef,
   props: MapEventProps
 ) {
   // note: calling a useEffect hook from within a loop is prohibited by the
@@ -67,15 +63,12 @@ export function useMapEvents(
         map,
         eventType,
         (ev?: google.maps.MapMouseEvent | google.maps.IconMouseEvent) => {
-          const mapEvent = createMapEvent(eventType, map, ev);
-
-          trackDispatchedEvent(mapEvent, cameraStateRef);
-          handler(mapEvent);
+          handler(createMapEvent(eventType, map, ev));
         }
       );
 
       return () => listener.remove();
-    }, [map, cameraStateRef, eventType, handler]);
+    }, [map, eventType, handler]);
   }
 }
 
@@ -117,7 +110,7 @@ function createMapEvent(
 
     camEvent.detail = {
       center: center?.toJSON() || {lat: 0, lng: 0},
-      zoom: zoom as number,
+      zoom: (zoom as number) || 0,
       heading: heading as number,
       tilt: tilt as number,
       bounds: bounds?.toJSON() || {
@@ -174,7 +167,12 @@ const propNameToEventType: {[prop in keyof Required<MapEventProps>]: string} = {
   onRenderingTypeChanged: 'renderingtype_changed',
   onTilesLoaded: 'tilesloaded',
   onTiltChanged: 'tilt_changed',
-  onZoomChanged: 'zoom_changed'
+  onZoomChanged: 'zoom_changed',
+
+  // note: onCameraChanged is an alias for the bounds_changed event,
+  // since that is going to be fired in every situation where the camera is
+  // updated.
+  onCameraChanged: 'bounds_changed'
 } as const;
 
 const cameraEventTypes = [
