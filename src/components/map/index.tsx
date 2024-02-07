@@ -51,7 +51,7 @@ export type MapProps = google.maps.MapOptions &
   MapEventProps &
   DeckGlCompatProps & {
     /**
-      * An id for the map, this is required when multiple maps are present
+     * An id for the map, this is required when multiple maps are present
      * in the same APIProvider context.
      */
     id?: string;
