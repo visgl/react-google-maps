@@ -27,8 +27,8 @@ const App = () => {
   return (
     <APIProvider apiKey={API_KEY}>
       <Map
-        center={{lat: 37.74, lng: -122.4}}
-        zoom={11}
+        defaultCenter={{lat: 37.74, lng: -122.4}}
+        defaultZoom={11}
         mapId={'4f6dde3310be51d7'}
         gestureHandling={'greedy'}
         disableDefaultUI={true}>

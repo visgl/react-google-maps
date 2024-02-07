@@ -36,10 +36,6 @@ export function useMapCameraParams(
   useLayoutEffect(() => {
     if (!map) return;
 
-    // when the map was configured with an initialCameraProps or initialBounds,
-    // we skip all camera updates here
-    if (mapProps.initialCameraProps || mapProps.initialBounds) return;
-
     const nextCamera: google.maps.CameraOptions = {};
     let needsUpdate = false;
 

@@ -18,36 +18,25 @@ const App = () => (
 );
 ```
 
-## Controlled and Uncontrolled modes
+## Controlled and Uncontrolled Props
 
-The map can operate in three different modes: uncontrolled mode, controlled
-mode, (both very similar to form-elements in React), and externally
-controlled mode.
+The props controlling the camera parameters for the map (center, zoom,
+heading and tilt) can all be specified via controlled or uncontrolled values.
+For example, the center of the map can be specified via either `center` or
+`defaultCenter`. This can even be mixed for the different parameters (for
+example, only the zoom value is controlled, while others are free).
 
-### Uncontrolled mode
-
-The simplest mode can be used if there is no need
-for much integration of the map with the rest of your application.
-In this mode, the map just receives the `initialCameraProps` and allows
-full user-control after that.
-
-In this mode (i.e., as long as `initialCameraProps` is present in the props),
-the other camera props will be ignored completely.
+As is the case with React form elements, the default-values will only be
+applied when the map is first initialized, while the regular parameters will
+make sure the map stays synchronized with the value specified.
 
 ```tsx
-const INITIAL_CAMERA = {
-  center: {lat: 40.7, lng: -74},
-  zoom: 12
-};
-
 const UncontrolledMap = () => {
-  return <Map initialCameraProps={INITIAL_CAMERA}></Map>;
+  return <Map defaultCenter={{lat: 40.7, lng: -74}} defaultZoom={12}></Map>;
 };
 ```
 
-### Controlled mode
-
-In this mode, the map will always exactly reflect the
+When only controlled props are used, the map will always exactly reflect the
 values specified for the camera parameters. When interactions occur, the new
 camera parameters will be published with a `cameraChanged` event and the
 application can use them to update the values passed to the props of the map.
@@ -79,7 +68,7 @@ anything not specified in the camera props.
 ## Props
 
 The `MapProps` type extends the [`google.maps.MapOptions` interface]
-[gmp-map-options] and includes all possible options available for a Google 
+[gmp-map-options] and includes all possible options available for a Google
 Map as props.
 
 The most important of these options are also listed below along with the
@@ -130,9 +119,6 @@ style-prop is no longer applied.
 
 Coordinates for the center of the map.
 
-The Google Maps API Documentation [has some more information on this topic]
-[gmp-coordinates].
-
 #### `zoom`: number
 
 The initial resolution at which to display the map.
@@ -144,6 +130,9 @@ is approximately:
 - `10`: City
 - `15`: Streets
 - `20`: Buildings
+
+The Google Maps API Documentation [has some more information on this topic].
+[gmp-coordinates].
 
 #### `heading`: number
 
@@ -162,13 +151,11 @@ The allowed values are restricted depending on the zoom level of the map:
 - between 10 and 15.5, it is a piecewise linear interpolation
   ([see here][get-max-tilt] for details)
 
-#### `initialCameraProps`: MapCameraProps
+#### `defaultCenter`, `defaultZoom`, `defaultHeading`, `defaultTilt`
 
-The initial state of the camera. This can be specified to leave the map
-component in uncontrolled mode. [See above](#uncontrolled-mode) for more
-information about the uncontrolled mode. The `MapCameraProps` type is just
-an object with the four properties `center`, `zoom`, `heading` and `tilt` as
-described above.
+The initial state of the camera. This can be used to leave the map
+component in uncontrolled mode. When both a default-value and a controlled
+value are present for a parameter, the controlled value takes precedence.
 
 #### `initialBounds`: [google.maps.LatLngBoundsLiteral][gmp-llb]
 

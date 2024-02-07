@@ -99,10 +99,10 @@ const App = () => {
   return (
     <APIProvider apiKey={API_KEY}>
       <Map
+        defaultCenter={{lat: 22, lng: 0}}
+        defaultZoom={3}
         mapId={mapConfig.mapId}
         mapTypeId={mapConfig.mapTypeId}
-        center={{lat: 22, lng: 0}}
-        zoom={3}
         styles={mapConfig.styles}
         gestureHandling={'greedy'}
         disableDefaultUI={true}>

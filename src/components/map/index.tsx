@@ -67,15 +67,15 @@ export type MapProps = google.maps.MapOptions &
      * Indicates that the map will be controlled externally. Disables all controls provided by the map itself.
      */
     controlled?: boolean;
+
+    defaultCenter?: google.maps.LatLngLiteral;
+    defaultZoom?: number;
+    defaultHeading?: number;
+    defaultTilt?: number;
     /**
-     * The initial parameters for the camera. If specified, the map will be in uncontrolled mode and
-     * will ignore the regular camera parameters (center/zoom/heading/tilt).
+     * Alternative way to specify the default camera props as a geographic region that should be fully visible
      */
-    initialCameraProps?: MapCameraProps;
-    /**
-     * Alternative way to specify the initialCameraProps as geographic region that should be visible
-     */
-    initialBounds?: google.maps.LatLngBounds | google.maps.LatLngBoundsLiteral;
+    defaultBounds?: google.maps.LatLngBoundsLiteral;
   };
 
 export const Map = (props: PropsWithChildren<MapProps>) => {

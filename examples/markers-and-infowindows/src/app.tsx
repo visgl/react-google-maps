@@ -22,10 +22,10 @@ const App = () => {
     <APIProvider apiKey={API_KEY} libraries={['marker']}>
       <Map
         mapId={'bf51a910020fa25a'}
-        zoom={3}
-        center={{lat: 12, lng: 0}}
+        defaultZoom={3}
+        defaultCenter={{lat: 12, lng: 0}}
         gestureHandling={'greedy'}
-        disableDefaultUI={true}>
+        disableDefaultUI>
         {/* simple marker */}
         <Marker
           position={{lat: 10, lng: 10}}

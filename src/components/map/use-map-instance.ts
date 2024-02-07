@@ -1,4 +1,4 @@
-import {Ref, useEffect, useState} from 'react';
+import {Ref, useEffect, useRef, useState} from 'react';
 
 import {MapProps} from '../map';
 import {APIProviderContextValue} from '../api-provider';
@@ -23,11 +23,23 @@ export function useMapInstance(
 
   const {
     id,
-    initialBounds,
-    initialCameraProps,
+    defaultBounds,
+    defaultCenter,
+    defaultZoom,
+    defaultHeading,
+    defaultTilt,
 
     ...mapOptions
   } = props;
+
+  // apply default camera props if available and not overwritten by controlled props
+  if (!mapOptions.center && defaultCenter) mapOptions.center = defaultCenter;
+  if (!mapOptions.zoom && Number.isFinite(defaultZoom))
+    mapOptions.zoom = defaultZoom;
+  if (!mapOptions.heading && Number.isFinite(defaultHeading))
+    mapOptions.heading = defaultHeading;
+  if (!mapOptions.tilt && Number.isFinite(defaultTilt))
+    mapOptions.tilt = defaultTilt;
 
   // create the map instance and register it in the context
   useEffect(
@@ -40,13 +52,11 @@ export function useMapInstance(
       setMap(newMap);
       addMapInstance(newMap, id);
 
-      if (initialBounds) {
-        newMap.fitBounds(initialBounds);
+      if (defaultBounds) {
+        newMap.fitBounds(defaultBounds);
       }
 
-      if (initialCameraProps) {
-        newMap.setOptions(initialCameraProps);
-      }
+      // FIXME: When the mapId is changed,  we need to maintain the current camera params.
 
       return () => {
         if (!container || !apiIsLoaded) return;
@@ -60,7 +70,7 @@ export function useMapInstance(
     },
 
     // some dependencies are ignored in the list below:
-    //  - initialBounds and initialCameraProps will only be used once, and
+    //  - defaultBounds and the default* camera props will only be used once, and
     //    changes should be ignored
     //  - mapOptions has special hooks that take care of updating the options
     // eslint-disable-next-line react-hooks/exhaustive-deps

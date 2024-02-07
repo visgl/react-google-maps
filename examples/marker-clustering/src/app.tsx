@@ -18,8 +18,10 @@ const App = () => (
   <APIProvider apiKey={API_KEY}>
     <Map
       mapId={'bf51a910020fa25a'}
-      center={{lat: 43.64, lng: -79.41}}
-      zoom={10}>
+      defaultCenter={{lat: 43.64, lng: -79.41}}
+      defaultZoom={10}
+      gestureHandling={'greedy'}
+      disableDefaultUI>
       <Markers points={trees} />
     </Map>
   </APIProvider>
