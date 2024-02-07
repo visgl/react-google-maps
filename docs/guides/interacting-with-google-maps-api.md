@@ -51,7 +51,6 @@ Other hooks provide access to different Google Maps API services:
 - [useDirectionsService](../api-reference/hooks/use-directions-service.md)
   for the [Directions Service](https://developers.google.com/maps/documentation/javascript/directions)
 - [useStreetViewPanorama](../api-reference/hooks/use-streetview-panorama.md) for the [Streetview Service](https://developers.google.com/maps/documentation/javascript/streetview)
-- [useAutocomplete](../api-reference/hooks/use-autocomplete.md) for the [Places Widget](https://developers.google.com/maps/documentation/javascript/reference/places-widget)
 
 The [useMapsLibrary](../api-reference/hooks/use-maps-library.md) hook can be
 utilized to load other parts of the Google Maps API that are not loaded by default.

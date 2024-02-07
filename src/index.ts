@@ -9,7 +9,6 @@ export * from './hooks/use-api-loading-status';
 export * from './hooks/use-api-is-loaded';
 export * from './hooks/use-maps-library';
 export * from './hooks/use-map';
-export * from './hooks/autocomplete';
 export * from './hooks/directions-service';
 export * from './hooks/street-view-panorama';
 

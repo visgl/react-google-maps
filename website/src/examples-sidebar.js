@@ -15,6 +15,7 @@ const sidebars = {
         'marker-clustering',
         'geometry',
         'change-map-styles',
+        'autocomplete',
         'map-control',
         'directions',
         'deckgl-overlay'

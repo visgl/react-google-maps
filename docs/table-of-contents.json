@@ -52,8 +52,7 @@
           "api-reference/hooks/use-api-is-loaded",
           "api-reference/hooks/use-maps-library",
           "api-reference/hooks/use-directions-service",
-          "api-reference/hooks/use-streetview-panorama",
-          "api-reference/hooks/use-autocomplete"
+          "api-reference/hooks/use-streetview-panorama"
         ]
       }
     ]
