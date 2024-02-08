@@ -1,5 +1,5 @@
 import {DependencyList, EffectCallback, useEffect, useRef} from 'react';
-import isDeepEqual from 'fast-deep-equal/react';
+import isDeepEqual from 'fast-deep-equal';
 
 export function useDeepCompareEffect(
   effect: EffectCallback,
