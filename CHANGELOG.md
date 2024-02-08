@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.1](https://github.com/visgl/react-google-maps/compare/v0.6.0...v0.6.1) (2024-02-08)
+
+
+### Bug Fixes
+
+* remove deep-link into fast-deep-equal package ([#208](https://github.com/visgl/react-google-maps/issues/208)) ([f0be380](https://github.com/visgl/react-google-maps/commit/f0be3803eeb3aa0c80b19b42977e714dcb746a2f))
+
 ## [0.6.0](https://github.com/visgl/react-google-maps/compare/v0.5.4...v0.6.0) (2024-02-07)
 
 
