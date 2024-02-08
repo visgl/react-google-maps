@@ -1,4 +1,4 @@
-import {Ref, useEffect, useRef, useState} from 'react';
+import {Ref, useEffect, useState} from 'react';
 
 import {MapProps} from '../map';
 import {APIProviderContextValue} from '../api-provider';
