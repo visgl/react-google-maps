@@ -12,7 +12,6 @@ import {APIProviderContext} from '../api-provider';
 
 import {MapEventProps, useMapEvents} from './use-map-events';
 import {useMapOptions} from './use-map-options';
-import {useTrackedCameraStateRef} from './use-tracked-camera-state-ref';
 import {useApiLoadingStatus} from '../../hooks/use-api-loading-status';
 import {APILoadingStatus} from '../../libraries/api-loading-status';
 import {
@@ -89,8 +88,7 @@ export const Map = (props: PropsWithChildren<MapProps>) => {
     );
   }
 
-  const [map, mapRef] = useMapInstance(props, context);
-  const cameraStateRef = useTrackedCameraStateRef(map);
+  const [map, mapRef, cameraStateRef] = useMapInstance(props, context);
 
   useMapCameraParams(map, cameraStateRef, props);
   useMapEvents(map, props);
