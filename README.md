@@ -70,7 +70,7 @@ function App() {
 
   return (
     <APIProvider apiKey={'YOUR API KEY HERE'}>
-      <Map center={position} zoom={10}>
+      <Map defaultCenter={position} defaultZoom={10}>
         <Marker position={position} />
       </Map>
     </APIProvider>
