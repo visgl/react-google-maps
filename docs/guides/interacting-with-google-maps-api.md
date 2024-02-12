@@ -107,12 +107,15 @@ module provides a hook [`useMapsLibrary()`](../api-reference/hooks/use-maps-libr
 to handle dynamic loading of those libraries.
 
 For example, if you want to write a component that needs to use the
-`google.maps.places.PlacesService` class, you can implement it like this:
+[`google.maps.places.PlacesService`][gmp-places-service] class, you can
+implement it like this:
 
 ```tsx
 import {useMapsLibrary} from '@vis.gl/react-google-maps';
 
 const MyComponent = () => {
+  const map = useMap();
+
   // triggers loading the places library and returns the API Object once complete (the
   // component calling the hook gets automatically re-rendered when this is
   // the case)
@@ -121,12 +124,12 @@ const MyComponent = () => {
   const [placesService, setPlacesService] = useState(null);
 
   useEffect(() => {
-    if (!placesLibrary) return;
+    if (!placesLibrary || !map) return;
 
     // when placesLibrary is loaded, the library can be accessed via the
     // placesLibrary API object
-    setPlacesService(new placesLibrary.PlacesService());
-  }, [placesLibrary]);
+    setPlacesService(new placesLibrary.PlacesService(map));
+  }, [placesLibrary, map]);
 
   useEffect(() => {
     if (!placesService) return;
@@ -142,14 +145,15 @@ Or you can extract your own hook from this:
 
 ```tsx
 function usePlacesService() {
+  const map = useMap();
   const placesLibrary = useMapsLibrary('places');
   const [placesService, setPlacesService] = useState(null);
 
   useEffect(() => {
-    if (!placesLibrary) return;
+    if (!placesLibrary || !map) return;
 
-    setPlacesService(new placesLibrary.PlacesService());
-  }, [placesLibrary]);
+    setPlacesService(new placesLibrary.PlacesService(map));
+  }, [placesLibrary, map]);
 
   return placesService;
 }
@@ -166,3 +170,5 @@ const MyComponent = () => {
   return <></>;
 };
 ```
+
+[gmp-places-service]: https://developers.google.com/maps/documentation/javascript/reference/places-service

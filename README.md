@@ -96,20 +96,21 @@ For example, if you want to use the `google.maps.places.PlacesService` class in
 your component, you can implement it like this:
 
 ```tsx
-import {useMapsLibrary} from '@vis.gl/react-google-maps';
+import {useMap, useMapsLibrary} from '@vis.gl/react-google-maps';
 
 const MyComponent = () => {
   // triggers loading the places library and returns true once complete (the
   // component calling the hook gets automatically re-rendered when this is
   // the case)
+  const map = useMap();
   const placesLib = useMapsLibrary('places');
   const [placesService, setPlacesService] = useState(null);
 
   useEffect(() => {
-    if (!placesLib) return;
+    if (!placesLib || !map) return;
 
-    setPlacesService(new placesLib.PlacesService());
-  }, [placesLib]);
+    setPlacesService(new placesLib.PlacesService(map));
+  }, [placesLib, map]);
 
   useEffect(() => {
     if (!placesService) return;
