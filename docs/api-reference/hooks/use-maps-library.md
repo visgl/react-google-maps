@@ -5,14 +5,15 @@ This is essentially a react-version of the `google.maps.importLibrary` function.
 
 ```tsx
 const MyComponent = () => {
+  const map = useMap();
   const placesLib = useMapsLibrary('places');
 
   useEffect(() => {
-    if (!placesLib) return;
+    if (!placesLib || !map) return;
 
-    const svc = new placesLib.PlacesService();
+    const svc = new placesLib.PlacesService(map);
     // ...
-  }, [placesLib]);
+  }, [placesLib, map]);
 
   // ...
 };
