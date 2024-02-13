@@ -1,5 +1,6 @@
 # Drawing
 
+import BrowserOnly from '@docusaurus/BrowserOnly';
 import App from 'website-examples/drawing/src/app';
 
-<App />
+<BrowserOnly>{() => <App />}</BrowserOnly>
