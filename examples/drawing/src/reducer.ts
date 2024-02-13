@@ -16,19 +16,17 @@ export default function reducer(state: State, action: Action) {
     case DrawingActionKind.UPDATE_OVERLAYS: {
       const overlays = state.now.map((overlay: Overlay) => {
         const pinnedState: PinnedState = {};
+        const {geometry} = overlay;
 
-        if (isCircle(overlay.geometry)) {
-          pinnedState.center = overlay.geometry.getCenter()?.toJSON();
-          pinnedState.radius = overlay.geometry.getRadius();
-        } else if (isMarker(overlay.geometry)) {
-          pinnedState.position = overlay.geometry.getPosition()?.toJSON();
-        } else if (
-          isPolygon(overlay.geometry) ||
-          isPolyline(overlay.geometry)
-        ) {
-          pinnedState.path = overlay.geometry.getPath()?.getArray();
-        } else if (isRectangle(overlay.geometry)) {
-          pinnedState.bounds = overlay.geometry.getBounds()?.toJSON();
+        if (isCircle(geometry)) {
+          pinnedState.center = geometry.getCenter()?.toJSON();
+          pinnedState.radius = geometry.getRadius();
+        } else if (isMarker(geometry)) {
+          pinnedState.position = geometry.getPosition()?.toJSON();
+        } else if (isPolygon(geometry) || isPolyline(geometry)) {
+          pinnedState.path = geometry.getPath()?.getArray();
+        } else if (isRectangle(geometry)) {
+          pinnedState.bounds = geometry.getBounds()?.toJSON();
         }
 
         return {

@@ -88,7 +88,7 @@ export const UndoRedo = ({drawingManager}: Props) => {
   useEffect(() => {
     if (!map || !state.now) return;
 
-    state.now.forEach((overlay: Overlay) => {
+    for (const overlay of state.now) {
       overlaysShouldUpdate.current = false;
 
       overlay.geometry.setMap(map);
@@ -107,12 +107,12 @@ export const UndoRedo = ({drawingManager}: Props) => {
       }
 
       overlaysShouldUpdate.current = true;
-    });
+    }
 
     return () => {
-      state.now.forEach((overlay: Overlay) => {
+      for (const overlay of state.now) {
         overlay.geometry.setMap(null);
-      });
+      }
     };
   }, [map, pinnedStatesSnapshot]);
 

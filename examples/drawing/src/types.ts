@@ -1,10 +1,3 @@
-export type OverlayGeometryType =
-  | google.maps.drawing.OverlayType.MARKER
-  | google.maps.drawing.OverlayType.POLYGON
-  | google.maps.drawing.OverlayType.POLYLINE
-  | google.maps.drawing.OverlayType.RECTANGLE
-  | google.maps.drawing.OverlayType.CIRCLE;
-
 export type OverlayGeometry =
   | google.maps.Marker
   | google.maps.Polygon
@@ -13,7 +6,7 @@ export type OverlayGeometry =
   | google.maps.Circle;
 
 export interface DrawResult {
-  type: OverlayGeometryType;
+  type: google.maps.drawing.OverlayType;
   overlay: OverlayGeometry;
 }
 
@@ -26,7 +19,7 @@ export interface PinnedState {
 }
 
 export interface Overlay {
-  type: OverlayGeometryType;
+  type: google.maps.drawing.OverlayType;
   geometry: OverlayGeometry;
   pinnedState: PinnedState;
 }
