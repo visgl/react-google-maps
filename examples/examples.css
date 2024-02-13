@@ -87,3 +87,42 @@ html[data-theme='dark'] .gm-style {
 .autocomplete-mode {
   margin: 8px 0;
 }
+
+.drawing-history {
+  margin: 5px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 27px;
+  box-sizing: border-box;
+}
+
+.drawing-history button {
+  height: 100%;
+  background: rgb(255, 255, 255);
+  border: 0px;
+  margin: 0px;
+  cursor: pointer;
+  color: rgb(86, 86, 86);
+  border-bottom-left-radius: 2px;
+  border-top-left-radius: 2px;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px -1px;
+}
+
+.drawing-history button svg {
+  width: 20px;
+}
+.drawing-history button path {
+  fill: rgb(86, 86, 86);
+}
+
+.drawing-history button:hover {
+  background: rgb(235, 235, 235);
+}
+
+.drawing-history button:disabled:hover,
+.drawing-history button:disabled {
+  background: rgb(255, 255, 255);
+  opacity: 0.5;
+  cursor: default;
+}
