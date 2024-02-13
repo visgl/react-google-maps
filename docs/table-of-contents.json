@@ -49,10 +49,9 @@
 
         "items": [
           "api-reference/hooks/use-map",
-          "api-reference/hooks/use-api-is-loaded",
           "api-reference/hooks/use-maps-library",
-          "api-reference/hooks/use-directions-service",
-          "api-reference/hooks/use-streetview-panorama"
+          "api-reference/hooks/use-api-is-loaded",
+          "api-reference/hooks/use-api-loading-status"
         ]
       }
     ]

@@ -1,4 +1,4 @@
-# `useApiIsLoaded` Hook
+# `useApiLoadingStatus` Hook
 
 React hook to get the current status of the API Loader. This can be used to react to loading-errors.
 
