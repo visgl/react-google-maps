@@ -14,6 +14,7 @@ const sidebars = {
         'markers-and-infowindows',
         'marker-clustering',
         'geometry',
+        'drawing',
         'change-map-styles',
         'autocomplete',
         'map-control',
