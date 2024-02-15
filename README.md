@@ -1,5 +1,5 @@
 > [!IMPORTANT]
-> This project is still in it's alpha phase.
+> This project is still in its alpha phase.
 >
 > When using it be aware that things may not yet work as expected and can
 > break at any point. Releases happen often, so when you experience problems,
