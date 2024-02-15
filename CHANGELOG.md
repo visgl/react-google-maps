@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.7.0](https://github.com/visgl/react-google-maps/compare/v0.6.1...v0.7.0) (2024-02-15)
+
+
+### ⚠ BREAKING CHANGES
+
+* removed the `useStreetViewPanorama()` and `useDirectionsService()` hooks.
+
+### Features
+
+* add example for drawing tools ([#220](https://github.com/visgl/react-google-maps/issues/220)) ([75e91c4](https://github.com/visgl/react-google-maps/commit/75e91c4a3b3893ac3d97b5689682bcca5262aac9))
+* restore map state when changing mapId ([#213](https://github.com/visgl/react-google-maps/issues/213)) ([0db363f](https://github.com/visgl/react-google-maps/commit/0db363f9c0291135b31ac387d4513bbaf652517a))
+
+
+### Code Refactoring
+
+* remove obsolete hooks ([#219](https://github.com/visgl/react-google-maps/issues/219)) ([69b2373](https://github.com/visgl/react-google-maps/commit/69b23734270e8754a518790620872dc1f4136cc7))
+
 ## [0.6.1](https://github.com/visgl/react-google-maps/compare/v0.6.0...v0.6.1) (2024-02-08)
 
 
