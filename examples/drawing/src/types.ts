@@ -10,7 +10,7 @@ export interface DrawResult {
   overlay: OverlayGeometry;
 }
 
-export interface PinnedState {
+export interface Snapshot {
   radius?: number;
   center?: google.maps.LatLngLiteral;
   position?: google.maps.LatLngLiteral;
@@ -21,7 +21,7 @@ export interface PinnedState {
 export interface Overlay {
   type: google.maps.drawing.OverlayType;
   geometry: OverlayGeometry;
-  pinnedState: PinnedState;
+  snapshot: Snapshot;
 }
 
 export interface State {
