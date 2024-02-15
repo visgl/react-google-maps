@@ -9,8 +9,6 @@ export * from './hooks/use-api-loading-status';
 export * from './hooks/use-api-is-loaded';
 export * from './hooks/use-maps-library';
 export * from './hooks/use-map';
-export * from './hooks/directions-service';
-export * from './hooks/street-view-panorama';
 
 export {limitTiltRange} from './libraries/limit-tilt-range';
 export * from './libraries/lat-lng-utils';
