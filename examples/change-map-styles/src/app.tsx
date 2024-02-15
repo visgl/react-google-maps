@@ -1,13 +1,7 @@
 import React, {useState} from 'react';
 import {createRoot} from 'react-dom/client';
 
-import {
-  Marker,
-  APIProvider,
-  InfoWindow,
-  Map,
-  useMarkerRef
-} from '@vis.gl/react-google-maps';
+import {APIProvider, Map} from '@vis.gl/react-google-maps';
 
 import ControlPanel from './control-panel';
 
@@ -93,35 +87,18 @@ const API_KEY =
 
 const App = () => {
   const [mapConfig, setMapConfig] = useState<MapConfig>(MAP_CONFIGS[0]);
-  const [infowindowOpen, setInfowindowOpen] = useState(true);
-  const [markerRef, marker] = useMarkerRef();
 
   return (
     <APIProvider apiKey={API_KEY}>
       <Map
         defaultCenter={{lat: 22, lng: 0}}
         defaultZoom={3}
-        mapId={mapConfig.mapId}
+        mapId={mapConfig.mapId || null}
         mapTypeId={mapConfig.mapTypeId}
         styles={mapConfig.styles}
         gestureHandling={'greedy'}
-        disableDefaultUI={true}>
-        <Marker
-          ref={markerRef}
-          onClick={() => setInfowindowOpen(true)}
-          position={{lat: 28, lng: -82}}
-        />
-
-        {infowindowOpen && (
-          <InfoWindow
-            anchor={marker}
-            maxWidth={200}
-            onCloseClick={() => setInfowindowOpen(false)}>
-            This marker is here to show that marker and infowindow persist when
-            changing the mapId.
-          </InfoWindow>
-        )}
-      </Map>
+        disableDefaultUI={true}
+      />
 
       <ControlPanel
         mapConfigs={MAP_CONFIGS}

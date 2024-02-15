@@ -22,8 +22,8 @@ function ControlPanel({
       </p>
       <p>
         Due to the way the Maps API works, a new <code>google.maps.Map</code>{' '}
-        instance has to be created when the mapId is changed, which could affect
-        the number of paid map-views.
+        instance has to be created when changing the mapId. This will affect the
+        number of paid map-views.
       </p>
 
       <div>

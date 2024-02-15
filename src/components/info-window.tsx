@@ -51,10 +51,13 @@ export const InfoWindow = (props: PropsWithChildren<InfoWindowProps>) => {
 
       setContentContainer(null);
     };
-    // We don't want to re-render a whole new infowindow
+
+    // `infoWindowOptions` is missing from dependencies:
+    //
+    // we don't want to re-render a whole new infowindow
     // when the options change to prevent flickering.
     // Update of infoWindow options is handled in the useEffect below.
-    // Excluding infoWindowOptions from dependency array on purpose here.
+    //
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [map, children]);
 
