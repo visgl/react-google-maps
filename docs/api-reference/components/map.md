@@ -67,9 +67,8 @@ anything not specified in the camera props.
 
 ## Props
 
-The `MapProps` type extends the [`google.maps.MapOptions` interface]
-[gmp-map-options] and includes all possible options available for a Google
-Map as props.
+The `MapProps` type extends the [`google.maps.MapOptions` interface][gmp-map-options]
+and includes all possible options available for a Google Map as props.
 
 The most important of these options are also listed below along with the
 properties added for the react-library.
@@ -131,8 +130,7 @@ is approximately:
 - `15`: Streets
 - `20`: Buildings
 
-The Google Maps API Documentation [has some more information on this topic].
-[gmp-coordinates].
+The Google Maps API Documentation [has some more information on this topic][gmp-coordinates].
 
 #### `heading`: number
 
