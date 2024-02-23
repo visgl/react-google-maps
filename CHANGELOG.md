@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.1](https://github.com/visgl/react-google-maps/compare/v0.7.0...v0.7.1) (2024-02-23)
+
+
+### Bug Fixes
+
+* export api-loading-status types ([#231](https://github.com/visgl/react-google-maps/issues/231)) ([9695034](https://github.com/visgl/react-google-maps/commit/9695034d3c51936c2c701b7fb8be4a864f349c3e)), closes [#230](https://github.com/visgl/react-google-maps/issues/230)
+
 ## [0.7.0](https://github.com/visgl/react-google-maps/compare/v0.6.1...v0.7.0) (2024-02-15)
 
 
