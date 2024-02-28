@@ -19,12 +19,14 @@ export const DeckGlOverlay = ({layers}: DeckglOverlayProps) => {
   const map = useMap();
   useEffect(() => {
     deck.setMap(map);
-  }, [map]);
+
+    return () => deck.setMap(null);
+  }, [deck, map]);
 
   // whenever the rendered data changes, the layers will be updated
   useEffect(() => {
     deck.setProps({layers});
-  }, [layers]);
+  }, [deck, layers]);
 
   // no dom rendered by this component
   return null;

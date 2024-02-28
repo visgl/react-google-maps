@@ -49,7 +49,11 @@ export const DeckGlOverlay = ({layers}) => {
   const deck = useMemo(() => new GoogleMapsOverlay({interleaved: true}), []);
 
   const map = useMap();
-  useEffect(() => deck.setMap(map), [map]);
+  useEffect(() => {
+    deck.setMap(map);
+    
+    return () => deck.setMap(null);
+  }, [map]);
   useEffect(() => deck.setProps({layers}), [layers]);
 
   // no dom rendered by this component
