@@ -90,7 +90,7 @@ const App = () => {
 
   return (
     <APIProvider apiKey={'Your API key here'}>
-      <Map zoom={12} center={{lat: 53.54992, lng: 10.00678}}>
+      <Map zoom={12} center={{lat: 53.54992, lng: 10.00678}} mapId={'<Your custom MapId here>'}>
         <AdvancedMarker
           ref={markerRef}
           position={{lat: 53.54992, lng: 10.00678}}
