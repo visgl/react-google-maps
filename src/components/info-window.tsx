@@ -23,7 +23,8 @@ export type InfoWindowProps = google.maps.InfoWindowOptions & {
  * Component to render a Google Maps Info Window
  */
 export const InfoWindow = (props: PropsWithChildren<InfoWindowProps>) => {
-  const {children, anchor, shouldFocus, onCloseClick, ...infoWindowOptions} = props;
+  const {children, anchor, shouldFocus, onCloseClick, ...infoWindowOptions} =
+    props;
   const map = useContext(GoogleMapsContext)?.map;
 
   const infoWindowRef = useRef<google.maps.InfoWindow | null>(null);
@@ -97,7 +98,7 @@ export const InfoWindow = (props: PropsWithChildren<InfoWindowProps>) => {
       openOptions.anchor = anchor;
     }
 
-    if(shouldFocus) {
+    if (shouldFocus) {
       openOptions.shouldFocus = shouldFocus;
     }
 
