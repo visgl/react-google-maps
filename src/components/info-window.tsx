@@ -103,7 +103,7 @@ export const InfoWindow = (props: PropsWithChildren<InfoWindowProps>) => {
     }
 
     infoWindowRef.current.open(openOptions);
-  }, [contentContainer, infoWindowRef, anchor, map]);
+  }, [contentContainer, infoWindowRef, anchor, map, shouldFocus]);
 
   return (
     <>{contentContainer !== null && createPortal(children, contentContainer)}</>
