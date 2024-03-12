@@ -16,7 +16,7 @@ import {GoogleMapsContext} from './map';
 export type InfoWindowProps = google.maps.InfoWindowOptions & {
   onCloseClick?: () => void;
   anchor?: google.maps.Marker | google.maps.marker.AdvancedMarkerElement | null;
-  shouldFocus?: boolean | null;
+  shouldFocus?: boolean;
 };
 
 /**
