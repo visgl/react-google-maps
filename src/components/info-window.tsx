@@ -16,13 +16,15 @@ import {GoogleMapsContext} from './map';
 export type InfoWindowProps = google.maps.InfoWindowOptions & {
   onCloseClick?: () => void;
   anchor?: google.maps.Marker | google.maps.marker.AdvancedMarkerElement | null;
+  shouldFocus?: boolean;
 };
 
 /**
  * Component to render a Google Maps Info Window
  */
 export const InfoWindow = (props: PropsWithChildren<InfoWindowProps>) => {
-  const {children, anchor, onCloseClick, ...infoWindowOptions} = props;
+  const {children, anchor, shouldFocus, onCloseClick, ...infoWindowOptions} =
+    props;
   const map = useContext(GoogleMapsContext)?.map;
 
   const infoWindowRef = useRef<google.maps.InfoWindow | null>(null);
@@ -96,8 +98,12 @@ export const InfoWindow = (props: PropsWithChildren<InfoWindowProps>) => {
       openOptions.anchor = anchor;
     }
 
+    if (shouldFocus) {
+      openOptions.shouldFocus = shouldFocus;
+    }
+
     infoWindowRef.current.open(openOptions);
-  }, [contentContainer, infoWindowRef, anchor, map]);
+  }, [contentContainer, infoWindowRef, anchor, map, shouldFocus]);
 
   return (
     <>{contentContainer !== null && createPortal(children, contentContainer)}</>
