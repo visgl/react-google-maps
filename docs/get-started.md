@@ -45,7 +45,7 @@ import {APIProvider, Map} from '@vis.gl/react-google-maps';
 const App = () => (
   <APIProvider apiKey={API_KEY}>
     <Map
-      style={{width: '500px', height: '700px'}}
+      style={{width: '100vw', height: '100vh'}}
       defaultCenter={{lat: 22.54992, lng: 0}}
       defaultZoom={3}
       gestureHandling={'greedy'}
