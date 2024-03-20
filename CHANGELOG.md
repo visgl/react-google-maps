@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.0](https://github.com/visgl/react-google-maps/compare/v0.7.1...v0.8.0) (2024-03-20)
+
+
+### Features
+
+* add new prop InfoWindow.shouldFocus ([#254](https://github.com/visgl/react-google-maps/issues/254)) ([c83ea37](https://github.com/visgl/react-google-maps/commit/c83ea375295699ed4e3c3a4a6f097cad1a4aca7d))
+
 ## [0.7.1](https://github.com/visgl/react-google-maps/compare/v0.7.0...v0.7.1) (2024-02-23)
 
 
