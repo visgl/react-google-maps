@@ -16,7 +16,8 @@ const MAP_IDS = [
   '7a9e2ebecd32a903'
 ];
 
-const API_KEY = process.env.GOOGLE_MAPS_API_KEY as string;
+const API_KEY =
+  globalThis.GOOGLE_MAPS_API_KEY ?? (process.env.GOOGLE_MAPS_API_KEY as string);
 
 const INITIAL_CAMERA_STATE = {
   center: {

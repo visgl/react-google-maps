@@ -18,6 +18,11 @@ const App = () => (
 );
 ```
 
+By default, the map will be added to the DOM with `width: 100%; height: 100%;`,
+assuming that the parent element will establish a size for the map. If that
+doesn't work in your case, you can adjust the styling of the map container
+using the [`style`](#style-reactcssproperties) and [`className`](#classname-string) props.
+
 ## Controlled and Uncontrolled Props
 
 The props controlling the camera parameters for the map (center, zoom,
@@ -109,7 +114,7 @@ only contain `{width: '100%', height: '100%'}`.
 #### `className`: string
 
 Additional css class-name to apply to the element containing the map.
-When a classname is specified, the default height of the map from the
+When a classname is specified, the default width and height of the map from the
 style-prop is no longer applied.
 
 ### Camera Control

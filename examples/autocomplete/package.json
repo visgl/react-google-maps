@@ -1,7 +1,7 @@
 {
   "type": "module",
   "dependencies": {
-    "@vis.gl/react-google-maps": "*",
+    "@vis.gl/react-google-maps": "latest",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-widgets": "^5.8.4",
