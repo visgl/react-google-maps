@@ -98,7 +98,7 @@ export const InfoWindow = (props: PropsWithChildren<InfoWindowProps>) => {
       openOptions.anchor = anchor;
     }
 
-    if (shouldFocus) {
+    if (shouldFocus === true || shouldFocus === false) {
       openOptions.shouldFocus = shouldFocus;
     }
 
