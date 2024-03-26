@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.1](https://github.com/visgl/react-google-maps/compare/v0.8.0...v0.8.1) (2024-03-26)
+
+
+### Bug Fixes
+
+* InfoWindow.shouldFocus doesn't work with false as value ([#278](https://github.com/visgl/react-google-maps/issues/278)) ([2f4b508](https://github.com/visgl/react-google-maps/commit/2f4b508a3da87f778496043dc7d5b40f47837d1f))
+
 ## [0.8.0](https://github.com/visgl/react-google-maps/compare/v0.7.1...v0.8.0) (2024-03-20)
 
 
