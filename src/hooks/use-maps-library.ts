@@ -18,8 +18,10 @@ interface ApiLibraries {
   visualization: google.maps.VisualizationLibrary;
 }
 
+export type ApiLibraryKeys = keyof ApiLibraries;
+
 export function useMapsLibrary<
-  K extends keyof ApiLibraries,
+  K extends ApiLibraryKeys,
   V extends ApiLibraries[K]
 >(name: K): V | null;
 
