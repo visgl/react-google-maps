@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.2](https://github.com/visgl/react-google-maps/compare/v0.8.1...v0.8.2) (2024-03-29)
+
+
+### Bug Fixes
+
+* memoize context-values to avoid excessive re-renders ([#287](https://github.com/visgl/react-google-maps/issues/287)) ([bea68f9](https://github.com/visgl/react-google-maps/commit/bea68f923e9326188baebd8a89b9ad5cbf891303)), closes [#285](https://github.com/visgl/react-google-maps/issues/285)
+
 ## [0.8.1](https://github.com/visgl/react-google-maps/compare/v0.8.0...v0.8.1) (2024-03-26)
 
 
