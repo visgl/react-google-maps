@@ -172,6 +172,8 @@ export const Map = (props: PropsWithChildren<MapProps>) => {
     [style, isDeckGlControlled]
   );
 
+  const contextValue: GoogleMapsContextValue = useMemo(() => ({map}), [map]);
+
   if (loadingStatus === APILoadingStatus.AUTH_FAILURE) {
     return (
       <div
@@ -190,7 +192,7 @@ export const Map = (props: PropsWithChildren<MapProps>) => {
       className={className}
       {...(id ? {id} : {})}>
       {map ? (
-        <GoogleMapsContext.Provider value={{map}}>
+        <GoogleMapsContext.Provider value={contextValue}>
           {children}
         </GoogleMapsContext.Provider>
       ) : null}

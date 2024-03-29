@@ -188,17 +188,29 @@ export const APIProvider = (
   const {status, loadedLibraries, importLibrary} =
     useGoogleMapsApiLoader(loaderProps);
 
+  const contextValue: APIProviderContextValue = useMemo(
+    () => ({
+      mapInstances,
+      addMapInstance,
+      removeMapInstance,
+      clearMapInstances,
+      status,
+      loadedLibraries,
+      importLibrary
+    }),
+    [
+      mapInstances,
+      addMapInstance,
+      removeMapInstance,
+      clearMapInstances,
+      status,
+      loadedLibraries,
+      importLibrary
+    ]
+  );
+
   return (
-    <APIProviderContext.Provider
-      value={{
-        mapInstances,
-        addMapInstance,
-        removeMapInstance,
-        clearMapInstances,
-        status,
-        loadedLibraries,
-        importLibrary
-      }}>
+    <APIProviderContext.Provider value={contextValue}>
       {children}
     </APIProviderContext.Provider>
   );

@@ -6,6 +6,7 @@ import React, {
   useContext,
   useEffect,
   useImperativeHandle,
+  useMemo,
   useState
 } from 'react';
 
@@ -147,6 +148,9 @@ export const AdvancedMarker = forwardRef(
     const {children} = props;
     const [marker, contentContainer] = useAdvancedMarker(props);
 
+    const advancedMarkerContextValue: AdvancedMarkerContextValue | null =
+      useMemo(() => (marker ? {marker} : null), [marker]);
+
     useImperativeHandle(ref, () => marker, [marker]);
 
     if (!marker) {
@@ -154,7 +158,7 @@ export const AdvancedMarker = forwardRef(
     }
 
     return (
-      <AdvancedMarkerContext.Provider value={{marker}}>
+      <AdvancedMarkerContext.Provider value={advancedMarkerContextValue}>
         {contentContainer !== null && createPortal(children, contentContainer)}
       </AdvancedMarkerContext.Provider>
     );
