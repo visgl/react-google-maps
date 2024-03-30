@@ -41,7 +41,7 @@ const App = () => {
   }, []);
 
   return (
-    <APIProvider apiKey={API_KEY}>
+    <APIProvider apiKey={API_KEY} version={'beta'}>
       <div
         style={{
           height: '100%',
