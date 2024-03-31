@@ -58,7 +58,7 @@ export const MapControl = ({children, position}: MapControlProps) => {
     controls.push(controlContainer);
 
     return () => {
-      const index = controls.getArray().indexOf(controlContainer);
+      const index = controls.getArray()?.indexOf(controlContainer);
       controls.removeAt(index);
     };
   }, [controlContainer, map, position]);
