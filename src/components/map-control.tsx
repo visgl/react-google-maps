@@ -58,7 +58,11 @@ export const MapControl = ({children, position}: MapControlProps) => {
     controls.push(controlContainer);
 
     return () => {
-      const index = controls.getArray().indexOf(controlContainer);
+      const controlsArray = controls.getArray();
+      // controlsArray could be undefined if the map is in an undefined state (e.g. invalid API-key, see #276
+      if (!controlsArray) return;
+
+      const index = controlsArray.indexOf(controlContainer);
       controls.removeAt(index);
     };
   }, [controlContainer, map, position]);
