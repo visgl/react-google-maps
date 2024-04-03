@@ -1,0 +1,15 @@
+{
+  "type": "module",
+  "dependencies": {
+    "@googlemaps/extended-component-library": "^0.6.9",
+    "@vis.gl/react-google-maps": "latest",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "vite": "^5.0.4"
+  },
+  "scripts": {
+    "start": "vite",
+    "start-local": "vite --config ../vite.config.local.js",
+    "build": "vite build"
+  }
+}
