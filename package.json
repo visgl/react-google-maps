@@ -1,6 +1,6 @@
 {
   "name": "@vis.gl/react-google-maps",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "description": "React components and hooks for Google Maps.",
   "source": "src/index.ts",
   "main": "dist/index.umd.js",
