@@ -10,13 +10,7 @@ export type ApiParams = {
   authReferrerPolicy?: string;
 };
 
-// Declare global maps callback function
-declare global {
-  interface Window {
-    __googleMapsCallback__?: () => void;
-    gm_authFailure?: () => void;
-  }
-}
+type LoadingStatusCallback = (status: APILoadingStatus) => void;
 
 const MAPS_API_BASE_URL = 'https://maps.googleapis.com/maps/api/js';
 
@@ -27,8 +21,20 @@ const MAPS_API_BASE_URL = 'https://maps.googleapis.com/maps/api/js';
  * allow using the API in an useEffect hook, without worrying about multiple API loads.
  */
 export class GoogleMapsApiLoader {
+  /**
+   * The current loadingStatus of the API.
+   */
   public static loadingStatus: APILoadingStatus = APILoadingStatus.NOT_LOADED;
+
+  /**
+   * The parameters used for first loading the API.
+   */
   public static serializedApiParams?: string;
+
+  /**
+   * A list of functions to be notified when the loading status changes.
+   */
+  private static listeners: LoadingStatusCallback[] = [];
 
   /**
    * Loads the Google Maps API with the specified parameters.
@@ -46,21 +52,23 @@ export class GoogleMapsApiLoader {
     const libraries = params.libraries ? params.libraries.split(',') : [];
     const serializedParams = this.serializeParams(params);
 
-    // note: if google.maps.importLibrary was defined externally, the params
-    //   will be ignored. If it was defined by a previous call to this
-    //   method, we will check that the key and other parameters have not been
-    //   changed in between calls.
-    if (!window.google?.maps?.importLibrary) {
-      this.serializedApiParams = serializedParams;
-      this.initImportLibrary(params, onLoadingStatusChange);
-    } else {
-      // if serializedApiParams isn't defined the library was loaded externally
-      // and we can only assume that went alright.
+    this.listeners.push(onLoadingStatusChange);
+
+    // Note: if `google.maps.importLibrary` has been defined externally, we
+    //   assume that loading is complete and successful.
+    //   If it was defined by a previous call to this method, a warning
+    //   message is logged if there are differences in api-parameters used
+    //   for both calls.
+
+    if (window.google?.maps?.importLibrary as unknown) {
+      // no serialized parameters means it was loaded externally
       if (!this.serializedApiParams) {
         this.loadingStatus = APILoadingStatus.LOADED;
       }
-
-      onLoadingStatusChange(this.loadingStatus);
+      this.notifyLoadingStatusListeners();
+    } else {
+      this.serializedApiParams = serializedParams;
+      this.initImportLibrary(params);
     }
 
     if (
@@ -68,17 +76,21 @@ export class GoogleMapsApiLoader {
       this.serializedApiParams !== serializedParams
     ) {
       console.warn(
-        `The maps API has already been loaded with different ` +
-          `parameters and will not be loaded again. Refresh the page for ` +
-          `new values to have effect.`
+        `[google-maps-api-loader] The maps API has already been loaded ` +
+          `with different parameters and will not be loaded again. Refresh the ` +
+          `page for new values to have effect.`
       );
     }
 
-    for (const lib of ['maps', ...libraries]) {
-      await google.maps.importLibrary(lib);
-    }
+    const librariesToLoad = ['maps', ...libraries];
+    await Promise.all(
+      librariesToLoad.map(name => google.maps.importLibrary(name))
+    );
   }
 
+  /**
+   * Serialize the paramters used to load the library for easier comparison.
+   */
   private static serializeParams(params: ApiParams): string {
     return [
       params.v,
@@ -90,22 +102,32 @@ export class GoogleMapsApiLoader {
     ].join('/');
   }
 
-  private static initImportLibrary(
-    params: ApiParams,
-    onLoadingStatusChange: (status: APILoadingStatus) => void
-  ) {
+  /**
+   * Creates the global `google.maps.importLibrary` function for bootstrapping.
+   * This is essentially a formatted version of the dynamic loading script
+   * from the official documentation with some minor adjustments.
+   *
+   * The created importLibrary function will load the Google Maps JavaScript API,
+   * which will then replace the `google.maps.importLibrary` function with the full
+   * implementation.
+   *
+   * @see https://developers.google.com/maps/documentation/javascript/load-maps-js-api#dynamic-library-import
+   */
+  private static initImportLibrary(params: ApiParams) {
     if (!window.google) window.google = {} as never;
     if (!window.google.maps) window.google.maps = {} as never;
 
     if (window.google.maps['importLibrary']) {
-      console.warn('initImportLibrary can only be called once.', params);
+      console.error(
+        '[google-maps-api-loader-internal]: initImportLibrary must only be called once'
+      );
 
       return;
     }
 
     let apiPromise: Promise<void> | null = null;
 
-    const loadApi = (library: string) => {
+    const loadApi = () => {
       if (apiPromise) return apiPromise;
 
       apiPromise = new Promise((resolve, reject) => {
@@ -119,36 +141,35 @@ export class GoogleMapsApiLoader {
           );
           urlParams.set(urlParamName, value);
         }
-        urlParams.set('libraries', library);
         urlParams.set('loading', 'async');
         urlParams.set('callback', '__googleMapsCallback__');
 
         scriptElement.async = true;
         scriptElement.src = MAPS_API_BASE_URL + `?` + urlParams.toString();
+        scriptElement.nonce =
+          (document.querySelector('script[nonce]') as HTMLScriptElement)
+            ?.nonce || '';
+
+        scriptElement.onerror = () => {
+          this.loadingStatus = APILoadingStatus.FAILED;
+          this.notifyLoadingStatusListeners();
+          reject(new Error('The Google Maps JavaScript API could not load.'));
+        };
 
         window.__googleMapsCallback__ = () => {
           this.loadingStatus = APILoadingStatus.LOADED;
-          onLoadingStatusChange(this.loadingStatus);
+          this.notifyLoadingStatusListeners();
           resolve();
         };
 
         window.gm_authFailure = () => {
           this.loadingStatus = APILoadingStatus.AUTH_FAILURE;
-          onLoadingStatusChange(this.loadingStatus);
+          this.notifyLoadingStatusListeners();
         };
-
-        scriptElement.onerror = () => {
-          this.loadingStatus = APILoadingStatus.FAILED;
-          onLoadingStatusChange(this.loadingStatus);
-          reject(new Error('The Google Maps JavaScript API could not load.'));
-        };
-
-        scriptElement.nonce =
-          (document.querySelector('script[nonce]') as HTMLScriptElement)
-            ?.nonce || '';
 
         this.loadingStatus = APILoadingStatus.LOADING;
-        onLoadingStatusChange(this.loadingStatus);
+        this.notifyLoadingStatusListeners();
+
         document.head.append(scriptElement);
       });
 
@@ -158,6 +179,23 @@ export class GoogleMapsApiLoader {
     // for the first load, we declare an importLibrary function that will
     // be overwritten once the api is loaded.
     google.maps.importLibrary = libraryName =>
-      loadApi(libraryName).then(() => google.maps.importLibrary(libraryName));
+      loadApi().then(() => google.maps.importLibrary(libraryName));
+  }
+
+  /**
+   * Calls all registered loadingStatusListeners after a status update.
+   */
+  private static notifyLoadingStatusListeners() {
+    for (const fn of this.listeners) {
+      fn(this.loadingStatus);
+    }
+  }
+}
+
+// Declare global maps callback functions
+declare global {
+  interface Window {
+    __googleMapsCallback__?: () => void;
+    gm_authFailure?: () => void;
   }
 }
