@@ -5,12 +5,13 @@
     "sourceMap": true,
     "noEmit": true,
     "noImplicitAny": true,
-    "module": "ES2015",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "esModuleInterop": true,
     "target": "ES2015",
     "lib": ["es2015", "dom"],
     "jsx": "react",
-    "esModuleInterop": true,
-    "moduleResolution": "node",
+
     "skipLibCheck": true,
     "paths": {
       "@vis.gl/react-google-maps": ["./src"]
