@@ -81,7 +81,7 @@ export const Pin = (props: PropsWithChildren<PinProps & {
 
     if (onMouseLeave)
       advancedMarker.content?.addEventListener('mouseleave', onMouseLeave);
-  }, [advancedMarker, glyphContainer, props]);
+  }, [advancedMarker, background, borderColor, glyph, glyphColor, glyphContainer, onMouseEnter, onMouseLeave, props, scale]);
 
   return createPortal(props.children, glyphContainer);
 };
