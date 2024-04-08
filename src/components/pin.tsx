@@ -9,6 +9,7 @@ import {AdvancedMarkerContext} from './advanced-marker';
 import {createPortal} from 'react-dom';
 import {logErrorOnce} from '../libraries/errors';
 
+
 /**
  * Props for the Pin component
  */
@@ -17,9 +18,21 @@ export type PinProps = google.maps.marker.PinElementOptions;
 /**
  * Component to render a google maps marker Pin View
  */
-export const Pin = (props: PropsWithChildren<PinProps>) => {
+export const Pin = (props: PropsWithChildren<PinProps & {
+  onMouseEnter?: EventListener | null;
+  onMouseLeave?: EventListener | null;
+}>) => {
   const advancedMarker = useContext(AdvancedMarkerContext)?.marker;
   const glyphContainer = useMemo(() => document.createElement('div'), []);
+  const {
+    background,
+    borderColor,
+    glyph,
+    glyphColor,
+    scale,
+    onMouseEnter,
+    onMouseLeave
+  } = props;
 
   // Create Pin View instance
   useEffect(() => {
@@ -46,7 +59,11 @@ export const Pin = (props: PropsWithChildren<PinProps>) => {
     }
 
     const pinViewOptions: google.maps.marker.PinElementOptions = {
-      ...props
+      background,
+      borderColor,
+      glyph,
+      glyphColor,
+      scale,
     };
 
     const pinElement = new google.maps.marker.PinElement(pinViewOptions);
@@ -59,6 +76,11 @@ export const Pin = (props: PropsWithChildren<PinProps>) => {
 
     // Set content of Advanced Marker View to the Pin View element
     advancedMarker.content = pinElement.element;
+    if (onMouseEnter)
+      advancedMarker.content?.addEventListener('mouseenter', onMouseEnter);
+
+    if (onMouseLeave)
+      advancedMarker.content?.addEventListener('mouseleave', onMouseLeave);
   }, [advancedMarker, glyphContainer, props]);
 
   return createPortal(props.children, glyphContainer);

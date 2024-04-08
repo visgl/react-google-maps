@@ -28,7 +28,6 @@ type AdvancedMarkerEventProps = {
   onDrag?: (e: google.maps.MapMouseEvent) => void;
   onDragStart?: (e: google.maps.MapMouseEvent) => void;
   onDragEnd?: (e: google.maps.MapMouseEvent) => void;
-  onMouseOver?: (e: google.maps.MapMouseEvent) => void;
 };
 
 export type AdvancedMarkerProps = PropsWithChildren<
@@ -60,7 +59,6 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
     onDrag,
     onDragStart,
     onDragEnd,
-    onMouseOver,
     collisionBehavior,
     draggable,
     position,
@@ -117,7 +115,7 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
     if (onDrag) gme.addListener(marker, 'drag', onDrag);
     if (onDragStart) gme.addListener(marker, 'dragstart', onDragStart);
     if (onDragEnd) gme.addListener(marker, 'dragend', onDragEnd);
-    if (onMouseOver) gme.addListener(marker, 'mouseover', onMouseOver);
+
     if ((onDrag || onDragStart || onDragEnd) && !draggable) {
       console.warn(
         'You need to set the marker to draggable to listen to drag-events.'
@@ -128,7 +126,7 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
     return () => {
       gme.clearInstanceListeners(m);
     };
-  }, [marker, draggable, onClick, onDragStart, onDrag, onDragEnd, onMouseOver]);
+  }, [marker, draggable, onClick, onDragStart, onDrag, onDragEnd]);
 
   // update other marker props when changed
   useEffect(() => {
