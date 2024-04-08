@@ -1,5 +1,5 @@
 {
-  "name": "@vis.gl/react-google-maps",
+  "name": "@aliasad106/react-google-maps",
   "version": "0.8.3",
   "description": "React components and hooks for Google Maps.",
   "source": "src/index.ts",
