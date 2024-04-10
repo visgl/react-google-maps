@@ -6,14 +6,11 @@ import '@testing-library/jest-dom';
 // FIXME: this should no longer be needed with the next version of @googlemaps/jest-mocks
 import {importLibraryMock} from '../../libraries/__mocks__/lib/import-library-mock';
 
-import {
-  APIProvider,
-  APIProviderContextValue
-} from '../api-provider';
+import {APIProvider, APIProviderContextValue} from '../api-provider';
 import {ApiParams} from '../../libraries/google-maps-api-loader';
 import {useApiIsLoaded} from '../../hooks/use-api-is-loaded';
 import {APILoadingStatus} from '../../libraries/api-loading-status';
-import { useApi } from '../../hooks/use-api';
+import {useApi} from '../../hooks/use-api';
 
 const apiLoadSpy = jest.fn();
 const apiUnloadSpy = jest.fn();

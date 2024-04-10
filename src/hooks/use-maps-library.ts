@@ -1,7 +1,7 @@
-import {useContext, useEffect} from 'react';
+import {useEffect} from 'react';
 
-import {APIProviderContext} from '../components/api-provider';
 import {useApiIsLoaded} from './use-api-is-loaded';
+import {useApi} from './use-api';
 
 interface ApiLibraries {
   core: google.maps.CoreLibrary;
@@ -25,16 +25,16 @@ export function useMapsLibrary<
 
 export function useMapsLibrary(name: string) {
   const apiIsLoaded = useApiIsLoaded();
-  const ctx = useContext(APIProviderContext);
+  const api = useApi();
 
   useEffect(() => {
-    if (!apiIsLoaded || !ctx) return;
+    if (!apiIsLoaded || !api) return;
 
     // Trigger loading the libraries via our proxy-method.
     // The returned promise is ignored, since importLibrary will update loadedLibraries
     // list in the context, triggering a re-render.
-    void ctx.importLibrary(name);
-  }, [apiIsLoaded, ctx, name]);
+    void api.importLibrary(name);
+  }, [apiIsLoaded, api, name]);
 
-  return ctx?.loadedLibraries[name] || null;
+  return api?.loadedLibraries[name] || null;
 }
