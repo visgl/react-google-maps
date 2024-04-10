@@ -1,14 +1,13 @@
 /* eslint-disable complexity */
 import React, {
   PropsWithChildren,
-  useContext,
   useEffect,
   useRef,
   useState
 } from 'react';
 import {createPortal} from 'react-dom';
 
-import {GoogleMapsContext} from './map';
+import {useMap} from '../hooks/use-map';
 
 /**
  * Props for the Info Window Component
@@ -25,7 +24,7 @@ export type InfoWindowProps = google.maps.InfoWindowOptions & {
 export const InfoWindow = (props: PropsWithChildren<InfoWindowProps>) => {
   const {children, anchor, shouldFocus, onCloseClick, ...infoWindowOptions} =
     props;
-  const map = useContext(GoogleMapsContext)?.map;
+  const map = useMap();
 
   const infoWindowRef = useRef<google.maps.InfoWindow | null>(null);
   const [contentContainer, setContentContainer] =

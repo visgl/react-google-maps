@@ -2,13 +2,11 @@
 import React, {
   forwardRef,
   useCallback,
-  useContext,
   useEffect,
   useImperativeHandle,
   useState
 } from 'react';
 
-import {GoogleMapsContext} from './map';
 import {useMap} from '../hooks/use-map';
 
 import type {Ref} from 'react';
