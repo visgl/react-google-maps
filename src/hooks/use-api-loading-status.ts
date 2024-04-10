@@ -1,7 +1,6 @@
-import {useContext} from 'react';
-import {APIProviderContext} from '../components/api-provider';
+import {useApi} from './use-api';
 import {APILoadingStatus} from '../libraries/api-loading-status';
 
 export function useApiLoadingStatus(): APILoadingStatus {
-  return useContext(APIProviderContext)?.status || APILoadingStatus.NOT_LOADED;
+  return useApi()?.status || APILoadingStatus.NOT_LOADED;
 }
