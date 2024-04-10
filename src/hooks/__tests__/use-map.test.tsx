@@ -56,7 +56,9 @@ test('returns the parent map instance when called without id', async () => {
   // Create wrapper component
   const wrapper = ({children}: React.PropsWithChildren) => (
     <MockApiContextProvider>
-      <GoogleMap>{children}</GoogleMap>
+      <GoogleMap zoom={8} center={{lat: 53.55, lng: 10.05}}>
+        {children}
+      </GoogleMap>
     </MockApiContextProvider>
   );
 
