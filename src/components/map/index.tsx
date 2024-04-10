@@ -2,13 +2,10 @@
 import React, {
   CSSProperties,
   PropsWithChildren,
-  useContext,
   useEffect,
   useLayoutEffect,
   useMemo
 } from 'react';
-
-import {APIProviderContext} from '../api-provider';
 
 import {MapEventProps, useMapEvents} from './use-map-events';
 import {useMapOptions} from './use-map-options';
@@ -22,6 +19,7 @@ import {toLatLngLiteral} from '../../libraries/lat-lng-utils';
 import {useMapCameraParams} from './use-map-camera-params';
 import {AuthFailureMessage} from './auth-failure-message';
 import {useMapInstance} from './use-map-instance';
+import {useApi} from '../../hooks/use-api';
 
 export interface GoogleMapsContextValue {
   map: google.maps.Map | null;
@@ -79,16 +77,16 @@ export type MapProps = google.maps.MapOptions &
 
 export const Map = (props: PropsWithChildren<MapProps>) => {
   const {children, id, className, style} = props;
-  const context = useContext(APIProviderContext);
+  const api = useApi();
   const loadingStatus = useApiLoadingStatus();
 
-  if (!context) {
+  if (!api) {
     throw new Error(
       '<Map> can only be used inside an <ApiProvider> component.'
     );
   }
 
-  const [map, mapRef, cameraStateRef] = useMapInstance(props, context);
+  const [map, mapRef, cameraStateRef] = useMapInstance(props, api);
 
   useMapCameraParams(map, cameraStateRef, props);
   useMapEvents(map, props);
