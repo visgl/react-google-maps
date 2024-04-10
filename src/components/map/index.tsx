@@ -37,7 +37,6 @@ export type {
 } from './use-map-events';
 
 export type MapCameraProps = {
-  zoom: number;
   heading?: number;
   tilt?: number;
 } & (
