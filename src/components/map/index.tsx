@@ -67,8 +67,8 @@ export type MapProps = google.maps.MapOptions &
      */
     controlled?: boolean;
 
-    defaultCenter?: google.maps.LatLngLiteral;
-    defaultZoom?: number;
+    defaultCenter: google.maps.LatLngLiteral;
+    defaultZoom: number;
     defaultHeading?: number;
     defaultTilt?: number;
     /**
