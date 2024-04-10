@@ -21,7 +21,8 @@ type MarkerEventProps = {
   onMouseOut?: (e: google.maps.MapMouseEvent) => void;
 };
 
-export type MarkerProps = Omit<google.maps.MarkerOptions, "map"> & MarkerEventProps;
+export type MarkerProps = Omit<google.maps.MarkerOptions, 'map'> &
+  MarkerEventProps;
 
 export type MarkerRef = Ref<google.maps.Marker | null>;
 
