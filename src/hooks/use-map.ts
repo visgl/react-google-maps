@@ -1,8 +1,8 @@
 import {useContext} from 'react';
 
-import {APIProviderContext} from '../components/api-provider';
 import {GoogleMapsContext} from '../components/map';
 import {logErrorOnce} from '../libraries/errors';
+import {useApi} from './use-api';
 
 /**
  * Retrieves a map-instance from the context. This is either an instance
@@ -10,10 +10,10 @@ import {logErrorOnce} from '../libraries/errors';
  * Returns null if neither can be found.
  */
 export const useMap = (id: string | null = null): google.maps.Map | null => {
-  const ctx = useContext(APIProviderContext);
+  const api = useApi();
   const {map} = useContext(GoogleMapsContext) || {};
 
-  if (ctx === null) {
+  if (api === null) {
     logErrorOnce(
       'useMap(): failed to retrieve APIProviderContext. ' +
         'Make sure that the <APIProvider> component exists and that the ' +
@@ -24,7 +24,7 @@ export const useMap = (id: string | null = null): google.maps.Map | null => {
     return null;
   }
 
-  const {mapInstances} = ctx;
+  const {mapInstances} = api;
 
   // if an id is specified, the corresponding map or null is returned
   if (id !== null) return mapInstances[id] || null;
