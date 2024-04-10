@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import {act, render, screen} from '@testing-library/react';
 import {initialize} from '@googlemaps/jest-mocks';
 import '@testing-library/jest-dom';
@@ -8,23 +8,23 @@ import {importLibraryMock} from '../../libraries/__mocks__/lib/import-library-mo
 
 import {
   APIProvider,
-  APIProviderContext,
   APIProviderContextValue
 } from '../api-provider';
 import {ApiParams} from '../../libraries/google-maps-api-loader';
 import {useApiIsLoaded} from '../../hooks/use-api-is-loaded';
 import {APILoadingStatus} from '../../libraries/api-loading-status';
+import { useApi } from '../../hooks/use-api';
 
 const apiLoadSpy = jest.fn();
 const apiUnloadSpy = jest.fn();
 
-const ContextSpyComponent = () => {
-  const context = useContext(APIProviderContext);
-  ContextSpyComponent.spy(context);
+const ApiSpyComponent = () => {
+  const api = useApi();
+  ApiSpyComponent.spy(api);
 
   return <></>;
 };
-ContextSpyComponent.spy = jest.fn();
+ApiSpyComponent.spy = jest.fn();
 
 let triggerMapsApiLoaded: () => void;
 
@@ -109,56 +109,56 @@ test('renders inner components', async () => {
 test('provides context values', async () => {
   render(
     <APIProvider apiKey={'apikey'}>
-      <ContextSpyComponent />
+      <ApiSpyComponent />
     </APIProvider>
   );
 
-  const contextSpy = ContextSpyComponent.spy;
-  expect(contextSpy).toHaveBeenCalled();
-  let actualContext: APIProviderContextValue = contextSpy.mock.lastCall[0];
+  const apiSpy = ApiSpyComponent.spy;
+  expect(apiSpy).toHaveBeenCalled();
+  let actual: APIProviderContextValue = apiSpy.mock.lastCall[0];
 
-  expect(actualContext.status).toEqual(APILoadingStatus.LOADING);
-  expect(actualContext.mapInstances).toEqual({});
+  expect(actual.status).toEqual(APILoadingStatus.LOADING);
+  expect(actual.mapInstances).toEqual({});
 
-  contextSpy.mockReset();
+  apiSpy.mockReset();
   await act(() => triggerMapsApiLoaded());
 
-  expect(contextSpy).toHaveBeenCalled();
+  expect(apiSpy).toHaveBeenCalled();
 
-  actualContext = contextSpy.mock.lastCall[0];
-  expect(actualContext.status).toBe(APILoadingStatus.LOADED);
+  actual = apiSpy.mock.lastCall[0];
+  expect(actual.status).toBe(APILoadingStatus.LOADED);
 });
 
 test('map instance management: add, access and remove', async () => {
   render(
     <APIProvider apiKey={'apikey'}>
-      <ContextSpyComponent />
+      <ApiSpyComponent />
     </APIProvider>
   );
 
-  const contextSpy = ContextSpyComponent.spy;
+  const apiSpy = ApiSpyComponent.spy;
 
-  let actualContext: APIProviderContextValue = contextSpy.mock.lastCall[0];
+  let actual: APIProviderContextValue = apiSpy.mock.lastCall[0];
   const map1 = new google.maps.Map(null as unknown as HTMLElement);
   const map2 = new google.maps.Map(null as unknown as HTMLElement);
 
-  contextSpy.mockReset();
+  apiSpy.mockReset();
   await act(() => {
-    actualContext.addMapInstance(map1, 'map-id-1');
-    actualContext.addMapInstance(map2, 'map-id-2');
+    actual.addMapInstance(map1, 'map-id-1');
+    actual.addMapInstance(map2, 'map-id-2');
   });
 
-  expect(contextSpy).toHaveBeenCalled();
+  expect(apiSpy).toHaveBeenCalled();
 
-  actualContext = contextSpy.mock.lastCall[0];
-  expect(actualContext.mapInstances['map-id-1']).toBe(map1);
-  expect(actualContext.mapInstances['map-id-2']).toBe(map2);
+  actual = apiSpy.mock.lastCall[0];
+  expect(actual.mapInstances['map-id-1']).toBe(map1);
+  expect(actual.mapInstances['map-id-2']).toBe(map2);
 
-  contextSpy.mockReset();
+  apiSpy.mockReset();
   await act(() => {
-    actualContext.removeMapInstance('map-id-1');
+    actual.removeMapInstance('map-id-1');
   });
 
-  actualContext = contextSpy.mock.lastCall[0];
-  expect(actualContext.mapInstances).toEqual({'map-id-2': map2});
+  actual = apiSpy.mock.lastCall[0];
+  expect(actual.mapInstances).toEqual({'map-id-2': map2});
 });
