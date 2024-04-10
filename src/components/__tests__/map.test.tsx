@@ -56,17 +56,21 @@ afterEach(() => {
 test('map instance is created after api is loaded', async () => {
   mockContextValue.status = APILoadingStatus.LOADING;
 
-  const {rerender} = render(<GoogleMap />, {wrapper});
+  const {rerender} = render(
+    <GoogleMap zoom={8} center={{lat: 53.55, lng: 10.05}} />,
+    {wrapper}
+  );
+
   expect(createMapSpy).not.toHaveBeenCalled();
 
   // rerender after loading completes
   mockContextValue.status = APILoadingStatus.LOADED;
-  rerender(<GoogleMap />);
+  rerender(<GoogleMap zoom={8} center={{lat: 53.55, lng: 10.05}} />);
   expect(createMapSpy).toHaveBeenCalled();
 });
 
 test("map is registered as 'default' when no id is specified", () => {
-  render(<GoogleMap />, {wrapper});
+  render(<GoogleMap zoom={8} center={{lat: 53.55, lng: 10.05}} />, {wrapper});
 
   expect(mockContextValue.addMapInstance).toHaveBeenCalledWith(
     mockInstances.get(google.maps.Map).at(-1),
@@ -79,7 +83,9 @@ test('throws an exception when rendering outside API provider', () => {
   jest.spyOn(console, 'error').mockImplementation(() => {});
 
   // render without wrapper
-  expect(() => render(<GoogleMap />)).toThrowErrorMatchingSnapshot();
+  expect(() =>
+    render(<GoogleMap zoom={8} center={{lat: 53.55, lng: 10.05}} />)
+  ).toThrowErrorMatchingSnapshot();
 });
 
 describe('creating and updating map instance', () => {
