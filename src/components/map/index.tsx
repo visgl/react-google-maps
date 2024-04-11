@@ -88,6 +88,18 @@ export const Map = (props: PropsWithChildren<MapProps>) => {
     );
   }
 
+  if (props.zoom === undefined && props.defaultZoom === undefined) {
+    throw new Error(
+      'Map zoom not set. Provide either a `zoom` or a `defaultZoom` prop.'
+    );
+  }
+
+  if (props.center === undefined && props.defaultCenter === undefined) {
+    throw new Error(
+      'Map center not set. Provide either a `center` or a `defaultCenter` prop.'
+    );
+  }
+
   const [map, mapRef, cameraStateRef] = useMapInstance(props, context);
 
   useMapCameraParams(map, cameraStateRef, props);
