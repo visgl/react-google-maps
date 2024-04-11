@@ -36,7 +36,7 @@ export type {
   MapMouseEvent
 } from './use-map-events';
 
-export type MapCameraProps = {
+export type MapCameraState = {
   center: google.maps.LatLngLiteral;
   zoom: number;
   heading?: number;

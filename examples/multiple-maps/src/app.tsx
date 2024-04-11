@@ -2,7 +2,7 @@ import React, {useCallback, useState} from 'react';
 import {createRoot} from 'react-dom/client';
 import {
   APIProvider,
-  MapCameraProps,
+  MapCameraState,
   Map,
   MapCameraChangedEvent
 } from '@vis.gl/react-google-maps';
@@ -31,7 +31,7 @@ const INITIAL_CAMERA_STATE = {
 
 const App = () => {
   const [cameraState, setCameraState] =
-    useState<MapCameraProps>(INITIAL_CAMERA_STATE);
+    useState<MapCameraState>(INITIAL_CAMERA_STATE);
 
   // we only want to receive cameraChanged events from the map the
   // user is interacting with:
