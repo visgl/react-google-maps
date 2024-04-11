@@ -3,7 +3,6 @@ import React, {
   Children,
   forwardRef,
   useCallback,
-  useContext,
   useEffect,
   useImperativeHandle,
   useMemo,
@@ -11,10 +10,10 @@ import React, {
 } from 'react';
 
 import {createPortal} from 'react-dom';
-import {GoogleMapsContext} from './map';
+import {useMap} from '../hooks/use-map';
+import {useMapsLibrary} from '../hooks/use-maps-library';
 
 import type {Ref, PropsWithChildren} from 'react';
-import {useMapsLibrary} from '../hooks/use-maps-library';
 
 export interface AdvancedMarkerContextValue {
   marker: google.maps.marker.AdvancedMarkerElement;
@@ -52,7 +51,7 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
   const [contentContainer, setContentContainer] =
     useState<HTMLDivElement | null>(null);
 
-  const map = useContext(GoogleMapsContext)?.map;
+  const map = useMap();
   const markerLibrary = useMapsLibrary('marker');
 
   const {
