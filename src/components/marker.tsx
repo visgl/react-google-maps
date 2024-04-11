@@ -2,13 +2,12 @@
 import React, {
   forwardRef,
   useCallback,
-  useContext,
   useEffect,
   useImperativeHandle,
   useState
 } from 'react';
 
-import {GoogleMapsContext} from './map';
+import {useMap} from '../hooks/use-map';
 
 import type {Ref} from 'react';
 
@@ -21,13 +20,14 @@ type MarkerEventProps = {
   onMouseOut?: (e: google.maps.MapMouseEvent) => void;
 };
 
-export type MarkerProps = google.maps.MarkerOptions & MarkerEventProps;
+export type MarkerProps = Omit<google.maps.MarkerOptions, 'map'> &
+  MarkerEventProps;
 
 export type MarkerRef = Ref<google.maps.Marker | null>;
 
 function useMarker(props: MarkerProps) {
   const [marker, setMarker] = useState<google.maps.Marker | null>(null);
-  const map = useContext(GoogleMapsContext)?.map;
+  const map = useMap();
 
   const {
     onClick,
