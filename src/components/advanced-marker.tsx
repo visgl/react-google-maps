@@ -11,9 +11,9 @@ import React, {
 
 import {createPortal} from 'react-dom';
 import {useMap} from '../hooks/use-map';
+import {useMapsLibrary} from '../hooks/use-maps-library';
 
 import type {Ref, PropsWithChildren} from 'react';
-import {useMapsLibrary} from '../hooks/use-maps-library';
 
 export interface AdvancedMarkerContextValue {
   marker: google.maps.marker.AdvancedMarkerElement;
