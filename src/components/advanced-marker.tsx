@@ -31,7 +31,10 @@ type AdvancedMarkerEventProps = {
 };
 
 export type AdvancedMarkerProps = PropsWithChildren<
-  Omit<google.maps.marker.AdvancedMarkerElementOptions, 'gmpDraggable'> &
+  Omit<
+    google.maps.marker.AdvancedMarkerElementOptions,
+    'gmpDraggable' | 'map'
+  > &
     AdvancedMarkerEventProps & {
       /**
        * className to add a class to the advanced marker element
