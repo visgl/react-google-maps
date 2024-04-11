@@ -1,3 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`throws an exception when missing center 1`] = `"Map center not set. Provide either a \`center\` or a \`defaultCenter\` prop."`;
+
+exports[`throws an exception when missing zoom 1`] = `"Map zoom not set. Provide either a \`zoom\` or a \`defaultZoom\` prop."`;
+
 exports[`throws an exception when rendering outside API provider 1`] = `"<Map> can only be used inside an <ApiProvider> component."`;

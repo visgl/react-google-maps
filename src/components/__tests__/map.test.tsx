@@ -88,6 +88,24 @@ test('throws an exception when rendering outside API provider', () => {
   ).toThrowErrorMatchingSnapshot();
 });
 
+test('throws an exception when missing center', () => {
+  // mute react error-message in test output
+  jest.spyOn(console, 'error').mockImplementation(() => {});
+
+  expect(() =>
+    render(<GoogleMap zoom={8} />, {wrapper})
+  ).toThrowErrorMatchingSnapshot();
+});
+
+test('throws an exception when missing zoom', () => {
+  // mute react error-message in test output
+  jest.spyOn(console, 'error').mockImplementation(() => {});
+
+  expect(() =>
+    render(<GoogleMap center={{lat: 53.55, lng: 10.05}} />, {wrapper})
+  ).toThrowErrorMatchingSnapshot();
+});
+
 describe('creating and updating map instance', () => {
   let rerender: (ui: React.ReactElement) => void;
 
