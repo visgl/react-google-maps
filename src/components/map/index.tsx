@@ -37,20 +37,17 @@ export type {
 } from './use-map-events';
 
 export type MapCameraProps = {
+  center: google.maps.LatLngLiteral;
+  zoom: number;
   heading?: number;
   tilt?: number;
-} & (
-  | {center: google.maps.LatLngLiteral}
-  | {defaultCenter: google.maps.LatLngLiteral}
-) &
-  ({zoom: number} | {defaultZoom: number});
+};
 
 /**
  * Props for the Google Maps Map Component
  */
 export type MapProps = google.maps.MapOptions &
   MapEventProps &
-  MapCameraProps &
   DeckGlCompatProps & {
     /**
      * An id for the map, this is required when multiple maps are present
@@ -70,6 +67,8 @@ export type MapProps = google.maps.MapOptions &
      */
     controlled?: boolean;
 
+    defaultCenter?: google.maps.LatLngLiteral;
+    defaultZoom?: number;
     defaultHeading?: number;
     defaultTilt?: number;
     /**

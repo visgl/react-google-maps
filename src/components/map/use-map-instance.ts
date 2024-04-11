@@ -35,9 +35,7 @@ export function useMapInstance(
   const {
     id,
     defaultBounds,
-    // @ts-expect-error TS complains that it's not defined in MapProps
     defaultCenter,
-    // @ts-expect-error TS complains that it's not defined in MapProps
     defaultZoom,
     defaultHeading,
     defaultTilt,
