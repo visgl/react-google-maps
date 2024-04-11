@@ -43,6 +43,18 @@ export function useMapInstance(
     ...mapOptions
   } = props;
 
+  if (props.zoom === undefined && props.defaultZoom === undefined) {
+    throw new Error(
+      'Map zoom not set. Provide either a `zoom` or a `defaultZoom` prop.'
+    );
+  }
+
+  if (props.center === undefined && props.defaultCenter === undefined) {
+    throw new Error(
+      'Map center not set. Provide either a `center` or a `defaultCenter` prop.'
+    );
+  }
+
   // apply default camera props if available and not overwritten by controlled props
   if (!mapOptions.center && defaultCenter) mapOptions.center = defaultCenter;
   if (!mapOptions.zoom && Number.isFinite(defaultZoom))
