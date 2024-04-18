@@ -6,7 +6,6 @@ import '@testing-library/jest-dom';
 import {Map as GoogleMap, MapProps} from '../map';
 import {APIProviderContext, APIProviderContextValue} from '../api-provider';
 import {APILoadingStatus} from '../../libraries/api-loading-status';
-import mocked = jest.mocked;
 
 jest.mock('../../libraries/google-maps-api-loader');
 
@@ -195,7 +194,7 @@ describe('camera configuration', () => {
 
     expect(createMapSpy).toHaveBeenCalled();
 
-    const mapInstance = mocked(mockInstances.get(google.maps.Map).at(0)!);
+    const mapInstance = jest.mocked(mockInstances.get(google.maps.Map).at(0)!);
     expect(mapInstance.fitBounds).toHaveBeenCalledWith({
       east: 180,
       north: 90,
