@@ -1,3 +1,33 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`camera configuration logs a warning message when missing configuration 1`] = `
+[
+  "<Map> component is missing configuration. You have to provide zoom and center (via the \`zoom\`/\`defaultZoom\` and \`center\`/\`defaultCenter\` props) or specify the region to show using \`defaultBounds\`. See https://visgl.github.io/react-google-maps/docs/api-reference/components/map#required",
+]
+`;
+
+exports[`camera configuration logs a warning message when missing configuration 2`] = `
+[
+  "<Map> component is missing configuration. You have to provide zoom and center (via the \`zoom\`/\`defaultZoom\` and \`center\`/\`defaultCenter\` props) or specify the region to show using \`defaultBounds\`. See https://visgl.github.io/react-google-maps/docs/api-reference/components/map#required",
+]
+`;
+
+exports[`camera configuration logs a warning message when missing configuration 3`] = `
+[
+  "<Map> component is missing configuration. You have to provide zoom and center (via the \`zoom\`/\`defaultZoom\` and \`center\`/\`defaultCenter\` props) or specify the region to show using \`defaultBounds\`. See https://visgl.github.io/react-google-maps/docs/api-reference/components/map#required",
+]
+`;
+
+exports[`camera configuration logs a warning message when missing configuration 4`] = `
+[
+  "<Map> component is missing configuration. You have to provide zoom and center (via the \`zoom\`/\`defaultZoom\` and \`center\`/\`defaultCenter\` props) or specify the region to show using \`defaultBounds\`. See https://visgl.github.io/react-google-maps/docs/api-reference/components/map#required",
+]
+`;
+
+exports[`camera configuration logs a warning message when missing configuration 5`] = `
+[
+  "<Map> component is missing configuration. You have to provide zoom and center (via the \`zoom\`/\`defaultZoom\` and \`center\`/\`defaultCenter\` props) or specify the region to show using \`defaultBounds\`. See https://visgl.github.io/react-google-maps/docs/api-reference/components/map#required",
+]
+`;
+
 exports[`throws an exception when rendering outside API provider 1`] = `"<Map> can only be used inside an <ApiProvider> component."`;
