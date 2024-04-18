@@ -3,9 +3,10 @@ import {render, screen, waitFor} from '@testing-library/react';
 import {initialize, mockInstances} from '@googlemaps/jest-mocks';
 import '@testing-library/jest-dom';
 
-import {Map as GoogleMap} from '../map';
+import {Map as GoogleMap, MapProps} from '../map';
 import {APIProviderContext, APIProviderContextValue} from '../api-provider';
 import {APILoadingStatus} from '../../libraries/api-loading-status';
+import mocked = jest.mocked;
 
 jest.mock('../../libraries/google-maps-api-loader');
 
@@ -88,24 +89,6 @@ test('throws an exception when rendering outside API provider', () => {
   ).toThrowErrorMatchingSnapshot();
 });
 
-test('throws an exception when missing center', () => {
-  // mute react error-message in test output
-  jest.spyOn(console, 'error').mockImplementation(() => {});
-
-  expect(() =>
-    render(<GoogleMap zoom={8} />, {wrapper})
-  ).toThrowErrorMatchingSnapshot();
-});
-
-test('throws an exception when missing zoom', () => {
-  // mute react error-message in test output
-  jest.spyOn(console, 'error').mockImplementation(() => {});
-
-  expect(() =>
-    render(<GoogleMap center={{lat: 53.55, lng: 10.05}} />, {wrapper})
-  ).toThrowErrorMatchingSnapshot();
-});
-
 describe('creating and updating map instance', () => {
   let rerender: (ui: React.ReactElement) => void;
 
@@ -176,15 +159,59 @@ describe('creating and updating map instance', () => {
   });
 });
 
-describe('map events and event-props', () => {
-  test.todo('events dispatched by the map are received via event-props');
-});
+describe('camera configuration', () => {
+  test.each([
+    [{}, true],
+    [{center: {lat: 0, lng: 0}}, true],
+    [{defaultCenter: {lat: 0, lng: 0}}, true],
+    [{zoom: 1}, true],
+    [{defaultZoom: 1}, true],
+    [{defaultBounds: {north: 1, east: 2, south: 3, west: 4}}, false],
+    [{defaultCenter: {lat: 0, lng: 0}, zoom: 0}, false],
+    [{center: {lat: 0, lng: 0}, zoom: 0}, false],
+    [{center: {lat: 0, lng: 0}, defaultZoom: 0}, false]
+  ])(
+    'logs a warning message when missing configuration',
+    (props: MapProps, expectWarningMessage: boolean) => {
+      // mute warning in test output
+      const consoleWarn = jest
+        .spyOn(console, 'warn')
+        .mockImplementation(() => {});
 
-describe('camera updates', () => {
+      render(<GoogleMap {...props} />, {wrapper});
+
+      if (expectWarningMessage)
+        expect(consoleWarn.mock.lastCall).toMatchSnapshot();
+      else expect(consoleWarn).not.toHaveBeenCalled();
+    }
+  );
+
+  test('makes sure that map renders without viewport configuration', async () => {
+    // mute warning in test output
+    console.warn = jest.fn();
+
+    render(<GoogleMap />, {wrapper});
+    await waitFor(() => expect(screen.getByTestId('map')).toBeInTheDocument());
+
+    expect(createMapSpy).toHaveBeenCalled();
+
+    const mapInstance = mocked(mockInstances.get(google.maps.Map).at(0)!);
+    expect(mapInstance.fitBounds).toHaveBeenCalledWith({
+      east: 180,
+      north: 90,
+      south: -90,
+      west: -180
+    });
+  });
+
   test.todo('initial camera state is passed via mapOptions, not moveCamera');
   test.todo('updated camera state is passed to moveCamera');
   test.todo("re-renders with unchanged camera state don't trigger moveCamera");
   test.todo(
     "re-renders with props received via events don't trigger moveCamera"
   );
+});
+
+describe('map events and event-props', () => {
+  test.todo('events dispatched by the map are received via event-props');
 });

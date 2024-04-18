@@ -43,15 +43,17 @@ export function useMapInstance(
     ...mapOptions
   } = props;
 
-  if (props.zoom === undefined && props.defaultZoom === undefined) {
-    throw new Error(
-      'Map zoom not set. Provide either a `zoom` or a `defaultZoom` prop.'
-    );
-  }
+  const hasZoom = props.zoom !== undefined || props.defaultZoom !== undefined;
+  const hasCenter =
+    props.center !== undefined || props.defaultCenter !== undefined;
 
-  if (props.center === undefined && props.defaultCenter === undefined) {
-    throw new Error(
-      'Map center not set. Provide either a `center` or a `defaultCenter` prop.'
+  if (!defaultBounds && (!hasZoom || !hasCenter)) {
+    console.warn(
+      '<Map> component is missing configuration. ' +
+        'You have to provide zoom and center (via the `zoom`/`defaultZoom` and ' +
+        '`center`/`defaultCenter` props) or specify the region to show using ' +
+        '`defaultBounds`. See ' +
+        'https://visgl.github.io/react-google-maps/docs/api-reference/components/map#required'
     );
   }
 
@@ -86,6 +88,11 @@ export function useMapInstance(
 
       if (defaultBounds) {
         newMap.fitBounds(defaultBounds);
+      }
+
+      // prevent map not rendering due to missing configuration
+      else if (!hasZoom || !hasCenter) {
+        newMap.fitBounds({east: 180, west: -180, south: -90, north: 90});
       }
 
       // the savedMapState is used to restore the camera parameters when the mapId is changed
