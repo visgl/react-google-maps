@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.9.0](https://github.com/visgl/react-google-maps/compare/v0.8.3...v0.9.0) (2024-04-18)
+
+
+### Features
+
+* better handling for missing map configuration ([#308](https://github.com/visgl/react-google-maps/issues/308)) ([b318d67](https://github.com/visgl/react-google-maps/commit/b318d676088e6f0ef787ffa911c552a12ecb4895))
+
+
+### Bug Fixes
+
+* **docs:** use correct spelling of JavaScript ([#312](https://github.com/visgl/react-google-maps/issues/312)) ([f38d3c4](https://github.com/visgl/react-google-maps/commit/f38d3c4004663fd1850c00dca7ddfb7e92b8d5cf))
+* omit map prop from markers ([#305](https://github.com/visgl/react-google-maps/issues/305)) ([8a38acf](https://github.com/visgl/react-google-maps/commit/8a38acf04ab665bbeeeef87a87d195bcbf44ccea))
+
 ## [0.8.3](https://github.com/visgl/react-google-maps/compare/v0.8.2...v0.8.3) (2024-04-04)
 
 
