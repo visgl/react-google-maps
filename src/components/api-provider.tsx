@@ -159,8 +159,10 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
           const params: ApiParams = {key: apiKey, ...otherApiParams};
           if (version) params.v = version;
           if (librariesString?.length > 0) params.libraries = librariesString;
+
           if (params.solutionChannel === undefined)
             params.solutionChannel = DEFAULT_SOLUTION_CHANNEL;
+          else if (params.solutionChannel === '') delete params.solutionChannel;
 
           await GoogleMapsApiLoader.load(params, status => setStatus(status));
 

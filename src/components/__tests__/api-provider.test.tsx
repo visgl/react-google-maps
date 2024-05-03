@@ -96,6 +96,13 @@ test('uses default solutionChannel', () => {
   expect(actual.solutionChannel).toBe('GMP_VISGL_react');
 });
 
+test("doesn't set solutionChannel when specified as empty string", () => {
+  render(<APIProvider apiKey={'apikey'} solutionChannel={''}></APIProvider>);
+
+  const actual = apiLoadSpy.mock.lastCall[0];
+  expect(actual).not.toHaveProperty('solutionChannel');
+});
+
 test('renders inner components', async () => {
   const LoadingStatus = () => {
     const mapsLoaded = useApiIsLoaded();
