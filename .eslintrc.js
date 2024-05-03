@@ -53,7 +53,10 @@ module.exports = {
 
         'no-undef': 'off',
         'react-hooks/rules-of-hooks': 'error',
-        'react-hooks/exhaustive-deps': 'error',
+        'react-hooks/exhaustive-deps': [
+          'error',
+          {additionalHooks: '(useDeepCompareEffect)'}
+        ],
         'react/jsx-no-constructed-context-values': 'error',
 
         // We use function hoisting to put exports at top of file
