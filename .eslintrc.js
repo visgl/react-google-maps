@@ -43,7 +43,10 @@ module.exports = {
 
         'no-undef': 'off',
         'react-hooks/rules-of-hooks': 'error',
-        'react-hooks/exhaustive-deps': 'warn',
+        "react-hooks/exhaustive-deps": [
+          "error", 
+          { "additionalHooks": "(useDeepCompareEffect)" }
+        ],
 
         // We use function hoisting to put exports at top of file
         '@typescript-eslint/no-use-before-define': 'off',
