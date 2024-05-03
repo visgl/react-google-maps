@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.10.0](https://github.com/visgl/react-google-maps/compare/v0.9.0...v0.10.0) (2024-05-03)
+
+
+### Features
+
+* add solution-channel parameter ([#334](https://github.com/visgl/react-google-maps/issues/334)) ([f93e43e](https://github.com/visgl/react-google-maps/commit/f93e43ee444a86dbc1b594d0c256229e6d207957))
+* **advanced-marker:** add style prop to add styles to content-element ([#337](https://github.com/visgl/react-google-maps/issues/337)) ([e942fb5](https://github.com/visgl/react-google-maps/commit/e942fb5f5543a0a27e9987ee4324825958f08fdf))
+* **infowindow:** add `className` and `style` props ([92854c9](https://github.com/visgl/react-google-maps/commit/92854c9103c90a8f0ad1c16eba729402b1e36919))
+* **infowindow:** add missing options and events ([92854c9](https://github.com/visgl/react-google-maps/commit/92854c9103c90a8f0ad1c16eba729402b1e36919))
+* **infowindow:** InfoWindow overhaul ([#335](https://github.com/visgl/react-google-maps/issues/335)) ([92854c9](https://github.com/visgl/react-google-maps/commit/92854c9103c90a8f0ad1c16eba729402b1e36919))
+
+
+### Bug Fixes
+
+* **infowindow:** add missing cleanup for infowindow ([92854c9](https://github.com/visgl/react-google-maps/commit/92854c9103c90a8f0ad1c16eba729402b1e36919))
+* **infowindow:** better dependency checks, using `useDeepCompareEffect` where needed ([92854c9](https://github.com/visgl/react-google-maps/commit/92854c9103c90a8f0ad1c16eba729402b1e36919))
+* **infowindow:** removed unneeded dependency in infowindow hooks ([92854c9](https://github.com/visgl/react-google-maps/commit/92854c9103c90a8f0ad1c16eba729402b1e36919))
+
 ## [0.9.0](https://github.com/visgl/react-google-maps/compare/v0.8.3...v0.9.0) (2024-04-18)
 
 
