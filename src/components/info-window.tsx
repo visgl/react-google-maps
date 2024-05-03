@@ -1,96 +1,140 @@
 /* eslint-disable complexity */
 import React, {
+  CSSProperties,
   PropsWithChildren,
-  useContext,
   useEffect,
   useRef,
   useState
 } from 'react';
 import {createPortal} from 'react-dom';
 
-import {GoogleMapsContext} from './map';
+import {useMap} from '../hooks/use-map';
+import {useMapsEventListener} from '../hooks/use-maps-event-listener';
+import {setValueForStyles} from '../libraries/set-value-for-styles';
+import {useMapsLibrary} from '../hooks/use-maps-library';
+import {useDeepCompareEffect} from '../libraries/use-deep-compare-effect';
 
-/**
- * Props for the Info Window Component
- */
-export type InfoWindowProps = google.maps.InfoWindowOptions & {
-  onCloseClick?: () => void;
+export type InfoWindowProps = Omit<
+  google.maps.InfoWindowOptions,
+  'content' | 'pixelOffset'
+> & {
+  style?: CSSProperties;
+  className?: string;
   anchor?: google.maps.Marker | google.maps.marker.AdvancedMarkerElement | null;
+  pixelOffset?: [number, number];
   shouldFocus?: boolean;
+  onClose?: () => void;
+  onCloseClick?: () => void;
 };
 
 /**
  * Component to render a Google Maps Info Window
  */
 export const InfoWindow = (props: PropsWithChildren<InfoWindowProps>) => {
-  const {children, anchor, shouldFocus, onCloseClick, ...infoWindowOptions} =
-    props;
-  const map = useContext(GoogleMapsContext)?.map;
+  const {
+    // content options
+    children,
+    style,
+    className,
+    pixelOffset,
 
-  const infoWindowRef = useRef<google.maps.InfoWindow | null>(null);
-  const [contentContainer, setContentContainer] =
-    useState<HTMLDivElement | null>(null);
+    // open options
+    anchor,
+    shouldFocus,
+    // events
+    onClose,
+    onCloseClick,
 
-  // create infowindow once map is available
-  useEffect(() => {
-    if (!map) return;
+    ...infoWindowOptions
+  } = props;
 
-    const newInfowindow = new google.maps.InfoWindow(infoWindowOptions);
+  // ## create infowindow instance once the mapsLibrary is available.
+  const mapsLibrary = useMapsLibrary('maps');
+  const [infoWindow, setInfoWindow] = useState<google.maps.InfoWindow | null>(
+    null
+  );
+  const [contentContainer, setContentContainer] = useState<HTMLElement | null>(
+    null
+  );
 
-    // Add content to info window
-    const el = document.createElement('div');
-    newInfowindow.setContent(el);
+  useEffect(
+    () => {
+      if (!mapsLibrary) return;
 
-    infoWindowRef.current = newInfowindow;
-    setContentContainer(el);
+      if (pixelOffset) {
+        (infoWindowOptions as google.maps.InfoWindowOptions).pixelOffset =
+          new google.maps.Size(pixelOffset[0], pixelOffset[1]);
+      }
 
-    // Cleanup info window and event listeners on unmount
-    return () => {
-      google.maps.event.clearInstanceListeners(newInfowindow);
+      // intentionally shadowing the state variables here
+      const infoWindow = new google.maps.InfoWindow(infoWindowOptions);
+      const contentContainer = document.createElement('div');
 
-      newInfowindow.close();
-      el.remove();
+      infoWindow.setContent(contentContainer);
 
-      setContentContainer(null);
-    };
+      setInfoWindow(infoWindow);
+      setContentContainer(contentContainer);
 
+      // cleanup: remove infoWindow, all event listeners and contentElement
+      return () => {
+        google.maps.event.clearInstanceListeners(infoWindow);
+
+        infoWindow.close();
+        contentContainer.remove();
+        setInfoWindow(null);
+        setContentContainer(null);
+      };
+    },
     // `infoWindowOptions` is missing from dependencies:
     //
-    // we don't want to re-render a whole new infowindow
-    // when the options change to prevent flickering.
-    // Update of infoWindow options is handled in the useEffect below.
+    // We don't want to re-create the infowindow instance
+    // when the options change.
+    // Updating the options is handled in the useEffect below.
     //
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [map, children]);
+    [mapsLibrary]
+  );
 
-  // Update infoWindowOptions
+  // ## update className and styles for `contentContainer`
+  // stores previously applied style properties, so they can be removed when unset
+  const prevStyleRef = useRef<CSSProperties | null>(null);
   useEffect(() => {
-    infoWindowRef.current?.setOptions(infoWindowOptions);
-  }, [infoWindowOptions]);
+    if (!contentContainer) return;
 
-  // Handle the close click callback
+    setValueForStyles(contentContainer, style || null, prevStyleRef.current);
+    prevStyleRef.current = style || null;
+
+    if (className !== contentContainer.className)
+      contentContainer.className = className || '';
+  }, [contentContainer, className, style]);
+
+  // ## update options
+  useDeepCompareEffect(
+    () => {
+      if (!infoWindow) return;
+
+      if (pixelOffset) {
+        (infoWindowOptions as google.maps.InfoWindowOptions).pixelOffset =
+          new google.maps.Size(pixelOffset[0], pixelOffset[1]);
+      }
+
+      infoWindow.setOptions(infoWindowOptions);
+    },
+
+    // dependency `infoWindow` isn't needed since options are passed to the constructor
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [infoWindowOptions]
+  );
+
+  // ## bind event handlers
+  useMapsEventListener(infoWindow, 'close', onClose);
+  useMapsEventListener(infoWindow, 'closeclick', onCloseClick);
+
+  // ## open info window when content and map are available
+  const map = useMap();
   useEffect(() => {
-    if (!infoWindowRef.current) return;
-
-    let listener: google.maps.MapsEventListener | null = null;
-
-    if (onCloseClick) {
-      listener = google.maps.event.addListener(
-        infoWindowRef.current,
-        'closeclick',
-        onCloseClick
-      );
-    }
-
-    return () => {
-      if (listener) listener.remove();
-    };
-  }, [onCloseClick]);
-
-  // Open info window after content container is set
-  useEffect(() => {
-    // anchor === null means an anchor is defined but not ready yet.
-    if (!contentContainer || !infoWindowRef.current || anchor === null) return;
+    // `anchor === null` means an anchor is defined but not ready yet.
+    if (!contentContainer || !infoWindow || anchor === null) return;
 
     const openOptions: google.maps.InfoWindowOpenOptions = {map};
 
@@ -102,8 +146,8 @@ export const InfoWindow = (props: PropsWithChildren<InfoWindowProps>) => {
       openOptions.shouldFocus = shouldFocus;
     }
 
-    infoWindowRef.current.open(openOptions);
-  }, [contentContainer, infoWindowRef, anchor, map, shouldFocus]);
+    infoWindow.open(openOptions);
+  }, [infoWindow, contentContainer, anchor, map, shouldFocus]);
 
   return (
     <>{contentContainer !== null && createPortal(children, contentContainer)}</>

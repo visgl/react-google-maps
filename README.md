@@ -88,38 +88,43 @@ about this library.
 Besides rendering maps, the Maps JavaScript API has a lot of
 [additional libraries][gmp-libraries] for things like geocoding, routing, the
 Places API, Street View, and a lot more.
+
 These libraries are not loaded by default, which is why this module provides
 the [`useMapsLibrary()`][api-use-lib] hook to handle dynamic loading of
 additional libraries.
 
-For example, if you want to use the `google.maps.places.PlacesService` class in
-your component, you can implement it like this:
+For example, if you just want to use the `google.maps.geocoding.Geocoder` class in
+a component and you don't even need a map, it can be implemented like this:
 
 ```tsx
 import {useMap, useMapsLibrary} from '@vis.gl/react-google-maps';
 
 const MyComponent = () => {
-  // triggers loading the places library and returns true once complete (the
-  // component calling the hook gets automatically re-rendered when this is
-  // the case)
-  const map = useMap();
-  const placesLib = useMapsLibrary('places');
-  const [placesService, setPlacesService] = useState(null);
+  // useMapsLibrary loads the geocoding library, it might initially return `null`
+  // if the library hasn't been loaded. Once loaded, it will return the library
+  // object as it would be returned by `await google.maps.importLibrary()`
+  const geocodingLib = useMapsLibrary('geocoding');
+  const geocoder = useMemo(
+    () => geocodingLib && new geocodingLib.Geocoder(),
+    [geocodingLib],
+  );
 
   useEffect(() => {
-    if (!placesLib || !map) return;
+    if (!geocoder) return;
 
-    setPlacesService(new placesLib.PlacesService(map));
-  }, [placesLib, map]);
-
-  useEffect(() => {
-    if (!placesService) return;
-
-    // ...use placesService...
-  }, [placesService]);
+    // now you can use `geocoder.geocode(...)` here
+  }, [geocoder]);
 
   return <></>;
 };
+
+const App = () => {
+  return (
+    <APIProvider apiKey={...}>
+      <MyComponent />
+    </APIProvider>
+  );
+}
 ```
 
 ## Examples

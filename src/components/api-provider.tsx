@@ -28,6 +28,8 @@ export interface APIProviderContextValue {
   clearMapInstances: () => void;
 }
 
+const DEFAULT_SOLUTION_CHANNEL = 'GMP_VISGL_react';
+
 export const APIProviderContext =
   React.createContext<APIProviderContextValue | null>(null);
 
@@ -65,6 +67,14 @@ export type APIProviderProps = {
    * Part of: https://developers.google.com/maps/documentation/javascript/url-params
    */
   authReferrerPolicy?: string;
+  /**
+   * To understand usage and ways to improve our solutions, Google includes the
+   * `solution_channel` query parameter in API calls to gather information about
+   * code usage. You may opt out at any time by setting this attribute to an
+   * empty string. Read more in the
+   * [documentation](https://developers.google.com/maps/reporting-and-monitoring/reporting#solutions-usage).
+   */
+  solutionChannel?: string;
   /**
    * A function that can be used to execute code after the Google Maps JavaScript API has been loaded.
    */
@@ -149,6 +159,10 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
           const params: ApiParams = {key: apiKey, ...otherApiParams};
           if (version) params.v = version;
           if (librariesString?.length > 0) params.libraries = librariesString;
+
+          if (params.solutionChannel === undefined)
+            params.solutionChannel = DEFAULT_SOLUTION_CHANNEL;
+          else if (params.solutionChannel === '') delete params.solutionChannel;
 
           await GoogleMapsApiLoader.load(params, status => setStatus(status));
 

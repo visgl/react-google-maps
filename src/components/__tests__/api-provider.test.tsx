@@ -67,6 +67,7 @@ test('passes parameters to GoogleMapsAPILoader', () => {
       version={'beta'}
       language={'en'}
       region={'us'}
+      solutionChannel={'test-channel_value'}
       authReferrerPolicy={'origin'}></APIProvider>
   );
 
@@ -76,15 +77,30 @@ test('passes parameters to GoogleMapsAPILoader', () => {
     v: 'beta',
     language: 'en',
     region: 'us',
+    solutionChannel: 'test-channel_value',
     authReferrerPolicy: 'origin'
   });
 });
 
 test('passes parameters to GoogleMapsAPILoader', () => {
+  render(<APIProvider apiKey={'apikey'} version={'version'}></APIProvider>);
+
+  const actual = apiLoadSpy.mock.lastCall[0];
+  expect(actual).toMatchObject({key: 'apikey', v: 'version'});
+});
+
+test('uses default solutionChannel', () => {
   render(<APIProvider apiKey={'apikey'}></APIProvider>);
 
   const actual = apiLoadSpy.mock.lastCall[0];
-  expect(Object.keys(actual)).toMatchObject(['key']);
+  expect(actual.solutionChannel).toBe('GMP_VISGL_react');
+});
+
+test("doesn't set solutionChannel when specified as empty string", () => {
+  render(<APIProvider apiKey={'apikey'} solutionChannel={''}></APIProvider>);
+
+  const actual = apiLoadSpy.mock.lastCall[0];
+  expect(actual).not.toHaveProperty('solutionChannel');
 });
 
 test('renders inner components', async () => {

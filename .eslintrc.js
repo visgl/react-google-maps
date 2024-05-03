@@ -3,20 +3,30 @@ module.exports = {
   plugins: ['react', 'import', 'react-hooks', '@typescript-eslint'],
   extends: ['prettier', 'plugin:@typescript-eslint/recommended'],
   parser: '@typescript-eslint/parser',
+
   env: {
     node: true,
     browser: true,
     es6: true
   },
+
   globals: {
     google: true
   },
+
+  settings: {
+    react: {
+      version: 'detect'
+    }
+  },
+
   ignorePatterns: ['node_modules', '**/dist*/**/*.js'],
 
   parserOptions: {
     ecmaVersion: 2020,
     sourceType: 'module'
   },
+
   rules: {
     'no-continue': 'off',
     'no-console': ['error', {allow: ['warn', 'error']}]
@@ -43,10 +53,11 @@ module.exports = {
 
         'no-undef': 'off',
         'react-hooks/rules-of-hooks': 'error',
-        "react-hooks/exhaustive-deps": [
+        'react-hooks/exhaustive-deps': [
           "error", 
           { "additionalHooks": "(useDeepCompareEffect)" }
         ],
+        'react/jsx-no-constructed-context-values': 'error',
 
         // We use function hoisting to put exports at top of file
         '@typescript-eslint/no-use-before-define': 'off',

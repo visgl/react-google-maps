@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GoogleMapsApiLoader logs a warning when called multiple times with different parameters 1`] = `
+[
+  [
+    "[google-maps-api-loader] The maps API has already been loaded with different parameters and will not be loaded again. Refresh the page for new values to have effect.",
+  ],
+]
+`;

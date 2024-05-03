@@ -1,6 +1,6 @@
 {
   "name": "@vis.gl/react-google-maps",
-  "version": "0.8.2",
+  "version": "0.10.0",
   "description": "React components and hooks for Google Maps.",
   "source": "src/index.ts",
   "main": "dist/index.umd.js",
@@ -60,7 +60,7 @@
   "devDependencies": {
     "@googlemaps/jest-mocks": "^2.18.0",
     "@testing-library/jest-dom": "^6.0.1",
-    "@testing-library/react": "^14.0.0",
+    "@testing-library/react": "^15.0.2",
     "@testing-library/user-event": "^14.4.3",
     "@types/jest": "^29.4.0",
     "@typescript-eslint/eslint-plugin": "^7.0.2",
