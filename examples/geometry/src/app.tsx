@@ -2,10 +2,11 @@ import React from 'react';
 import {createRoot} from 'react-dom/client';
 
 import {APIProvider, Map, Marker} from '@vis.gl/react-google-maps';
-import {Circle, Polygon} from './components';
+import {Circle, Polygon, Polyline} from './components';
 import ControlPanel from './control-panel';
 
 import {POLYGONS} from './encoded-polygon-data';
+import {POLYLINE} from './encoded-polyline-data';
 
 const API_KEY =
   globalThis.GOOGLE_MAPS_API_KEY ?? (process.env.GOOGLE_MAPS_API_KEY as string);
@@ -36,6 +37,7 @@ const App = () => {
           }
         />
         <Polygon strokeWeight={1.5} encodedPaths={POLYGONS} />
+        <Polyline strokeWeight={1.5} encodedPath={POLYLINE} />
         <Circle
           radius={radius}
           center={center}
