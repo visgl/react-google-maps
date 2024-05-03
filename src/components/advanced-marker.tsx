@@ -1,17 +1,20 @@
 /* eslint-disable complexity */
 import React, {
   Children,
+  CSSProperties,
   forwardRef,
   useCallback,
   useEffect,
   useImperativeHandle,
   useMemo,
+  useRef,
   useState
 } from 'react';
 
 import {createPortal} from 'react-dom';
 import {useMap} from '../hooks/use-map';
 import {useMapsLibrary} from '../hooks/use-maps-library';
+import {setValueForStyles} from '../libraries/set-value-for-styles';
 
 import type {Ref, PropsWithChildren} from 'react';
 
@@ -36,10 +39,14 @@ export type AdvancedMarkerProps = PropsWithChildren<
   > &
     AdvancedMarkerEventProps & {
       /**
-       * className to add a class to the advanced marker element
-       * Can only be used with HTML Marker content
+       * A className for the content element.
+       * (can only be used with HTML Marker content)
        */
       className?: string;
+      /**
+       * Additional styles to apply to the content element.
+       */
+      style?: CSSProperties;
       draggable?: boolean;
     }
 >;
@@ -51,12 +58,15 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
   const [contentContainer, setContentContainer] =
     useState<HTMLDivElement | null>(null);
 
+  const prevStyleRef = useRef<CSSProperties | null>(null);
+
   const map = useMap();
   const markerLibrary = useMapsLibrary('marker');
 
   const {
     children,
     className,
+    style,
     onClick,
     onDrag,
     onDragStart,
@@ -68,9 +78,9 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
     zIndex
   } = props;
 
-  const numChilds = Children.count(children);
+  const numChildren = Children.count(children);
 
-  // create marker instance and add it to the map when map becomes available
+  // create an AdvancedMarkerElement instance and add it to the map once available
   useEffect(() => {
     if (!map || !markerLibrary) return;
 
@@ -79,14 +89,12 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
 
     setMarker(newMarker);
 
-    // create container for marker content if there are children
-    if (numChilds > 0) {
-      const el = document.createElement('div');
-      if (className) el.className = className;
+    // create the container for marker content if there are children
+    if (numChildren > 0) {
+      const contentElement = document.createElement('div');
 
-      newMarker.content = el;
-
-      setContentContainer(el);
+      newMarker.content = contentElement;
+      setContentContainer(contentElement);
     }
 
     return () => {
@@ -94,18 +102,18 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
       setMarker(null);
       setContentContainer(null);
     };
-    // We do not want to re-render the whole marker when the className changes
-    // because that causes a short flickering of the marker.
-    // The className update is handled in the useEffect below.
-    // Excluding the className from the dependency array onm purpose here
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [map, markerLibrary, numChilds]);
+  }, [map, markerLibrary, numChildren]);
 
-  // update className of advanced marker element
+  // update className and styles of marker.content element
   useEffect(() => {
     if (!contentContainer) return;
-    contentContainer.className = className ?? '';
-  }, [contentContainer, className]);
+
+    setValueForStyles(contentContainer, style || null, prevStyleRef.current);
+    prevStyleRef.current = style || null;
+
+    if (className !== contentContainer.className)
+      contentContainer.className = className ?? '';
+  }, [contentContainer, className, style]);
 
   // bind all marker events
   useEffect(() => {
@@ -155,9 +163,7 @@ export const AdvancedMarker = forwardRef(
 
     useImperativeHandle(ref, () => marker, [marker]);
 
-    if (!marker) {
-      return null;
-    }
+    if (!marker) return null;
 
     return (
       <AdvancedMarkerContext.Provider value={advancedMarkerContextValue}>
