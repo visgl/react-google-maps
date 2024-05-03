@@ -54,8 +54,8 @@ module.exports = {
         'no-undef': 'off',
         'react-hooks/rules-of-hooks': 'error',
         'react-hooks/exhaustive-deps': [
-          "error", 
-          { "additionalHooks": "(useDeepCompareEffect)" }
+          'error',
+          {additionalHooks: '(useDeepCompareEffect)'}
         ],
         'react/jsx-no-constructed-context-values': 'error',
 

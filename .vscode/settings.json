@@ -1,0 +1,7 @@
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "prettier.configPath": ".prettierrc",
+  "javascript.validate.enable": false,
+  "editor.formatOnSave": true,
+  "editor.linkedEditing": true
+}
