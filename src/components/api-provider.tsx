@@ -66,6 +66,14 @@ export type APIProviderProps = {
    */
   authReferrerPolicy?: string;
   /**
+   * To understand usage and ways to improve our solutions, Google includes the
+   * `solution_channel` query parameter in API calls to gather information about
+   * code usage. You may opt out at any time by setting this attribute to an
+   * empty string. Read more in the
+   * [documentation](https://developers.google.com/maps/reporting-and-monitoring/reporting#solutions-usage).
+   */
+  solutionChannel?: string;
+  /**
    * A function that can be used to execute code after the Google Maps JavaScript API has been loaded.
    */
   onLoad?: () => void;
@@ -101,6 +109,7 @@ function useMapInstances() {
  */
 function useGoogleMapsApiLoader(props: APIProviderProps) {
   const {onLoad, apiKey, version, libraries = [], ...otherApiParams} = props;
+  const solutionChannel = props.solutionChannel || 'GMP_VISGL_react';
 
   const [status, setStatus] = useState<APILoadingStatus>(
     GoogleMapsApiLoader.loadingStatus
@@ -117,8 +126,8 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
 
   const librariesString = useMemo(() => libraries?.join(','), [libraries]);
   const serializedParams = useMemo(
-    () => JSON.stringify({apiKey, version, ...otherApiParams}),
-    [apiKey, version, otherApiParams]
+    () => JSON.stringify({apiKey, version, solutionChannel, ...otherApiParams}),
+    [apiKey, version, solutionChannel, otherApiParams]
   );
 
   const importLibrary: typeof google.maps.importLibrary = useCallback(

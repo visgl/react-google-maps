@@ -67,6 +67,7 @@ test('passes parameters to GoogleMapsAPILoader', () => {
       version={'beta'}
       language={'en'}
       region={'us'}
+      solutionChannel={'test-channel_value'}
       authReferrerPolicy={'origin'}></APIProvider>
   );
 
@@ -76,6 +77,7 @@ test('passes parameters to GoogleMapsAPILoader', () => {
     v: 'beta',
     language: 'en',
     region: 'us',
+    solutionChannel: 'test-channel_value',
     authReferrerPolicy: 'origin'
   });
 });
