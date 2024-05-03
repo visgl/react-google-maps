@@ -28,6 +28,8 @@ export interface APIProviderContextValue {
   clearMapInstances: () => void;
 }
 
+const DEFAULT_SOLUTION_CHANNEL = 'GMP_VISGL_react';
+
 export const APIProviderContext =
   React.createContext<APIProviderContextValue | null>(null);
 
@@ -109,7 +111,6 @@ function useMapInstances() {
  */
 function useGoogleMapsApiLoader(props: APIProviderProps) {
   const {onLoad, apiKey, version, libraries = [], ...otherApiParams} = props;
-  const solutionChannel = props.solutionChannel || 'GMP_VISGL_react';
 
   const [status, setStatus] = useState<APILoadingStatus>(
     GoogleMapsApiLoader.loadingStatus
@@ -126,8 +127,8 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
 
   const librariesString = useMemo(() => libraries?.join(','), [libraries]);
   const serializedParams = useMemo(
-    () => JSON.stringify({apiKey, version, solutionChannel, ...otherApiParams}),
-    [apiKey, version, solutionChannel, otherApiParams]
+    () => JSON.stringify({apiKey, version, ...otherApiParams}),
+    [apiKey, version, otherApiParams]
   );
 
   const importLibrary: typeof google.maps.importLibrary = useCallback(
@@ -158,6 +159,8 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
           const params: ApiParams = {key: apiKey, ...otherApiParams};
           if (version) params.v = version;
           if (librariesString?.length > 0) params.libraries = librariesString;
+          if (params.solutionChannel === undefined)
+            params.solutionChannel = DEFAULT_SOLUTION_CHANNEL;
 
           await GoogleMapsApiLoader.load(params, status => setStatus(status));
 

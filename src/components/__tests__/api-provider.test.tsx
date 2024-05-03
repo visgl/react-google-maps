@@ -83,10 +83,17 @@ test('passes parameters to GoogleMapsAPILoader', () => {
 });
 
 test('passes parameters to GoogleMapsAPILoader', () => {
+  render(<APIProvider apiKey={'apikey'} version={'version'}></APIProvider>);
+
+  const actual = apiLoadSpy.mock.lastCall[0];
+  expect(actual).toMatchObject({key: 'apikey', v: 'version'});
+});
+
+test('uses default solutionChannel', () => {
   render(<APIProvider apiKey={'apikey'}></APIProvider>);
 
   const actual = apiLoadSpy.mock.lastCall[0];
-  expect(Object.keys(actual)).toMatchObject(['key']);
+  expect(actual.solutionChannel).toBe('GMP_VISGL_react');
 });
 
 test('renders inner components', async () => {
