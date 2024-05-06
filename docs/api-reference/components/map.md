@@ -225,7 +225,6 @@ Based on the specific event, there is also additional information in the
 | `zoom_changed`                    | `onZoomChanged`                         | `MapCameraChangedEvent` |
 | `heading_changed`                 | `onHeadingChanged`                      | `MapCameraChangedEvent` |
 | `tilt_changed`                    | `onTiltChanged`                         | `MapCameraChangedEvent` |
-| `projection_changed`              | `onProjectionChanged`                   | `MapCameraChangedEvent` |
 | `click`                           | `onClick`                               | `MapMouseEvent`         |
 | `contextmenu`                     | `onContextmenu`                         | `MapMouseEvent`         |
 | `dblclick`                        | `onDblclick`                            | `MapMouseEvent`         |
@@ -236,6 +235,7 @@ Based on the specific event, there is also additional information in the
 | `dragend`                         | `onDragend`                             | `MapEvent`              |
 | `dragstart`                       | `onDragstart`                           | `MapEvent`              |
 | `idle`                            | `onIdle`                                | `MapEvent`              |
+| `projection_changed`              | `onProjectionChanged`                   | `MapEvent`              |
 | `isfractionalzoomenabled_changed` | `onIsFractionalZoomEnabledChanged`      | `MapEvent`              |
 | `mapcapabilities_changed`         | `onMapCapabilitiesChanged`              | `MapEvent`              |
 | `maptypeid_changed`               | `onMapTypeIdChanged`                    | `MapEvent`              |
