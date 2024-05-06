@@ -10,7 +10,6 @@ export type MapEventProps = Partial<{
   onHeadingChanged: (event: MapCameraChangedEvent) => void;
   onTiltChanged: (event: MapCameraChangedEvent) => void;
   onZoomChanged: (event: MapCameraChangedEvent) => void;
-  onProjectionChanged: (event: MapCameraChangedEvent) => void;
   onCameraChanged: (event: MapCameraChangedEvent) => void;
 
   // mouse / touch / pointer events
@@ -29,6 +28,7 @@ export type MapEventProps = Partial<{
   onIdle: (event: MapEvent) => void;
 
   // configuration events
+  onProjectionChanged: (event: MapEvent) => void;
   onIsFractionalZoomEnabledChanged: (event: MapEvent) => void;
   onMapCapabilitiesChanged: (event: MapEvent) => void;
   onMapTypeIdChanged: (event: MapEvent) => void;
@@ -179,7 +179,6 @@ const cameraEventTypes = [
   'bounds_changed',
   'center_changed',
   'heading_changed',
-  'projection_changed',
   'tilt_changed',
   'zoom_changed'
 ];
