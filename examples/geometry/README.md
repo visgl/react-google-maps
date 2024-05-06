@@ -131,7 +131,6 @@ interface PolygonProps extends google.maps.PolygonOptions {
 
 To see a Polygon on the Map, the `paths` or `encodedPaths` properties needs to be set.
 
-
 ## `<Polyline>` Component
 
 React component to display a [Polyline](https://developers.google.com/maps/documentation/javascript/shapes#circles) instance.
