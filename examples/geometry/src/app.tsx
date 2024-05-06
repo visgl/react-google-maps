@@ -6,7 +6,6 @@ import {Circle, Polygon, Polyline} from './components';
 import ControlPanel from './control-panel';
 
 import {POLYGONS} from './encoded-polygon-data';
-import {POLYLINE} from './encoded-polyline-data';
 
 const API_KEY =
   globalThis.GOOGLE_MAPS_API_KEY ?? (process.env.GOOGLE_MAPS_API_KEY as string);
@@ -37,7 +36,11 @@ const App = () => {
           }
         />
         <Polygon strokeWeight={1.5} encodedPaths={POLYGONS} />
-        <Polyline strokeWeight={1.5} encodedPath={POLYLINE} />
+        <Polyline
+          strokeWeight={10}
+          strokeColor={'#ff22cc88'}
+          encodedPath={POLYGONS[11]}
+        />
         <Circle
           radius={radius}
           center={center}
