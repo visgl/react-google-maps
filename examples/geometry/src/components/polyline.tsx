@@ -12,7 +12,7 @@ import {GoogleMapsContext, useMapsLibrary} from '@vis.gl/react-google-maps';
 
 import type {Ref} from 'react';
 
-type PolygonEventProps = {
+type PolylineEventProps = {
   onClick?: (e: google.maps.MapMouseEvent) => void;
   onDrag?: (e: google.maps.MapMouseEvent) => void;
   onDragStart?: (e: google.maps.MapMouseEvent) => void;
@@ -21,20 +21,20 @@ type PolygonEventProps = {
   onMouseOut?: (e: google.maps.MapMouseEvent) => void;
 };
 
-type PolygonCustomProps = {
+type PolylineCustomProps = {
   /**
    * this is an encoded string for the path, will be decoded and used as a path
    */
-  encodedPaths?: string[];
+  encodedPath?: string;
 };
 
-export type PolygonProps = google.maps.PolygonOptions &
-  PolygonEventProps &
-  PolygonCustomProps;
+export type PolylineProps = google.maps.PolylineOptions &
+  PolylineEventProps &
+  PolylineCustomProps;
 
-export type PolygonRef = Ref<google.maps.Polygon | null>;
+export type PolylineRef = Ref<google.maps.Polyline | null>;
 
-function usePolygon(props: PolygonProps) {
+function usePolyline(props: PolylineProps) {
   const {
     onClick,
     onDrag,
@@ -42,8 +42,8 @@ function usePolygon(props: PolygonProps) {
     onDragEnd,
     onMouseOver,
     onMouseOut,
-    encodedPaths,
-    ...polygonOptions
+    encodedPath,
+    ...polylineOptions
   } = props;
   // This is here to avoid triggering the useEffect below when the callbacks change (which happen if the user didn't memoize them)
   const callbacks = useRef<Record<string, (e: unknown) => void>>({});
@@ -58,44 +58,42 @@ function usePolygon(props: PolygonProps) {
 
   const geometryLibrary = useMapsLibrary('geometry');
 
-  const polygon = useRef(new google.maps.Polygon()).current;
-  // update PolygonOptions (note the dependencies aren't properly checked
+  const polyline = useRef(new google.maps.Polyline()).current;
+  // update PolylineOptions (note the dependencies aren't properly checked
   // here, we just assume that setOptions is smart enough to not waste a
   // lot of time updating values that didn't change)
   useMemo(() => {
-    polygon.setOptions(polygonOptions);
-  }, [polygon, polygonOptions]);
+    polyline.setOptions(polylineOptions);
+  }, [polyline, polylineOptions]);
 
   const map = useContext(GoogleMapsContext)?.map;
 
   // update the path with the encodedPath
   useMemo(() => {
-    if (!encodedPaths || !geometryLibrary) return;
-    const paths = encodedPaths.map(path =>
-      geometryLibrary.encoding.decodePath(path)
-    );
-    polygon.setPaths(paths);
-  }, [polygon, encodedPaths, geometryLibrary]);
+    if (!encodedPath || !geometryLibrary) return;
+    const path = geometryLibrary.encoding.decodePath(encodedPath);
+    polyline.setPath(path);
+  }, [polyline, encodedPath, geometryLibrary]);
 
-  // create polygon instance and add to the map once the map is available
+  // create polyline instance and add to the map once the map is available
   useEffect(() => {
     if (!map) {
       if (map === undefined)
-        console.error('<Polygon> has to be inside a Map component.');
+        console.error('<Polyline> has to be inside a Map component.');
 
       return;
     }
 
-    polygon.setMap(map);
+    polyline.setMap(map);
 
     return () => {
-      polygon.setMap(null);
+      polyline.setMap(null);
     };
   }, [map]);
 
   // attach and re-attach event-handlers when any of the properties change
   useEffect(() => {
-    if (!polygon) return;
+    if (!polyline) return;
 
     // Add event listeners
     const gme = google.maps.event;
@@ -107,27 +105,27 @@ function usePolygon(props: PolygonProps) {
       ['mouseover', 'onMouseOver'],
       ['mouseout', 'onMouseOut']
     ].forEach(([eventName, eventCallback]) => {
-      gme.addListener(polygon, eventName, (e: google.maps.MapMouseEvent) => {
+      gme.addListener(polyline, eventName, (e: google.maps.MapMouseEvent) => {
         const callback = callbacks.current[eventCallback];
         if (callback) callback(e);
       });
     });
 
     return () => {
-      gme.clearInstanceListeners(polygon);
+      gme.clearInstanceListeners(polyline);
     };
-  }, [polygon]);
+  }, [polyline]);
 
-  return polygon;
+  return polyline;
 }
 
 /**
- * Component to render a Google Maps polygon on a map
+ * Component to render a Google Maps polyline on a map
  */
-export const Polygon = forwardRef((props: PolygonProps, ref: PolygonRef) => {
-  const polygon = usePolygon(props);
+export const Polyline = forwardRef((props: PolylineProps, ref: PolylineRef) => {
+  const polyline = usePolyline(props);
 
-  useImperativeHandle(ref, () => polygon, []);
+  useImperativeHandle(ref, () => polyline, []);
 
   return null;
 });
