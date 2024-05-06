@@ -49,13 +49,13 @@ React component to display a [Circle](https://developers.google.com/maps/documen
 ### Usage
 
 ```tsx
-import React, {FunctionComponent} from 'react';
+import React from 'react';
 import {APIProvider, Map} from '@vis.gl/react-google-maps';
 import {Circle} from './components/circle'; // import from your local file
 
-const App: FunctionComponent<Record<string, unknown>> = () => (
+const App = () => (
   <APIProvider apiKey={'Your API key here'}>
-    <Map zoom={12} center={{lat: 53.54992, lng: 10.00678}}>
+    <Map defaultZoom={8} defaultCenter={{lat: 53.54992, lng: 10.00678}}>
       <Circle center={{lat: 53.54992, lng: 10.00678}} radius={15000} />
     </Map>
   </APIProvider>
@@ -89,13 +89,13 @@ React component to display a [Polygon](https://developers.google.com/maps/docume
 ### Usage
 
 ```tsx
-import React, {FunctionComponent} from 'react';
+import React from 'react';
 import {APIProvider, Map} from '@vis.gl/react-google-maps';
 import {Polygon} from './components/polygon'; // import from your local file
 
-const App: FunctionComponent<Record<string, unknown>> = () => (
+const App = () => (
   <APIProvider apiKey={'Your API key here'}>
-    <Map zoom={12} center={{lat: 53.54992, lng: 10.00678}}>
+    <Map defaultZoom={5} defaultCenter={{lat: 24, lng: -72}}>
       {/* Draw the Bermuda triangle */}
       <Polygon
         paths={[
@@ -138,13 +138,13 @@ React component to display a [Polyline](https://developers.google.com/maps/docum
 ### Usage
 
 ```tsx
-import React, {FunctionComponent} from 'react';
+import React from 'react';
 import {APIProvider, Map} from '@vis.gl/react-google-maps';
 import {Polyline} from './components/polyline'; // import from your local file
 
-const App: FunctionComponent<Record<string, unknown>> = () => (
+const App = () => (
   <APIProvider apiKey={'Your API key here'}>
-    <Map zoom={12} center={{lat: 53.54992, lng: 10.00678}}>
+    <Map defaultZoom={5} defaultCenter={{lat: 24, lng: -72}}>
       {/* Draw the Bermuda triangle */}
       <Polyline
         path={[
