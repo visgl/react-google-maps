@@ -17,10 +17,24 @@ import {useMapsLibrary} from '../hooks/use-maps-library';
 import {setValueForStyles} from '../libraries/set-value-for-styles';
 
 import type {Ref, PropsWithChildren} from 'react';
+import {useMapsEventListener} from '../hooks/use-maps-event-listener';
+import {usePropBinding} from '../hooks/use-prop-binding';
 
 export interface AdvancedMarkerContextValue {
   marker: google.maps.marker.AdvancedMarkerElement;
 }
+
+/**
+ * Copy of the `google.maps.CollisionBehavior` constants.
+ * They have to be duplicated here since we can't wait for the maps API to load to be able to use them.
+ */
+export const CollisionBehavior = {
+  REQUIRED: 'REQUIRED',
+  REQUIRED_AND_HIDES_OPTIONAL: 'REQUIRED_AND_HIDES_OPTIONAL',
+  OPTIONAL_AND_HIDES_LOWER_PRIORITY: 'OPTIONAL_AND_HIDES_LOWER_PRIORITY'
+} as const;
+export type CollisionBehavior =
+  (typeof CollisionBehavior)[keyof typeof CollisionBehavior];
 
 export const AdvancedMarkerContext =
   React.createContext<AdvancedMarkerContextValue | null>(null);
@@ -35,9 +49,12 @@ type AdvancedMarkerEventProps = {
 export type AdvancedMarkerProps = PropsWithChildren<
   Omit<
     google.maps.marker.AdvancedMarkerElementOptions,
-    'gmpDraggable' | 'map'
+    'gmpDraggable' | 'gmpClickable' | 'content' | 'map' | 'collisionBehavior'
   > &
     AdvancedMarkerEventProps & {
+      draggable?: boolean;
+      clickable?: boolean;
+      collisionBehavior?: CollisionBehavior;
       /**
        * A className for the content element.
        * (can only be used with HTML Marker content)
@@ -47,7 +64,6 @@ export type AdvancedMarkerProps = PropsWithChildren<
        * Additional styles to apply to the content element.
        */
       style?: CSSProperties;
-      draggable?: boolean;
     }
 >;
 
@@ -72,6 +88,7 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
     onDragStart,
     onDragEnd,
     collisionBehavior,
+    clickable,
     draggable,
     position,
     title,
@@ -105,50 +122,48 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
   }, [map, markerLibrary, numChildren]);
 
   // update className and styles of marker.content element
+  usePropBinding(contentContainer, 'className', className ?? '');
   useEffect(() => {
     if (!contentContainer) return;
 
     setValueForStyles(contentContainer, style || null, prevStyleRef.current);
     prevStyleRef.current = style || null;
-
-    if (className !== contentContainer.className)
-      contentContainer.className = className ?? '';
   }, [contentContainer, className, style]);
 
-  // bind all marker events
+  // copy other props
+  usePropBinding(marker, 'position', position);
+  usePropBinding(marker, 'title', title ?? '');
+  usePropBinding(marker, 'zIndex', zIndex);
+  usePropBinding(
+    marker,
+    'collisionBehavior',
+    collisionBehavior as google.maps.CollisionBehavior
+  );
+
+  // set gmpDraggable from props (when unspecified, it's true if any drag-event
+  // callbacks are specified)
   useEffect(() => {
     if (!marker) return;
 
-    const gme = google.maps.event;
-
-    if (onClick) gme.addListener(marker, 'click', onClick);
-    if (onDrag) gme.addListener(marker, 'drag', onDrag);
-    if (onDragStart) gme.addListener(marker, 'dragstart', onDragStart);
-    if (onDragEnd) gme.addListener(marker, 'dragend', onDragEnd);
-
-    if ((onDrag || onDragStart || onDragEnd) && !draggable) {
-      console.warn(
-        'You need to set the marker to draggable to listen to drag-events.'
-      );
-    }
-
-    const m = marker;
-    return () => {
-      gme.clearInstanceListeners(m);
-    };
-  }, [marker, draggable, onClick, onDragStart, onDrag, onDragEnd]);
-
-  // update other marker props when changed
-  useEffect(() => {
-    if (!marker) return;
-
-    if (position !== undefined) marker.position = position;
     if (draggable !== undefined) marker.gmpDraggable = draggable;
-    if (collisionBehavior !== undefined)
-      marker.collisionBehavior = collisionBehavior;
-    if (zIndex !== undefined) marker.zIndex = zIndex;
-    if (typeof title === 'string') marker.title = title;
-  }, [marker, position, draggable, collisionBehavior, zIndex, title]);
+    else if (onDrag || onDragStart || onDragEnd) marker.gmpDraggable = true;
+    else marker.gmpDraggable = false;
+  }, [marker, draggable, onDrag, onDragEnd, onDragStart]);
+
+  // set gmpClickable from props (when unspecified, it's true if the onClick event
+  // callback is specified)
+  useEffect(() => {
+    if (!marker) return;
+
+    if (clickable !== undefined) marker.gmpClickable = clickable;
+    else if (onClick) marker.gmpClickable = true;
+    else marker.gmpClickable = false;
+  }, [marker, clickable, onClick]);
+
+  useMapsEventListener(marker, 'click', onClick);
+  useMapsEventListener(marker, 'drag', onDrag);
+  useMapsEventListener(marker, 'dragstart', onDragStart);
+  useMapsEventListener(marker, 'dragend', onDragEnd);
 
   return [marker, contentContainer] as const;
 }
@@ -163,11 +178,11 @@ export const AdvancedMarker = forwardRef(
 
     useImperativeHandle(ref, () => marker, [marker]);
 
-    if (!marker) return null;
+    if (!contentContainer) return null;
 
     return (
       <AdvancedMarkerContext.Provider value={advancedMarkerContextValue}>
-        {contentContainer !== null && createPortal(children, contentContainer)}
+        {createPortal(children, contentContainer)}
       </AdvancedMarkerContext.Provider>
     );
   }

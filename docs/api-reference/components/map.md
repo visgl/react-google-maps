@@ -186,7 +186,7 @@ const MapWithEventHandler = props => {
 ```
 
 See [the table below](#mapping-of-google-maps-event-names-to-react-props)
-for the full list of props and corresponding prop names.
+for the full list of events and corresponding prop names.
 
 All event callbacks receive a single argument of type `MapEvent` with the
 following properties and methods:

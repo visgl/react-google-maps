@@ -1,117 +1,250 @@
 # `<AdvancedMarker>` Component
 
-React component to display
-a [Google Maps Advanced Marker Element](https://developers.google.com/maps/documentation/javascript/reference/advanced-markers#AdvancedMarkerElement)
-instance.
+A component to add an [`AdvancedMarkerElement`][gmp-adv-marker]
+to a map. By default, an AdvancedMarker will appear as a balloon-shaped,
+red maps-pin at the specified position on the map, but the appearance of the
+markers can be fully customized.
 
-## Setup
+:::info
 
-To use the Advanced Marker View component, it is necessary to add a custom `mapId`
-to the map options. To see how this works, check out the following tutorial:
-[Use Map IDs](https://developers.google.com/maps/documentation/get-map-id).
+The `AdvancedMarker` can only be used on maps using cloud-based map styling
+(i.e. the `Map`-component has a [`mapId`][gmp-mapid] specified).
 
-### APIProvider and Map setup to implement the Advanced Marker View component
-
-```tsx
-<APIProvider apiKey={loadingOptions.apiKey}>
-    <Map
-        zoom={10}
-        center={{lat, lng}}
-        mapId={'<Your custom MapId here>'}>
-
-        <AdvancedMarker position={{...}} />
-    </Map>
-</APIProvider>
-```
+:::
 
 ## Usage
 
-Advanced Marker Element can either be as a standalone component or be customized with
-the [Pin Element component](./pin.md) or be displayed with custom HTML.
+By default, the marker will be rendered as the default red balloon pin.
+This can be customized in two ways: by specifying custom colors, an icon and
+such via a [`Pin`](./pin.md) component, or by creating the complete marker with
+html/css (images, svg, animations are all supported).
 
-### Simple Advanced Marker Element implementation
-
-See also: https://developers.google.com/maps/documentation/javascript/adding-a-google-map
-
-```tsx
-const App = () => (
-  <APIProvider apiKey={'Your API key here'}>
-    <Map
-      zoom={12}
-      center={{lat: 53.54992, lng: 10.00678}}
-      mapId={'<Your custom MapId here>'}>
-      <AdvancedMarker position={{lat: 53.54992, lng: 10.00678}} />
-    </Map>
-  </APIProvider>
-);
-export default App;
-```
-
-### Advanced Marker Element with Pin Element component implementation
-
-See also: https://developers.google.com/maps/documentation/javascript/advanced-markers/basic-customization
+For this, the `AdvancedMarker` component optionally accepts child components that
+will be rendered instead of the default pin-element on the map, making it
+possible to create simple labels and infowindows with it.
 
 ```tsx
-const App = () => (
-  <APIProvider apiKey={'Your API key here'}>
-    <Map
-      zoom={12}
-      center={{lat: 53.54992, lng: 10.00678}}
-      mapId={'<Your custom MapId here>'}>
-      <AdvancedMarker position={{lat: 53.54992, lng: 10.00678}}>
-        <Pin background={'#FBBC04'} glyphColor={'#000'} borderColor={'#000'} />
-      </AdvancedMarker>
-    </Map>
-  </APIProvider>
-);
-export default App;
+import {AdvancedMarker} from './advanced-marker';
+
+<Map {...mapProps}>
+  {/* red default marker */}
+  <AdvancedMarker position={{lat: 29.5, lng: -81.2}} />
+
+  {/* customized green marker */}
+  <AdvancedMarker position={{lat: 29.5, lng: -81.2}}>
+    <Pin
+      background={'#0f9d58'}
+      borderColor={'#006425'}
+      glyphColor={'#60d98f'}
+    />
+  </AdvancedMarker>
+
+  {/* fully customized marker */}
+  <AdvancedMarker position={{lat: 29.5, lng: -81.2}}>
+    <img src={markerImage} width={32} height={32} />
+  </AdvancedMarker>
+</Map>;
 ```
 
-### Advanced Marker Element component with custom HTML implementation
+When anything other than a `Pin` component is specified for the marker, a
+div element (the "content element") will be created and the children will be
+rendered into that content element via a [portal][react-portal]. The `style`
+and `className` props can be used to configure the styling of this content
+element.
 
-See also: https://developers.google.com/maps/documentation/javascript/advanced-markers/html-markers
+:::tip
+
+When custom html is specified, the marker will be positioned such that the
+`position` on the map is at the bottom center of the content-element.
+If you need it positioned differently, you can use css-transforms on
+the content element. For example, to have the anchor point in the top-left
+corner of the marker (the transform can also be applied via a css class and
+specified as `className`):
 
 ```tsx
-const App = () => (
-  <APIProvider apiKey={'Your API key here'}>
-    <Map
-      zoom={12}
-      center={{lat: 53.54992, lng: 10.00678}}
-      mapId={'<Your custom MapId here>'}>
-      <AdvancedMarker
-        className={customMarker}
-        position={{lat: 53.54992, lng: 10.00678}}>
-        <h2>I am so customized</h2>
-        <p>That is pretty awesome!</p>
-      </AdvancedMarker>
-    </Map>
-  </APIProvider>
-);
-export default App;
+<AdvancedMarker position={...} style={{transform: 'translate(50%, 100%)'}}>
+    ...
+</AdvancedMarker>
 ```
 
-To apply style to the custom HTML marker, it is possible to add a class via the className property which will add
-styling to the Advanced Marker Element container.
+:::
 
-### Draggable Advanced Marker Element component implementation
+## Props
 
-see
-also: https://developers.google.com/maps/documentation/javascript/advanced-markers/accessible-markers#make_a_marker_draggable
+The `AdvancedMarker` component supports most of the options in
+[`google.maps.marker.AdvancedMarkerElementOptions`][gmp-adv-marker-opts]
+as props, as well as a couple of others that are specific to React.
+
+### Required
+
+There are no strictly required props for the AdvancedMarker component,
+but – for obvious reasons – the position has to be set for the marker to be
+shown on the map.
+
+### Content Props
+
+#### `className`: string
+
+A className to be added to the content-element. Since the content-element
+isn't created when using the default-pin, this option is only available when
+using custom HTML markers.
+
+#### `style`: [CSSProperties][react-dev-styling]
+
+Additional style-rules to apply to the content-element. Since the
+content-element isn't created when using the default-pin, this option is
+only available when using custom HTML markers.
+
+#### `title`: string
+
+The title of the marker. If provided, an accessibility text (e.g. for use
+with screen readers) will be added to the AdvancedMarkerElement with the
+provided value.
+
+### Positioning Props
+
+#### `position`: [google.maps.LatLngLiteral][gmp-ll] | [google.maps.LatLngAltitudeLiteral][gmp-lla]
+
+The position of the marker. For maps with tilt enabled, an `AdvancedMarker`
+can also be placed at an altitude using the `{lat: number, lng: number, 
+altitude: number}` format.
+
+#### `zIndex`: number
+
+All markers are displayed on the map in order of their zIndex, with higher
+values in front of lower values.
+
+By default, `AdvancedMarker`s are displayed according to their vertical
+position on screen, with lower AdvancedMarkerElements appearing in front of
+AdvancedMarkerElements farther up the screen.
+
+:::note
+
+The `zIndex` is also used to help determine relative
+priority between multiple markers when using collision
+behavior `CollisionBehavior.OPTIONAL_AND_HIDES_LOWER_PRIORITY`.
+A higher `zIndex` value indicates higher priority.
+
+:::
+
+#### `collisionBehavior`: CollisionBehavior
+
+Defines how the marker behaves when it collides with another marker or with
+the basemap labels on a vector map. Specified as one of the
+`CollisionBehaviour` constants.
+
+Collision between multiple markers works on both raster and vector
+maps; however, hiding labels and default-markers of the base map to make
+room for the markers will only work on vector maps.
+
+:::note
+
+You should always import the `CollisionBehavior` enum from the
+`@vis.gl/react-google-maps` package instead of using the
+`google.maps.CollisionBehavior` constants. This will help avoid problems
+with using the constants before the maps API has finished loading.
 
 ```tsx
-const App = () => (
-  <APIProvider apiKey={'Your API key here'}>
-    <Map
-      zoom={12}
-      center={{lat: 53.54992, lng: 10.00678}}
-      mapId={'<Your custom MapId here>'}>
-      <AdvancedMarker
-        position={{lat: 53.58675649147477, lng: 10.045572975464376}}
-        draggable={true}></AdvancedMarker>
-    </Map>
-  </APIProvider>
-);
-export default App;
+import {AdvancedMarker, CollisionBehavior} from '@vis.gl/react-google-maps';
+
+// ...
+
+<AdvancedMarker
+  collisionBehavior={CollisionBehavior.REQUIRED_AND_HIDES_OPTIONAL}>
+  ...
+</AdvancedMarker>;
 ```
 
-To see an Advanced Marker Element on the map, the `position` property needs to be set.
+:::
+
+See the documentation on [Marker Collision Management][gmp-collisions]
+for more information.
+
+### Other Props
+
+#### `clickable`: boolean
+
+Controls if the marker should be clickable. If true, the
+marker will be clickable and will be interactive for accessibility purposes
+(e.g., allowing keyboard navigation via arrow keys).
+
+By default, this will automatically be set to true when the `onClick` prop
+is specified.
+
+#### `draggable`: boolean
+
+Controls if the marker can be repositioned by dragging.
+
+By default, this will be set to true if any of the corresponding
+event-handlers (`onDragStart`, `onDrag`, `onDragEnd`) are specified.
+
+:::note
+
+Dragging is only available in 2D. Markers that have an altitude
+specified in the position can't be dragged.
+
+:::
+
+### Events
+
+#### `onClick`: (e: [google.maps.marker.AdvancedMarkerClickEvent][gmp-adv-marker-click-ev]) => void
+
+This event is fired when the marker is clicked.
+
+#### `onDragStart`: (e: [google.maps.MapMouseEvent][gmp-map-mouse-ev]) => void
+
+This event is fired when the user starts dragging the marker.
+
+#### `onDrag`: (e: [google.maps.MapMouseEvent][gmp-map-mouse-ev]) => void
+
+This event is repeatedly fired while the user drags the marker.
+
+#### `onDragEnd`: (e: [google.maps.MapMouseEvent][gmp-map-mouse-ev]) => void
+
+This event is fired when the user stops dragging the marker.
+
+## Context
+
+## Hooks
+
+### `useAdvancedMarkerRef()`
+
+A hook that can be used to simplify the connection between a marker and an
+infowindow. Returns an array containing both a `RefCallback` that can be passed
+to the `ref`-prop of the `AdvancedMarker` and the value of the ref as state
+variable to be passed to the anchor prop of the `InfoWindow`.
+
+```tsx
+import {
+  AdvancedMarker,
+  InfoWindow,
+  useAdvancedMarkerRef
+} from '@vis.gl/react-google-maps';
+
+const MarkerWithInfoWindow = props => {
+  const [markerRef, marker] = useAdvancedMarkerRef();
+
+  return (
+    <>
+      <AdvancedMarker position={props.position} ref={markerRef} />
+      <InfoWindow anchor={marker}>Infowindow Content</InfoWindow>
+    </>
+  );
+};
+```
+
+## Source
+
+[`./src/components/advanced-marker.tsx`][adv-marker-src]
+
+[gmp-adv-marker]: https://developers.google.com/maps/documentation/javascript/reference/advanced-markers#AdvancedMarkerElement
+[gmp-adv-marker-opts]: https://developers.google.com/maps/documentation/javascript/reference/advanced-markers#AdvancedMarkerElementOptions
+[gmp-mapid]: https://developers.google.com/maps/documentation/get-map-id
+[gmp-ll]: https://developers.google.com/maps/documentation/javascript/reference/coordinates#LatLngLiteral
+[gmp-lla]: https://developers.google.com/maps/documentation/javascript/reference/coordinates#LatLngAltitudeLiteral
+[gmp-collisions]: https://developers.google.com/maps/documentation/javascript/examples/marker-collision-management
+[gmp-adv-marker-click-ev]: https://developers.google.com/maps/documentation/javascript/reference/advanced-markers#AdvancedMarkerClickEvent
+[gmp-map-mouse-ev]: https://developers.google.com/maps/documentation/javascript/reference/map#MapMouseEvent
+[adv-marker-src]: https://github.com/visgl/react-google-maps/tree/main/src/components/advanced-marker.tsx
+[react-portal]: https://react.dev/reference/react-dom/createPortal
+[react-dev-styling]: https://react.dev/reference/react-dom/components/common#applying-css-styles
