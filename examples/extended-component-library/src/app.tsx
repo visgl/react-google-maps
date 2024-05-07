@@ -116,6 +116,9 @@ const App = () => {
               mapId="8c732c82e4ec29d9"
               center={college?.location ?? DEFAULT_CENTER}
               zoom={college?.location ? DEFAULT_ZOOM_WITH_LOCATION : DEFAULT_ZOOM}
+              gestureHandling="none"
+              fullscreenControl={false}
+              zoomControl={false}
             >
               {college?.location && (
                 <AdvancedMarker position={college?.location}>
