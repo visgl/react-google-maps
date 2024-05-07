@@ -1,7 +1,7 @@
 import React from 'react';
 import {createRoot} from 'react-dom/client';
-
 import {APIProvider, Map} from '@vis.gl/react-google-maps';
+import {RouteOverview} from '@googlemaps/extended-component-library/react';
 import ControlPanel from './control-panel';
 
 const API_KEY =
@@ -10,11 +10,17 @@ const API_KEY =
 const App = () => (
   <APIProvider apiKey={API_KEY} version={'beta'}>
     <Map
-      defaultZoom={3}
-      defaultCenter={{lat: 22.54992, lng: 0}}
+      mapId={'49ae42fed52588c3'}
+      defaultCenter={{lat: 53.55, lng: 10.05}}
+      defaultZoom={10}
       gestureHandling={'greedy'}
-      disableDefaultUI={true}
-    />
+      disableDefaultUI={true}>
+      <RouteOverview
+        originAddress={'Little Island, New York'}
+        destinationAddress={'Times Square Plaza, New York'}
+        travelMode={'walking'}
+        noPin></RouteOverview>
+    </Map>
     <ControlPanel />
   </APIProvider>
 );

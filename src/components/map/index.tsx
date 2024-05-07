@@ -1,7 +1,9 @@
 /* eslint-disable complexity */
 import React, {
   CSSProperties,
+  DOMAttributes,
   PropsWithChildren,
+  RefAttributes,
   useContext,
   useEffect,
   useLayoutEffect,
@@ -185,10 +187,10 @@ export const Map = (props: PropsWithChildren<MapProps>) => {
   }
 
   return (
-    <div
+    <gmp-map
       ref={mapRef}
       data-testid={'map'}
-      style={className ? undefined : combinedStyle}
+      style={className ? undefined : (combinedStyle as CSSStyleDeclaration)}
       className={className}
       {...(id ? {id} : {})}>
       {map ? (
@@ -196,7 +198,28 @@ export const Map = (props: PropsWithChildren<MapProps>) => {
           {children}
         </GoogleMapsContext.Provider>
       ) : null}
-    </div>
+    </gmp-map>
   );
 };
+
 Map.deckGLViewProps = true;
+
+type CustomElement<T> = Partial<
+  T &
+    DOMAttributes<T> &
+    RefAttributes<T> & {
+      // for whatever reason, anything else doesn't work as children
+      // of a custom element, so we allow `any` here
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      children: any;
+    }
+>;
+
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace JSX {
+    interface IntrinsicElements {
+      ['gmp-map']: CustomElement<google.maps.MapElement>;
+    }
+  }
+}
