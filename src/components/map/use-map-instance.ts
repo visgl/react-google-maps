@@ -12,6 +12,38 @@ import {
 } from './use-tracked-camera-state-ref';
 
 /**
+ * Stores a stack of map-instances for each mapId. Whenever an
+ * instance is used, it is removed from the stack while in use,
+ * and returned to the stack when the component unmounts.
+ * This allows us to correctly implement caching for multiple
+ * maps om the same page, while reusing as much as possible.
+ *
+ * FIXME: while it should in theory be possible to reuse maps solely
+ *   based on the mapId (as all other parameters can be changed at
+ *   runtime), we don't yet have good enough tracking of options to
+ *   reliably unset all the options that have been set.
+ */
+class CachedMapStack {
+  static entries: {[key: string]: google.maps.Map[]} = {};
+
+  static has(key: string) {
+    return this.entries[key] && this.entries[key].length > 0;
+  }
+
+  static pop(key: string) {
+    if (!this.entries[key]) return null;
+
+    return this.entries[key].pop() || null;
+  }
+
+  static push(key: string, value: google.maps.Map) {
+    if (!this.entries[key]) this.entries[key] = [];
+
+    this.entries[key].push(value);
+  }
+}
+
+/**
  * The main hook takes care of creating map-instances and registering them in
  * the api-provider context.
  * @return a tuple of the map-instance created (or null) and the callback
@@ -39,6 +71,7 @@ export function useMapInstance(
     defaultZoom,
     defaultHeading,
     defaultTilt,
+    reuseMaps,
 
     ...mapOptions
   } = props;
@@ -80,19 +113,39 @@ export function useMapInstance(
       if (!container || !apiIsLoaded) return;
 
       const {addMapInstance, removeMapInstance} = context;
-      const mapId = props.mapId;
-      const newMap = new google.maps.Map(container, mapOptions);
 
-      setMap(newMap);
-      addMapInstance(newMap, id);
+      const mapId = props.mapId;
+      const cacheKey = mapId || 'default';
+      let mapDiv: HTMLElement;
+      let map: google.maps.Map;
+
+      if (reuseMaps && CachedMapStack.has(cacheKey)) {
+        map = CachedMapStack.pop(cacheKey) as google.maps.Map;
+        mapDiv = map.getDiv();
+
+        container.appendChild(mapDiv);
+        map.setOptions(mapOptions);
+
+        // detaching the element from the DOM lets the map fall back to its default
+        // size, setting the center will trigger reloading the map.
+        setTimeout(() => map.setCenter(map.getCenter()!), 0);
+      } else {
+        mapDiv = document.createElement('div');
+        mapDiv.style.height = '100%';
+        container.appendChild(mapDiv);
+        map = new google.maps.Map(mapDiv, mapOptions);
+      }
+
+      setMap(map);
+      addMapInstance(map, id);
 
       if (defaultBounds) {
-        newMap.fitBounds(defaultBounds);
+        map.fitBounds(defaultBounds);
       }
 
       // prevent map not rendering due to missing configuration
       else if (!hasZoom || !hasCenter) {
-        newMap.fitBounds({east: 180, west: -180, south: -90, north: 90});
+        map.fitBounds({east: 180, west: -180, south: -90, north: 90});
       }
 
       // the savedMapState is used to restore the camera parameters when the mapId is changed
@@ -100,7 +153,7 @@ export function useMapInstance(
         const {mapId: savedMapId, cameraState: savedCameraState} =
           savedMapStateRef.current;
         if (savedMapId !== mapId) {
-          newMap.setOptions(savedCameraState);
+          map.setOptions(savedCameraState);
         }
       }
 
@@ -111,8 +164,16 @@ export function useMapInstance(
           cameraState: cameraStateRef.current
         };
 
-        // remove all event-listeners to minimize memory-leaks
-        google.maps.event.clearInstanceListeners(newMap);
+        // detach the map-div from the dom
+        mapDiv.remove();
+
+        if (reuseMaps) {
+          // push back on the stack
+          CachedMapStack.push(cacheKey, map);
+        } else {
+          // remove all event-listeners to minimize the possibility of memory-leaks
+          google.maps.event.clearInstanceListeners(map);
+        }
 
         setMap(null);
         removeMapInstance(id);

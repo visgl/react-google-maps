@@ -67,6 +67,11 @@ export type MapProps = google.maps.MapOptions &
      */
     controlled?: boolean;
 
+    /**
+     * Enable caching of map-instances created by this component.
+     */
+    reuseMaps?: boolean;
+
     defaultCenter?: google.maps.LatLngLiteral;
     defaultZoom?: number;
     defaultHeading?: number;
