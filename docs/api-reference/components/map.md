@@ -96,9 +96,8 @@ there are some known issues when maps are being reused with different sets
 of options applied. In most simpler situations, like when showing the very
 same component multiple times, it should work fine.
 
-If you experience any problems using this feature, please file a [bug-report]
-[rgm-new-issue]
-or [start a discussion][rgm-discussions] on GitHub.
+If you experience any problems using this feature, please file a 
+[bug-report][rgm-new-issue] or [start a discussion][rgm-discussions] on GitHub.
 
 :::
 
