@@ -107,8 +107,9 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
     setMarker(newMarker);
 
     // create the container for marker content if there are children
+    let contentElement: HTMLDivElement | null = null;
     if (numChildren > 0) {
-      const contentElement = document.createElement('div');
+      contentElement = document.createElement('div');
 
       newMarker.content = contentElement;
       setContentContainer(contentElement);
@@ -116,6 +117,7 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
 
     return () => {
       newMarker.map = null;
+      contentElement?.remove();
       setMarker(null);
       setContentContainer(null);
     };
