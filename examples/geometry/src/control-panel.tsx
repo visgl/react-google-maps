@@ -8,11 +8,11 @@ function ControlPanel({
 }: Props) {
   return (
     <div className="control-panel">
-      <h3>Map with Geometry Example</h3>
+      <h3>Map with Geometry</h3>
       <p>
-        An example demonstrating how we can add <code>{'<Polygon>'}</code> and{' '}
-        <code>{'<Circle>'}</code> components to a <code>{'<Map>'}</code>{' '}
-        component.
+        An example to demonstrate possible implementations of{' '}
+        <code>{'<Polygon>'}</code>, <code>{'<Polyline>'}</code> and{' '}
+        <code>{'<Circle>'}</code> components.
       </p>
 
       {/* Circle Controls */}

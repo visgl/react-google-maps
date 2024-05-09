@@ -18,10 +18,17 @@ const App = () => (
 );
 ```
 
-By default, the map will be added to the DOM with `width: 100%; height: 100%;`,
-assuming that the parent element will establish a size for the map. If that
-doesn't work in your case, you can adjust the styling of the map container
-using the [`style`](#style-reactcssproperties) and [`className`](#classname-string) props.
+:::note
+
+By default, the intrinsic height of a Google map is 0.
+To prevent this from causing confusion, the Map component uses a
+default-style of `width: 100%; height: 100%;` for the div-element containing
+the map, assuming that the parent element will establish a size for the map.
+If that doesn't work in your case, you can adjust the styling of the map
+container using the [`style`](#style-reactcssproperties) and
+[`className`](#classname-string) props.
+
+:::
 
 ## Controlled and Uncontrolled Props
 
@@ -70,6 +77,30 @@ enabled by the [`controlled` prop](#controlled-boolean). When this mode is
 active, the map will disable all control inputs and will reject to render
 anything not specified in the camera props.
 
+## Map Instance Caching
+
+If your application renders the map on a subpage or otherwise mounts and
+unmounts the `Map` component a lot, this can cause new map instances to be
+created with every mount of the component. Since the pricing of the Google
+Maps JavaScript API is based on map-views (effectively calls to the
+`google.maps.Map` constructor), this can quickly become a problem.
+
+The `Map` component can be configured to re-use already created maps with
+the `reuseMaps` prop. When enabled, all `Map` components created with the same
+`mapId` will reuse previously created instances instead of creating new ones.
+
+:::warning
+
+In the 1.0.0 version, support for map-caching is still a bit experimental, and
+there are some known issues when maps are being reused with different sets
+of options applied. In most simpler situations, like when showing the very
+same component multiple times, it should work fine.
+
+If you experience any problems using this feature, please file a 
+[bug-report][rgm-new-issue] or [start a discussion][rgm-discussions] on GitHub.
+
+:::
+
 ## Props
 
 The `MapProps` type extends the [`google.maps.MapOptions` interface][gmp-map-options]
@@ -106,6 +137,22 @@ A string that identifies the map component. This is required when multiple
 maps are present in the same APIProvider context to be able to access them using the
 [`useMap`](../hooks/use-map.md) hook.
 
+#### `mapId`: string
+
+The [Map ID][gmp-mapid] of the map. 
+
+:::info
+
+The Maps JavaScript API doesn't allow changing the Map ID of a map after it 
+has been created. This isn't the case for this component. However, the 
+internal `google.maps.Map` instance has to be recreated when the `mapId` prop 
+changes, which might cause additional cost. 
+
+See the [reuseMaps](#reusemaps-boolean) parameter if your application has to 
+repeatedly switch between multiple Map IDs.
+
+:::
+
 #### `style`: React.CSSProperties
 
 Additional style rules to apply to the map dom-element. By default, this will
@@ -116,6 +163,13 @@ only contain `{width: '100%', height: '100%'}`.
 Additional css class-name to apply to the element containing the map.
 When a classname is specified, the default width and height of the map from the
 style-prop is no longer applied.
+
+#### `reuseMaps`: boolean
+
+Enable map-instance caching for this component. When caching is enabled, 
+this component will reuse map instances created with the same `mapId`.
+
+See also the section [Map Instance Caching](#map-instance-caching) above.
 
 ### Camera Control
 
@@ -186,7 +240,7 @@ const MapWithEventHandler = props => {
 ```
 
 See [the table below](#mapping-of-google-maps-event-names-to-react-props)
-for the full list of props and corresponding prop names.
+for the full list of events and corresponding prop names.
 
 All event callbacks receive a single argument of type `MapEvent` with the
 following properties and methods:
@@ -225,7 +279,6 @@ Based on the specific event, there is also additional information in the
 | `zoom_changed`                    | `onZoomChanged`                         | `MapCameraChangedEvent` |
 | `heading_changed`                 | `onHeadingChanged`                      | `MapCameraChangedEvent` |
 | `tilt_changed`                    | `onTiltChanged`                         | `MapCameraChangedEvent` |
-| `projection_changed`              | `onProjectionChanged`                   | `MapCameraChangedEvent` |
 | `click`                           | `onClick`                               | `MapMouseEvent`         |
 | `contextmenu`                     | `onContextmenu`                         | `MapMouseEvent`         |
 | `dblclick`                        | `onDblclick`                            | `MapMouseEvent`         |
@@ -236,6 +289,7 @@ Based on the specific event, there is also additional information in the
 | `dragend`                         | `onDragend`                             | `MapEvent`              |
 | `dragstart`                       | `onDragstart`                           | `MapEvent`              |
 | `idle`                            | `onIdle`                                | `MapEvent`              |
+| `projection_changed`              | `onProjectionChanged`                   | `MapEvent`              |
 | `isfractionalzoomenabled_changed` | `onIsFractionalZoomEnabledChanged`      | `MapEvent`              |
 | `mapcapabilities_changed`         | `onMapCapabilitiesChanged`              | `MapEvent`              |
 | `maptypeid_changed`               | `onMapTypeIdChanged`                    | `MapEvent`              |
@@ -272,6 +326,9 @@ to get access to the `google.maps.Map` object rendered in the `<Map>` component.
 [gmp-llb]: https://developers.google.com/maps/documentation/javascript/reference/coordinates#LatLngBoundsLiteral
 [gmp-ll]: https://developers.google.com/maps/documentation/javascript/reference/coordinates#LatLngLiteral
 [gmp-coordinates]: https://developers.google.com/maps/documentation/javascript/coordinates
+[gmp-mapid]: https://developers.google.com/maps/documentation/get-map-id
 [api-provider]: ./api-provider.md
 [get-max-tilt]: https://github.com/visgl/react-google-maps/blob/4319bd3b68c40b9aa9b0ce7f377b52d20e824849/src/libraries/limit-tilt-range.ts#L4-L19
 [map-source]: https://github.com/visgl/react-google-maps/tree/main/src/components/map
+[rgm-new-issue]: https://github.com/visgl/react-google-maps/issues/new/choose
+[rgm-discussions]: https://github.com/visgl/react-google-maps/discussions

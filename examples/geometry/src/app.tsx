@@ -2,7 +2,7 @@ import React from 'react';
 import {createRoot} from 'react-dom/client';
 
 import {APIProvider, Map, Marker} from '@vis.gl/react-google-maps';
-import {Circle, Polygon} from './components';
+import {Circle, Polygon, Polyline} from './components';
 import ControlPanel from './control-panel';
 
 import {POLYGONS} from './encoded-polygon-data';
@@ -36,6 +36,11 @@ const App = () => {
           }
         />
         <Polygon strokeWeight={1.5} encodedPaths={POLYGONS} />
+        <Polyline
+          strokeWeight={10}
+          strokeColor={'#ff22cc88'}
+          encodedPath={POLYGONS[11]}
+        />
         <Circle
           radius={radius}
           center={center}
