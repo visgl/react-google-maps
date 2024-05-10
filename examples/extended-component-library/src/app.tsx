@@ -22,7 +22,9 @@ import {
 import {OverlayLayout as TOverlayLayout} from '@googlemaps/extended-component-library/overlay_layout.js';
 import {PlacePicker as TPlacePicker} from '@googlemaps/extended-component-library/place_picker.js';
 
-const API_KEY = globalThis.GOOGLE_MAPS_API_KEY ?? 'YOUR_API_KEY';
+const API_KEY =
+  globalThis.GOOGLE_MAPS_API_KEY ?? (process.env.GOOGLE_MAPS_API_KEY as string);
+
 const DEFAULT_CENTER = {lat: -34.397, lng: 150.644};
 const DEFAULT_ZOOM = 4;
 const DEFAULT_ZOOM_WITH_LOCATION = 16;
