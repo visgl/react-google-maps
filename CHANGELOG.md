@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.11.2](https://github.com/visgl/react-google-maps/compare/v0.11.1...v0.11.2) (2024-05-10)
+
+
+### Bug Fixes
+
+* **map:** set other container position to relative ([#357](https://github.com/visgl/react-google-maps/issues/357)) ([8e77d70](https://github.com/visgl/react-google-maps/commit/8e77d70c272ac243c5d53f3dd6c02f508104226f))
+
+## [0.11.1](https://github.com/visgl/react-google-maps/compare/v0.11.0...v0.11.1) (2024-05-10)
+
+
+### Bug Fixes
+
+* **advanced-marker:** remove content element in cleanup ([#351](https://github.com/visgl/react-google-maps/issues/351)) ([128df87](https://github.com/visgl/react-google-maps/commit/128df8730b7e1549e530a108192e7bae0699f199))
+* **map:** set container position to relative ([#356](https://github.com/visgl/react-google-maps/issues/356)) ([7fa2b71](https://github.com/visgl/react-google-maps/commit/7fa2b711952a2472c409c38cd39edc1866cecbe3))
+
 ## [0.11.0](https://github.com/visgl/react-google-maps/compare/v0.10.0...v0.11.0) (2024-05-08)
 
 

@@ -169,6 +169,7 @@ export const Map = (props: PropsWithChildren<MapProps>) => {
     () => ({
       width: '100%',
       height: '100%',
+      position: 'relative',
       // when using deckgl, the map should be sent to the back
       zIndex: isDeckGlControlled ? -1 : 0,
 
