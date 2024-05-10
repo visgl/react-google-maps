@@ -1,5 +1,11 @@
 # Extended Component Library
 
-import App from 'website-examples/extended-component-library/src/app';
+import BrowserOnly from '@docusaurus/BrowserOnly';
 
-<App />
+<BrowserOnly>
+  {() => {
+    const App = require('website-examples/extended-component-library/src/app').default;
+    console.log(App);
+    return <App />;
+  }}
+</BrowserOnly>

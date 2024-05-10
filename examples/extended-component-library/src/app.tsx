@@ -13,10 +13,13 @@ import {
   OverlayLayout,
   PlacePicker
 } from '@googlemaps/extended-component-library/react';
+
+import './app.css';
+
 // The below imports are necessary because we are creating refs of
 // the OverlayLayout and PlacePicker components.
 // You need to pass the ref property a web component type object.
-// Imports from  @googlemaps/extended-component-library/react are
+// Imports from @googlemaps/extended-component-library/react are
 // wrappers around web components, not the components themselves.
 // For the ref property we import the actual components and alias them for clarity.
 import {OverlayLayout as TOverlayLayout} from '@googlemaps/extended-component-library/overlay_layout.js';
@@ -25,7 +28,7 @@ import {PlacePicker as TPlacePicker} from '@googlemaps/extended-component-librar
 const API_KEY =
   globalThis.GOOGLE_MAPS_API_KEY ?? (process.env.GOOGLE_MAPS_API_KEY as string);
 
-const DEFAULT_CENTER = {lat: -34.397, lng: 150.644};
+const DEFAULT_CENTER = {lat: 38, lng: -98};
 const DEFAULT_ZOOM = 4;
 const DEFAULT_ZOOM_WITH_LOCATION = 16;
 
@@ -104,6 +107,7 @@ const App = () => {
                 college?.location ? DEFAULT_ZOOM_WITH_LOCATION : DEFAULT_ZOOM
               }
               gestureHandling="none"
+              disableDefaultUI
               fullscreenControl={false}
               zoomControl={false}>
               {college?.location && (
