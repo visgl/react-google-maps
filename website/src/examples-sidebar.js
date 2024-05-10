@@ -20,7 +20,9 @@ const sidebars = {
         'map-control',
         'directions',
         'deckgl-overlay',
-        'multiple-maps'
+        'multiple-maps',
+        'extended-component-library',
+
       ]
     }
   ]

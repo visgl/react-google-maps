@@ -1,30 +1,29 @@
-import React, { useState, useRef } from 'react';
-import { createRoot } from 'react-dom/client';
+import React, {useState, useRef} from 'react';
+import {createRoot} from 'react-dom/client';
 
 import ControlPanel from './control-panel';
-import { AdvancedMarker, Map, Pin, APIProvider } from '@vis.gl/react-google-maps';
+import {AdvancedMarker, Map, Pin, APIProvider} from '@vis.gl/react-google-maps';
 import {
   PlaceReviews,
-  PlaceDataProvider, 
-  PlaceDirectionsButton, 
-  IconButton, 
-  PlaceOverview, 
+  PlaceDataProvider,
+  PlaceDirectionsButton,
+  IconButton,
+  PlaceOverview,
   SplitLayout,
   OverlayLayout,
   PlacePicker
 } from '@googlemaps/extended-component-library/react';
-// The below imports are necessary because we are creating refs of 
+// The below imports are necessary because we are creating refs of
 // the OverlayLayout and PlacePicker components.
-// You need to pass the ref property a web component type object. 
-// Imports from  @googlemaps/extended-component-library/react are 
+// You need to pass the ref property a web component type object.
+// Imports from  @googlemaps/extended-component-library/react are
 // wrappers around web components, not the components themselves.
 // For the ref property we import the actual components and alias them for clarity.
-import { OverlayLayout as TOverlayLayout } from '@googlemaps/extended-component-library/overlay_layout.js';
-import { PlacePicker as TPlacePicker } from '@googlemaps/extended-component-library/place_picker.js';
+import {OverlayLayout as TOverlayLayout} from '@googlemaps/extended-component-library/overlay_layout.js';
+import {PlacePicker as TPlacePicker} from '@googlemaps/extended-component-library/place_picker.js';
 
-const API_KEY =
-  globalThis.GOOGLE_MAPS_API_KEY ?? ("YOUR_API_KEY");
-const DEFAULT_CENTER = { lat: -34.397, lng: 150.644 };
+const API_KEY = globalThis.GOOGLE_MAPS_API_KEY ?? 'YOUR_API_KEY';
+const DEFAULT_CENTER = {lat: -34.397, lng: 150.644};
 const DEFAULT_ZOOM = 4;
 const DEFAULT_ZOOM_WITH_LOCATION = 16;
 
@@ -35,13 +34,15 @@ const DEFAULT_ZOOM_WITH_LOCATION = 16;
 const App = () => {
   const overlayLayoutRef = useRef<TOverlayLayout>(null);
   const pickerRef = useRef<TPlacePicker>(null);
-  const [college, setCollege] = useState<google.maps.places.Place | undefined>(undefined);
+  const [college, setCollege] = useState<google.maps.places.Place | undefined>(
+    undefined
+  );
 
-  // See https://lit.dev/docs/frameworks/react/#using-slots for why 
+  // See https://lit.dev/docs/frameworks/react/#using-slots for why
   // we need to wrap our custom elements in a div with a slot attribute.
   return (
     <div className="App">
-      <APIProvider apiKey={API_KEY} version='beta' >
+      <APIProvider apiKey={API_KEY} version="beta">
         <SplitLayout rowReverse rowLayoutMinWidth={700}>
           <div className="SplitLayoutContainer" slot="fixed">
             <OverlayLayout ref={overlayLayoutRef}>
@@ -64,14 +65,12 @@ const App = () => {
                 <PlaceOverview
                   size="large"
                   place={college}
-                  googleLogoAlreadyDisplayed
-                >
+                  googleLogoAlreadyDisplayed>
                   <div slot="action">
                     <IconButton
                       slot="action"
                       variant="filled"
-                      onClick={() => overlayLayoutRef.current?.showOverlay()}
-                    >
+                      onClick={() => overlayLayoutRef.current?.showOverlay()}>
                       See Reviews
                     </IconButton>
                   </div>
@@ -85,8 +84,7 @@ const App = () => {
               <div slot="overlay">
                 <IconButton
                   className="CloseButton"
-                  onClick={() => overlayLayoutRef.current?.hideOverlay()}
-                >
+                  onClick={() => overlayLayoutRef.current?.hideOverlay()}>
                   Close
                 </IconButton>
                 <PlaceDataProvider place={college}>
@@ -100,14 +98,19 @@ const App = () => {
               id="gmap"
               mapId="8c732c82e4ec29d9"
               center={college?.location ?? DEFAULT_CENTER}
-              zoom={college?.location ? DEFAULT_ZOOM_WITH_LOCATION : DEFAULT_ZOOM}
+              zoom={
+                college?.location ? DEFAULT_ZOOM_WITH_LOCATION : DEFAULT_ZOOM
+              }
               gestureHandling="none"
               fullscreenControl={false}
-              zoomControl={false}
-            >
+              zoomControl={false}>
               {college?.location && (
                 <AdvancedMarker position={college?.location}>
-                  <Pin background={'#FBBC04'} glyphColor={'#000'} borderColor={'#000'} />
+                  <Pin
+                    background={'#FBBC04'}
+                    glyphColor={'#000'}
+                    borderColor={'#000'}
+                  />
                 </AdvancedMarker>
               )}
               <ControlPanel />
