@@ -1,7 +1,5 @@
 # Google Maps Platform’s Extended Component Library Example
 
-![image](https://user-images.githubusercontent.com/39244966/208682692-d5b23518-9e51-4a87-8121-29f71e41c777.png)
-
 This example shows how to build a basic locations services web app using the [Google Maps Platform’s Extended Component Library](https://github.com/googlemaps/extended-component-library/tree/main).
 
 [Google Maps Platform’s Extended Component Library](https://github.com/googlemaps/extended-component-library/tree/main) is a set of Web Components that helps developers build better maps faster, and with less effort. It encapsulates boilerplate code, best practices, and responsive design, reducing complex map UIs into what is effectively a single HTML element.
