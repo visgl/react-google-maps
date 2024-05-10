@@ -1,0 +1,11 @@
+# Extended Component Library
+
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const App = require('website-examples/extended-component-library/src/app').default;
+
+    return <App />;
+  }}
+</BrowserOnly>
