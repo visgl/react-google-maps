@@ -132,7 +132,6 @@ export function useMapInstance(
       } else {
         mapDiv = document.createElement('div');
         mapDiv.style.height = '100%';
-        mapDiv.style.position = 'relative';
         container.appendChild(mapDiv);
         map = new google.maps.Map(mapDiv, mapOptions);
       }
