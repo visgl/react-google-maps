@@ -10,6 +10,7 @@ import {
 import {MarkerClusterer} from '@googlemaps/markerclusterer';
 import type {Marker} from '@googlemaps/markerclusterer';
 import trees from './trees';
+import ControlPanel from './control-panel';
 
 const API_KEY =
   globalThis.GOOGLE_MAPS_API_KEY ?? (process.env.GOOGLE_MAPS_API_KEY as string);
@@ -24,6 +25,7 @@ const App = () => (
       disableDefaultUI>
       <Markers points={trees} />
     </Map>
+    <ControlPanel />
   </APIProvider>
 );
 
