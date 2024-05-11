@@ -1,6 +1,6 @@
 # `useMapsLibrary` Hook
 
-React hook to get access to the different [Google Maps API libraries][gmp-libraries].
+React hook to get access to the different [Maps JavaScript API libraries][gmp-libraries].
 This is essentially a react-version of the `google.maps.importLibrary` function.
 
 ```tsx

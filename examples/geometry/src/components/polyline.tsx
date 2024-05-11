@@ -120,7 +120,7 @@ function usePolyline(props: PolylineProps) {
 }
 
 /**
- * Component to render a Google Maps polyline on a map
+ * Component to render a polyline on a map
  */
 export const Polyline = forwardRef((props: PolylineProps, ref: PolylineRef) => {
   const polyline = usePolyline(props);

@@ -2,7 +2,7 @@
 import {useEffect} from 'react';
 
 /**
- * Internally used to bind events to google maps API objects.
+ * Internally used to bind events to Maps JavaScript API objects.
  * @internal
  */
 export function useMapsEventListener<T extends (...args: any[]) => void>(

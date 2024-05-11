@@ -1,6 +1,6 @@
 # `<Map>` Component
 
-React component to render a [Google Map][gmp-map]. It can be placed as a child
+React component to render a [Google map][gmp-map]. It can be placed as a child
 into any other component, but it has to be somewhere inside an
 [`<APIProvider>`][api-provider] container.
 
@@ -104,7 +104,7 @@ If you experience any problems using this feature, please file a
 ## Props
 
 The `MapProps` type extends the [`google.maps.MapOptions` interface][gmp-map-options]
-and includes all possible options available for a Google Map as props.
+and includes all possible options available for a Google map as props.
 
 The most important of these options are also listed below along with the
 properties added for the react-library.
@@ -189,7 +189,7 @@ is approximately:
 - `15`: Streets
 - `20`: Buildings
 
-The Google Maps API Documentation [has some more information on this topic][gmp-coordinates].
+The Maps JavaScript API Documentation [has some more information on this topic][gmp-coordinates].
 
 #### `heading`: number
 
@@ -239,14 +239,14 @@ const MapWithEventHandler = props => {
 };
 ```
 
-See [the table below](#mapping-of-google-maps-event-names-to-react-props)
+See [the table below](#mapping-of-maps-javascript-api-event-names-to-react-props)
 for the full list of events and corresponding prop names.
 
 All event callbacks receive a single argument of type `MapEvent` with the
 following properties and methods:
 
-- **`event.type`: string** The Google Maps event type of the event.
-- **`event.map`: google.maps.Map** The Map instance that dispatched the event.
+- **`event.type`: string** The event type of the event from the Maps JavaScript API.
+- **`event.map`: google.maps.Map** The map instance that dispatched the event.
 - **`event.stoppable`: boolean** Indicates if the event can be stopped in
   the event-handler. This is only the case for the `MapMouseEvent` type.
 - **`event.stop()`: () => void** for stoppable events, this will cause the
@@ -270,7 +270,7 @@ Based on the specific event, there is also additional information in the
   - **`placeId`: string | null** when a place marker on the map is clicked,
     this will contain the placeId of the Google Places API for that place.
 
-#### Mapping of Google Maps Event names to React props
+#### Mapping of Maps JavaScript API Event names to React props
 
 | Google Maps Event                 | React Prop                              | Event Type              |
 | --------------------------------- | --------------------------------------- | ----------------------- |

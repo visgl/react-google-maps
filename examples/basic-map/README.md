@@ -1,11 +1,10 @@
-# Basic Google Maps Setup Example
+# Basic Map Setup Example
 
 ![image](https://user-images.githubusercontent.com/39244966/208682692-d5b23518-9e51-4a87-8121-29f71e41c777.png)
 
-This is an example to show how to setup a simple Google Maps Map with the `<Map/>` component of the Google Maps React
-library.
+This is an example to show how to setup a simple Google map with the `<Map/>` component.
 
-## Google Maps API key
+## Google Maps Platform API Key
 
 This example does not come with an API key. Running the examples locally requires a valid API key for the Google Maps Platform.
 See [the official documentation][get-api-key] on how to create and configure your own key.

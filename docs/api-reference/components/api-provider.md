@@ -7,7 +7,7 @@ components and hooks of this library.
 It can be added at any level of the application (typically somewhere
 at the top of your component-tree), and it will render all child components
 unmodified. A re-render is only triggered once the loading status of the
-Google Maps API changes.
+Maps JavaScript API changes.
 
 Normally, there should only be a single instance of the APIProvider in a page,
 but there are situations (e.g., multiple React render-roots in a page) where
@@ -15,7 +15,7 @@ this isn't possible. In those cases, make sure to create all `APIProvider`
 components using the exact same props, since only the first one to
 render will actually load the maps API.
 
-When the Google Maps API has already been loaded externally
+When the Maps JavaScript API has already been loaded externally
 (i.e., the [`google.maps.importLibrary`][gmp-import-library] function exists),
 the
 `APIProvider` will ignore all specified props and use the existing
@@ -33,7 +33,7 @@ first render will in most cases have no effect, cause an error, or both.
 
 ## Usage
 
-The `APIProvider` only needs the [Google Maps API Key][gmp-api-keys] to function.
+The `APIProvider` only needs the [Google Maps Platform API Key][gmp-api-keys] to function.
 This has to be provided via the `apiKey` prop:
 
 ```tsx

@@ -1,4 +1,4 @@
-# Basic Google Maps Setup Example
+# Google Maps Directions API Example
 
 ![image](https://raw.githubusercontent.com/visgl/react-google-maps/main/website/static/images/examples/directions.jpg)
 
@@ -6,7 +6,7 @@ This is an example which shows how to use `useMapsLibrary` to load the `routes` 
 
 It allows the user to choose alternative routes, updating the route being rendered on the map.
 
-## Google Maps API key
+## Google Maps Platform API Key
 
 This example does not come with an API key. Running the examples locally requires a valid API key for the Google Maps Platform.
 See [the official documentation][get-api-key] on how to create and configure your own key.

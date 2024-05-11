@@ -1,15 +1,15 @@
-# Interacting with the Google Maps API
+# Interacting with the Google Maps JavaScript API
 
 With the provided components, you are able to declaratively create a
-[Google Map](../api-reference/components/map.md) or a map with
+[Google map](../api-reference/components/map.md) or a map with
 [markers](../api-reference/components/marker.md) for example.
 
 Besides that, there are three main ways and concepts to interact
-with the Google Maps API on lower level with this library.
+with the Maps JavaScript API on lower level with this library.
 You can use the provided hooks, the refs that are available for
 some components or use the
 [`useMapsLibrary`](../api-reference/hooks/use-maps-library.md) hook
-to tap into other libraries and services of the Google Maps API or
+to tap into other libraries and services of the Maps JavaScript API or
 craft your own custom hooks.
 
 ## Hooks
@@ -47,7 +47,7 @@ const App = () => (
 ```
 
 The [useMapsLibrary](../api-reference/hooks/use-maps-library.md) hook can be
-utilized to load other parts of the Google Maps API that are not loaded by default.
+utilized to load other parts of the Maps JavaScript API that are not loaded by default.
 For example, the Places Service or the Geocoding Service.
 [Learn how to use this hook.](#other-google-maps-api-libraries-and-services)
 
@@ -92,7 +92,7 @@ const App = () => {
 export default App;
 ```
 
-## Other Google Maps API libraries and services
+## Other Maps JavaScript API libraries and services
 
 The Maps JavaScript API has a lot of [additional libraries](https://developers.google.com/maps/documentation/javascript/libraries)
 for things like geocoding, routing, the Places API, Street View, and

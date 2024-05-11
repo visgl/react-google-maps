@@ -16,7 +16,7 @@ InfoWindow.
 :::note
 
 The rendered InfoWindow includes a close-button that can't be removed or
-controlled via the Google Maps API. This means that the application can't
+controlled via the Maps JavaScript API. This means that the application can't
 fully control the visibility of the InfoWindow.
 
 To keep your state in sync with the map, you have to provide a listener for the 

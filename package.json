@@ -1,7 +1,7 @@
 {
   "name": "@vis.gl/react-google-maps",
   "version": "0.11.2",
-  "description": "React components and hooks for Google Maps.",
+  "description": "React components and hooks for the Google Maps JavaScript API",
   "source": "src/index.ts",
   "main": "dist/index.umd.js",
   "module": "dist/index.modern.mjs",
@@ -44,10 +44,11 @@
   ],
   "keywords": [
     "React",
-    "React components",
-    "React hooks",
+    "React Components",
+    "React Hooks",
     "Google Maps",
-    "Google Maps components"
+    "Google Maps JavaScript API",
+    "Maps"
   ],
   "dependencies": {
     "@types/google.maps": "^3.54.10",

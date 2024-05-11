@@ -37,7 +37,7 @@ export class GoogleMapsApiLoader {
   private static listeners: LoadingStatusCallback[] = [];
 
   /**
-   * Loads the Google Maps API with the specified parameters.
+   * Loads the Maps JavaScript API with the specified parameters.
    * Since the Maps library can only be loaded once per page, this will
    * produce a warning when called multiple times with different
    * parameters.

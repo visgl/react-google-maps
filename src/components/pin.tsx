@@ -15,7 +15,7 @@ import {logErrorOnce} from '../libraries/errors';
 export type PinProps = google.maps.marker.PinElementOptions;
 
 /**
- * Component to render a google maps marker Pin View
+ * Component to configure the appearance of an AdvancedMarker
  */
 export const Pin = (props: PropsWithChildren<PinProps>) => {
   const advancedMarker = useContext(AdvancedMarkerContext)?.marker;

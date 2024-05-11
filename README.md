@@ -1,25 +1,3 @@
-> [!IMPORTANT]
-> This project is still in its alpha phase.
->
-> When using it be aware that things may not yet work as expected and can
-> break at any point. Releases happen often, so when you experience problems,
-> make sure you are using the latest version (check with `npm outdated` in
-> your project) before opening an issue.
->
-> We are still in a phase where we can easily make bigger changes, so we ask
-> you to please [provide feedback](https://github.com/visgl/react-google-maps/issues/new)
-> on everything you notice - including, but not limited to
->
-> - developer experience (installation, typings, sourcemaps, framework integration, ...)
-> - hard to understand concepts and APIs
-> - wrong, missing, outdated or inaccurate documentation
-> - use-cases not covered by the API
-> - missing features
-> - and of course any bugs you encounter
->
-> Also, feel free to use [GitHub discussions](https://github.com/visgl/react-google-maps/discussions) to ask questions or start a new
-> discussion.
-
 # React Components for the Google Maps JavaScript API
 
 [![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/visgl/react-google-maps/tree/main/LICENSE)
@@ -50,7 +28,7 @@ package name has to be quoted)_
 ## Usage
 
 Import the [`APIProvider`][api-provider] and wrap it around all components that should have
-access to the Google Maps API.
+access to the Maps JavaScript API.
 Any component within the context of the `APIProvider` can use the hooks and
 components provided by this library.
 
@@ -120,7 +98,7 @@ const MyComponent = () => {
 
 const App = () => {
   return (
-    <APIProvider apiKey={...}>
+    <APIProvider apiKey={'YOUR API KEY HERE'}>
       <MyComponent />
     </APIProvider>
   );
@@ -131,6 +109,35 @@ const App = () => {
 
 Explore our [examples directory on GitHub](./examples) or the
 [examples on our website][examples] for full implementation examples.
+
+## Terms of Service
+
+`@vis.gl/react-google-maps` uses Google Maps Platform services. Use of Google 
+Maps Platform services through this library is subject to the 
+[Google Maps Platform Terms of Service][gmp-tos].
+
+This library is not a Google Maps Platform Core Service. 
+Therefore, the Google Maps Platform Terms of Service (e.g., Technical 
+Support Services, Service Level Agreements, and Deprecation Policy) 
+do not apply to this library.
+
+## Support
+
+This library is offered via an open source license. It is not governed by the 
+Google Maps Platform [Support Technical Support Services Guidelines][gmp-tssg], 
+the [SLA][gmp-sla], or the [Deprecation Policy][gmp-dp] (however, any Google 
+Maps Platform services used by this library remain subject to the Google Maps 
+Platform Terms of Service).
+
+If you find a bug, or have a feature request, please [file an issue][rgm-issues]
+on GitHub. If you would like to get answers to technical questions from 
+other Google Maps Platform developers, feel free to open a thread in the 
+[discussions section on GitHub][rgm-discuss] or ask a question through one of 
+our [developer community channels][gmp-community].
+
+If you'd like to contribute, please check the [Contributing guide][rgm-contrib].
+
+You can also discuss this library on [our Discord server][gmp-discord].
 
 [api-provider]: https://visgl.github.io/react-google-maps/docs/api-reference/components/api-provider
 [api-map]: https://visgl.github.io/react-google-maps/docs/api-reference/components/map
@@ -143,3 +150,13 @@ Explore our [examples directory on GitHub](./examples) or the
 [gmp-services]: https://developers.google.com/maps/documentation/javascript#services
 [gmp-libraries]: https://developers.google.com/maps/documentation/javascript/libraries
 [npm-package]: https://www.npmjs.com/package/@vis.gl/react-google-maps
+[gmp-tos]: https://cloud.google.com/maps-platform/terms
+[gmp-tssg]: https://cloud.google.com/maps-platform/terms/tssg
+[gmp-sla]: https://cloud.google.com/maps-platform/terms/sla
+[gmp-dp]: https://cloud.google.com/maps-platform/terms/other/deprecation-policy
+[rgm-issues]: https://github.com/visgl/react-google-maps/issues
+[rgm-discuss]: https://github.com/visgl/react-google-maps/discussions
+[rgm-contrib]: https://visgl.github.io/react-google-maps/docs/contributing
+[gmp-community]: https://developers.google.com/maps/developer-community
+[gmp-discord]: https://discord.gg/f4hvx8Rp2q
+

@@ -19,7 +19,7 @@ const getMapMaxTilt = (zoom: number) => {
 };
 
 /**
- * Function to limit the tilt range of the google maps map when updating the view state
+ * Function to limit the tilt range of the Google map when updating the view state
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const limitTiltRange = ({viewState}: any) => {

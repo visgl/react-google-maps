@@ -26,7 +26,7 @@ library remain subject to the Google Maps Platform Terms of Service). If you
 find a bug, or have a feature request, file an issue on the Github library
 site.
 
-## Google Maps API key
+## Google Maps Platform API Key
 
 This example does not come with an API key. Running the examples locally requires a valid API key for the Google Maps Platform.
 See [the official documentation][get-api-key] on how to create and configure your own key.

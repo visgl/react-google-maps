@@ -2,7 +2,7 @@
 
 This example shows how to use the [google.maps.drawing.DrawingManager][drawing-manager] to draw shapes or markers on the map. In addition the example implements an undo/redo flow for the drawing tools. If you only want to add the the drawing tools to your map take a look at the `use-drawing-manager` hook.
 
-## Google Maps API key
+## Google Maps Platform API Key
 
 This example does not come with an API key. Running the examples locally requires a valid API key for the Google Maps Platform.
 See [the official documentation][get-api-key] on how to create and configure your own key.

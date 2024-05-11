@@ -174,7 +174,10 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
             onLoad();
           }
         } catch (error) {
-          console.error('<ApiProvider> failed to load Google Maps API', error);
+          console.error(
+            '<ApiProvider> failed to load the Google Maps JavaScript API',
+            error
+          );
         }
       })();
     },
@@ -190,7 +193,7 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
 }
 
 /**
- * Component to wrap the Google Maps React components and load the Google Maps JavaScript API
+ * Component to wrap the components from this library and load the Google Maps JavaScript API
  */
 export const APIProvider = (
   props: PropsWithChildren<APIProviderProps>

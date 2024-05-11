@@ -6,9 +6,9 @@ Here you can find a few example implementations of the autocomplete functionalit
 
 We have three different implementations to demonstrate how to add autocomplete functionality to your application
 
-### 1) Google Maps Autocomplete Widget
+### 1) Maps JavaScript API Autocomplete Widget
 
-When using the [Google Maps Autocomplete widget][autocomplete-widget] you provide an HTML input element of your choice and Google handles all the rest. It will fetch predictions when the user types and it will get the details for a place when the user selects a prediction from the list.
+When using the [Autocomplete widget][autocomplete-widget] you provide an HTML input element of your choice and Google handles all the rest. It will fetch predictions when the user types and it will get the details for a place when the user selects a prediction from the list.
 
 ### 2) Custom Build
 
@@ -20,7 +20,7 @@ When building your own you are completely free but also responsible for the user
 
 This is basically the same as the custom build, except for not having to implement the list/dropdown/DOM handling yourself. A lot of third party text box widgets provide functionionality for handling keyboard navigation and focus handling. For the demo we used the [Combobox][combobox] from `react-widgets`.
 
-## Google Maps API key
+## Google Maps Platform API Key
 
 This example does not come with an API key. Running the examples locally requires a valid API key for the Google Maps Platform.
 See [the official documentation][get-api-key] on how to create and configure your own key. For this example to work you also need to enable the `Places API` in your Google Cloud Console.

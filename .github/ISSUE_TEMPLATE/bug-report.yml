@@ -1,7 +1,7 @@
 name: Bug Report
 description: Something does not work as expected
 title: '[Bug]'
-labels: bug
+labels: [bug]
 body:
   - type: markdown
     attributes:
@@ -11,7 +11,7 @@ body:
         Before reporting, please verify that you are using the latest version of the `@vis.gl/react-google-maps` library.
         
         You may find answers faster by searching in [the documentation](https://visgl.github.io/react-google-maps/search) and [existing issues](https://github.com/visgl/react-google-maps/issue).
-        If you are unsure whether it is a bug in your own implementation or the library itself, consider starting a conversation in [Discussions](https://github.com/visgl/react-map-gl/discussions) instead.
+        If you are unsure whether it is a bug in your own implementation or the library itself, consider starting a conversation in [Discussions](https://github.com/visgl/react-google-maps/discussions) instead.
   - type: textarea
     attributes:
       label: Description
@@ -38,7 +38,7 @@ body:
 
         Example:
           - **Library version**: @vis.gl/react-google-maps@1.0.0
-          - **Google maps version**: weekly (whatever is passed to the `version`
+          - **Google Maps JavaScript API version**: weekly (whatever is passed to the `version`
             prop of the APIProvider, default is 'weekly', ideally including the
             value of `google.maps.version`)
           - **Browser and Version**: Chrome 119.0
@@ -54,7 +54,11 @@ body:
   - type: textarea
     attributes:
       label: Logs
-      description: Please check the browser console for any relevant errors or warnings and post them here.
+      description: |
+        Please check the browser console for any relevant errors or warnings and post them here. 
+        
+        **Important**: stack traces can sometimes include your API-key as part of the script URLs, 
+        make sure to remove or replace them before submitting.
       render: text
     validations:
       required: false

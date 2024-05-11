@@ -23,7 +23,7 @@ carefully.
 
 The focus will be on providing an extensible library of **"low-level"
 abstractions** that can be used to implement known and unknown use-cases of
-the Google Maps API in a React application.
+the Google Maps JavaScript API in a React application.
 
 In a lot of cases – especially when a solution needs to have a lot of
 flexibility (implementing an Autocomplete component for example) and room
