@@ -20,7 +20,7 @@ export default App;
 
 ## Props
 
-The MarkerProps interface extends the [google.maps.MarkerOptions interface](https://developers.google.com/maps/documentation/javascript/reference/marker#MarkerOptions) and includes all possible options available for a Google Maps Platform Marker. Additionally, it is possible to add different event listeners, e.g. the click event with the `onClick` property.
+The MarkerProps interface extends the [google.maps.MarkerOptions interface](https://developers.google.com/maps/documentation/javascript/reference/marker#MarkerOptions) and includes all possible options available for a Maps JavaScript API Marker. Additionally, it is possible to add different event listeners, e.g. the click event with the `onClick` property.
 
 ```tsx
 interface MarkerProps extends google.maps.MarkerOptions {

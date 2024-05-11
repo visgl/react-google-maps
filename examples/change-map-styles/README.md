@@ -2,7 +2,7 @@
 
 This is an example to demonstrate changing the style of the `<Map/>` component using local and cloud-based map styles as well as map types.
 
-## Google Maps API key
+## Google Maps Platform API Key
 
 This example does not come with an API key. Running the examples locally requires a valid API key for the Google Maps Platform.
 See [the official documentation][get-api-key] on how to create and configure your own key.

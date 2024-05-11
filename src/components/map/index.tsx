@@ -44,7 +44,7 @@ export type MapCameraProps = {
 };
 
 /**
- * Props for the Google Maps Map Component
+ * Props for the Map Component
  */
 export type MapProps = google.maps.MapOptions &
   MapEventProps &

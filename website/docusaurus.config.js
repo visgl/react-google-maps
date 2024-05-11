@@ -10,7 +10,7 @@ const {globSync} = require('glob');
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'React Google Maps',
-  tagline: 'React wrapper for the Google Maps JavaScript API',
+  tagline: 'React components and hooks for the Google Maps JavaScript API',
   url: 'https://visgl.github.io/',
   baseUrl: '/react-google-maps/',
   onBrokenLinks: 'throw',

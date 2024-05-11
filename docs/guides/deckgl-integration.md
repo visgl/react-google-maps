@@ -13,7 +13,7 @@ The following props need to be defined and passed to the DeckGL component:
 - `onViewStateChange`
 
 Make sure that the controller is always set to true and an initial view state is defined. To ensure that deck.gl works
-well with the Google Maps Platform map, set the `limitTiltRange` function, which can be imported from the Google Maps React
+well with the Google map, set the `limitTiltRange` function, which can be imported from `@vis.gl/react-gogle-maps`
 library, to `onViewStateChange`.
 
 ```tsx

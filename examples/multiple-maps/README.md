@@ -3,7 +3,7 @@
 Shows how to use controlled mode and camera-events to synchronize
 multiple map instances.
 
-## Google Maps API key
+## Google Maps Platform API Key
 
 This example does not come with an API key. Running the examples locally requires a valid API key for the Google Maps Platform.
 See [the official documentation][get-api-key] on how to create and configure your own key.

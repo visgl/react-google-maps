@@ -116,7 +116,7 @@ function useMarker(props: MarkerProps) {
 }
 
 /**
- * Component to render a Google Maps Marker on a map
+ * Component to render a marker on a map
  */
 export const Marker = forwardRef((props: MarkerProps, ref: MarkerRef) => {
   const marker = useMarker(props);

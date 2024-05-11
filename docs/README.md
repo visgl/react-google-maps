@@ -40,7 +40,7 @@ to the map and any other component.
 Ultimately, in the spirit of the [reactive programming paradigm][wiki-reactive]
 used in React, data from this single source of truth should
 always flow down the component hierarchy. If components manage their own
-state, as Google Maps is designed to do, we risk the components going out of
+state, as Google maps are designed to do, we risk the components going out of
 sync.
 
 `@vis.gl/react-google-maps` provides a reactive wrapper for the Google Maps

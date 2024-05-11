@@ -1,4 +1,4 @@
-// NOTE: This requires the alpha version of the Google Maps API and is not yet
+// NOTE: This requires the alpha version of the Maps JavaScript API and is not yet
 // recommended to be used in production applications. We will add this to the example map
 // when it reaches GA (General Availability). Treat this as a preview of what's to come.
 

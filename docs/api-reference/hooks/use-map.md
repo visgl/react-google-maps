@@ -50,7 +50,6 @@ const MyComponent = () => {
 
     // do something with the map instance
   }, [map]);
-  // Do something with the Google Maps map instance
 
   return <>...</>;
 };

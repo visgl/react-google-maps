@@ -2,13 +2,13 @@
 
 ![image](https://github.com/ArielBenichou/react-google-maps/assets/21100652/d32d7052-0ec0-4f2f-84a2-d31e6629dfa6)
 
-This is an example to show how to setup a Google Maps Map with some geometry component, notably the `<Circle />` and `<Polygon />` components.
+This is an example to show how to setup a Google map with some geometry component, notably the `<Circle />`, `<Polygon />` and `<Polyline />` components.
 
 ## Usage
 
-To use these components you just need to copy the components you want from the `src/components` folder, into your project.
+To use these components, you need to copy the components you want from the `src/components` folder into your project.
 
-## Google Maps API key
+## Google Maps Platform API Key
 
 This example does not come with an API key. Running the examples locally requires a valid API key for the Google Maps Platform.
 See [the official documentation][get-api-key] on how to create and configure your own key.
@@ -65,7 +65,7 @@ export default App;
 
 ### Props
 
-The CircleProps interface extends the [google.maps.CircleOptions interface](https://developers.google.com/maps/documentation/javascript/reference/polygon#Circle) and includes all possible options available for a Google Maps Platform Circle. Additionally, it is possible to add different event listeners, e.g. the click event with the `onClick` property.
+The CircleProps interface extends the [google.maps.CircleOptions interface](https://developers.google.com/maps/documentation/javascript/reference/polygon#Circle) and includes all possible options available for a Circle. Additionally, it is possible to add different event listeners, e.g. the click event with the `onClick` property.
 
 ```tsx
 interface CircleProps extends google.maps.CircleOptions {
@@ -115,7 +115,7 @@ export default App;
 
 ### Props
 
-The PolygonProps interface extends the [google.maps.PolygonOptions interface](https://developers.google.com/maps/documentation/javascript/reference/polygon#Polygon) and includes all possible options available for a Google Maps Platform Polygon. Additionally, it is possible to add different event listeners, e.g. the click event with the `onClick` property.
+The PolygonProps interface extends the [google.maps.PolygonOptions interface](https://developers.google.com/maps/documentation/javascript/reference/polygon#Polygon) and includes all possible options available for a Polygon. Additionally, it is possible to add different event listeners, e.g. the click event with the `onClick` property.
 
 ```tsx
 interface PolygonProps extends google.maps.PolygonOptions {
@@ -164,7 +164,7 @@ export default App;
 
 ### Props
 
-The PolylineProps interface extends the [google.maps.PolylineOptions interface](https://developers.google.com/maps/documentation/javascript/reference/polyline#Polyline) and includes all possible options available for a Google Maps Platform Polyline. Additionally, it is possible to add different event listeners, e.g. the click event with the `onClick` property.
+The PolylineProps interface extends the [google.maps.PolylineOptions interface](https://developers.google.com/maps/documentation/javascript/reference/polyline#Polyline) and includes all possible options available for a Polyline. Additionally, it is possible to add different event listeners, e.g. the click event with the `onClick` property.
 
 ```tsx
 interface PolylineProps extends google.maps.PolylineOptions {

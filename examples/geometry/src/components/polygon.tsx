@@ -122,7 +122,7 @@ function usePolygon(props: PolygonProps) {
 }
 
 /**
- * Component to render a Google Maps polygon on a map
+ * Component to render a polygon on a map
  */
 export const Polygon = forwardRef((props: PolygonProps, ref: PolygonRef) => {
   const polygon = usePolygon(props);

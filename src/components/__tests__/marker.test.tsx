@@ -13,7 +13,7 @@ let wrapper: ({children}: {children: React.ReactNode}) => JSX.Element | null;
 let createMarkerSpy: jest.Mock;
 
 beforeEach(() => {
-  // initialize the Google Maps mock
+  // initialize the Maps JavaScript API mocks
   initialize();
 
   // Create wrapper component
@@ -43,7 +43,7 @@ afterEach(() => {
 test('marker should be initialized', async () => {
   render(<GoogleMapsMarker position={{lat: 1, lng: 2}} />, {wrapper});
 
-  // wait for Google Maps API to load and the marker to be created
+  // wait for Maps JavaScript API to load and the marker to be created
   await waitFor(() => expect(createMarkerSpy).toHaveBeenCalled());
 
   const markers = mockInstances.get(google.maps.Marker);
@@ -67,7 +67,7 @@ test('marker position should update when re-rendering', async () => {
     wrapper
   });
 
-  // wait for (mock) Google Maps API to load and the marker to be created
+  // wait for (mock) Maps JavaScript API to load and the marker to be created
   await waitFor(() => expect(createMarkerSpy).toHaveBeenCalled());
 
   const markers = mockInstances.get(google.maps.Marker);
@@ -88,7 +88,7 @@ test('marker should have a click listener', async () => {
     {wrapper}
   );
 
-  // wait for (mock) Google Maps API to load and the marker to be created
+  // wait for (mock) Maps JavaScript API to load and the marker to be created
   await waitFor(() => expect(createMarkerSpy).toHaveBeenCalled());
 
   const markerMocks = mockInstances.get(google.maps.Marker);

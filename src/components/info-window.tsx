@@ -28,7 +28,7 @@ export type InfoWindowProps = Omit<
 };
 
 /**
- * Component to render a Google Maps Info Window
+ * Component to render an Info Window with the Maps JavaScript API
  */
 export const InfoWindow = (props: PropsWithChildren<InfoWindowProps>) => {
   const {

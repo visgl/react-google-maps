@@ -123,7 +123,7 @@ function useCircle(props: CircleProps) {
 }
 
 /**
- * Component to render a Google Maps Circle on a map
+ * Component to render a circle on a map
  */
 export const Circle = forwardRef((props: CircleProps, ref: CircleRef) => {
   const circle = useCircle(props);
