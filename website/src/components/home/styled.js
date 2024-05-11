@@ -4,7 +4,7 @@ import {isMobile} from '../common';
 export const Banner = styled.section`
   position: relative;
   height: 30rem;
-  background: var(--ifm-color-gray-400);
+  background: #8ad8ec;
   color: var(--ifm-color-gray-200);
   z-index: 0;
   ${isMobile} {
@@ -28,6 +28,12 @@ export const BannerContainer = styled(Container)`
   padding-left: 4rem;
   z-index: 0;
   pointer-events: none;
+
+  h1,
+  p {
+    filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.2))
+      drop-shadow(0px 0px 6px rgba(0, 0, 0, 0.1));
+  }
 `;
 
 export const HeroExampleContainer = styled.div`
@@ -37,6 +43,7 @@ export const HeroExampleContainer = styled.div`
   right: 0;
   bottom: 0;
   z-index: -1;
+  pointer-events: none;
 `;
 
 export const Section = styled.section`
@@ -65,7 +72,9 @@ export const GetStartedLink = styled.a`
   padding: 0 4rem;
   display: inline-block;
   text-decoration: none;
-  transition: background-color 250ms ease-in, color 250ms ease-in;
+  transition:
+    background-color 250ms ease-in,
+    color 250ms ease-in;
   border: solid 2px var(--ifm-color-primary);
   color: var(--ifm-color-gray-200);
 

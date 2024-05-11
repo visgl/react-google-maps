@@ -3,3 +3,4 @@
 /examples/**/package-lock.json
 /examples/**/node_modules
 /examples/**/dist
+/examples/**/.env*
