@@ -1,15 +1,28 @@
 import React from 'react';
-import {Home} from '../components';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import styled from 'styled-components';
 import Layout from '@theme/Layout';
 
-const HeroExample = styled.div`
-  background-image: url(images/hero.jpg);
-  background-size: cover;
-  background-position: top center;
+import {Home} from '../components';
+import HeaderMap from 'website-examples/homepage-header/src/app';
+
+const HeroExampleScrim = styled.div`
+  background-image: linear-gradient(
+    90deg,
+    rgb(0, 0, 0, 0.15) 0,
+    rgb(0, 0, 0, 0) 50%
+  );
   height: 100%;
 `;
+
+const HeroExample = () => {
+  return (
+    <>
+      <HeroExampleScrim />
+      <HeaderMap />
+    </>
+  );
+};
 
 const TextContainer = styled.div`
   max-width: 800px;
@@ -18,12 +31,16 @@ const TextContainer = styled.div`
   font-size: 14px;
 
   h2 {
-    font: bold 32px/48px;
+    font-size: 32px;
+    font-weight: bold;
+    line-height: 1.5;
     margin: 24px 0 16px;
     position: relative;
   }
   h3 {
-    font: bold 16px/24px;
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 1.5;
     margin: 16px 0 0;
     position: relative;
   }
@@ -65,15 +82,18 @@ export default function IndexPage() {
               <img src={`${baseUrl}images/icon-react.svg`} />
               React Integration
             </h3>
-            <p>Use a Google Map as a fully controlled reactive component.</p>
+            <p>
+              Use a Google map as a fully controlled reactive component and use
+              all the other features of the Google Maps JavaScript API.
+            </p>
 
             <h3>
               <img src={`${baseUrl}images/icon-layers.svg`} />
               Extensible
             </h3>
             <p>
-              Comes with additional React interfaces such as context and hooks
-              to support custom components.
+              Includes components and hooks to make writing custom components
+              easy.
             </p>
 
             <h3>
@@ -89,7 +109,7 @@ export default function IndexPage() {
                 deck.gl
               </a>{' '}
               to render performant and compelling 2D and 3D WebGL visualizations
-              on top of your Google Maps JavaScript API-based maps.
+              on top of your maps.
             </p>
           </TextContainer>
         </div>

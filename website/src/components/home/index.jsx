@@ -1,6 +1,12 @@
 import React from 'react';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
-import {Banner, BannerContainer, HeroExampleContainer, ProjectName, GetStartedLink} from './styled';
+import {
+  Banner,
+  BannerContainer,
+  HeroExampleContainer,
+  ProjectName,
+  GetStartedLink
+} from './styled';
 
 export default function renderPage({HeroExample, children}) {
   const {siteConfig} = useDocusaurusContext();
@@ -9,7 +15,9 @@ export default function renderPage({HeroExample, children}) {
   return (
     <>
       <Banner>
-        <HeroExampleContainer>{HeroExample && <HeroExample />}</HeroExampleContainer>
+        <HeroExampleContainer>
+          {HeroExample && <HeroExample />}
+        </HeroExampleContainer>
         <BannerContainer>
           <ProjectName>{siteConfig.title}</ProjectName>
           <p>{siteConfig.tagline}</p>
