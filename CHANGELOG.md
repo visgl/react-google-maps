@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.0](https://github.com/visgl/react-google-maps/compare/v0.11.2...v1.0.0) (2024-05-11)
+
+
+### Miscellaneous Chores
+
+* tag 1.0.0 release ([afb67a7](https://github.com/visgl/react-google-maps/commit/afb67a7b076e83c025a147d488a93c33150c5b15))
+
 ## [0.11.2](https://github.com/visgl/react-google-maps/compare/v0.11.1...v0.11.2) (2024-05-10)
 
 
