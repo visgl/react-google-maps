@@ -5,7 +5,7 @@ export const Banner = styled.section`
   position: relative;
   height: 30rem;
   background: #8ad8ec;
-  color: var(--ifm-color-gray-200);
+  color: #2b3848;
   z-index: 0;
   ${isMobile} {
     height: 80vh;
@@ -28,11 +28,10 @@ export const BannerContainer = styled(Container)`
   padding-left: 4rem;
   z-index: 0;
   pointer-events: none;
+  max-width: 750px;
 
   h1,
   p {
-    filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.2))
-      drop-shadow(0px 0px 6px rgba(0, 0, 0, 0.1));
   }
 `;
 
@@ -75,17 +74,17 @@ export const GetStartedLink = styled.a`
   transition:
     background-color 250ms ease-in,
     color 250ms ease-in;
-  border: solid 2px var(--ifm-color-primary);
-  color: var(--ifm-color-gray-200);
+  background: white;
+  color: #2b3848;
 
   &:visited {
-    color: var(--ifm-color-gray-200);
+    color: #2b3848;
   }
   &:active {
     color: var(--ifm-color-white);
   }
   &:hover {
     color: var(--ifm-color-white);
-    background-color: var(--ifm-color-primary);
+    background-color: #2b3848;
   }
 `;
