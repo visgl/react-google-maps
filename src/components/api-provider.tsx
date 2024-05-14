@@ -28,7 +28,7 @@ export interface APIProviderContextValue {
   clearMapInstances: () => void;
 }
 
-const DEFAULT_SOLUTION_CHANNEL = 'GMP_VISGL_react';
+const DEFAULT_SOLUTION_CHANNEL = 'GMP_visgl_rgmlibrary_v1_default';
 
 export const APIProviderContext =
   React.createContext<APIProviderContextValue | null>(null);

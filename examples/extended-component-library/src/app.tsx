@@ -50,7 +50,7 @@ const App = () => {
   return (
     <div className="App">
       <APIProvider
-        solutionChannel="GMP_VISGL_react-examples-extended-component-library"
+        solutionChannel="GMP_visgl_rgmlibrary_v1_extendedcomponentlibraryexample"
         apiKey={API_KEY}
         version="beta">
         <SplitLayout rowReverse rowLayoutMinWidth={700}>
