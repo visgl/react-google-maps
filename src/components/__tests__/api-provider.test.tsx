@@ -93,7 +93,7 @@ test('uses default solutionChannel', () => {
   render(<APIProvider apiKey={'apikey'}></APIProvider>);
 
   const actual = apiLoadSpy.mock.lastCall[0];
-  expect(actual.solutionChannel).toBe('GMP_VISGL_react');
+  expect(actual.solutionChannel).toBe('GMP_visgl_rgmlibrary_v1_default');
 });
 
 test("doesn't set solutionChannel when specified as empty string", () => {
