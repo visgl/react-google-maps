@@ -16,12 +16,14 @@ import {
 
 import './app.css';
 
-// The below imports are necessary because we are creating refs of
-// the OverlayLayout and PlacePicker components.
-// You need to pass the ref property a web component type object.
-// Imports from @googlemaps/extended-component-library/react are
-// wrappers around web components, not the components themselves.
-// For the ref property we import the actual components and alias them for clarity.
+/**
+ * The below imports are necessary because we are creating refs of
+ * the OverlayLayout and PlacePicker components. You need to pass
+ * the ref property a web component type object. Imports from
+ * @googlemaps/extended-component-library/react are wrappers around
+ * the web components, not the components themselves. For the ref
+ * property we import the actual components and alias them for clarity.
+ */
 import {OverlayLayout as TOverlayLayout} from '@googlemaps/extended-component-library/overlay_layout.js';
 import {PlacePicker as TPlacePicker} from '@googlemaps/extended-component-library/place_picker.js';
 
@@ -47,7 +49,10 @@ const App = () => {
   // we need to wrap our custom elements in a div with a slot attribute.
   return (
     <div className="App">
-      <APIProvider apiKey={API_KEY} version="beta">
+      <APIProvider
+        solutionChannel="GMP_VISGL_react-examples-extended-component-library"
+        apiKey={API_KEY}
+        version="beta">
         <SplitLayout rowReverse rowLayoutMinWidth={700}>
           <div className="SplitLayoutContainer" slot="fixed">
             <OverlayLayout ref={overlayLayoutRef}>
