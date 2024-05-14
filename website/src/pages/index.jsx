@@ -31,11 +31,15 @@ const TextContainer = styled.div`
   font-size: 14px;
 
   h2 {
-    font-size: 32px;
+    font-size: 2em;
     font-weight: bold;
     line-height: 1.5;
     margin: 24px 0 16px;
     position: relative;
+
+    @media (max-width: 760px) {
+      font-size: 1.4em;
+    }
   }
   h3 {
     font-size: 16px;

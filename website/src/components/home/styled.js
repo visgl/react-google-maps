@@ -59,6 +59,11 @@ export const ProjectName = styled.h1`
   font-weight: 700;
   margin: 0;
   margin-bottom: 16px;
+
+  @media (max-width: 760px) {
+    font-size: 3em;
+    max-width: 420px;
+  }
 `;
 
 export const GetStartedLink = styled.a`
