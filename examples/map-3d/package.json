@@ -1,0 +1,16 @@
+{
+  "type": "module",
+  "dependencies": {
+    "@turf/turf": "^7.1.0",
+    "@vis.gl/react-google-maps": "latest",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "typescript": "^5.4.5",
+    "vite": "^5.0.4"
+  },
+  "scripts": {
+    "start": "vite",
+    "start-local": "vite --config ../vite.config.local.js",
+    "build": "vite build"
+  }
+}
