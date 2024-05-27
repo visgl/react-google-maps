@@ -124,6 +124,12 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
   }, [map, markerLibrary, numChildren]);
 
   // update className and styles of marker.content element
+  useEffect(() => {
+    if (!marker || !marker.content) return;
+
+    (marker.content as HTMLElement).className = className || '';
+  }, [marker, className]);
+
   usePropBinding(contentContainer, 'className', className ?? '');
   useEffect(() => {
     if (!contentContainer) return;
