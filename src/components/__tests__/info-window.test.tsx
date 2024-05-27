@@ -18,7 +18,7 @@ let useMapsLibraryMock: jest.MockedFn<typeof useMapsLibrary>;
 
 beforeEach(async () => {
   initialize();
-  jest.resetAllMocks();
+  jest.clearAllMocks();
 
   useMapMock = jest.mocked(useMap);
   useMapsLibraryMock = jest.mocked(useMapsLibrary);

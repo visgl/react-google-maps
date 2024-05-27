@@ -85,9 +85,10 @@ shown on the map.
 
 #### `className`: string
 
-A className to be added to the content-element. Since the content-element
-isn't created when using the default-pin, this option is only available when
-using custom HTML markers.
+A className to be added to the markers content-element. The content-element is 
+either an element that contains the custom HTML content or the DOM 
+representation of the `google.maps.marker.PinElement` when a Pin or an 
+empty AdvancedMarker component is rendered.
 
 #### `style`: [CSSProperties][react-dev-styling]
 
