@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/visgl/react-google-maps/compare/v1.0.0...v1.0.1) (2024-05-27)
+
+
+### Bug Fixes
+
+* **advanced-marker:** apply marker class when rendering a Pin ([#384](https://github.com/visgl/react-google-maps/issues/384)) ([e8a4cc3](https://github.com/visgl/react-google-maps/commit/e8a4cc3aca92e92c20c1e99ba19fee7d713f4785))
+
 ## [1.0.0](https://github.com/visgl/react-google-maps/compare/v0.11.2...v1.0.0) (2024-05-11)
 
 
