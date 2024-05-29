@@ -27,6 +27,11 @@ export type InfoWindowProps = Omit<
   onCloseClick?: () => void;
 };
 
+type InfoWindowAnchor =
+  | google.maps.MVCObject
+  | null
+  | google.maps.marker.AdvancedMarkerElement;
+
 /**
  * Component to render an Info Window with the Maps JavaScript API
  */
@@ -67,7 +72,9 @@ export const InfoWindow = (props: PropsWithChildren<InfoWindowProps>) => {
       }
 
       // intentionally shadowing the state variables here
-      const infoWindow = new google.maps.InfoWindow(infoWindowOptions);
+      const infoWindow = new google.maps.InfoWindow(
+        infoWindowOptions
+      ) as google.maps.InfoWindow & {anchor?: InfoWindowAnchor};
       const contentContainer = document.createElement('div');
 
       infoWindow.setContent(contentContainer);
@@ -80,6 +87,7 @@ export const InfoWindow = (props: PropsWithChildren<InfoWindowProps>) => {
         google.maps.event.clearInstanceListeners(infoWindow);
 
         infoWindow.close();
+        infoWindow.anchor = null;
         contentContainer.remove();
         setInfoWindow(null);
         setContentContainer(null);
