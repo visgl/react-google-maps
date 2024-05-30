@@ -72,6 +72,9 @@ export const InfoWindow = (props: PropsWithChildren<InfoWindowProps>) => {
       }
 
       // intentionally shadowing the state variables here
+      // the `anchor` property is not exposed directly by @types/google.maps but
+      // is present on the created InfoWindow object. Access to this property is
+      // needed to ensure proper cleanup of the InfoWindow
       const infoWindow = new google.maps.InfoWindow(
         infoWindowOptions
       ) as google.maps.InfoWindow & {anchor?: InfoWindowAnchor};
