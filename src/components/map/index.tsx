@@ -79,7 +79,9 @@ export type MapProps = google.maps.MapOptions &
     /**
      * Alternative way to specify the default camera props as a geographic region that should be fully visible
      */
-    defaultBounds?: google.maps.LatLngBoundsLiteral;
+    defaultBounds?: google.maps.LatLngBoundsLiteral & {
+      padding?: number | google.maps.Padding;
+    };
   };
 
 export const Map = (props: PropsWithChildren<MapProps>) => {

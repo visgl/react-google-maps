@@ -214,10 +214,16 @@ The initial state of the camera. This can be used to leave the map
 component in uncontrolled mode. When both a default-value and a controlled
 value are present for a parameter, the controlled value takes precedence.
 
-#### `defaultBounds`: [google.maps.LatLngBoundsLiteral][gmp-llb]
+#### `defaultBounds`: object
 
 An alternative way to specify the region that should initially be visible on
 the map. Has otherwise the same effect as `defaultCenter` and `defaultZoom`.
+
+The `defaultBounds` type is an extension of [google.maps.LatLngBoundsLiteral][gmp-llb]
+that can also contain the optional property `padding`: number | [google.maps.Padding][gmp-pad]
+that represents padding in pixels for the initial view.
+The bounds will be fit in the part of the map that remains after padding is removed.
+A number value will yield the same padding on all 4 sides.
 
 #### `controlled`: boolean
 
@@ -324,6 +330,7 @@ to get access to the `google.maps.Map` object rendered in the `<Map>` component.
 [gmp-map-options]: https://developers.google.com/maps/documentation/javascript/reference/map#MapOptions
 [gmp-map-events]: https://developers.google.com/maps/documentation/javascript/reference/map#Map-Events
 [gmp-llb]: https://developers.google.com/maps/documentation/javascript/reference/coordinates#LatLngBoundsLiteral
+[gmp-pad]: https://developers.google.com/maps/documentation/javascript/reference/coordinates#Padding
 [gmp-ll]: https://developers.google.com/maps/documentation/javascript/reference/coordinates#LatLngLiteral
 [gmp-coordinates]: https://developers.google.com/maps/documentation/javascript/coordinates
 [gmp-mapid]: https://developers.google.com/maps/documentation/get-map-id
