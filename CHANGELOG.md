@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/visgl/react-google-maps/compare/v1.0.1...v1.0.2) (2024-05-30)
+
+
+### Bug Fixes
+
+* **info-window:** fix reappearing InfoWindows ([#393](https://github.com/visgl/react-google-maps/issues/393)) ([dc51eb9](https://github.com/visgl/react-google-maps/commit/dc51eb979e5db6fb57a07d52efa36ef03e83dfcf))
+
 ## [1.0.1](https://github.com/visgl/react-google-maps/compare/v1.0.0...v1.0.1) (2024-05-27)
 
 
