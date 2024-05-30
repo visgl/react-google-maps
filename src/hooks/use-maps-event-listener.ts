@@ -15,6 +15,6 @@ export function useMapsEventListener<T extends (...args: any[]) => void>(
 
     const listener = google.maps.event.addListener(target, name, callback);
 
-    return () => listener?.remove();
+    return () => listener.remove();
   }, [target, name, callback]);
 }
