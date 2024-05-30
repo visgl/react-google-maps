@@ -8,6 +8,9 @@ export const ExampleHeader = styled.div`
   border-bottom: 1px solid 20px;
   display: inline-block;
   padding: 20px 20px 4px 0;
+  ${isMobile} {
+      margin: 0;
+  }
 `;
 
 export const MainExamples = styled.main`
@@ -18,6 +21,9 @@ export const ExamplesGroup = styled.main`
   display: flex;
   flex-wrap: wrap;
   padding: 16px;
+  ${isMobile} {
+      padding-inline: 0;
+  }
 `;
 
 export const ExampleCard = styled.a`
@@ -42,7 +48,7 @@ export const ExampleCard = styled.a`
   }
   ${isMobile} {
     width: 33%;
-    min-width: 200px;
+    min-width: 150px;
   }
   @media screen and (max-width: 632px) {
     width: 50%;
