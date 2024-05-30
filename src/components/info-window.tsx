@@ -69,23 +69,21 @@ export const InfoWindow = (props: PropsWithChildren<InfoWindowProps>) => {
       // intentionally shadowing the state variables here
       const infoWindow = new google.maps.InfoWindow(infoWindowOptions);
       const contentContainer = document.createElement('div');
-
       infoWindow.setContent(contentContainer);
 
       setInfoWindow(infoWindow);
       setContentContainer(contentContainer);
 
-      // cleanup: remove infoWindow, all event listeners and contentElement
+      // unmount: remove infoWindow and contentElement
       return () => {
-        google.maps.event.clearInstanceListeners(infoWindow);
-
-        infoWindow.close();
+        infoWindow.setContent(null);
         contentContainer.remove();
+
         setInfoWindow(null);
         setContentContainer(null);
       };
     },
-    // `infoWindowOptions` is missing from dependencies:
+    // `infoWindowOptions` and `pixelOffset` are missing from dependencies:
     //
     // We don't want to re-create the infowindow instance
     // when the options change.
@@ -121,7 +119,8 @@ export const InfoWindow = (props: PropsWithChildren<InfoWindowProps>) => {
       infoWindow.setOptions(infoWindowOptions);
     },
 
-    // dependency `infoWindow` isn't needed since options are passed to the constructor
+    // dependency `infoWindow` isn't needed since options are also passed
+    // to the constructor when a new infoWindow is created.
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [infoWindowOptions]
   );
@@ -136,8 +135,8 @@ export const InfoWindow = (props: PropsWithChildren<InfoWindowProps>) => {
     // `anchor === null` means an anchor is defined but not ready yet.
     if (!contentContainer || !infoWindow || anchor === null) return;
 
+    const isOpenedWithAnchor = !!anchor;
     const openOptions: google.maps.InfoWindowOpenOptions = {map};
-
     if (anchor) {
       openOptions.anchor = anchor;
     }
@@ -147,6 +146,16 @@ export const InfoWindow = (props: PropsWithChildren<InfoWindowProps>) => {
     }
 
     infoWindow.open(openOptions);
+
+    return () => {
+      // Note: when the infowindow has an anchor, it will automatically show up again when the
+      // anchor was removed from the map before infoWindow.close() is called but the it gets
+      // added back to the map after that.
+      // More information here: https://issuetracker.google.com/issues/343750849
+      if (isOpenedWithAnchor) infoWindow.set('anchor', null);
+
+      infoWindow.close();
+    };
   }, [infoWindow, contentContainer, anchor, map, shouldFocus]);
 
   return (
