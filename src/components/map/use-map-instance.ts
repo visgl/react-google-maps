@@ -140,7 +140,8 @@ export function useMapInstance(
       addMapInstance(map, id);
 
       if (defaultBounds) {
-        map.fitBounds(defaultBounds);
+        const {padding, ...defBounds} = defaultBounds;
+        map.fitBounds(defBounds, padding);
       }
 
       // prevent map not rendering due to missing configuration
