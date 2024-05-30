@@ -166,6 +166,20 @@ describe('camera configuration', () => {
     [{zoom: 1}, true],
     [{defaultZoom: 1}, true],
     [{defaultBounds: {north: 1, east: 2, south: 3, west: 4}}, false],
+    [
+      {
+        defaultBounds: {
+          north: 1,
+          east: 2,
+          south: 3,
+          west: 4,
+          padding: {
+            left: 50
+          }
+        }
+      },
+      false
+    ],
     [{defaultCenter: {lat: 0, lng: 0}, zoom: 0}, false],
     [{center: {lat: 0, lng: 0}, zoom: 0}, false],
     [{center: {lat: 0, lng: 0}, defaultZoom: 0}, false]
