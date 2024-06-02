@@ -1,7 +1,9 @@
 /* eslint-disable complexity */
 import React, {
+  ComponentType,
   CSSProperties,
   PropsWithChildren,
+  ReactNode,
   useEffect,
   useRef,
   useState
@@ -16,7 +18,7 @@ import {useDeepCompareEffect} from '../libraries/use-deep-compare-effect';
 
 export type InfoWindowProps = Omit<
   google.maps.InfoWindowOptions,
-  'content' | 'pixelOffset'
+  'headerContent' | 'content' | 'pixelOffset'
 > & {
   style?: CSSProperties;
   className?: string;
@@ -25,6 +27,8 @@ export type InfoWindowProps = Omit<
   shouldFocus?: boolean;
   onClose?: () => void;
   onCloseClick?: () => void;
+
+  headerContent?: ReactNode;
 };
 
 /**
@@ -34,6 +38,8 @@ export const InfoWindow = (props: PropsWithChildren<InfoWindowProps>) => {
   const {
     // content options
     children,
+    headerContent,
+
     style,
     className,
     pixelOffset,
@@ -41,10 +47,12 @@ export const InfoWindow = (props: PropsWithChildren<InfoWindowProps>) => {
     // open options
     anchor,
     shouldFocus,
+
     // events
     onClose,
     onCloseClick,
 
+    // other options
     ...infoWindowOptions
   } = props;
 
@@ -53,37 +61,51 @@ export const InfoWindow = (props: PropsWithChildren<InfoWindowProps>) => {
   const [infoWindow, setInfoWindow] = useState<google.maps.InfoWindow | null>(
     null
   );
-  const [contentContainer, setContentContainer] = useState<HTMLElement | null>(
-    null
-  );
+
+  const contentContainerRef = useRef<HTMLElement | null>(null);
+  const headerContainerRef = useRef<HTMLElement | null>(null);
 
   useEffect(
     () => {
       if (!mapsLibrary) return;
 
+      contentContainerRef.current = document.createElement('div');
+      headerContainerRef.current = document.createElement('div');
+
+      const opts: google.maps.InfoWindowOptions = infoWindowOptions;
       if (pixelOffset) {
-        (infoWindowOptions as google.maps.InfoWindowOptions).pixelOffset =
-          new google.maps.Size(pixelOffset[0], pixelOffset[1]);
+        opts.pixelOffset = new google.maps.Size(pixelOffset[0], pixelOffset[1]);
+      }
+
+      if (headerContent) {
+        // if headerContent is specified as string we can directly forward it,
+        // otherwise we'll pass the element the portal will render into
+        opts.headerContent =
+          typeof headerContent === 'string'
+            ? headerContent
+            : headerContainerRef.current;
       }
 
       // intentionally shadowing the state variables here
       const infoWindow = new google.maps.InfoWindow(infoWindowOptions);
-      const contentContainer = document.createElement('div');
-      infoWindow.setContent(contentContainer);
+      infoWindow.setContent(contentContainerRef.current);
 
       setInfoWindow(infoWindow);
-      setContentContainer(contentContainer);
 
-      // unmount: remove infoWindow and contentElement
+      // unmount: remove infoWindow and content elements (note: close is called in a different effect-cleanup)
       return () => {
         infoWindow.setContent(null);
-        contentContainer.remove();
+
+        contentContainerRef.current?.remove();
+        headerContainerRef.current?.remove();
+
+        contentContainerRef.current = null;
+        headerContainerRef.current = null;
 
         setInfoWindow(null);
-        setContentContainer(null);
       };
     },
-    // `infoWindowOptions` and `pixelOffset` are missing from dependencies:
+    // `infoWindowOptions` and other props are missing from dependencies:
     //
     // We don't want to re-create the infowindow instance
     // when the options change.
@@ -97,23 +119,39 @@ export const InfoWindow = (props: PropsWithChildren<InfoWindowProps>) => {
   // stores previously applied style properties, so they can be removed when unset
   const prevStyleRef = useRef<CSSProperties | null>(null);
   useEffect(() => {
-    if (!contentContainer) return;
+    if (!infoWindow || !contentContainerRef.current) return;
 
-    setValueForStyles(contentContainer, style || null, prevStyleRef.current);
+    setValueForStyles(
+      contentContainerRef.current,
+      style || null,
+      prevStyleRef.current
+    );
+
     prevStyleRef.current = style || null;
 
-    if (className !== contentContainer.className)
-      contentContainer.className = className || '';
-  }, [contentContainer, className, style]);
+    if (className !== contentContainerRef.current.className)
+      contentContainerRef.current.className = className || '';
+  }, [infoWindow, className, style]);
 
   // ## update options
   useDeepCompareEffect(
     () => {
       if (!infoWindow) return;
 
-      if (pixelOffset) {
-        (infoWindowOptions as google.maps.InfoWindowOptions).pixelOffset =
-          new google.maps.Size(pixelOffset[0], pixelOffset[1]);
+      const opts: google.maps.InfoWindowOptions = infoWindowOptions;
+      if (!pixelOffset) {
+        opts.pixelOffset = null;
+      } else {
+        opts.pixelOffset = new google.maps.Size(pixelOffset[0], pixelOffset[1]);
+      }
+
+      if (!headerContent) {
+        opts.headerContent = null;
+      } else {
+        opts.headerContent =
+          typeof headerContent === 'string'
+            ? headerContent
+            : headerContainerRef.current;
       }
 
       infoWindow.setOptions(infoWindowOptions);
@@ -122,7 +160,7 @@ export const InfoWindow = (props: PropsWithChildren<InfoWindowProps>) => {
     // dependency `infoWindow` isn't needed since options are also passed
     // to the constructor when a new infoWindow is created.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [infoWindowOptions]
+    [infoWindowOptions, pixelOffset, headerContent]
   );
 
   // ## bind event handlers
@@ -133,7 +171,7 @@ export const InfoWindow = (props: PropsWithChildren<InfoWindowProps>) => {
   const map = useMap();
   useEffect(() => {
     // `anchor === null` means an anchor is defined but not ready yet.
-    if (!contentContainer || !infoWindow || anchor === null) return;
+    if (!map || !infoWindow || anchor === null) return;
 
     const isOpenedWithAnchor = !!anchor;
     const openOptions: google.maps.InfoWindowOpenOptions = {map};
@@ -156,9 +194,15 @@ export const InfoWindow = (props: PropsWithChildren<InfoWindowProps>) => {
 
       infoWindow.close();
     };
-  }, [infoWindow, contentContainer, anchor, map, shouldFocus]);
+  }, [infoWindow, anchor, map, shouldFocus]);
 
   return (
-    <>{contentContainer !== null && createPortal(children, contentContainer)}</>
+    <>
+      {contentContainerRef.current &&
+        createPortal(children, contentContainerRef.current)}
+
+      {headerContainerRef.current !== null &&
+        createPortal(headerContent, headerContainerRef.current)}
+    </>
   );
 };
