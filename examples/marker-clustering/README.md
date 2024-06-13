@@ -2,7 +2,7 @@
 
 ![image](https://raw.githubusercontent.com/visgl/react-google-maps/main/website/static/images/examples/marker-clustering.jpg)
 
-This is an example of how to use the [MarkerClusterer](https://github.com/googlemaps/js-markerclusterer) library from Google to cluster markers on a map.
+This is an example of how to use the [`@googlemaps/markerclusterer`](https://github.com/googlemaps/js-markerclusterer) library from Google to cluster markers on a map.
 
 ## Google Maps Platform API Key
 
