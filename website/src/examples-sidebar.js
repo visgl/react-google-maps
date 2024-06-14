@@ -13,6 +13,7 @@ const sidebars = {
         'basic-map',
         'markers-and-infowindows',
         'marker-clustering',
+        'custom-marker-clustering',
         'geometry',
         'drawing',
         'change-map-styles',
