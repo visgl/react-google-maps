@@ -49,7 +49,7 @@ const App = () => (
 The [useMapsLibrary](../api-reference/hooks/use-maps-library.md) hook can be
 utilized to load other parts of the Maps JavaScript API that are not loaded by default.
 For example, the Places Service or the Geocoding Service.
-[Learn how to use this hook.](#other-google-maps-api-libraries-and-services)
+[Learn how to use this hook.](#other-maps-javascript-api-libraries-and-services)
 
 ## Refs
 
