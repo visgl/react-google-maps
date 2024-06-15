@@ -15,10 +15,12 @@
     scale: 1;
   }
 }
+
 .custom-marker-clustering-map {
   width: 100vw;
   height: 100vh;
 }
+
 .custom-marker-clustering-map .marker {
   box-sizing: border-box;
   border-radius: 50%;
@@ -32,37 +34,37 @@
   align-items: center;
 
   animation: appear 150ms both;
+}
 
-  svg {
-    width: 100%;
-    vector-effect: non-scaling-stroke;
-  }
+.custom-marker-clustering-map .marker svg {
+  width: 100%;
+  vector-effect: non-scaling-stroke;
+}
 
-  &.feature {
-    width: 40px;
-    height: 40px;
+.custom-marker-clustering-map .marker.feature {
+  width: 40px;
+  height: 40px;
 
-    background: #3f5b72;
-    filter: drop-shadow(1px 2px 3px rgba(0, 0, 0, 0.5));
-  }
+  background-color: #3f5b72;
+  filter: drop-shadow(1px 2px 3px rgba(0, 0, 0, 0.5));
+}
 
-  &.cluster {
-    width: 56px;
-    height: 56px;
-    background: #618bad;
-    filter: drop-shadow(2px 4px 12px rgba(0, 0, 0, 0.7));
-    overflow: hidden;
-    padding-bottom: 0;
+.custom-marker-clustering-map .marker.cluster {
+  width: 56px;
+  height: 56px;
+  background-color: #618bad;
+  filter: drop-shadow(2px 4px 12px rgba(0, 0, 0, 0.7));
+  overflow: hidden;
+  padding-bottom: 0;
+}
 
-    span {
-      background: white;
-      color: rgba(0, 0, 0, 0.5);
-      padding: 3px 6px;
-      /* oversized by the padding of the container */
-      width: calc(100% + 16px);
-      text-align: center;
-      margin-top: 6px;
-      height: 30px;
-    }
-  }
+.custom-marker-clustering-map .marker.cluster span {
+  background-color: white;
+  color: rgba(0, 0, 0, 0.5);
+  padding: 3px 6px;
+  /* oversized by the padding of the container */
+  width: calc(100% + 16px);
+  text-align: center;
+  margin-top: 6px;
+  height: 30px;
 }
