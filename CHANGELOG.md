@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.0](https://github.com/visgl/react-google-maps/compare/v1.0.2...v1.1.0) (2024-06-17)
+
+
+### Features
+
+* **infowindow:** add new headerContent prop ([#396](https://github.com/visgl/react-google-maps/issues/396)) ([0d40c81](https://github.com/visgl/react-google-maps/commit/0d40c81fe0d850accccf031bfb4f6f7412eea73a)), closes [#378](https://github.com/visgl/react-google-maps/issues/378)
+* **map:** add padding option to defaultBounds ([#392](https://github.com/visgl/react-google-maps/issues/392)) ([9dc65dc](https://github.com/visgl/react-google-maps/commit/9dc65dc36c1d3efb17ebcfa55da3b2f3909eb63f))
+
 ## [1.0.2](https://github.com/visgl/react-google-maps/compare/v1.0.1...v1.0.2) (2024-05-30)
 
 
