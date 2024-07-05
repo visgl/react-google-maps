@@ -3,20 +3,20 @@ import * as React from 'react';
 function ControlPanel() {
   return (
     <div className="control-panel">
-      <h3>Example Template</h3>
+      <h3>Heatmap</h3>
       <p>
-        Add a brief description of the example here and update the link below
+        This uses the useMapsLibrary hook showing earthquake magnitude data in a
+        heatmap.
       </p>
-
       <div className="links">
         <a
-          href="https://codesandbox.io/s/github/visgl/react-google-maps/tree/main/examples/_template"
+          href="https://codesandbox.io/s/github/visgl/react-google-maps/tree/main/examples/heatmap"
           target="_new">
           Try on CodeSandbox ↗
         </a>
 
         <a
-          href="https://github.com/visgl/react-google-maps/tree/main/examples/_template"
+          href="https://github.com/visgl/react-google-maps/tree/main/examples/heatmap"
           target="_new">
           View Code ↗
         </a>

@@ -1,7 +1,7 @@
-# Example
+# Heatmap
 
-This is an example to show how to setup a simple Google Maps Map with the `<Map/>` component of the Google Maps React
-library.
+This uses the `useMapsLibrary` hook showing earthquake magnitude data in a
+heatmap.
 
 ## Google Maps Platform API key
 
