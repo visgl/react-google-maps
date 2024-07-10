@@ -17,8 +17,9 @@ function ControlPanel({
     <div className="control-panel">
       <h3>Heatmap</h3>
       <p>
-        This uses the useMapsLibrary hook showing earthquake magnitude data in a
-        heatmap.
+        This uses the <code>useMapsLibrary()</code> hook and the{' '}
+        <code>google.maps.visualization</code> library to show earthquake
+        magnitude data in a heatmap.
       </p>
 
       {/* Circle Controls */}
