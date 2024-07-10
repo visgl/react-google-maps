@@ -15,7 +15,7 @@ const sidebars = {
         'marker-clustering',
         'custom-marker-clustering',
         'geometry',
-        "heatmap",
+        'heatmap',
         'drawing',
         'change-map-styles',
         'autocomplete',
