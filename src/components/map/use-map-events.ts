@@ -14,6 +14,7 @@ export type MapEventProps = Partial<{
 
   // mouse / touch / pointer events
   onClick: (event: MapMouseEvent) => void;
+  onRightClick: (event: MapMouseEvent) => void;
   onDblclick: (event: MapMouseEvent) => void;
   onContextmenu: (event: MapMouseEvent) => void;
   onMousemove: (event: MapMouseEvent) => void;
@@ -150,6 +151,7 @@ const propNameToEventType: {[prop in keyof Required<MapEventProps>]: string} = {
   onBoundsChanged: 'bounds_changed',
   onCenterChanged: 'center_changed',
   onClick: 'click',
+  onRightClick: 'rightclick',
   onContextmenu: 'contextmenu',
   onDblclick: 'dblclick',
   onDrag: 'drag',
@@ -185,6 +187,7 @@ const cameraEventTypes = [
 
 const mouseEventTypes = [
   'click',
+  'rightclick',
   'contextmenu',
   'dblclick',
   'mousemove',
