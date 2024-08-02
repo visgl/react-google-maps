@@ -5,9 +5,11 @@ export const ExampleHeader = styled.div`
   font: bold 20px/28px var(--ifm-font-family-base);
   color: var(--ifm-color-content-secondary);
   margin: 0 20px;
-  border-bottom: 1px solid 20px;
   display: inline-block;
   padding: 20px 20px 4px 0;
+  ${isMobile} {
+    margin: 0;
+  }
 `;
 
 export const MainExamples = styled.main`
@@ -18,17 +20,21 @@ export const ExamplesGroup = styled.main`
   display: flex;
   flex-wrap: wrap;
   padding: 16px;
+  ${isMobile} {
+    padding-inline: 0;
+  }
 `;
 
 export const ExampleCard = styled.a`
   cursor: pointer;
   text-decoration: none;
-  width: 50%;
-  max-width: 240px;
+  width: 240px;
+  max-width: 50%;
   line-height: 0;
   outline: none;
   padding: 4px;
   position: relative;
+
   img {
     transition-property: filter;
     transition-duration: var(--ifm-transition-slow);
@@ -40,11 +46,8 @@ export const ExampleCard = styled.a`
   &:hover img {
     filter: contrast(0.2);
   }
+
   ${isMobile} {
-    width: 33%;
-    min-width: 200px;
-  }
-  @media screen and (max-width: 632px) {
     width: 50%;
   }
 `;
