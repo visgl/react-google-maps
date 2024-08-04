@@ -41,15 +41,15 @@ For more advanced use-cases you can even add your own components to the map
 that make use of `google.maps.OverlayView` or `google.maps.WebGlOverlayView`.
 
 ```tsx
-import {APIProvider, Map, Marker} from '@vis.gl/react-google-maps';
+import {AdvancedMarker, APIProvider, Map} from '@vis.gl/react-google-maps';
 
 function App() {
   const position = {lat: 53.54992, lng: 10.00678};
 
   return (
     <APIProvider apiKey={'YOUR API KEY HERE'}>
-      <Map defaultCenter={position} defaultZoom={10}>
-        <Marker position={position} />
+      <Map defaultCenter={position} defaultZoom={10} mapId='DEMO_MAP_ID'>
+        <AdvancedMarker position={position} />
       </Map>
     </APIProvider>
   );
