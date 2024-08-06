@@ -12,6 +12,7 @@ const sidebars = {
       items: [
         'basic-map',
         'markers-and-infowindows',
+        'advanced-marker-interaction',
         'marker-clustering',
         'custom-marker-clustering',
         'geometry',
