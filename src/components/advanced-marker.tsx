@@ -151,6 +151,7 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
   const {
     children,
     onClick,
+    className,
     onMouseEnter,
     onMouseLeave,
     onDrag,
@@ -193,6 +194,14 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
       setContentContainer(null);
     };
   }, [map, markerLibrary, numChildren]);
+
+  // set className on advanced marker content when no
+  // children are present
+  useEffect(() => {
+    if (!marker || !marker.content || numChildren > 0) return;
+
+    (marker.content as HTMLElement).className = className || '';
+  }, [marker, className, numChildren]);
 
   // copy other props
   usePropBinding(marker, 'position', position);
