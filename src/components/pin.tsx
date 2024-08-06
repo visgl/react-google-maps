@@ -58,7 +58,15 @@ export const Pin = (props: PropsWithChildren<PinProps>) => {
     }
 
     // Set content of Advanced Marker View to the Pin View element
-    advancedMarker.content = pinElement.element;
+    const markerContent = advancedMarker.content?.firstChild;
+
+    while (markerContent?.firstChild) {
+      markerContent.removeChild(markerContent.firstChild);
+    }
+
+    if (markerContent) {
+      markerContent.appendChild(pinElement.element);
+    }
   }, [advancedMarker, glyphContainer, props]);
 
   return createPortal(props.children, glyphContainer);

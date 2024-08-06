@@ -7,18 +7,17 @@ import React, {
   useEffect,
   useImperativeHandle,
   useMemo,
-  useRef,
   useState
 } from 'react';
 
 import {createPortal} from 'react-dom';
 import {useMap} from '../hooks/use-map';
 import {useMapsLibrary} from '../hooks/use-maps-library';
-import {setValueForStyles} from '../libraries/set-value-for-styles';
 
 import type {Ref, PropsWithChildren} from 'react';
 import {useMapsEventListener} from '../hooks/use-maps-event-listener';
 import {usePropBinding} from '../hooks/use-prop-binding';
+import {useDomEventListener} from '../hooks/use-dom-event-listener';
 
 export interface AdvancedMarkerContextValue {
   marker: google.maps.marker.AdvancedMarkerElement;
@@ -39,8 +38,34 @@ export type CollisionBehavior =
 export const AdvancedMarkerContext =
   React.createContext<AdvancedMarkerContextValue | null>(null);
 
+// [xPosition, yPosition] when the top left corner is [0, 0]
+export const AdvancedMarkerAnchorPoint = {
+  TOP_LEFT: ['0', '0'],
+  TOP_CENTER: ['50%', '0'],
+  TOP: ['50%', '0'],
+  TOP_RIGHT: ['100%', '0'],
+  LEFT_CENTER: ['0', '50%'],
+  LEFT_TOP: ['0', '0'],
+  LEFT: ['0', '50%'],
+  LEFT_BOTTOM: ['0', '100%'],
+  RIGHT_TOP: ['100%', '0'],
+  RIGHT: ['100%', '50%'],
+  RIGHT_CENTER: ['100%', '50%'],
+  RIGHT_BOTTOM: ['100%', '100%'],
+  BOTTOM_LEFT: ['0', '100%'],
+  BOTTOM_CENTER: ['50%', '100%'],
+  BOTTOM: ['50%', '100%'],
+  BOTTOM_RIGHT: ['100%', '100%'],
+  CENTER: ['50%', '50%']
+} as const;
+
+export type AdvancedMarkerAnchorPoint =
+  (typeof AdvancedMarkerAnchorPoint)[keyof typeof AdvancedMarkerAnchorPoint];
+
 type AdvancedMarkerEventProps = {
   onClick?: (e: google.maps.MapMouseEvent) => void;
+  onMouseEnter?: (e: google.maps.MapMouseEvent['domEvent']) => void;
+  onMouseLeave?: (e: google.maps.MapMouseEvent['domEvent']) => void;
   onDrag?: (e: google.maps.MapMouseEvent) => void;
   onDragStart?: (e: google.maps.MapMouseEvent) => void;
   onDragEnd?: (e: google.maps.MapMouseEvent) => void;
@@ -56,6 +81,15 @@ export type AdvancedMarkerProps = PropsWithChildren<
       clickable?: boolean;
       collisionBehavior?: CollisionBehavior;
       /**
+       * The anchor point for the Advanced Marker.
+       * Either use one of the predefined anchor point from the "AdvancedMarkerAnchorPoint" export
+       * or provide a string tuple in the form of ["xPosition", "yPosition"].
+       * The position is measured from the top-left corner and
+       * can be anything that can be consumed by a CSS translate() function.
+       * For example in percent ("50%") or in pixels ("20px").
+       */
+      anchorPoint?: AdvancedMarkerAnchorPoint | [string, string];
+      /**
        * A className for the content element.
        * (can only be used with HTML Marker content)
        */
@@ -67,6 +101,43 @@ export type AdvancedMarkerProps = PropsWithChildren<
     }
 >;
 
+type MarkerContentProps = PropsWithChildren & {
+  styles?: CSSProperties;
+  className?: string;
+  anchorPoint?: AdvancedMarkerAnchorPoint | [string, string];
+};
+
+const MarkerContent = ({
+  children,
+  styles,
+  className,
+  anchorPoint
+}: MarkerContentProps) => {
+  const [xTranslation, yTranslation] =
+    anchorPoint ?? AdvancedMarkerAnchorPoint['BOTTOM'];
+
+  const {transform: userTransform, ...restStyles} = styles ?? {};
+
+  let transformStyle = `translate(-${xTranslation}, -${yTranslation})`;
+
+  // preserve extra transform styles that were set by the user
+  if (userTransform) {
+    transformStyle += ` ${userTransform}`;
+  }
+  return (
+    <div
+      className={className}
+      style={{
+        width: 'fit-content',
+        transformOrigin: `${xTranslation} ${yTranslation}`,
+        transform: transformStyle,
+        ...restStyles
+      }}>
+      {children}
+    </div>
+  );
+};
+
 export type AdvancedMarkerRef = google.maps.marker.AdvancedMarkerElement | null;
 function useAdvancedMarker(props: AdvancedMarkerProps) {
   const [marker, setMarker] =
@@ -74,16 +145,14 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
   const [contentContainer, setContentContainer] =
     useState<HTMLDivElement | null>(null);
 
-  const prevStyleRef = useRef<CSSProperties | null>(null);
-
   const map = useMap();
   const markerLibrary = useMapsLibrary('marker');
 
   const {
     children,
-    className,
-    style,
     onClick,
+    onMouseEnter,
+    onMouseLeave,
     onDrag,
     onDragStart,
     onDragEnd,
@@ -110,6 +179,8 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
     let contentElement: HTMLDivElement | null = null;
     if (numChildren > 0) {
       contentElement = document.createElement('div');
+      contentElement.style.width = '0px';
+      contentElement.style.height = '0px';
 
       newMarker.content = contentElement;
       setContentContainer(contentElement);
@@ -122,21 +193,6 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
       setContentContainer(null);
     };
   }, [map, markerLibrary, numChildren]);
-
-  // update className and styles of marker.content element
-  useEffect(() => {
-    if (!marker || !marker.content) return;
-
-    (marker.content as HTMLElement).className = className || '';
-  }, [marker, className]);
-
-  usePropBinding(contentContainer, 'className', className ?? '');
-  useEffect(() => {
-    if (!contentContainer) return;
-
-    setValueForStyles(contentContainer, style || null, prevStyleRef.current);
-    prevStyleRef.current = style || null;
-  }, [contentContainer, className, style]);
 
   // copy other props
   usePropBinding(marker, 'position', position);
@@ -173,12 +229,15 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
   useMapsEventListener(marker, 'dragstart', onDragStart);
   useMapsEventListener(marker, 'dragend', onDragEnd);
 
+  useDomEventListener(marker?.element, 'mouseenter', onMouseEnter);
+  useDomEventListener(marker?.element, 'mouseleave', onMouseLeave);
+
   return [marker, contentContainer] as const;
 }
 
 export const AdvancedMarker = forwardRef(
   (props: AdvancedMarkerProps, ref: Ref<AdvancedMarkerRef>) => {
-    const {children} = props;
+    const {children, style, className, anchorPoint} = props;
     const [marker, contentContainer] = useAdvancedMarker(props);
 
     const advancedMarkerContextValue: AdvancedMarkerContextValue | null =
@@ -190,7 +249,15 @@ export const AdvancedMarker = forwardRef(
 
     return (
       <AdvancedMarkerContext.Provider value={advancedMarkerContextValue}>
-        {createPortal(children, contentContainer)}
+        {createPortal(
+          <MarkerContent
+            anchorPoint={anchorPoint}
+            styles={style}
+            className={className}>
+            {children}
+          </MarkerContent>,
+          contentContainer
+        )}
       </AdvancedMarkerContext.Provider>
     );
   }
