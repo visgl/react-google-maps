@@ -22,6 +22,14 @@ export type TPaneNamesKey =
   | "OVERLAY_MOUSE_TARGET";
 export type PaneNames = keyof google.maps.MapPanes;
 
+export const PANE_NAMES: Record<TPaneNamesKey, PaneNames> = {
+  FLOAT_PANE: `floatPane`,
+  MAP_PANE: `mapPane`,
+  MARKER_LAYER: `markerLayer`,
+  OVERLAY_LAYER: `overlayLayer`,
+  OVERLAY_MOUSE_TARGET: `overlayMouseTarget`
+};
+
 export type PositionDrawProps = {
   left?: string | number | undefined;
   top?: string | number | undefined;
@@ -126,18 +134,15 @@ export type OverlayViewRef = google.maps.OverlayView | null;
 function useOverlayView(props: OverlayViewProps) {
   const [overlayView, setOverlayView] =
     useState<google.maps.OverlayView | null>(null);
-  // const [contentContainer, setContentContainer] =
-  //   useState<HTMLDivElement | null>(null);
   const [paneEl, setPaneEl] = useState<HTMLElement | null>(null);
   const [containerStyle, setContainerStyle] = useState<CSSProperties>({
     position: "absolute"
   });
 
-
   const map = useMap();
 
   const updatePane = (overlayView: google.maps.OverlayView) => {
-    const mapPaneName = props.mapPaneName;
+    const mapPaneName = props.mapPaneName ?? PANE_NAMES.FLOAT_PANE;
     const mapPanes = overlayView.getPanes();
     if (mapPanes) {
       setPaneEl(mapPanes[mapPaneName] as HTMLElement);
