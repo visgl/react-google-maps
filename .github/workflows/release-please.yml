@@ -14,7 +14,7 @@ jobs:
     steps:
       - id: release
         name: Release Please
-        uses: google-github-actions/release-please-action@v3
+        uses: googleapis/release-please-action@v4
 
         with:
           release-type: node
@@ -25,11 +25,11 @@ jobs:
 
       - if: ${{ steps.release.outputs.release_created }}
         name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - if: ${{ steps.release.outputs.release_created }}
         name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
