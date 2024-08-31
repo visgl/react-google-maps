@@ -10,7 +10,7 @@ const DemoContainer = styled.div`
   top: 0;
   bottom: 0;
 
-  > h1 {
+  > header {
     display: none;
   }
 `;
@@ -19,7 +19,6 @@ const DemoContainer = styled.div`
 export default function DocItem({content, route}) {
   const MDXComponent = content;
   const indexPath = useBaseUrl('/examples');
-
   if (route.path === indexPath) {
     return (
       <div key="index">
