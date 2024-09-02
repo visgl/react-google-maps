@@ -1,7 +1,7 @@
 import {MapProps} from '../map';
 import {useDeepCompareEffect} from '../../libraries/use-deep-compare-effect';
 
-const mapOptionKeys = new Set([
+const mapOptionKeys: Set<keyof google.maps.MapOptions> = new Set([
   'backgroundColor',
   'clickableIcons',
   'controlSize',
@@ -13,6 +13,7 @@ const mapOptionKeys = new Set([
   'fullscreenControl',
   'fullscreenControlOptions',
   'gestureHandling',
+  'headingInteractionEnabled',
   'isFractionalZoomEnabled',
   'keyboardShortcuts',
   'mapTypeControl',
@@ -33,6 +34,7 @@ const mapOptionKeys = new Set([
   'streetViewControl',
   'streetViewControlOptions',
   'styles',
+  'tiltInteractionEnabled',
   'zoomControl',
   'zoomControlOptions'
 ]);

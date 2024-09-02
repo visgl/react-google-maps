@@ -156,6 +156,55 @@ describe('creating and updating map instance', () => {
     const [, options] = createMapSpy.mock.lastCall!;
     expect(options).toMatchObject({mapId: 'othermapid'});
   });
+
+  test('recreates the map when the colorScheme is changed', () => {
+    createMapSpy.mockReset();
+    rerender(
+      <GoogleMap
+        id={'mymap'}
+        mapId={'mymapid'}
+        center={center}
+        zoom={14}
+        colorScheme={'DARK'}
+      />
+    );
+
+    expect(createMapSpy).toHaveBeenCalled();
+
+    const [, options] = createMapSpy.mock.lastCall!;
+    expect(options).toMatchObject({colorScheme: 'DARK'});
+  });
+
+  test('recreates the map when the renderingType is changed', () => {
+    createMapSpy.mockReset();
+    rerender(
+      <GoogleMap
+        id={'mymap'}
+        mapId={'mymapid'}
+        center={center}
+        zoom={14}
+        renderingType={'VECTOR'}
+      />
+    );
+
+    expect(createMapSpy).toHaveBeenCalled();
+
+    const [, options] = createMapSpy.mock.lastCall!;
+    expect(options).toMatchObject({renderingType: 'VECTOR'});
+  });
+});
+
+describe('map instance caching', () => {
+  test.todo(
+    "map isn't recreated when unmounting and remounting with the same props"
+  );
+  test.todo(
+    'map is recreated when unmounting and remounting with changed mapId'
+  );
+  test.todo(
+    "map isn't recreated when unmounting and remounting with regular changed options"
+  );
+  test.todo('removed options are handled correctly');
 });
 
 describe('camera configuration', () => {
