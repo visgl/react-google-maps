@@ -1,6 +1,5 @@
 /* eslint-disable complexity */
 import React, {
-  ComponentType,
   CSSProperties,
   PropsWithChildren,
   ReactNode,

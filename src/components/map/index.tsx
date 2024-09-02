@@ -43,10 +43,30 @@ export type MapCameraProps = {
   tilt?: number;
 };
 
+// ColorScheme and RenderingType are redefined here to make them usable before the
+// maps API has been fully loaded.
+
+export const ColorScheme = {
+  DARK: 'DARK',
+  LIGHT: 'LIGHT',
+  FOLLOW_SYSTEM: 'FOLLOW_SYSTEM'
+};
+export type ColorScheme = (typeof ColorScheme)[keyof typeof ColorScheme];
+
+export const RenderingType = {
+  VECTOR: 'VECTOR',
+  RASTER: 'RASTER',
+  UNINITIALIZED: 'UNINITIALIZED'
+};
+export type RenderingType = (typeof RenderingType)[keyof typeof RenderingType];
+
 /**
  * Props for the Map Component
  */
-export type MapProps = google.maps.MapOptions &
+export type MapProps = Omit<
+  google.maps.MapOptions,
+  'renderingType' | 'colorScheme'
+> &
   MapEventProps &
   DeckGlCompatProps & {
     /**
@@ -54,14 +74,27 @@ export type MapProps = google.maps.MapOptions &
      * in the same APIProvider context.
      */
     id?: string;
+
     /**
      * Additional style rules to apply to the map dom-element.
      */
     style?: CSSProperties;
+
     /**
      * Additional css class-name to apply to the element containing the map.
      */
     className?: string;
+
+    /**
+     * The color-scheme to use for the map.
+     */
+    colorScheme?: ColorScheme;
+
+    /**
+     * The rendering-type to be used.
+     */
+    renderingType?: RenderingType;
+
     /**
      * Indicates that the map will be controlled externally. Disables all controls provided by the map itself.
      */

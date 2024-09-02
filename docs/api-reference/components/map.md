@@ -83,20 +83,23 @@ If your application renders the map on a subpage or otherwise mounts and
 unmounts the `Map` component a lot, this can cause new map instances to be
 created with every mount of the component. Since the pricing of the Google
 Maps JavaScript API is based on map-views (effectively calls to the
-`google.maps.Map` constructor), this can quickly become a problem.
+`google.maps.Map` constructor), this can quickly cause a problem.
 
 The `Map` component can be configured to re-use already created maps with
-the `reuseMaps` prop. When enabled, all `Map` components created with the same
-`mapId` will reuse previously created instances instead of creating new ones.
+the [`reuseMaps`](#reusemaps-boolean) prop. 
+When enabled, all `Map` components created with the same [`mapId`](#mapid-string), 
+[`colorScheme`](#colorscheme-googlemapscolorschemegmp-color-scheme-type) and 
+[`renderingType`](#renderingtype-googlemapsrenderingtypegmp-rendering-type) will reuse 
+previously created instances instead of creating new ones.
 
 :::warning
 
-In the 1.0.0 version, support for map-caching is still a bit experimental, and
+In the current version, support for map-caching is still a bit experimental, and
 there are some known issues when maps are being reused with different sets
 of options applied. In most simpler situations, like when showing the very
 same component multiple times, it should work fine.
 
-If you experience any problems using this feature, please file a 
+If you experience any problems using this feature, please file a
 [bug-report][rgm-new-issue] or [start a discussion][rgm-discussions] on GitHub.
 
 :::
@@ -131,6 +134,19 @@ to be provided in some way for the map to render. This can be done
 
 ### General Props
 
+:::info
+
+The Maps JavaScript API doesn't allow changing the Map ID, the color scheme
+or the rendering-type of a map after it has been created. This isn't the
+case for this component. However, the internal `google.maps.Map` instance
+has to be recreated when the `mapId`, `colorScheme` or `renderingType` props
+are changed, **which will cause additional cost**.
+
+See the [`reuseMaps`](#reusemaps-boolean) prop if your application has to
+dynamically switch between multiple Map IDs, color schemes or rendering types.
+
+:::
+
 #### `id`: string
 
 A string that identifies the map component. This is required when multiple
@@ -139,19 +155,32 @@ maps are present in the same APIProvider context to be able to access them using
 
 #### `mapId`: string
 
-The [Map ID][gmp-mapid] of the map. 
+The [Map ID][gmp-mapid] of the map. This is required if you want to make use
+of the [Cloud-based maps styling][gmp-map-styling].
 
-:::info
+#### `colorScheme`: [google.maps.ColorScheme][gmp-color-scheme-type]
 
-The Maps JavaScript API doesn't allow changing the Map ID of a map after it 
-has been created. This isn't the case for this component. However, the 
-internal `google.maps.Map` instance has to be recreated when the `mapId` prop 
-changes, which might cause additional cost. 
+The [color-scheme][gmp-color-scheme] to be used by the map. Can be
+`'LIGHT'`, `'DARK'`, `'FOLLOW_SYSTEM'` or one of the
+`ColorScheme` constants 
+(`import {ColorScheme} from '@vis.gl/react-google-maps';`).
 
-See the [reuseMaps](#reusemaps-boolean) parameter if your application has to 
-repeatedly switch between multiple Map IDs.
+:::note
+
+Custom styles that use Map IDs only apply to the light color scheme for roadmap map types.
 
 :::
+
+#### `renderingType`: [google.maps.RenderingType][gmp-rendering-type]
+
+The desired rendering type the renderer should use. Can be `'RASTER'` or
+`'VECTOR'` or one of the `RenderingType` constants 
+(`import {RenderingType} from '@vis.gl/react-google-maps';`).
+
+If not set, the cloud configuration for the map ID will determine the
+rendering type (if available). Please note that vector maps may not be
+available for all devices and browsers, and the map will fall back to a
+raster map as needed.
 
 #### `style`: React.CSSProperties
 
@@ -166,8 +195,9 @@ style-prop is no longer applied.
 
 #### `reuseMaps`: boolean
 
-Enable map-instance caching for this component. When caching is enabled, 
-this component will reuse map instances created with the same `mapId`.
+Enable map-instance caching for this component. When caching is enabled,
+this component will reuse map instances created with the same `mapId`, 
+`colorScheme` and `renderingType`.
 
 See also the section [Map Instance Caching](#map-instance-caching) above.
 
@@ -333,7 +363,11 @@ to get access to the `google.maps.Map` object rendered in the `<Map>` component.
 [gmp-pad]: https://developers.google.com/maps/documentation/javascript/reference/coordinates#Padding
 [gmp-ll]: https://developers.google.com/maps/documentation/javascript/reference/coordinates#LatLngLiteral
 [gmp-coordinates]: https://developers.google.com/maps/documentation/javascript/coordinates
+[gmp-color-scheme]: https://developers.google.com/maps/documentation/javascript/mapcolorscheme
+[gmp-color-scheme-type]: https://developers.google.com/maps/documentation/javascript/reference/map#ColorScheme
 [gmp-mapid]: https://developers.google.com/maps/documentation/get-map-id
+[gmp-map-styling]: https://developers.google.com/maps/documentation/javascript/cloud-customization
+[gmp-rendering-type]: https://developers.google.com/maps/documentation/javascript/reference/map#RenderingType
 [api-provider]: ./api-provider.md
 [get-max-tilt]: https://github.com/visgl/react-google-maps/blob/4319bd3b68c40b9aa9b0ce7f377b52d20e824849/src/libraries/limit-tilt-range.ts#L4-L19
 [map-source]: https://github.com/visgl/react-google-maps/tree/main/src/components/map
