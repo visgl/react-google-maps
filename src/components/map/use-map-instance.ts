@@ -140,10 +140,6 @@ export function useMapInstance(
         map = new google.maps.Map(mapDiv, {
           ...mapOptions,
           renderingType: renderingType as google.maps.RenderingType,
-          // The colorScheme option and google.maps.ColorScheme type haven't been added
-          // to the @types/google.maps package yet, so this will cause a TS error:
-          // @ts-expect-error TS2353: Object literal may only specify known properties,
-          //   and colorScheme does not exist in type MapOptions
           colorScheme: colorScheme as google.maps.ColorScheme
         });
       }
