@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.1](https://github.com/visgl/react-google-maps/compare/v1.1.0...v1.1.1) (2024-09-02)
+
+
+### Bug Fixes
+
+* **map:** add support for new and missing mapOptions ([#501](https://github.com/visgl/react-google-maps/issues/501)) ([f22af50](https://github.com/visgl/react-google-maps/commit/f22af50793622c2bee0508a4b57307dd18302d1b))
+* **map:** remove [@ts-expect-error](https://github.com/ts-expect-error) after @types/google.maps update ([deb2bc7](https://github.com/visgl/react-google-maps/commit/deb2bc733800cb99ad8edeb30059ad050a16ee86))
+
 ## [1.1.0](https://github.com/visgl/react-google-maps/compare/v1.0.2...v1.1.0) (2024-06-17)
 
 
