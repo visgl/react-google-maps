@@ -176,6 +176,37 @@ export const InfoWindow = (props: PropsWithChildren<InfoWindowProps>) => {
     const openOptions: google.maps.InfoWindowOpenOptions = {map};
     if (anchor) {
       openOptions.anchor = anchor;
+
+      const anchorElementDimensions = anchor.content.getBoundingClientRect();
+
+      if (
+        anchorElementDimensions.width === 0 &&
+        anchorElementDimensions.height === 0
+      ) {
+        const anchorDomContent = anchor.content.firstChild;
+
+        const anchorDomWidth = anchorDomContent.getBoundingClientRect().width;
+
+        const anchorComputedStyles = getComputedStyle(anchorDomContent);
+        const matrix = new WebKitCSSMatrix(anchorComputedStyles.transform);
+
+        const translatePixelX = matrix.m41;
+        const translatePixelY = matrix.m42;
+        const scaleX = matrix.m11;
+        const scaleY = matrix.m22;
+
+        const pixelOffsetX = translatePixelX * scaleX + anchorDomWidth / 2; // center infowindow above marker
+        const pixelOffsetY = translatePixelY * scaleY;
+
+        const opts: google.maps.InfoWindowOptions = infoWindowOptions;
+
+        opts.pixelOffset = new google.maps.Size(
+          pixelOffset ? pixelOffset[0] + pixelOffsetX : pixelOffsetX,
+          pixelOffset ? pixelOffset[1] + pixelOffsetY : pixelOffsetY
+        );
+
+        infoWindow.setOptions(opts);
+      }
     }
 
     if (shouldFocus !== undefined) {
@@ -193,7 +224,7 @@ export const InfoWindow = (props: PropsWithChildren<InfoWindowProps>) => {
 
       infoWindow.close();
     };
-  }, [infoWindow, anchor, map, shouldFocus]);
+  }, [infoWindow, anchor, map, shouldFocus, infoWindowOptions, pixelOffset]);
 
   return (
     <>

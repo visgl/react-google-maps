@@ -4,9 +4,12 @@ import {createRoot} from 'react-dom/client';
 import {
   AdvancedMarker,
   AdvancedMarkerAnchorPoint,
+  AdvancedMarkerProps,
   APIProvider,
+  InfoWindow,
   Map,
-  Pin
+  Pin,
+  useAdvancedMarkerRef
 } from '@vis.gl/react-google-maps';
 
 import ControlPanel from './control-panel';
@@ -68,10 +71,39 @@ const App = () => {
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const [anchorPoint, setAnchorPoint] = useState('BOTTOM' as AnchorPointName);
+  const [selectedMarker, setSelectedMarker] =
+    useState<google.maps.marker.AdvancedMarkerElement | null>(null);
+  const [infoWindowShown, setInfoWindowShown] = useState(false);
 
   const onMouseEnter = useCallback((id: string | null) => setHoverId(id), []);
   const onMouseLeave = useCallback(() => setHoverId(null), []);
-  const onClick = useCallback((id: string | null) => setSelectedId(id), []);
+  const onMarkerClick = useCallback(
+    (id: string | null, marker?: google.maps.marker.AdvancedMarkerElement) => {
+      setSelectedId(id);
+
+      if (marker) {
+        setSelectedMarker(marker);
+      }
+
+      if (id !== selectedId) {
+        setInfoWindowShown(true);
+      } else {
+        setInfoWindowShown(isShown => !isShown);
+      }
+    },
+    [selectedId]
+  );
+
+  const onMapClick = useCallback(() => {
+    setSelectedId(null);
+    setSelectedMarker(null);
+    setInfoWindowShown(false);
+  }, []);
+
+  const handleInfowindowCloseClick = useCallback(
+    () => setInfoWindowShown(false),
+    []
+  );
 
   return (
     <APIProvider apiKey={API_KEY} libraries={['marker']}>
@@ -80,7 +112,8 @@ const App = () => {
         defaultZoom={12}
         defaultCenter={{lat: 53.55909057947169, lng: 10.005767668054645}}
         gestureHandling={'greedy'}
-        onClick={() => onClick(null)}
+        onClick={onMapClick}
+        clickableIcons={false}
         disableDefaultUI>
         {markers.map(({id, zIndex: zIndexDefault, position, type}) => {
           let zIndex = zIndexDefault;
@@ -95,10 +128,12 @@ const App = () => {
 
           if (type === 'pin') {
             return (
-              <AdvancedMarker
-                onClick={() => onClick(id)}
+              <AdvancedMarkerWithRef
+                onMarkerClick={(
+                  marker: google.maps.marker.AdvancedMarkerElement
+                ) => onMarkerClick(id, marker)}
                 onMouseEnter={() => onMouseEnter(id)}
-                onMouseLeave={() => onMouseLeave()}
+                onMouseLeave={onMouseLeave}
                 key={id}
                 zIndex={zIndex}
                 className="test-class"
@@ -112,18 +147,20 @@ const App = () => {
                   borderColor={selectedId === id ? '#1e89a1' : null}
                   glyphColor={selectedId === id ? '#0f677a' : null}
                 />
-              </AdvancedMarker>
+              </AdvancedMarkerWithRef>
             );
           }
 
           if (type === 'html') {
             return (
               <React.Fragment key={id}>
-                <AdvancedMarker
-                  onClick={() => onClick(id)}
+                <AdvancedMarkerWithRef
+                  onMarkerClick={(
+                    marker: google.maps.marker.AdvancedMarkerElement
+                  ) => onMarkerClick(id, marker)}
                   zIndex={zIndex}
                   onMouseEnter={() => onMouseEnter(id)}
-                  onMouseLeave={() => onMouseLeave()}
+                  onMouseLeave={onMouseLeave}
                   className="test-class"
                   style={{
                     transition: 'all 200ms ease-in-out',
@@ -140,14 +177,16 @@ const App = () => {
                       border: '1px solid #ffa700',
                       borderRadius: '4px'
                     }}></div>
-                </AdvancedMarker>
+                </AdvancedMarkerWithRef>
 
                 {/* anchor point visualization marker */}
-                <AdvancedMarker
-                  onClick={() => onClick(id)}
+                <AdvancedMarkerWithRef
+                  onMarkerClick={(
+                    marker: google.maps.marker.AdvancedMarkerElement
+                  ) => onMarkerClick(id, marker)}
                   zIndex={zIndex}
                   onMouseEnter={() => onMouseEnter(id)}
-                  onMouseLeave={() => onMouseLeave()}
+                  onMouseLeave={onMouseLeave}
                   anchorPoint={AdvancedMarkerAnchorPoint.CENTER}
                   position={position}>
                   <div
@@ -158,11 +197,20 @@ const App = () => {
                       borderRadius: '50%',
                       border: '1px solid #0057e7'
                     }}></div>
-                </AdvancedMarker>
+                </AdvancedMarkerWithRef>
               </React.Fragment>
             );
           }
         })}
+
+        {infoWindowShown && selectedMarker && (
+          <InfoWindow
+            anchor={selectedMarker}
+            onCloseClick={handleInfowindowCloseClick}>
+            <h2>Marker {selectedId}</h2>
+            <p>Some arbitrary html to be rendered into the InfoWindow.</p>
+          </InfoWindow>
+        )}
       </Map>
       <ControlPanel
         anchorPointName={anchorPoint}
@@ -171,6 +219,28 @@ const App = () => {
         }
       />
     </APIProvider>
+  );
+};
+
+export const AdvancedMarkerWithRef = (
+  props: AdvancedMarkerProps & {
+    onMarkerClick: (marker: google.maps.marker.AdvancedMarkerElement) => void;
+  }
+) => {
+  const {children, onMarkerClick, ...advancedMarkerProps} = props;
+  const [markerRef, marker] = useAdvancedMarkerRef();
+
+  return (
+    <AdvancedMarker
+      onClick={() => {
+        if (marker) {
+          onMarkerClick(marker);
+        }
+      }}
+      ref={markerRef}
+      {...advancedMarkerProps}>
+      {children}
+    </AdvancedMarker>
   );
 };
 
