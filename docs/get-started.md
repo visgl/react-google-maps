@@ -61,3 +61,39 @@ root.render(
   </React.StrictMode>
 );
 ```
+
+## Development Setup
+If you are using @vis.gl/react-google-maps for development purposes and do not need to access Google Maps services during testing, you can simplify your setup by using an empty string for the apiKey. This allows you to bypass the need for a valid API key, making it easier to start working with the library without worrying about API quotas or obtaining a key.
+
+To use this setup, create a .env file in your project directory with the following content:
+
+```text title=".env"
+GOOGLE_MAPS_API_KEY=""
+```
+
+This setup will allow you to run the examples or your own application without requiring an actual API key. Keep in mind that certain Google Maps features will not be available with an empty API key, so this configuration is only recommended for development and testing purposes.
+
+```tsx title=index.jsx
+import React from 'react';
+import {createRoot} from 'react-dom/client';
+import {APIProvider, Map} from '@vis.gl/react-google-maps';
+
+const App = () => (
+  <APIProvider apiKey="">
+    <Map
+      style={{width: '100vw', height: '100vh'}}
+      defaultCenter={{lat: 22.54992, lng: 0}}
+      defaultZoom={3}
+      gestureHandling={'greedy'}
+      disableDefaultUI={true}
+    />
+  </APIProvider>
+);
+
+const root = createRoot(document.querySelector('#app'));
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+```
