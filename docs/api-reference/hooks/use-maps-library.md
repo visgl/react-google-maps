@@ -17,6 +17,14 @@ const MyComponent = () => {
 
   // ...
 };
+
+// Make sure you have wrapped the component tree with the APIProvider
+const App = () => (
+  <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}>
+    {/* ... */}
+    <MyComponent />
+  </APIProvider>
+);
 ```
 
 ## Signature
