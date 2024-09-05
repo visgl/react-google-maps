@@ -12,49 +12,19 @@ import {
   useAdvancedMarkerRef
 } from '@vis.gl/react-google-maps';
 
+import {getData} from './data';
+
 import ControlPanel from './control-panel';
 
-function randomLat() {
-  const min = 53.52;
-  const max = 53.63;
-
-  return Math.random() * (max - min) + min;
-}
-function randomLng() {
-  const min = 9.88;
-  const max = 10.12;
-
-  return Math.random() * (max - min) + min;
-}
-
-type MarkerData = Array<{
-  id: string;
-  position: google.maps.LatLngLiteral;
-  type: 'pin' | 'html';
-  zIndex: number;
-}>;
+import './style.css';
 
 export type AnchorPointName = keyof typeof AdvancedMarkerAnchorPoint;
-
-const initialData: MarkerData = [];
-
-// create 50 random markers
-for (let index = 0; index < 50; index++) {
-  const r = Math.random();
-
-  initialData.push({
-    id: String(index),
-    position: {lat: randomLat(), lng: randomLng()},
-    zIndex: index,
-    type: r < 0.5 ? 'pin' : 'html'
-  });
-}
 
 // A common pattern for applying z-indexes is to sort the markers
 // by latitude and apply a default z-index according to the index position
 // This usually is the most pleasing visually. Markers that are more "south"
 // thus appear in front.
-const data = initialData
+const data = getData()
   .sort((a, b) => b.position.lat - a.position.lat)
   .map((dataItem, index) => ({...dataItem, zIndex: index}));
 
@@ -136,9 +106,8 @@ const App = () => {
                 onMouseLeave={onMouseLeave}
                 key={id}
                 zIndex={zIndex}
-                className="test-class"
+                className="custom-marker"
                 style={{
-                  transition: 'all 200ms ease-in-out',
                   transform: `scale(${[hoverId, selectedId].includes(id) ? 1.4 : 1})`
                 }}
                 position={position}>
@@ -155,28 +124,10 @@ const App = () => {
             return (
               <React.Fragment key={id}>
                 <AdvancedMarkerWithRef
-                  onMarkerClick={(
-                    marker: google.maps.marker.AdvancedMarkerElement
-                  ) => onMarkerClick(id, marker)}
-                  zIndex={zIndex}
-                  onMouseEnter={() => onMouseEnter(id)}
-                  onMouseLeave={onMouseLeave}
-                  className="test-class"
-                  style={{
-                    transition: 'all 200ms ease-in-out',
-                    transform: `scale(${[hoverId, selectedId].includes(id) ? 1.4 : 1})`
-                  }}
-                  anchorPoint={AdvancedMarkerAnchorPoint[anchorPoint]}
-                  position={position}>
-                  <div
-                    style={{
-                      width: '25px',
-                      height: '25px',
-                      background: selectedId === id ? '#22ccff' : '#0057e7',
-                      transition: 'all 200ms ease-in-out',
-                      border: '1px solid #ffa700',
-                      borderRadius: '4px'
-                    }}></div>
+                  position={position}
+                  anchorPoint={AdvancedMarkerAnchorPoint.BOTTOM}
+                  className="custom-marker">
+                  <div className="custom-html-content"></div>
                 </AdvancedMarkerWithRef>
 
                 {/* anchor point visualization marker */}
@@ -189,14 +140,7 @@ const App = () => {
                   onMouseLeave={onMouseLeave}
                   anchorPoint={AdvancedMarkerAnchorPoint.CENTER}
                   position={position}>
-                  <div
-                    style={{
-                      width: '8px',
-                      height: '8px',
-                      background: '#ffa700',
-                      borderRadius: '50%',
-                      border: '1px solid #0057e7'
-                    }}></div>
+                  <div className="visualization-marker"></div>
                 </AdvancedMarkerWithRef>
               </React.Fragment>
             );

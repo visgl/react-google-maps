@@ -1,7 +1,7 @@
 # Advanced Marker interaction example
 
-This is example showcases a classic interaction pattern when dealing with map markers.
-It covers hover-, click- and z-index handling as well as setting the correct anchor point for a marker.
+This example showcases a classic interaction pattern when dealing with map markers.
+It covers hover-, click- and z-index handling as well as modifying the anchor point for an `AdvancedMarker`.
 
 ## Google Maps Platform API Key
 

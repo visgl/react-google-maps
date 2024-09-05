@@ -23,6 +23,14 @@ export interface AdvancedMarkerContextValue {
   marker: google.maps.marker.AdvancedMarkerElement;
 }
 
+export function isAdvancedMarker(
+  marker: google.maps.Marker | google.maps.marker.AdvancedMarkerElement
+): marker is google.maps.marker.AdvancedMarkerElement {
+  return (
+    (marker as google.maps.marker.AdvancedMarkerElement).content !== undefined
+  );
+}
+
 /**
  * Copy of the `google.maps.CollisionBehavior` constants.
  * They have to be duplicated here since we can't wait for the maps API to load to be able to use them.
@@ -180,8 +188,8 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
     let contentElement: HTMLDivElement | null = null;
     if (numChildren > 0) {
       contentElement = document.createElement('div');
-      contentElement.style.width = '0px';
-      contentElement.style.height = '0px';
+      contentElement.style.width = '0';
+      contentElement.style.height = '0';
 
       newMarker.content = contentElement;
       setContentContainer(contentElement);
@@ -195,8 +203,10 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
     };
   }, [map, markerLibrary, numChildren]);
 
-  // set className on advanced marker content when no
-  // children are present
+  // When no children are present we don't have our own wrapper div
+  // which usually gets the user provided className. In this case
+  // we set the className directly on the marker.content element that comes
+  // with the AdvancedMarker.
   useEffect(() => {
     if (!marker || !marker.content || numChildren > 0) return;
 

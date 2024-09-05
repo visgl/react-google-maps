@@ -14,6 +14,7 @@ import {useMapsEventListener} from '../hooks/use-maps-event-listener';
 import {setValueForStyles} from '../libraries/set-value-for-styles';
 import {useMapsLibrary} from '../hooks/use-maps-library';
 import {useDeepCompareEffect} from '../libraries/use-deep-compare-effect';
+import {isAdvancedMarker} from './advanced-marker';
 
 export type InfoWindowProps = Omit<
   google.maps.InfoWindowOptions,
@@ -177,35 +178,44 @@ export const InfoWindow = (props: PropsWithChildren<InfoWindowProps>) => {
     if (anchor) {
       openOptions.anchor = anchor;
 
-      const anchorElementDimensions = anchor.content.getBoundingClientRect();
+      // Only do the infowindow adjusting when dealing with an AdvancedMarker
+      if (isAdvancedMarker(anchor) && anchor.content instanceof Element) {
+        const {width: anchorWidth, height: anchorHeight} =
+          anchor.content.getBoundingClientRect() ?? {};
 
-      if (
-        anchorElementDimensions.width === 0 &&
-        anchorElementDimensions.height === 0
-      ) {
-        const anchorDomContent = anchor.content.firstChild;
+        // This checks whether or not the anchor has custom content with our own
+        // div wrapper. If not, that means we have a regular AdvancedMarker without any children.
+        // In that case we do not want to adjust the infowindow since it is all handled correctly
+        // by the Google Maps API.
+        if (anchorWidth === 0 && anchorHeight === 0) {
+          // We can safely typecast here since we control that element and we now that
+          // it is a div
+          const anchorDomContent = anchor.content.firstChild as Element;
+          const anchorDomWidth =
+            anchorDomContent?.getBoundingClientRect().width;
 
-        const anchorDomWidth = anchorDomContent.getBoundingClientRect().width;
+          const anchorComputedStyles = getComputedStyle(anchorDomContent);
+          const transformMatrix = new WebKitCSSMatrix(
+            anchorComputedStyles.transform
+          );
 
-        const anchorComputedStyles = getComputedStyle(anchorDomContent);
-        const matrix = new WebKitCSSMatrix(anchorComputedStyles.transform);
+          const translatePixelX = transformMatrix.m41;
+          const translatePixelY = transformMatrix.m42;
+          const scaleX = transformMatrix.m11;
+          const scaleY = transformMatrix.m22;
 
-        const translatePixelX = matrix.m41;
-        const translatePixelY = matrix.m42;
-        const scaleX = matrix.m11;
-        const scaleY = matrix.m22;
+          const pixelOffsetX = translatePixelX * scaleX + anchorDomWidth / 2; // center infowindow above marker
+          const pixelOffsetY = translatePixelY * scaleY;
 
-        const pixelOffsetX = translatePixelX * scaleX + anchorDomWidth / 2; // center infowindow above marker
-        const pixelOffsetY = translatePixelY * scaleY;
+          const opts: google.maps.InfoWindowOptions = infoWindowOptions;
 
-        const opts: google.maps.InfoWindowOptions = infoWindowOptions;
+          opts.pixelOffset = new google.maps.Size(
+            pixelOffset ? pixelOffset[0] + pixelOffsetX : pixelOffsetX,
+            pixelOffset ? pixelOffset[1] + pixelOffsetY : pixelOffsetY
+          );
 
-        opts.pixelOffset = new google.maps.Size(
-          pixelOffset ? pixelOffset[0] + pixelOffsetX : pixelOffsetX,
-          pixelOffset ? pixelOffset[1] + pixelOffsetY : pixelOffsetY
-        );
-
-        infoWindow.setOptions(opts);
+          infoWindow.setOptions(opts);
+        }
       }
     }
 
