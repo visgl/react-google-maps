@@ -9,10 +9,10 @@
   border: 1px solid #ffa700;
   border-radius: 4px;
   background: #0057e7;
+}
 
-  &.selected {
-    background: #22ccff;
-  }
+.custom-html-content.selected {
+  background: #22ccff;
 }
 
 .visualization-marker {
