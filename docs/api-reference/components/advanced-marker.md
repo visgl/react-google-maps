@@ -56,13 +56,13 @@ element.
 
 When custom html is specified, the marker will be positioned such that the
 `position` on the map is at the bottom center of the content-element.
-If you need it positioned differently, you can use css-transforms on
-the content element. For example, to have the anchor point in the top-left
-corner of the marker (the transform can also be applied via a css class and
-specified as `className`):
+If you need it positioned differently, you can use the [`anchorPoint`](#anchorpoint-advancedmarkeranchorpoint--string-string) property of the `AdvancedMarker`. For example, to have the anchor point in the top-left
+corner of the marker:
 
 ```tsx
-<AdvancedMarker position={...} style={{transform: 'translate(50%, 100%)'}}>
+import {AdvancedMarker, AdvancedMarkerAnchorPoint} from '@vis.gl/react-google-maps';
+
+<AdvancedMarker position={...} anchorPoint={AdvancedMarkerAnchorPoint.TOP_LEFT}>
     ...
 </AdvancedMarker>
 ```
