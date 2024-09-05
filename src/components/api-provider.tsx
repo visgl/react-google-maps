@@ -33,12 +33,27 @@ const DEFAULT_SOLUTION_CHANNEL = 'GMP_visgl_rgmlibrary_v1_default';
 export const APIProviderContext =
   React.createContext<APIProviderContextValue | null>(null);
 
-export type APIProviderProps = {
-  /**
-   * apiKey must be provided to load the Google Maps JavaScript API. To create an API key, see: https://developers.google.com/maps/documentation/javascript/get-api-key
-   * Part of:
-   */
-  apiKey: string;
+export type APIProviderKey =
+  | {
+      /**
+       * apiKey must be provided to load the Google Maps JavaScript API. To create an API key, see: https://developers.google.com/maps/documentation/javascript/get-api-key
+       * apiKey can not be provided when using clientId.
+       * Part of:
+       */
+      apiKey: string;
+      /**
+       * Client ID for enterprise customers. See: https://developers.google.com/maps/premium/overview#client_id
+       * apiKey can not be provided when using clientId.
+       * Part of:
+       */
+      clientId?: never;
+    }
+  | {
+      clientId: string;
+      apiKey?: never;
+    };
+
+export type APIProviderProps = APIProviderKey & {
   /**
    * A custom id to reference the script tag can be provided. The default is set to 'google-maps-api'
    * @default 'google-maps-api'
@@ -110,7 +125,14 @@ function useMapInstances() {
  * @param props
  */
 function useGoogleMapsApiLoader(props: APIProviderProps) {
-  const {onLoad, apiKey, version, libraries = [], ...otherApiParams} = props;
+  const {
+    onLoad,
+    apiKey,
+    clientId,
+    version,
+    libraries = [],
+    ...otherApiParams
+  } = props;
 
   const [status, setStatus] = useState<APILoadingStatus>(
     GoogleMapsApiLoader.loadingStatus
@@ -127,8 +149,8 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
 
   const librariesString = useMemo(() => libraries?.join(','), [libraries]);
   const serializedParams = useMemo(
-    () => JSON.stringify({apiKey, version, ...otherApiParams}),
-    [apiKey, version, otherApiParams]
+    () => JSON.stringify({apiKey, version, clientId, ...otherApiParams}),
+    [apiKey, version, clientId, otherApiParams]
   );
 
   const importLibrary: typeof google.maps.importLibrary = useCallback(
@@ -156,7 +178,9 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
     () => {
       (async () => {
         try {
-          const params: ApiParams = {key: apiKey, ...otherApiParams};
+          const params: ApiParams = apiKey
+            ? {key: apiKey, ...otherApiParams}
+            : {client: clientId, ...otherApiParams};
           if (version) params.v = version;
           if (librariesString?.length > 0) params.libraries = librariesString;
 
@@ -182,7 +206,7 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
       })();
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [apiKey, librariesString, serializedParams]
+    [apiKey, clientId, librariesString, serializedParams]
   );
 
   return {

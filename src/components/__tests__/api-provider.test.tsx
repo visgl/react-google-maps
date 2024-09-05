@@ -103,6 +103,13 @@ test("doesn't set solutionChannel when specified as empty string", () => {
   expect(actual).not.toHaveProperty('solutionChannel');
 });
 
+test('passes clientId to GoogleMapsAPILoader', () => {
+  render(<APIProvider clientId={'client-id'}></APIProvider>);
+
+  const actual = apiLoadSpy.mock.lastCall[0];
+  expect(actual).toMatchObject({client: 'client-id'});
+});
+
 test('renders inner components', async () => {
   const LoadingStatus = () => {
     const mapsLoaded = useApiIsLoaded();
