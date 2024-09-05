@@ -188,7 +188,7 @@ export const InfoWindow = (props: PropsWithChildren<InfoWindowProps>) => {
         // In that case we do not want to adjust the infowindow since it is all handled correctly
         // by the Google Maps API.
         if (anchorWidth === 0 && anchorHeight === 0) {
-          // We can safely typecast here since we control that element and we now that
+          // We can safely typecast here since we control that element and we know that
           // it is a div
           const anchorDomContent = anchor.content.firstChild as Element;
           const anchorDomWidth =
@@ -204,7 +204,8 @@ export const InfoWindow = (props: PropsWithChildren<InfoWindowProps>) => {
           const scaleX = transformMatrix.m11;
           const scaleY = transformMatrix.m22;
 
-          const pixelOffsetX = translatePixelX * scaleX + anchorDomWidth / 2; // center infowindow above marker
+          // center infowindow above marker
+          const pixelOffsetX = translatePixelX * scaleX + anchorDomWidth / 2;
           const pixelOffsetY = translatePixelY * scaleY;
 
           const opts: google.maps.InfoWindowOptions = infoWindowOptions;
