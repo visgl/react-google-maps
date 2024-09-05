@@ -1,6 +1,12 @@
 import {APILoadingStatus} from './api-loading-status';
 
-type ApiCommonParams = {
+export type ApiParams = (
+  | {key?: string; client?: never}
+  | {
+      key?: never;
+      client?: string;
+    }
+) & {
   v?: string;
   language?: string;
   region?: string;
@@ -8,13 +14,6 @@ type ApiCommonParams = {
   solutionChannel?: string;
   authReferrerPolicy?: string;
 };
-
-export type ApiParams =
-  | ({key?: string; client?: never} & ApiCommonParams)
-  | ({
-      key?: never;
-      client?: string;
-    } & ApiCommonParams);
 
 type LoadingStatusCallback = (status: APILoadingStatus) => void;
 
