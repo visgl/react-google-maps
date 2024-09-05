@@ -125,9 +125,19 @@ const App = () => {
               <React.Fragment key={id}>
                 <AdvancedMarkerWithRef
                   position={position}
-                  anchorPoint={AdvancedMarkerAnchorPoint.BOTTOM}
-                  className="custom-marker">
-                  <div className="custom-html-content"></div>
+                  zIndex={zIndex}
+                  anchorPoint={AdvancedMarkerAnchorPoint[anchorPoint]}
+                  className="custom-marker"
+                  style={{
+                    transform: `scale(${[hoverId, selectedId].includes(id) ? 1.4 : 1})`
+                  }}
+                  onMarkerClick={(
+                    marker: google.maps.marker.AdvancedMarkerElement
+                  ) => onMarkerClick(id, marker)}
+                  onMouseEnter={() => onMouseEnter(id)}
+                  onMouseLeave={onMouseLeave}>
+                  <div
+                    className={`custom-html-content ${selectedId === id ? 'selected' : ''}`}></div>
                 </AdvancedMarkerWithRef>
 
                 {/* anchor point visualization marker */}
