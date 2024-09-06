@@ -1,6 +1,7 @@
 {
   "extends": "./tsconfig.json",
-  "exclude": ["./examples"],
+  "include": ["src/**/*"],
+  "exclude": ["./examples/**/*"],
   "compilerOptions": {
     "noEmit": false
   }
