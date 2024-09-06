@@ -33,7 +33,8 @@ first render will in most cases have no effect, cause an error, or both.
 
 ## Usage
 
-The `APIProvider` only needs the [Google Maps Platform API Key][gmp-api-keys] to function. This has to be provided via the `apiKey` or `clientId` prop:
+The `APIProvider` only needs the [Google Maps Platform API Key][gmp-api-keys] to function.
+This has to be provided via the `apiKey` prop:
 
 ```tsx
 import React from 'react';
