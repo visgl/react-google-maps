@@ -137,10 +137,15 @@ export function useMapInstance(
         mapDiv = document.createElement('div');
         mapDiv.style.height = '100%';
         container.appendChild(mapDiv);
+
         map = new google.maps.Map(mapDiv, {
           ...mapOptions,
-          renderingType: renderingType as google.maps.RenderingType,
-          colorScheme: colorScheme as google.maps.ColorScheme
+          ...(renderingType
+            ? {renderingType: renderingType as google.maps.RenderingType}
+            : {}),
+          ...(colorScheme
+            ? {colorScheme: colorScheme as google.maps.ColorScheme}
+            : {})
         });
       }
 
