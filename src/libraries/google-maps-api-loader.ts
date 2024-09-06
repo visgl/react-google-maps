@@ -1,12 +1,7 @@
 import {APILoadingStatus} from './api-loading-status';
 
-export type ApiParams = (
-  | {key?: string; client?: never}
-  | {
-      key?: never;
-      client?: string;
-    }
-) & {
+export type ApiParams = {
+  key: string;
   v?: string;
   language?: string;
   region?: string;
