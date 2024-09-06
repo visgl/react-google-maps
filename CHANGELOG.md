@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.2](https://github.com/visgl/react-google-maps/compare/v1.1.1...v1.1.2) (2024-09-06)
+
+
+### Bug Fixes
+
+* **map:** undefined rendering-type and color-scheme ([#515](https://github.com/visgl/react-google-maps/issues/515)) ([c288d15](https://github.com/visgl/react-google-maps/commit/c288d15e2b4bfa5d952ae06c1f586888987f86c7))
+
 ## [1.1.1](https://github.com/visgl/react-google-maps/compare/v1.1.0...v1.1.1) (2024-09-02)
 
 
