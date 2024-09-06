@@ -33,8 +33,7 @@ first render will in most cases have no effect, cause an error, or both.
 
 ## Usage
 
-The `APIProvider` only needs the [Google Maps Platform API Key][gmp-api-keys] or [Client ID URL Authorization][gmp-client-id] to function.
-This has to be provided via the `apiKey` or `clientId` prop:
+The `APIProvider` only needs the [Google Maps Platform API Key][gmp-api-keys] to function. This has to be provided via the `apiKey` or `clientId` prop:
 
 ```tsx
 import React from 'react';
@@ -66,18 +65,6 @@ first render, later changes to the values will have no effect.
 #### `apiKey`: string (required, first-render only) {#apiKey}
 
 The API Key for the Maps JavaScript API.
-
-or
-
-#### `clientId`: string (required, first-render only) {#clientId}
-
-The Client ID for the Maps JavaScript API.
-
-:::note
-
-Request can not contain both `apiKey` and `clientId` at the same time.
-
-:::
 
 ### Optional
 
@@ -162,7 +149,6 @@ The following hooks are built to work with the `APIProvider` Component:
 
 [gmp-import-library]: https://developers.google.com/maps/documentation/javascript/load-maps-js-api#dynamic-library-import
 [gmp-api-keys]: https://developers.google.com/maps/documentation/javascript/get-api-key
-[gmp-client-id]: https://developers.google.com/maps/premium/authentication/client-id/url-authorization
 [gmp-params]: https://developers.google.com/maps/documentation/javascript/load-maps-js-api#required_parameters
 [gmp-api-version]: https://developers.google.com/maps/documentation/javascript/versions
 [gmp-libs]: https://developers.google.com/maps/documentation/javascript/libraries
