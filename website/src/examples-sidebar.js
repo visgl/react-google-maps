@@ -11,19 +11,20 @@ const sidebars = {
       collapsed: false,
       items: [
         'basic-map',
+        'change-map-styles',
         'markers-and-infowindows',
         'advanced-marker-interaction',
+        'map-control',
+        'multiple-maps',
         'marker-clustering',
         'custom-marker-clustering',
         'geometry',
         'heatmap',
         'drawing',
-        'change-map-styles',
         'autocomplete',
-        'map-control',
         'directions',
         'deckgl-overlay',
-        'multiple-maps',
+        'map-3d',
         'extended-component-library'
       ]
     }

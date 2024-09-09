@@ -110,7 +110,7 @@ describe('creating and updating map instance', () => {
 
     const [actualEl, actualOptions] = createMapSpy.mock.lastCall!;
     expect(screen.getByTestId('map')).toContainElement(actualEl);
-    expect(actualOptions).toMatchObject({
+    expect(actualOptions).toStrictEqual({
       center: {lat: 53.55, lng: 10.05},
       zoom: 12,
       mapId: 'mymapid'

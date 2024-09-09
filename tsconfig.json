@@ -17,6 +17,6 @@
       "@vis.gl/react-google-maps": ["./src"]
     }
   },
-  "include": ["src/**/*", "examples/**/*.ts", "examples/**/*.tsx"],
+  "include": ["src/**/*"],
   "exclude": ["./dist", "./node_modules"]
 }

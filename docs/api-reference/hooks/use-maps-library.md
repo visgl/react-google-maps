@@ -17,6 +17,14 @@ const MyComponent = () => {
 
   // ...
 };
+
+// Make sure you have wrapped the component tree with the APIProvider
+const App = () => (
+  <APIProvider apiKey={/* ... */}>
+    {/* ... */}
+    <MyComponent />
+  </APIProvider>
+);
 ```
 
 ## Signature
