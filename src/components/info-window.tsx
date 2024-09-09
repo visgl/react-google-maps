@@ -180,8 +180,8 @@ export const InfoWindow = (props: PropsWithChildren<InfoWindowProps>) => {
 
       // Only do the infowindow adjusting when dealing with an AdvancedMarker
       if (isAdvancedMarker(anchor) && anchor.content instanceof Element) {
-        const {width: anchorWidth, height: anchorHeight} =
-          anchor.content.getBoundingClientRect() ?? {};
+        const wrapperBcr = anchor.content.getBoundingClientRect() ?? {};
+        const {width: anchorWidth, height: anchorHeight} = wrapperBcr;
 
         // This checks whether or not the anchor has custom content with our own
         // div wrapper. If not, that means we have a regular AdvancedMarker without any children.
@@ -190,29 +190,20 @@ export const InfoWindow = (props: PropsWithChildren<InfoWindowProps>) => {
         if (anchorWidth === 0 && anchorHeight === 0) {
           // We can safely typecast here since we control that element and we know that
           // it is a div
-          const anchorDomContent = anchor.content.firstChild as Element;
-          const anchorDomWidth =
-            anchorDomContent?.getBoundingClientRect().width;
+          const anchorDomContent = anchor.content.firstElementChild as Element;
 
-          const anchorComputedStyles = getComputedStyle(anchorDomContent);
-          const transformMatrix = new WebKitCSSMatrix(
-            anchorComputedStyles.transform
-          );
-
-          const translatePixelX = transformMatrix.m41;
-          const translatePixelY = transformMatrix.m42;
-          const scaleX = transformMatrix.m11;
-          const scaleY = transformMatrix.m22;
+          const contentBcr = anchorDomContent?.getBoundingClientRect();
 
           // center infowindow above marker
-          const pixelOffsetX = translatePixelX * scaleX + anchorDomWidth / 2;
-          const pixelOffsetY = translatePixelY * scaleY;
+          const anchorOffsetX =
+            contentBcr.x - wrapperBcr.x + contentBcr.width / 2;
+          const anchorOffsetY = contentBcr.y - wrapperBcr.y;
 
           const opts: google.maps.InfoWindowOptions = infoWindowOptions;
 
           opts.pixelOffset = new google.maps.Size(
-            pixelOffset ? pixelOffset[0] + pixelOffsetX : pixelOffsetX,
-            pixelOffset ? pixelOffset[1] + pixelOffsetY : pixelOffsetY
+            pixelOffset ? pixelOffset[0] + anchorOffsetX : anchorOffsetX,
+            pixelOffset ? pixelOffset[1] + anchorOffsetY : anchorOffsetY
           );
 
           infoWindow.setOptions(opts);
