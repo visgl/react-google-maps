@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.3](https://github.com/visgl/react-google-maps/compare/v1.1.2...v1.1.3) (2024-09-08)
+
+
+### Bug Fixes
+
+* **types:** add types-reference to google.maps ([#520](https://github.com/visgl/react-google-maps/issues/520)) ([ed19636](https://github.com/visgl/react-google-maps/commit/ed196365821d6ac8b97baa1a900842990f1959f2)), closes [#519](https://github.com/visgl/react-google-maps/issues/519)
+
 ## [1.1.2](https://github.com/visgl/react-google-maps/compare/v1.1.1...v1.1.2) (2024-09-06)
 
 
