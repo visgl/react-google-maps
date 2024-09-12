@@ -1,0 +1,31 @@
+{
+  "uuid": "82e41887-0605-48b2-bb54-458eda8b7726",
+  "details": {
+    "property_type": "Townhouse",
+    "property_address": "5468 Becky Pass Apt. 215, Seattle, WA 98169",
+    "property_bedrooms": 1,
+    "property_bathrooms": 3,
+    "property_square_feet": "1404 sq ft",
+    "property_lot_size": "3710 sq ft",
+    "property_price": "$1075859",
+    "property_year_built": 2013,
+    "property_adjective": "modern",
+    "property_material": "grey Douglas Fir Wood and Concrete",
+    "property_garage": false,
+    "property_features": ["Basement"],
+    "property_accessibility": "-",
+    "property_eco_features": "-",
+    "property_has_view": false,
+    "local_amenities": "close to shopping",
+    "transport_access": "excellent bus connectivity",
+    "ambiance": "upcoming district",
+    "latitude": 47.532273,
+    "longitude": -122.342249,
+    "img_weather": "afternoon",
+    "listing_title": "Modern Townhouse Perfect for Urban Living",
+    "listing_description": "This 1404 sq ft, 1-bedroom, 3-bathroom modern townhouse offers a sophisticated exterior of grey Douglas Fir wood and concrete.",
+    "img_prompt_front": "4k photo of a modern Townhouse built in 2013 clad in grey Douglas Fir Wood and Concrete, in the Seattle area, taken from street level, natural afternoon lighting, 35mm lens. The image style should be realistic and high quality, similar to professional real estate photography. Additional building info: Modern Townhouse Perfect for Urban Living",
+    "img_prompt_back": "4k photo of the garden of a modern Townhouse built in 2013 clad in grey Douglas Fir Wood and Concrete, in the Seattle area, taken from building backside, natural afternoon lighting, 35mm lens. The image style should be realistic and high quality, similar to professional real estate photography. Additional building info: Modern Townhouse Perfect for Urban Living",
+    "img_prompt_bedroom": "4k photo of a bedroom in a modern Townhouse built in 2013, in the Seattle area, natural afternoon lighting, 35mm lens. The image style should be realistic and high quality, similar to professional real estate photography. Additional room info: , with bamboo flooring, brick walls, and plush comforter with tree motif. The window is dressed with minimal coverings and illuminated by table lamp with wooden base. Decorations include local art prints and it's furnished with a modern wood bed frame."
+  }
+}
