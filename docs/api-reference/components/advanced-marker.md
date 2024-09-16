@@ -56,13 +56,13 @@ element.
 
 When custom html is specified, the marker will be positioned such that the
 `position` on the map is at the bottom center of the content-element.
-If you need it positioned differently, you can use css-transforms on
-the content element. For example, to have the anchor point in the top-left
-corner of the marker (the transform can also be applied via a css class and
-specified as `className`):
+If you need it positioned differently, you can use the [`anchorPoint`](#anchorpoint-advancedmarkeranchorpoint--string-string) property of the `AdvancedMarker`. For example, to have the anchor point in the top-left
+corner of the marker:
 
 ```tsx
-<AdvancedMarker position={...} style={{transform: 'translate(50%, 100%)'}}>
+import {AdvancedMarker, AdvancedMarkerAnchorPoint} from '@vis.gl/react-google-maps';
+
+<AdvancedMarker position={...} anchorPoint={AdvancedMarkerAnchorPoint.TOP_LEFT}>
     ...
 </AdvancedMarker>
 ```
@@ -85,9 +85,9 @@ shown on the map.
 
 #### `className`: string
 
-A className to be added to the markers content-element. The content-element is 
-either an element that contains the custom HTML content or the DOM 
-representation of the `google.maps.marker.PinElement` when a Pin or an 
+A className to be added to the markers content-element. The content-element is
+either an element that contains the custom HTML content or the DOM
+representation of the `google.maps.marker.PinElement` when a Pin or an
 empty AdvancedMarker component is rendered.
 
 #### `style`: [CSSProperties][react-dev-styling]
@@ -107,7 +107,7 @@ provided value.
 #### `position`: [google.maps.LatLngLiteral][gmp-ll] | [google.maps.LatLngAltitudeLiteral][gmp-lla]
 
 The position of the marker. For maps with tilt enabled, an `AdvancedMarker`
-can also be placed at an altitude using the `{lat: number, lng: number, 
+can also be placed at an altitude using the `{lat: number, lng: number,
 altitude: number}` format.
 
 #### `zIndex`: number
@@ -161,6 +161,18 @@ import {AdvancedMarker, CollisionBehavior} from '@vis.gl/react-google-maps';
 See the documentation on [Marker Collision Management][gmp-collisions]
 for more information.
 
+#### `anchorPoint`: AdvancedMarkerAnchorPoint | [string, string]
+
+Defines the point on the marker which should align with the geo position of the marker.
+The default anchor point is `BOTTOM_CENTER`. That means for a standard map marker, the bottom of the pin is on the exact geo location of the marker
+
+Either use one of the predefined anchor points from the `AdvancedMarkerAnchorPoint` export
+or provide a string tuple in the form of `["xPosition", "yPosition"]`.
+
+The position is measured from the top-left corner and
+can be anything that can be consumed by a CSS translate() function.
+For example in percent `[10%, 90%]` or in pixels `[10px, 20px]`.
+
 ### Other Props
 
 #### `clickable`: boolean
@@ -191,6 +203,14 @@ specified in the position can't be dragged.
 #### `onClick`: (e: [google.maps.marker.AdvancedMarkerClickEvent][gmp-adv-marker-click-ev]) => void
 
 This event is fired when the marker is clicked.
+
+#### `onMouseEnter`: (e: [google.maps.MapMouseEvent['domEvent']][gmp-map-mouse-ev-dom]) => void
+
+This event is fired when the mouse enters the marker.
+
+#### `onMouseLeave`: (e: [google.maps.MapMouseEvent['domEvent']][gmp-map-mouse-ev-dom]) => void
+
+This event is fired when the mouse leaves the marker.
 
 #### `onDragStart`: (e: [google.maps.MapMouseEvent][gmp-map-mouse-ev]) => void
 
@@ -246,6 +266,7 @@ const MarkerWithInfoWindow = props => {
 [gmp-collisions]: https://developers.google.com/maps/documentation/javascript/examples/marker-collision-management
 [gmp-adv-marker-click-ev]: https://developers.google.com/maps/documentation/javascript/reference/advanced-markers#AdvancedMarkerClickEvent
 [gmp-map-mouse-ev]: https://developers.google.com/maps/documentation/javascript/reference/map#MapMouseEvent
+[gmp-map-mouse-ev-dom]: https://developers.google.com/maps/documentation/javascript/reference/map#MapMouseEvent.domEvent
 [adv-marker-src]: https://github.com/visgl/react-google-maps/tree/main/src/components/advanced-marker.tsx
 [react-portal]: https://react.dev/reference/react-dom/createPortal
 [react-dev-styling]: https://react.dev/reference/react-dom/components/common#applying-css-styles

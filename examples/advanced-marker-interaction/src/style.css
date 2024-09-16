@@ -1,0 +1,24 @@
+.custom-marker {
+  transition: all 200ms ease-in-out;
+}
+
+.custom-html-content {
+  width: 25px;
+  height: 25px;
+  transition: all 200ms ease-in-out;
+  border: 1px solid #ffa700;
+  border-radius: 4px;
+  background: #0057e7;
+}
+
+.custom-html-content.selected {
+  background: #22ccff;
+}
+
+.visualization-marker {
+  width: 8px;
+  height: 8px;
+  background: #ffa700;
+  border-radius: 50%;
+  border: 1px solid #0057e7;
+}
