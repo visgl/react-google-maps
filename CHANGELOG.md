@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/visgl/react-google-maps/compare/v1.1.3...v1.2.0) (2024-09-16)
+
+
+### Features
+
+* add hover events and anchor points to advanced markers ([#472](https://github.com/visgl/react-google-maps/issues/472)) ([cc4a397](https://github.com/visgl/react-google-maps/commit/cc4a397f0ed2af12a28c21db6afad3a946527131))
+
 ## [1.1.3](https://github.com/visgl/react-google-maps/compare/v1.1.2...v1.1.3) (2024-09-08)
 
 
