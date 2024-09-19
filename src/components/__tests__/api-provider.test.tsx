@@ -28,6 +28,8 @@ ContextSpyComponent.spy = jest.fn();
 
 let triggerMapsApiLoaded: () => void;
 
+let shouldRejectLoad = false; // Variable to control the behavior of the mock. Used in test for onError callback
+
 jest.mock('../../libraries/google-maps-api-loader', () => {
   class GoogleMapsApiLoader {
     static async load(
@@ -38,14 +40,19 @@ jest.mock('../../libraries/google-maps-api-loader', () => {
       onLoadingStatusChange(APILoadingStatus.LOADING);
 
       google.maps.importLibrary = importLibraryMock;
-      return new Promise(
-        resolve =>
-          (triggerMapsApiLoaded = () => {
+
+      return new Promise((resolve, reject) => {
+        if (shouldRejectLoad) {
+          reject(new Error('Test error: Failed to load Google Maps API'));
+        } else {
+          triggerMapsApiLoaded = () => {
             resolve();
             onLoadingStatusChange(APILoadingStatus.LOADED);
-          })
-      );
+          };
+        }
+      });
     }
+
     static unload() {
       apiUnloadSpy();
     }
@@ -57,6 +64,7 @@ jest.mock('../../libraries/google-maps-api-loader', () => {
 beforeEach(() => {
   initialize();
   jest.clearAllMocks();
+  shouldRejectLoad = false;
 });
 
 test('passes parameters to GoogleMapsAPILoader', () => {
@@ -177,4 +185,18 @@ test('map instance management: add, access and remove', async () => {
 
   actualContext = contextSpy.mock.lastCall[0];
   expect(actualContext.mapInstances).toEqual({'map-id-2': map2});
+});
+
+test('calls onError when loading the Google Maps JavaScript API fails', async () => {
+  const onErrorMock = jest.fn();
+  shouldRejectLoad = true;
+
+  render(<APIProvider apiKey={'apikey'} onError={onErrorMock}></APIProvider>);
+
+  await act(async () => {});
+
+  expect(onErrorMock).toHaveBeenCalled();
+  expect(onErrorMock).toHaveBeenCalledWith(
+    new Error('Test error: Failed to load Google Maps API')
+  );
 });
