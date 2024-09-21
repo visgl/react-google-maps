@@ -48,7 +48,7 @@ function App() {
 
   return (
     <APIProvider apiKey={'YOUR API KEY HERE'}>
-      <Map defaultCenter={position} defaultZoom={10} mapId='DEMO_MAP_ID'>
+      <Map defaultCenter={position} defaultZoom={10} mapId="DEMO_MAP_ID">
         <AdvancedMarker position={position} />
       </Map>
     </APIProvider>
@@ -84,7 +84,7 @@ const MyComponent = () => {
   const geocodingLib = useMapsLibrary('geocoding');
   const geocoder = useMemo(
     () => geocodingLib && new geocodingLib.Geocoder(),
-    [geocodingLib],
+    [geocodingLib]
   );
 
   useEffect(() => {
@@ -102,7 +102,7 @@ const App = () => {
       <MyComponent />
     </APIProvider>
   );
-}
+};
 ```
 
 ## Examples
@@ -110,29 +110,45 @@ const App = () => {
 Explore our [examples directory on GitHub](./examples) or the
 [examples on our website][examples] for full implementation examples.
 
+## Supported Browsers
+
+Being a library built around the Google Maps JavaScript API, we follow the
+same browser-support policy as the Google Maps Team,
+[available here][gmp-browsersupport].
+Generally, the last two versions of the major browsers are officially supported.
+
+It is not unlikely that browsers even far outside the given
+range will still work. We try our best to support as many browsers and
+versions as reasonably possible, but we won't actively investigate issues
+related to outdated browser versions.
+
+However, if you can suggest small changes that could be made to even
+increase that range, we will be happy to include them, as long as they don't
+negatively affect the supported browsers.
+
 ## Terms of Service
 
-`@vis.gl/react-google-maps` uses Google Maps Platform services. Use of Google 
-Maps Platform services through this library is subject to the 
+`@vis.gl/react-google-maps` uses Google Maps Platform services. Use of Google
+Maps Platform services through this library is subject to the
 [Google Maps Platform Terms of Service][gmp-tos].
 
-This library is not a Google Maps Platform Core Service. 
-Therefore, the Google Maps Platform Terms of Service (e.g., Technical 
-Support Services, Service Level Agreements, and Deprecation Policy) 
+This library is not a Google Maps Platform Core Service.
+Therefore, the Google Maps Platform Terms of Service (e.g., Technical
+Support Services, Service Level Agreements, and Deprecation Policy)
 do not apply to this library.
 
-## Support
+## Help and Support
 
-This library is offered via an open source license. It is not governed by the 
-Google Maps Platform [Support Technical Support Services Guidelines][gmp-tssg], 
-the [SLA][gmp-sla], or the [Deprecation Policy][gmp-dp] (however, any Google 
-Maps Platform services used by this library remain subject to the Google Maps 
+This library is offered via an open source license. It is not governed by the
+Google Maps Platform [Technical Support Services Guidelines][gmp-tssg],
+the [SLA][gmp-sla], or the [Deprecation Policy][gmp-dp] (however, any Google
+Maps Platform services used by this library remain subject to the Google Maps
 Platform Terms of Service).
 
-If you find a bug, or have a feature request, please [file an issue][rgm-issues]
-on GitHub. If you would like to get answers to technical questions from 
-other Google Maps Platform developers, feel free to open a thread in the 
-[discussions section on GitHub][rgm-discuss] or ask a question through one of 
+If you find a bug or have a feature request, please [file an issue][rgm-issues]
+on GitHub. If you would like to get answers to technical questions from
+other Google Maps Platform developers, feel free to open a thread in the
+[discussions section on GitHub][rgm-discuss] or ask a question through one of
 our [developer community channels][gmp-community].
 
 If you'd like to contribute, please check the [Contributing guide][rgm-contrib].
@@ -159,4 +175,4 @@ You can also discuss this library on [our Discord server][gmp-discord].
 [rgm-contrib]: https://visgl.github.io/react-google-maps/docs/contributing
 [gmp-community]: https://developers.google.com/maps/developer-community
 [gmp-discord]: https://discord.gg/f4hvx8Rp2q
-
+[gmp-browsersupport]: https://developers.google.com/maps/documentation/javascript/browsersupport
