@@ -121,9 +121,7 @@ Read more in the [documentation][gmp-solutions-usage].
 a callback that is called once the Maps JavaScript
 API finished loading.
 
-### Error Handling
-
-#### `onError`: (error: Error) => void {#onError}
+#### `onError`: (error: unknown) => void {#onError}
 
 a callback that is called if there is an error loading
 the Google Maps JavaScript API.

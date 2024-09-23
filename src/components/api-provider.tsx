@@ -82,7 +82,7 @@ export type APIProviderProps = {
   /**
    * A function that will be called if there was an error when loading the Google Maps JavaScript API.
    */
-  onError?: (error: Error) => void;
+  onError?: (error: unknown) => void;
 };
 
 /**
@@ -185,7 +185,7 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
             onLoad();
           }
         } catch (error) {
-          if (onError && error instanceof Error) {
+          if (onError) {
             onError(error);
           } else {
             console.error(
