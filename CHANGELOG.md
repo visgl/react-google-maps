@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.3.0](https://github.com/visgl/react-google-maps/compare/v1.2.0...v1.3.0) (2024-09-30)
+
+
+### Features
+
+* add new `onError` prop for api provider ([#541](https://github.com/visgl/react-google-maps/issues/541)) ([bbe5709](https://github.com/visgl/react-google-maps/commit/bbe5709e1420e7260234b11a7749ed9b7804e9b7))
+
+
+### Bug Fixes
+
+* avoid unnecessary state-updates in api-provider ([#551](https://github.com/visgl/react-google-maps/issues/551)) ([46068c9](https://github.com/visgl/react-google-maps/commit/46068c9b3f3e930d464e2314181e2f6ed32a9aa7))
+
 ## [1.2.0](https://github.com/visgl/react-google-maps/compare/v1.1.3...v1.2.0) (2024-09-16)
 
 
