@@ -79,6 +79,10 @@ export type APIProviderProps = {
    * A function that can be used to execute code after the Google Maps JavaScript API has been loaded.
    */
   onLoad?: () => void;
+  /**
+   * A function that will be called if there was an error when loading the Google Maps JavaScript API.
+   */
+  onError?: (error: unknown) => void;
 };
 
 /**
@@ -110,7 +114,14 @@ function useMapInstances() {
  * @param props
  */
 function useGoogleMapsApiLoader(props: APIProviderProps) {
-  const {onLoad, apiKey, version, libraries = [], ...otherApiParams} = props;
+  const {
+    onLoad,
+    onError,
+    apiKey,
+    version,
+    libraries = [],
+    ...otherApiParams
+  } = props;
 
   const [status, setStatus] = useState<APILoadingStatus>(
     GoogleMapsApiLoader.loadingStatus
@@ -176,10 +187,14 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
             onLoad();
           }
         } catch (error) {
-          console.error(
-            '<ApiProvider> failed to load the Google Maps JavaScript API',
-            error
-          );
+          if (onError) {
+            onError(error);
+          } else {
+            console.error(
+              '<ApiProvider> failed to load the Google Maps JavaScript API',
+              error
+            );
+          }
         }
       })();
     },
