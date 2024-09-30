@@ -120,7 +120,9 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
       loadedLibraries: LoadedLibraries,
       action: {name: keyof LoadedLibraries; value: LoadedLibraries[string]}
     ) => {
-      return {...loadedLibraries, [action.name]: action.value};
+      return loadedLibraries[action.name]
+        ? loadedLibraries
+        : {...loadedLibraries, [action.name]: action.value};
     },
     {}
   );
