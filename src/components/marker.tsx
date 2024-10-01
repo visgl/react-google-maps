@@ -50,7 +50,7 @@ function useMarker(props: MarkerProps) {
       return;
     }
 
-    const newMarker = new google.maps.Marker(markerOptions);
+    const newMarker = new google.maps.marker.AdvancedMarkerElement(markerOptions);
     newMarker.setMap(map);
     setMarker(newMarker);
 
