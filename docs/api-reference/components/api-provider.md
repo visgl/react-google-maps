@@ -105,12 +105,12 @@ A list of [libraries][gmp-libs] to load immediately
 
 #### `solutionChannel`: string
 
-To help Google to better understand types of usage of the Google Maps 
-JavaScript API, the query parameter `solution_channel` can be set when 
-loading the API. 
+To help Google to better understand types of usage of the Google Maps
+JavaScript API, the query parameter `solution_channel` can be set when
+loading the API.
 
-The `@vis.gl/react-google-maps` library will by default set 
-this to a generic value unique to this library (`GMP_VISGL_react`). You may 
+The `@vis.gl/react-google-maps` library will by default set
+this to a generic value unique to this library (`GMP_VISGL_react`). You may
 opt out at any time by setting this prop to an empty string.
 Read more in the [documentation][gmp-solutions-usage].
 
@@ -120,6 +120,11 @@ Read more in the [documentation][gmp-solutions-usage].
 
 a callback that is called once the Maps JavaScript
 API finished loading.
+
+#### `onError`: (error: unknown) => void {#onError}
+
+a callback that is called if there is an error loading
+the Google Maps JavaScript API.
 
 ## Context
 
