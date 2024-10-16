@@ -1,0 +1,49 @@
+/* ---- fonts ---- */
+@import url('https://fonts.googleapis.com/css?family=Rufina:wght@400;700|Raleway:wght@0,100,700|Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0');
+
+:root {
+  /* real estate */
+  --estate-yellow: #b88b2e;
+  --estate-yellow-light: #ffe29c;
+  --estate-green-dark: #12271e;
+  --estate-green-light: #18342a;
+  --estate-01-grey-mid: #f4f4f4;
+  --estate-grey-main: #404040;
+  /* basic colors */
+  --background-color-primary: #fff;
+  /* fonts */
+  --font-family-rufina: 'Rufina', serif;
+  --font-family-raleway: 'Raleway', sans-serif;
+}
+
+/* ---- basics ---- */
+
+html *,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  height: 100%;
+  font-size: 16px;
+  display: flex;
+}
+
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  font-feature-settings: 'liga';
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+}
