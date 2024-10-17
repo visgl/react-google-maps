@@ -58,7 +58,10 @@ export const Pin = (props: PropsWithChildren<PinProps>) => {
     }
 
     // Set content of Advanced Marker View to the Pin View element
-    const markerContent = advancedMarker.content?.firstChild;
+    // Here we are selecting the anchor container.
+    // The hierarchy is as follows:
+    // "advancedMarker.content" (from google) -> "anchoring reset div" -> "anchor container"
+    const markerContent = advancedMarker.content?.firstChild?.firstChild;
 
     while (markerContent?.firstChild) {
       markerContent.removeChild(markerContent.firstChild);

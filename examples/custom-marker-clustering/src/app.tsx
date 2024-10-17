@@ -27,7 +27,7 @@ const App = () => {
     features: Feature<Point>[];
   } | null>(null);
 
-  const hamdleInfoWindowClose = useCallback(
+  const handleInfoWindowClose = useCallback(
     () => setInfowindowData(null),
     [setInfowindowData]
   );
@@ -40,6 +40,7 @@ const App = () => {
         defaultZoom={3}
         gestureHandling={'greedy'}
         disableDefaultUI
+        onClick={() => setInfowindowData(null)}
         className={'custom-marker-clustering-map'}>
         {geojson && (
           <ClusteredMarkers
@@ -51,7 +52,7 @@ const App = () => {
 
         {infowindowData && (
           <InfoWindow
-            onClose={hamdleInfoWindowClose}
+            onCloseClick={handleInfoWindowClose}
             anchor={infowindowData.anchor}>
             <InfoWindowContent features={infowindowData.features} />
           </InfoWindow>

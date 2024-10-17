@@ -1,5 +1,9 @@
 import React, {useCallback} from 'react';
-import {AdvancedMarker, useAdvancedMarkerRef} from '@vis.gl/react-google-maps';
+import {
+  AdvancedMarker,
+  AdvancedMarkerAnchorPoint,
+  useAdvancedMarkerRef
+} from '@vis.gl/react-google-maps';
 import {CastleSvg} from './castle-svg';
 
 type TreeClusterMarkerProps = {
@@ -33,7 +37,8 @@ export const FeaturesClusterMarker = ({
       zIndex={size}
       onClick={handleClick}
       className={'marker cluster'}
-      style={{width: markerSize, height: markerSize}}>
+      style={{width: markerSize, height: markerSize}}
+      anchorPoint={AdvancedMarkerAnchorPoint.CENTER}>
       <CastleSvg />
       <span>{sizeAsText}</span>
     </AdvancedMarker>

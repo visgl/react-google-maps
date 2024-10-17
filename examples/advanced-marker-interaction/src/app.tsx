@@ -9,7 +9,8 @@ import {
   InfoWindow,
   Map,
   Pin,
-  useAdvancedMarkerRef
+  useAdvancedMarkerRef,
+  CollisionBehavior
 } from '@vis.gl/react-google-maps';
 
 import {getData} from './data';
@@ -108,7 +109,8 @@ const App = () => {
                 zIndex={zIndex}
                 className="custom-marker"
                 style={{
-                  transform: `scale(${[hoverId, selectedId].includes(id) ? 1.4 : 1})`
+                  transform: `scale(${[hoverId, selectedId].includes(id) ? 1.3 : 1})`,
+                  transformOrigin: AdvancedMarkerAnchorPoint['BOTTOM'].join(' ')
                 }}
                 position={position}>
                 <Pin
@@ -129,12 +131,17 @@ const App = () => {
                   anchorPoint={AdvancedMarkerAnchorPoint[anchorPoint]}
                   className="custom-marker"
                   style={{
-                    transform: `scale(${[hoverId, selectedId].includes(id) ? 1.4 : 1})`
+                    transform: `scale(${[hoverId, selectedId].includes(id) ? 1.3 : 1})`,
+                    transformOrigin:
+                      AdvancedMarkerAnchorPoint[anchorPoint].join(' ')
                   }}
                   onMarkerClick={(
                     marker: google.maps.marker.AdvancedMarkerElement
                   ) => onMarkerClick(id, marker)}
                   onMouseEnter={() => onMouseEnter(id)}
+                  collisionBehavior={
+                    CollisionBehavior.OPTIONAL_AND_HIDES_LOWER_PRIORITY
+                  }
                   onMouseLeave={onMouseLeave}>
                   <div
                     className={`custom-html-content ${selectedId === id ? 'selected' : ''}`}></div>
@@ -145,7 +152,7 @@ const App = () => {
                   onMarkerClick={(
                     marker: google.maps.marker.AdvancedMarkerElement
                   ) => onMarkerClick(id, marker)}
-                  zIndex={zIndex}
+                  zIndex={zIndex + 1}
                   onMouseEnter={() => onMouseEnter(id)}
                   onMouseLeave={onMouseLeave}
                   anchorPoint={AdvancedMarkerAnchorPoint.CENTER}
@@ -160,6 +167,7 @@ const App = () => {
         {infoWindowShown && selectedMarker && (
           <InfoWindow
             anchor={selectedMarker}
+            pixelOffset={[0, -2]}
             onCloseClick={handleInfowindowCloseClick}>
             <h2>Marker {selectedId}</h2>
             <p>Some arbitrary html to be rendered into the InfoWindow.</p>
