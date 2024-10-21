@@ -148,8 +148,10 @@ describe('map and marker-library loaded', () => {
       .get(google.maps.marker.AdvancedMarkerElement)
       .at(0) as google.maps.marker.AdvancedMarkerElement;
 
-    expect(marker.content?.firstChild).toHaveClass('classname-test');
-    expect(marker.content?.firstChild).toHaveStyle('width: 200px');
+    expect(marker.content?.firstChild?.firstChild).toHaveClass(
+      'classname-test'
+    );
+    expect(marker.content?.firstChild?.firstChild).toHaveStyle('width: 200px');
     expect(
       queryByTestId(marker.content as HTMLElement, 'marker-content')
     ).toBeTruthy();
