@@ -103,6 +103,10 @@ when authorizing requests from the Maps JavaScript API.
 A list of [libraries][gmp-libs] to load immediately
 (libraries can also be loaded later with the `useMapsLibrary` hook).
 
+#### `channel`: number
+
+To track usage of Google Maps JavaScript API via numeric channels. The only acceptable channel values are numbers from 0-999. Read more in the [documentation][gmp-channel-usage].
+
 #### `solutionChannel`: string
 
 To help Google to better understand types of usage of the Google Maps
@@ -163,3 +167,4 @@ The following hooks are built to work with the `APIProvider` Component:
 [gmp-solutions-usage]: https://developers.google.com/maps/reporting-and-monitoring/reporting#solutions-usage
 [api-provider-src]: https://github.com/visgl/react-google-maps/blob/main/src/components/api-provider.tsx
 [rgm-new-issue]: https://github.com/visgl/react-google-maps/issues/new/choose
+[gmp-channel-usage]: https://developers.google.com/maps/reporting-and-monitoring/reporting#usage-tracking-per-channel

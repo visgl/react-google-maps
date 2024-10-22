@@ -6,6 +6,7 @@ export type ApiParams = {
   language?: string;
   region?: string;
   libraries?: string;
+  channel?: string;
   solutionChannel?: string;
   authReferrerPolicy?: string;
 };
