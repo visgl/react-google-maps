@@ -74,6 +74,12 @@ export type APIProviderProps = {
    * empty string. Read more in the
    * [documentation](https://developers.google.com/maps/reporting-and-monitoring/reporting#solutions-usage).
    */
+  channel?: number;
+  /**
+   * To track usage of Google Maps JavaScript API via numeric channels. The only acceptable channel values are numbers from 0-999.
+   * Read more in the
+   * [documentation](https://developers.google.com/maps/reporting-and-monitoring/reporting#usage-tracking-per-channel)
+   */
   solutionChannel?: string;
   /**
    * A function that can be used to execute code after the Google Maps JavaScript API has been loaded.
@@ -172,6 +178,13 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
           const params: ApiParams = {key: apiKey, ...otherApiParams};
           if (version) params.v = version;
           if (librariesString?.length > 0) params.libraries = librariesString;
+
+          if (
+            params.channel === undefined ||
+            params.channel < 0 ||
+            params.channel > 999
+          )
+            delete params.channel;
 
           if (params.solutionChannel === undefined)
             params.solutionChannel = DEFAULT_SOLUTION_CHANNEL;

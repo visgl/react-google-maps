@@ -6,6 +6,7 @@ export type ApiParams = {
   language?: string;
   region?: string;
   libraries?: string;
+  channel?: number;
   solutionChannel?: string;
   authReferrerPolicy?: string;
 };
@@ -139,7 +140,7 @@ export class GoogleMapsApiLoader {
             /[A-Z]/g,
             t => '_' + t[0].toLowerCase()
           );
-          urlParams.set(urlParamName, value);
+          urlParams.set(urlParamName, String(value));
         }
         urlParams.set('loading', 'async');
         urlParams.set('callback', '__googleMapsCallback__');
