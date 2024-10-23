@@ -32,7 +32,7 @@ export function isAdvancedMarker(
 }
 
 function isElementNode(node: Node): node is HTMLElement {
-  return (node as Node).nodeType === Node.ELEMENT_NODE;
+  return node.nodeType === Node.ELEMENT_NODE;
 }
 
 /**
