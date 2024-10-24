@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.4.0](https://github.com/visgl/react-google-maps/compare/v1.3.0...v1.4.0) (2024-10-24)
+
+
+### Features
+
+* add `channel` prop to APIProvider ([#584](https://github.com/visgl/react-google-maps/issues/584)) ([6aa38e5](https://github.com/visgl/react-google-maps/commit/6aa38e52a2cf0cc856167489b879871622c74ea8))
+
+
+### Bug Fixes
+
+* adjust advanced marker markup to fix anchoring & collision behavior ([#577](https://github.com/visgl/react-google-maps/issues/577)) ([97a98b2](https://github.com/visgl/react-google-maps/commit/97a98b2a04b896a892351a178fecafa665c03113))
+
 ## [1.3.0](https://github.com/visgl/react-google-maps/compare/v1.2.0...v1.3.0) (2024-09-30)
 
 
