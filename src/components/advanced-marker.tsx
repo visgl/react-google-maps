@@ -31,6 +31,10 @@ export function isAdvancedMarker(
   );
 }
 
+function isElementNode(node: Node): node is HTMLElement {
+  return node.nodeType === Node.ELEMENT_NODE;
+}
+
 /**
  * Copy of the `google.maps.CollisionBehavior` constants.
  * They have to be duplicated here since we can't wait for the maps API to load to be able to use them.
@@ -48,19 +52,19 @@ export const AdvancedMarkerContext =
 
 // [xPosition, yPosition] when the top left corner is [0, 0]
 export const AdvancedMarkerAnchorPoint = {
-  TOP_LEFT: ['0', '0'],
-  TOP_CENTER: ['50%', '0'],
-  TOP: ['50%', '0'],
-  TOP_RIGHT: ['100%', '0'],
-  LEFT_CENTER: ['0', '50%'],
-  LEFT_TOP: ['0', '0'],
-  LEFT: ['0', '50%'],
-  LEFT_BOTTOM: ['0', '100%'],
-  RIGHT_TOP: ['100%', '0'],
+  TOP_LEFT: ['0%', '0%'],
+  TOP_CENTER: ['50%', '0%'],
+  TOP: ['50%', '0%'],
+  TOP_RIGHT: ['100%', '0%'],
+  LEFT_CENTER: ['0%', '50%'],
+  LEFT_TOP: ['0%', '0%'],
+  LEFT: ['0%', '50%'],
+  LEFT_BOTTOM: ['0%', '100%'],
+  RIGHT_TOP: ['100%', '0%'],
   RIGHT: ['100%', '50%'],
   RIGHT_CENTER: ['100%', '50%'],
   RIGHT_BOTTOM: ['100%', '100%'],
-  BOTTOM_LEFT: ['0', '100%'],
+  BOTTOM_LEFT: ['0%', '100%'],
   BOTTOM_CENTER: ['50%', '100%'],
   BOTTOM: ['50%', '100%'],
   BOTTOM_RIGHT: ['100%', '100%'],
@@ -124,27 +128,24 @@ const MarkerContent = ({
   const [xTranslation, yTranslation] =
     anchorPoint ?? AdvancedMarkerAnchorPoint['BOTTOM'];
 
-  const {transform: userTransform, ...restStyles} = styles ?? {};
+  // The "translate(50%, 100%)" is here to counter and reset the default anchoring of the advanced marker element
+  // that comes from the api
+  const transformStyle = `translate(50%, 100%) translate(-${xTranslation}, -${yTranslation})`;
 
-  let transformStyle = `translate(-${xTranslation}, -${yTranslation})`;
-
-  // preserve extra transform styles that were set by the user
-  if (userTransform) {
-    transformStyle += ` ${userTransform}`;
-  }
   return (
-    <div
-      className={className}
-      style={{
-        width: 'fit-content',
-        transformOrigin: `${xTranslation} ${yTranslation}`,
-        transform: transformStyle,
-        ...restStyles
-      }}>
-      {children}
+    // anchoring container
+    <div style={{transform: transformStyle}}>
+      {/* AdvancedMarker div that user can give styles and classes */}
+      <div className={className} style={styles}>
+        {children}
+      </div>
     </div>
   );
 };
+
+export type CustomMarkerContent =
+  | (HTMLDivElement & {isCustomMarker?: boolean})
+  | null;
 
 export type AdvancedMarkerRef = google.maps.marker.AdvancedMarkerElement | null;
 function useAdvancedMarker(props: AdvancedMarkerProps) {
@@ -185,11 +186,14 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
     setMarker(newMarker);
 
     // create the container for marker content if there are children
-    let contentElement: HTMLDivElement | null = null;
+    let contentElement: CustomMarkerContent = null;
     if (numChildren > 0) {
       contentElement = document.createElement('div');
-      contentElement.style.width = '0';
-      contentElement.style.height = '0';
+
+      // We need some kind of flag to identify the custom marker content
+      // in the infowindow component. Choosing a custom property instead of a className
+      // to not encourage users to style the marker content directly.
+      contentElement.isCustomMarker = true;
 
       newMarker.content = contentElement;
       setContentContainer(contentElement);
@@ -233,15 +237,31 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
     else marker.gmpDraggable = false;
   }, [marker, draggable, onDrag, onDragEnd, onDragStart]);
 
-  // set gmpClickable from props (when unspecified, it's true if the onClick event
-  // callback is specified)
+  // set gmpClickable from props (when unspecified, it's true if the onClick or one of
+  // the hover events callbacks are specified)
   useEffect(() => {
     if (!marker) return;
 
-    if (clickable !== undefined) marker.gmpClickable = clickable;
-    else if (onClick) marker.gmpClickable = true;
-    else marker.gmpClickable = false;
-  }, [marker, clickable, onClick]);
+    const gmpClickable =
+      clickable !== undefined ||
+      Boolean(onClick) ||
+      Boolean(onMouseEnter) ||
+      Boolean(onMouseLeave);
+
+    // gmpClickable is only available in beta version of the
+    // maps api (as of 2024-10-10)
+    marker.gmpClickable = gmpClickable;
+
+    // enable pointer events for the markers with custom content
+    if (gmpClickable && marker?.content && isElementNode(marker.content)) {
+      marker.content.style.pointerEvents = 'none';
+
+      if (marker.content.firstElementChild) {
+        (marker.content.firstElementChild as HTMLElement).style.pointerEvents =
+          'all';
+      }
+    }
+  }, [marker, clickable, onClick, onMouseEnter, onMouseLeave]);
 
   useMapsEventListener(marker, 'click', onClick);
   useMapsEventListener(marker, 'drag', onDrag);
