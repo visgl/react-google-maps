@@ -39,6 +39,16 @@ function ControlPanel(props: Props) {
           })}
         </select>
       </p>
+      <p>
+        The blue markers also have the{' '}
+        <a
+          href="https://developers.google.com/maps/documentation/javascript/reference/advanced-markers#AdvancedMarkerElement.collisionBehavior"
+          target="_blank">
+          collision detection
+        </a>{' '}
+        feature turned on for demonstration purposes.
+      </p>
+
       <div className="links">
         <a
           href="https://codesandbox.io/s/github/visgl/react-google-maps/tree/main/examples/advanced-marker-interaction"

@@ -74,11 +74,21 @@ export type APIProviderProps = {
    * empty string. Read more in the
    * [documentation](https://developers.google.com/maps/reporting-and-monitoring/reporting#solutions-usage).
    */
+  channel?: number;
+  /**
+   * To track usage of Google Maps JavaScript API via numeric channels. The only acceptable channel values are numbers from 0-999.
+   * Read more in the
+   * [documentation](https://developers.google.com/maps/reporting-and-monitoring/reporting#usage-tracking-per-channel)
+   */
   solutionChannel?: string;
   /**
    * A function that can be used to execute code after the Google Maps JavaScript API has been loaded.
    */
   onLoad?: () => void;
+  /**
+   * A function that will be called if there was an error when loading the Google Maps JavaScript API.
+   */
+  onError?: (error: unknown) => void;
 };
 
 /**
@@ -110,7 +120,14 @@ function useMapInstances() {
  * @param props
  */
 function useGoogleMapsApiLoader(props: APIProviderProps) {
-  const {onLoad, apiKey, version, libraries = [], ...otherApiParams} = props;
+  const {
+    onLoad,
+    onError,
+    apiKey,
+    version,
+    libraries = [],
+    ...otherApiParams
+  } = props;
 
   const [status, setStatus] = useState<APILoadingStatus>(
     GoogleMapsApiLoader.loadingStatus
@@ -120,7 +137,9 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
       loadedLibraries: LoadedLibraries,
       action: {name: keyof LoadedLibraries; value: LoadedLibraries[string]}
     ) => {
-      return {...loadedLibraries, [action.name]: action.value};
+      return loadedLibraries[action.name]
+        ? loadedLibraries
+        : {...loadedLibraries, [action.name]: action.value};
     },
     {}
   );
@@ -160,6 +179,13 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
           if (version) params.v = version;
           if (librariesString?.length > 0) params.libraries = librariesString;
 
+          if (
+            params.channel === undefined ||
+            params.channel < 0 ||
+            params.channel > 999
+          )
+            delete params.channel;
+
           if (params.solutionChannel === undefined)
             params.solutionChannel = DEFAULT_SOLUTION_CHANNEL;
           else if (params.solutionChannel === '') delete params.solutionChannel;
@@ -174,10 +200,14 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
             onLoad();
           }
         } catch (error) {
-          console.error(
-            '<ApiProvider> failed to load the Google Maps JavaScript API',
-            error
-          );
+          if (onError) {
+            onError(error);
+          } else {
+            console.error(
+              '<ApiProvider> failed to load the Google Maps JavaScript API',
+              error
+            );
+          }
         }
       })();
     },

@@ -27,6 +27,7 @@ const ContextSpyComponent = () => {
 ContextSpyComponent.spy = jest.fn();
 
 let triggerMapsApiLoaded: () => void;
+let triggerLoadingFailed: () => void;
 
 jest.mock('../../libraries/google-maps-api-loader', () => {
   class GoogleMapsApiLoader {
@@ -38,14 +39,20 @@ jest.mock('../../libraries/google-maps-api-loader', () => {
       onLoadingStatusChange(APILoadingStatus.LOADING);
 
       google.maps.importLibrary = importLibraryMock;
-      return new Promise(
-        resolve =>
-          (triggerMapsApiLoaded = () => {
-            resolve();
-            onLoadingStatusChange(APILoadingStatus.LOADED);
-          })
-      );
+
+      return new Promise((resolve, reject) => {
+        triggerLoadingFailed = () => {
+          reject();
+          onLoadingStatusChange(APILoadingStatus.FAILED);
+        };
+
+        triggerMapsApiLoaded = () => {
+          resolve();
+          onLoadingStatusChange(APILoadingStatus.LOADED);
+        };
+      });
     }
+
     static unload() {
       apiUnloadSpy();
     }
@@ -177,4 +184,14 @@ test('map instance management: add, access and remove', async () => {
 
   actualContext = contextSpy.mock.lastCall[0];
   expect(actualContext.mapInstances).toEqual({'map-id-2': map2});
+});
+
+test('calls onError when loading the Google Maps JavaScript API fails', async () => {
+  const onErrorMock = jest.fn();
+
+  render(<APIProvider apiKey={'apikey'} onError={onErrorMock}></APIProvider>);
+
+  await act(() => triggerLoadingFailed());
+
+  expect(onErrorMock).toHaveBeenCalled();
 });
