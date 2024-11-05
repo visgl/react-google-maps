@@ -1,5 +1,23 @@
 .real-estate-marker {
   cursor: pointer;
+  position: relative;
+  transform: translateY(-5px);
+  transition: all 0.2s ease-in-out;
+
+  .tip {
+    position: absolute;
+    bottom: 0;
+    width: 0;
+    height: 0;
+    border: 8px solid var(--estate-green-dark);
+    border-radius: 0;
+    border-bottom-right-radius: 5px;
+    z-index: -1;
+    left: 50%;
+
+    transform: translateY(22%) translateX(-50%) rotate(45deg);
+    transition: all 0.2s ease-in-out;
+  }
 }
 
 .custom-pin {
@@ -10,9 +28,6 @@
   padding: 4px;
   background-color: var(--estate-green-dark);
   border-radius: 50%;
-  box-shadow:
-    0px 1px 2px 0px rgba(60, 64, 67, 0.3),
-    0px 2px 6px 2px rgba(60, 64, 67, 0.15);
 
   display: flex;
   justify-content: center;
@@ -20,25 +35,9 @@
 
   transform-origin: bottom;
   transition:
-    max-width 0.2s ease-in,
-    height 0.2s ease-in,
-    margin-bottom 0.2s ease-in,
-    border-radius 0.2s ease-in;
-
-  &:before {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    width: 0;
-    height: 0;
-    border: 8px solid var(--estate-green-dark);
-    border-radius: 0;
-    border-bottom-right-radius: 5px;
-    z-index: -2;
-
-    transform: translateY(23%) rotate(45deg);
-    transition: scale 0.2s ease-in;
-  }
+    max-width 0.2s ease-in-out,
+    height 0.2s ease-in-out,
+    border-radius 0.2s ease-in-out;
 
   .close-button {
     display: none;
@@ -67,23 +66,24 @@
     justify-content: center;
     align-items: center;
 
-    transition: opacity 0.2s ease-in;
+    transition: opacity 0.2s ease-in-out;
 
     .icon {
       position: absolute;
       opacity: 1;
-      transition: opacity 0.2s ease-in;
+      transition: opacity 0.2s ease-in-out;
     }
   }
 }
 
-.real-estate-marker:hover {
+.real-estate-marker.hovered {
   z-index: 2;
+
+  transform: translateY(-9px);
 
   .custom-pin {
     max-width: 80px;
     height: 80px;
-    margin-bottom: 5px;
     border-radius: 50%;
 
     .image-container {
@@ -94,15 +94,17 @@
         opacity: 0;
       }
     }
+  }
 
-    &:before {
-      scale: 1.4;
-    }
+  .tip {
+    transform: translateY(23%) translateX(-50%) rotate(45deg) scale(1.4);
   }
 }
 
 .real-estate-marker.clicked {
   z-index: 3;
+
+  transform: translateY(-9px);
 
   .custom-pin {
     background-color: var(--estate-green-dark);
@@ -110,7 +112,6 @@
     width: fit-content;
     max-width: 650px;
     height: 317px;
-    margin-bottom: 8px;
 
     .image-container {
       border-radius: inherit;
@@ -136,10 +137,9 @@
         font-size: 24px;
       }
     }
-
-    &:before {
-      scale: 1.5;
-    }
+  }
+  .tip {
+    transform: translateY(23%) translateX(-50%) rotate(45deg) scale(1.4);
   }
 }
 

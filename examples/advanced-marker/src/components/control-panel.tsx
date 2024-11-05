@@ -5,15 +5,28 @@ function ControlPanel() {
     <div className="control-panel">
       <h3>Advanced Marker</h3>
       <p>
-        This example uses <code>&lt;AdvancedMarker&gt;</code> component with
-        custom hover and click states, integrating React components for dynamic
-        content.
+        This example uses the <code>&lt;AdvancedMarker&gt;</code> component with
+        custom hover and click states.
       </p>
 
       <p>
-        The marker can display additional "infowindow-like" information or
-        perform actions, creating an engaging and responsive user experience.
+        By integrating content in the marker that would traditionally be shown
+        in an info window, we can create smooth and engaging user experience.
       </p>
+
+      <div className="links">
+        <a
+          href="https://codesandbox.io/s/github/visgl/react-google-maps/tree/main/examples/advanced-marker"
+          target="_new">
+          Try on CodeSandbox ↗
+        </a>
+
+        <a
+          href="https://github.com/visgl/react-google-maps/tree/main/examples/advanced-marker"
+          target="_new">
+          View Code ↗
+        </a>
+      </div>
     </div>
   );
 }
