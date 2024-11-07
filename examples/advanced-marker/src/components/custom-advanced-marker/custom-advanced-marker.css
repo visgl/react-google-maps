@@ -1,0 +1,187 @@
+.advanced-marker-example .real-estate-marker {
+  cursor: pointer;
+  position: relative;
+  transform: translateY(-5px);
+  transition: all 0.2s ease-in-out;
+}
+
+.advanced-marker-example .real-estate-marker .tip {
+  position: absolute;
+  bottom: 0;
+  width: 0;
+  height: 0;
+  border: 8px solid var(--estate-green-dark);
+  border-radius: 0;
+  border-bottom-right-radius: 5px;
+  z-index: -1;
+  left: 50%;
+  transform: translateY(22%) translateX(-50%) rotate(45deg);
+  transition: all 0.2s ease-in-out;
+}
+
+.advanced-marker-example .custom-pin {
+  position: relative;
+  height: 34px;
+  width: fit-content;
+  max-width: 34px;
+  padding: 4px;
+  background-color: var(--estate-green-dark);
+  border-radius: 50%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  transform-origin: bottom;
+  transition:
+    max-width 0.2s ease-in-out,
+    height 0.2s ease-in-out,
+    border-radius 0.2s ease-in-out;
+}
+
+.advanced-marker-example .custom-pin .close-button {
+  display: none;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 8px;
+  border: none;
+  box-shadow: none;
+  background: none;
+  color: var(--estate-green-dark);
+  cursor: pointer;
+}
+
+.advanced-marker-example .custom-pin .image-container {
+  width: 100%;
+  height: 100%;
+  max-width: 285px;
+  background-position: 50% 50%;
+  background-size: cover;
+  border-radius: inherit;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.advanced-marker-example .custom-pin .image-container .icon {
+  position: absolute;
+  opacity: 1;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.advanced-marker-example .real-estate-marker.hovered {
+  z-index: 2;
+
+  transform: translateY(-9px);
+}
+.advanced-marker-example .real-estate-marker.hovered .custom-pin {
+  max-width: 80px;
+  height: 80px;
+  border-radius: 50%;
+}
+
+.advanced-marker-example
+  .real-estate-marker.hovered
+  .custom-pin
+  .image-container {
+  opacity: 1;
+  border-radius: inherit;
+}
+
+.advanced-marker-example
+  .real-estate-marker.hovered
+  .custom-pin
+  .image-container
+  .icon {
+  opacity: 0;
+}
+
+.advanced-marker-example .real-estate-marker.hovered .tip {
+  transform: translateY(23%) translateX(-50%) rotate(45deg) scale(1.4);
+}
+
+.advanced-marker-example .real-estate-marker.clicked {
+  z-index: 3;
+
+  transform: translateY(-9px);
+}
+
+.advanced-marker-example .real-estate-marker.clicked .custom-pin {
+  background-color: var(--estate-green-dark);
+  border-radius: 0;
+  width: fit-content;
+  max-width: 650px;
+  height: 317px;
+}
+
+.advanced-marker-example
+  .real-estate-marker.clicked
+  .custom-pin
+  .image-container {
+  border-radius: inherit;
+}
+
+.advanced-marker-example
+  .real-estate-marker.clicked
+  .custom-pin
+  .image-container
+  .icon {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.advanced-marker-example
+  .real-estate-marker.clicked
+  .custom-pin
+  .details-container {
+  max-width: 380px;
+  opacity: 1;
+  visibility: visible;
+
+  animation: slideInFadeIn 0.7s ease-in-out;
+}
+
+.advanced-marker-example
+  .real-estate-marker.clicked
+  .custom-pin
+  .details-container
+  .close-button {
+  display: flex;
+}
+
+.advanced-marker-example
+  .real-estate-marker.clicked
+  .custom-pin
+  .details-container
+  .close-button
+  span {
+  font-size: 24px;
+}
+
+.advanced-marker-example .real-estate-marker.clicked .tip {
+  transform: translateY(23%) translateX(-50%) rotate(45deg) scale(1.4);
+}
+
+@keyframes slideInFadeIn {
+  0% {
+    max-width: 0;
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  75% {
+    max-width: 380px;
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  100% {
+    max-width: 380px;
+    opacity: 1;
+    visibility: visible;
+  }
+}

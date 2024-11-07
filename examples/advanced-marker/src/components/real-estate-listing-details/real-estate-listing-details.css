@@ -1,0 +1,95 @@
+.advanced-marker-example .details-container {
+  background-color: var(--background-color-primary);
+  height: 100%;
+  opacity: 0;
+  max-width: 0;
+  border-top-right-radius: inherit;
+  border-bottom-right-radius: inherit;
+  visibility: hidden;
+}
+
+.advanced-marker-example .listing-image {
+  height: auto;
+  width: 200px;
+  object-fit: cover;
+}
+
+.advanced-marker-example .listing-content {
+  height: 100%;
+  padding: 24px;
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+}
+.advanced-marker-example .listing-content h2 {
+  font-family: var(--font-family-rufina);
+}
+.advanced-marker-example .listing-content p,
+.advanced-marker-example .listing-content span {
+  font-family: var(--font-family-raleway);
+}
+
+.advanced-marker-example .listing-content h2 {
+  color: var(--estate-green-light);
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 26px;
+  letter-spacing: 0.2px;
+  margin: 0;
+}
+
+.advanced-marker-example .listing-content p {
+  color: var(--estate-green-light);
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 14px;
+  letter-spacing: 0.2px;
+  margin: 0;
+}
+
+.advanced-marker-example .listing-content .description {
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0.2px;
+}
+
+.advanced-marker-example .listing-content .price {
+  color: var(--estate-green-light);
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 18px;
+  letter-spacing: 0.2px;
+}
+
+.advanced-marker-example .details {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+}
+
+.advanced-marker-example .details .detail_item {
+  color: var(--estate-grey-main);
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 14px;
+  letter-spacing: 0.2px;
+
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.advanced-marker-example .details .detail_item span,
+.advanced-marker-example .details .detail_item svg {
+  font-size: 17px;
+  color: var(--estate-yellow);
+}
