@@ -11,7 +11,7 @@ function ControlPanel() {
 
       <p>
         By integrating content in the marker that would traditionally be shown
-        in an info window, we can create smooth and engaging user experience.
+        in an info window, we can create a smooth and engaging user experience.
       </p>
 
       <div className="links">

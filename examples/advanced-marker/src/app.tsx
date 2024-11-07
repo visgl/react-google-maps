@@ -7,7 +7,7 @@ import ControlPanel from './components/control-panel';
 import {CustomAdvancedMarker} from './components/custom-advanced-marker/custom-advanced-marker';
 import {loadRealEstateListing} from '../libs/load-real-estate-listing';
 
-import {RealEstateListing} from './types';
+import {RealEstateListing} from './types/types';
 
 import './style.css';
 
@@ -25,21 +25,23 @@ const App = () => {
   }, []);
 
   return (
-    <APIProvider apiKey={API_KEY} libraries={['marker']}>
-      <Map
-        mapId={'bf51a910020fa25a'}
-        defaultZoom={5}
-        defaultCenter={{lat: 47.53, lng: -122.34}}
-        gestureHandling={'greedy'}
-        disableDefaultUI>
-        {/* advanced marker with html-content */}
-        {realEstateListing && (
-          <CustomAdvancedMarker realEstateListing={realEstateListing} />
-        )}
-      </Map>
+    <div className="advanced-marker-example">
+      <APIProvider apiKey={API_KEY} libraries={['marker']}>
+        <Map
+          mapId={'bf51a910020fa25a'}
+          defaultZoom={5}
+          defaultCenter={{lat: 47.53, lng: -122.34}}
+          gestureHandling={'greedy'}
+          disableDefaultUI>
+          {/* advanced marker with html-content */}
+          {realEstateListing && (
+            <CustomAdvancedMarker realEstateListing={realEstateListing} />
+          )}
+        </Map>
 
-      <ControlPanel />
-    </APIProvider>
+        <ControlPanel />
+      </APIProvider>
+    </div>
   );
 };
 

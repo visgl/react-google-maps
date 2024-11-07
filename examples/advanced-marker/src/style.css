@@ -16,22 +16,21 @@
   --font-family-raleway: 'Raleway', sans-serif;
 }
 
-/* ---- basics ---- */
-
-html *,
-*:before,
-*:after {
+.advanced-marker-example * {
   box-sizing: border-box;
 }
 
-body {
-  margin: 0;
+.advanced-marker-example {
+  width: 100%;
   height: 100%;
-  font-size: 16px;
-  display: flex;
 }
 
-.material-symbols-outlined {
+.advanced-marker-example *:before,
+.advanced-marker-example *:after {
+  box-sizing: border-box;
+}
+
+.advanced-marker-example .material-symbols-outlined {
   font-family: 'Material Symbols Outlined';
   font-weight: normal;
   font-style: normal;

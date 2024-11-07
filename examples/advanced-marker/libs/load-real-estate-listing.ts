@@ -1,4 +1,8 @@
-import {RealEstateListing} from '../src/types';
+import {RealEstateListing} from '../src/types/types';
+
+import frontImage from '../data/images/front.jpg';
+import bedroomImage from '../data/images/bedroom.jpg';
+import backImage from '../data/images/back.jpg';
 
 export async function loadRealEstateListing(): Promise<RealEstateListing> {
   const url = new URL('../data/real-estate-listing.json', import.meta.url);
@@ -7,11 +11,7 @@ export async function loadRealEstateListing(): Promise<RealEstateListing> {
     res.json()
   )) as RealEstateListing;
 
-  const front = new URL(`../data/images/front.jpg`, import.meta.url).href;
-  const bedroom = new URL(`../data/images/bedroom.jpg`, import.meta.url).href;
-  const back = new URL(`../data/images/back.jpg`, import.meta.url).href;
-
-  listing.images = [front, bedroom, back];
+  listing.images = [frontImage, bedroomImage, backImage];
 
   return listing;
 }

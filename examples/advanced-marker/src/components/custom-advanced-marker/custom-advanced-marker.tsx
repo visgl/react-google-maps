@@ -6,7 +6,7 @@ import {RealEstateListingDetails} from '../real-estate-listing-details/real-esta
 import {RealEstateGallery} from '../real-estate-gallery/real-estate-gallery';
 import {RealEstateIcon} from '../../../icons/real-estate-icon';
 
-import {RealEstateListing} from '../../types';
+import {RealEstateListing} from '../../types/types';
 
 import './custom-advanced-marker.css';
 

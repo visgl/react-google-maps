@@ -1,7 +1,9 @@
-# Markers and Infowindow Example
+# Advanced Marker
 
-Shows the different ways to use the `<Marker>`, `<AdvancedMarker>` and
-`<InfoWindow>` components.
+This example uses the `AdvancedMarker` component with
+custom hover and click states.
+By integrating content in the marker that would traditionally be shown
+in an info window, we can create a smooth and engaging user experience.
 
 ## Google Maps Platform API Key
 

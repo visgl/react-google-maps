@@ -5,7 +5,7 @@ import {FloorplanIcon} from '../../../icons/floor-plan-icon';
 import {BathroomIcon} from '../../../icons/bathroom-icon';
 import {BedroomIcon} from '../../../icons/bedroom-icon';
 
-import {ListingDetails} from '../../types';
+import {ListingDetails} from '../../types/types';
 
 import './real-estate-listing-details.css';
 
