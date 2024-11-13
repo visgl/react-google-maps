@@ -5,7 +5,7 @@ the map is excluded from Server-side Rendering since that is not supported by th
 
 ## Next.js
 
-This is how a compoenent in a Next.js (app router) application looks like. Checkout the example [code](https://github.com/visgl/react-google-maps/tree/main/examples/nextjs) on Github or play around with the [demo](https://codesandbox.io/s/github/visgl/react-google-maps/tree/main/examples/nextjs) on Codesandbox.
+This is how a component in a Next.js (app router) application looks like. Checkout the example [code](https://github.com/visgl/react-google-maps/tree/main/examples/nextjs) on Github or play around with the [demo](https://codesandbox.io/s/github/visgl/react-google-maps/tree/main/examples/nextjs) on Codesandbox.
 
 :::note
 
@@ -22,7 +22,7 @@ import {APIProvider, Map} from '@vis.gl/react-google-maps';
 export default function MyMap() {
   return (
     <div className={styles.container}>
-      <APIProvider apiKey={"..."}>
+      <APIProvider apiKey={'...'}>
         <Map
           mapId={'bf51a910020fa25a'}
           defaultZoom={5}
@@ -40,7 +40,7 @@ export default function MyMap() {
 
 And here is a component that can be used in a Remix application. Checkout the example [code](https://github.com/visgl/react-google-maps/tree/main/examples/remix) on Github or play around with the [demo](https://codesandbox.io/s/github/visgl/react-google-maps/tree/main/examples/remix) on Codesandbox.
 
- :::note
+:::note
 
 The components needs to be wrapped `<ClientOnly>` component from the `remix-utils` package for it to be rendered only on the client.
 

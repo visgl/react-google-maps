@@ -20,12 +20,7 @@ module.exports = {
     }
   },
 
-  ignorePatterns: [
-    'node_modules',
-    '**/dist*/**/*.js',
-    'examples/nextjs/**/{*.js,*.ts,*.tsx}',
-    'examples/remix/**/{*.js,*.ts,*.tsx}'
-  ],
+  ignorePatterns: ['node_modules', '**/dist*/**/*.js'],
 
   parserOptions: {
     ecmaVersion: 2020,
