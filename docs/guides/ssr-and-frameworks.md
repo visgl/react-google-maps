@@ -42,7 +42,7 @@ And here is a component that can be used in a Remix application. Checkout the ex
 
 :::note
 
-The components needs to be wrapped `<ClientOnly>` component from the `remix-utils` package for it to be rendered only on the client.
+The component needs to be wrapped `<ClientOnly>` component from the `remix-utils` package for it to be rendered only on the client.
 
 :::
 
