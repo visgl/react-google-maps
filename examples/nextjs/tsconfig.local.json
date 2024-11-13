@@ -20,7 +20,7 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
-      // Use local files when starting with `npm run dev-local`
+      // Use local files when starting with `npm run start-local`
       "@vis.gl/react-google-maps": ["../../src/index"]
     }
   },

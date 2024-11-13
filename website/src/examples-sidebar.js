@@ -26,13 +26,7 @@ const sidebars = {
         'directions',
         'deckgl-overlay',
         'map-3d',
-        'extended-component-library',
-        // External link
-        {
-          type: 'link',
-          label: 'Next.js',
-          href: 'https://github.com/visgl/react-google-maps/tree/main/examples/nextjs'
-        }
+        'extended-component-library'
       ]
     }
   ]

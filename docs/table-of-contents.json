@@ -16,6 +16,7 @@
     "items": [
       "guides/interacting-with-google-maps-api",
       "guides/deckgl-integration",
+      "guides/ssr-and-frameworks",
       "guides/writing-examples"
     ]
   },

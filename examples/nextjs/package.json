@@ -1,9 +1,9 @@
 {
   "scripts": {
-    "dev": "cp tsconfig.sandbox.json tsconfig.json && next dev",
-    "dev-local": "cp tsconfig.local.json tsconfig.json && next dev",
+    "start": "cp tsconfig.sandbox.json tsconfig.json && next dev",
+    "start-local": "cp tsconfig.local.json tsconfig.json && next dev",
     "build": "cp tsconfig.sandbox.json tsconfig.json && next build",
-    "start": "next start",
+    "serve": "next start",
     "lint": "next lint"
   },
   "dependencies": {
