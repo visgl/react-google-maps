@@ -1,11 +1,10 @@
-import type {MetaFunction} from '@remix-run/node';
-import MyMap from '../components/map/map.client';
 import {ClientOnly} from 'remix-utils/client-only';
 
-export const meta: MetaFunction = () => {
-  return [{title: 'Remix Example'}];
-};
+import MyMap from '../components/map/map.client';
+import MyMapFallback from '../components/map/map-fallback';
 
 export default function Index() {
-  return <ClientOnly>{() => <MyMap />}</ClientOnly>;
+  return (
+    <ClientOnly fallback={<MyMapFallback />}>{() => <MyMap />}</ClientOnly>
+  );
 }

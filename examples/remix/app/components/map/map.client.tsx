@@ -1,5 +1,3 @@
-'use client';
-
 import {APIProvider, Map} from '@vis.gl/react-google-maps';
 
 import styles from './map.module.css';

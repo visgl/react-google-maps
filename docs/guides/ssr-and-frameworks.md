@@ -38,11 +38,14 @@ export default function MyMap() {
 
 ## Remix
 
-And here is a component that can be used in a Remix application. Checkout the example [code](https://github.com/visgl/react-google-maps/tree/main/examples/remix) on Github or play around with the [demo](https://codesandbox.io/s/github/visgl/react-google-maps/tree/main/examples/remix) on Codesandbox.
+Here is the best approach we found to use a map component in a Remix application. Checkout the example [code](https://github.com/visgl/react-google-maps/tree/main/examples/remix) on Github or play around with the [demo](https://codesandbox.io/s/github/visgl/react-google-maps/tree/main/examples/remix) on Codesandbox.
+
+Wrap the map in a `<ClientOnly>` component from the [`remix-utils`](https://github.com/sergiodxa/remix-utils) package for it to be rendered only on the client.
 
 :::note
 
-The component needs to be wrapped `<ClientOnly>` component from the `remix-utils` package for it to be rendered only on the client.
+If you use a fallback and you know the dimensions of your final map, make sure that
+the fallback has the same size to prevent layout shifts when the map component loads.
 
 :::
 
@@ -52,7 +55,7 @@ import {ClientOnly} from 'remix-utils/client-only';
 
 export default function MyMap() {
   return (
-    <ClientOnly>
+    <ClientOnly fallback={<MapFallback />}>
       {() => (
         <APIProvider apiKey={'...'}>
           <Map
