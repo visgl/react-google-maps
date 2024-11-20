@@ -2,3 +2,5 @@ node_modules
 dist
 .npmignore
 CHANGELOG.md
+examples/nextjs/.next
+examples/nextjs/next.lock
