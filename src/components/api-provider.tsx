@@ -1,6 +1,6 @@
 import React, {
+  FunctionComponent,
   PropsWithChildren,
-  ReactElement,
   useCallback,
   useEffect,
   useMemo,
@@ -33,7 +33,7 @@ const DEFAULT_SOLUTION_CHANNEL = 'GMP_visgl_rgmlibrary_v1_default';
 export const APIProviderContext =
   React.createContext<APIProviderContextValue | null>(null);
 
-export type APIProviderProps = {
+export type APIProviderProps = PropsWithChildren<{
   /**
    * apiKey must be provided to load the Google Maps JavaScript API. To create an API key, see: https://developers.google.com/maps/documentation/javascript/get-api-key
    * Part of:
@@ -89,7 +89,7 @@ export type APIProviderProps = {
    * A function that will be called if there was an error when loading the Google Maps JavaScript API.
    */
   onError?: (error: unknown) => void;
-};
+}>;
 
 /**
  * local hook to set up the map-instance management context.
@@ -225,9 +225,7 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
 /**
  * Component to wrap the components from this library and load the Google Maps JavaScript API
  */
-export const APIProvider = (
-  props: PropsWithChildren<APIProviderProps>
-): ReactElement | null => {
+export const APIProvider: FunctionComponent<APIProviderProps> = props => {
   const {children, ...loaderProps} = props;
   const {mapInstances, addMapInstance, removeMapInstance, clearMapInstances} =
     useMapInstances();

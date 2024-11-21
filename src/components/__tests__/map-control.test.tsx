@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 
-import React, {ReactElement} from 'react';
+import React, {FunctionComponent, PropsWithChildren} from 'react';
 import {initialize} from '@googlemaps/jest-mocks';
 import {cleanup, render} from '@testing-library/react';
 
@@ -11,12 +11,12 @@ import {waitForMockInstance} from './__utils__/wait-for-mock-instance';
 
 jest.mock('../../libraries/google-maps-api-loader');
 
-let wrapper: ({children}: {children: React.ReactNode}) => ReactElement | null;
+let wrapper: FunctionComponent<PropsWithChildren>;
 
 beforeEach(() => {
   initialize();
 
-  wrapper = ({children}: {children: React.ReactNode}) => (
+  wrapper = ({children}) => (
     <APIProvider apiKey={'apikey'}>
       <Map zoom={10} center={{lat: 0, lng: 0}}>
         {children}

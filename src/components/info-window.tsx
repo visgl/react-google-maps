@@ -1,6 +1,7 @@
 /* eslint-disable complexity */
 import React, {
   CSSProperties,
+  FunctionComponent,
   PropsWithChildren,
   ReactNode,
   useEffect,
@@ -34,7 +35,9 @@ export type InfoWindowProps = Omit<
 /**
  * Component to render an Info Window with the Maps JavaScript API
  */
-export const InfoWindow = (props: PropsWithChildren<InfoWindowProps>) => {
+export const InfoWindow: FunctionComponent<
+  PropsWithChildren<InfoWindowProps>
+> = props => {
   const {
     // content options
     children,
