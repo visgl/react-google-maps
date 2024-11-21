@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {FunctionComponent, PropsWithChildren} from 'react';
 import {initialize, mockInstances} from '@googlemaps/jest-mocks';
 import {cleanup, render, waitFor} from '@testing-library/react';
 
@@ -9,7 +9,7 @@ import MockedFunction = jest.MockedFunction;
 
 jest.mock('../../libraries/google-maps-api-loader');
 
-let wrapper: ({children}: {children: React.ReactNode}) => JSX.Element | null;
+let wrapper: FunctionComponent<PropsWithChildren>;
 let createMarkerSpy: jest.Mock;
 
 beforeEach(() => {
@@ -17,7 +17,7 @@ beforeEach(() => {
   initialize();
 
   // Create wrapper component
-  wrapper = ({children}: {children: React.ReactNode}) => (
+  wrapper = ({children}) => (
     <APIProvider apiKey={'apikey'}>
       <GoogleMap zoom={10} center={{lat: 0, lng: 0}}>
         {children}

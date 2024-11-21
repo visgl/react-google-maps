@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {FunctionComponent, PropsWithChildren} from 'react';
 import {initialize} from '@googlemaps/jest-mocks';
 import {renderHook} from '@testing-library/react';
 
@@ -11,7 +11,7 @@ import {useApiLoadingStatus} from '../use-api-loading-status';
 import {useApiIsLoaded} from '../use-api-is-loaded';
 import {APILoadingStatus} from '../../libraries/api-loading-status';
 
-let wrapper: ({children}: {children: React.ReactNode}) => JSX.Element | null;
+let wrapper: FunctionComponent<PropsWithChildren>;
 let mockContextValue: jest.MockedObject<APIProviderContextValue>;
 beforeEach(() => {
   initialize();
@@ -26,7 +26,7 @@ beforeEach(() => {
     clearMapInstances: jest.fn()
   };
 
-  wrapper = ({children}: {children: React.ReactNode}) => (
+  wrapper = ({children}) => (
     <APIProviderContext.Provider value={mockContextValue}>
       {children}
     </APIProviderContext.Provider>

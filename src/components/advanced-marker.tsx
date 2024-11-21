@@ -3,6 +3,7 @@ import React, {
   Children,
   CSSProperties,
   forwardRef,
+  ForwardRefExoticComponent,
   useCallback,
   useEffect,
   useImperativeHandle,
@@ -274,8 +275,8 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
   return [marker, contentContainer] as const;
 }
 
-export const AdvancedMarker = forwardRef(
-  (props: AdvancedMarkerProps, ref: Ref<AdvancedMarkerRef>) => {
+export const AdvancedMarker: ForwardRefExoticComponent<AdvancedMarkerProps> =
+  forwardRef((props, ref: Ref<AdvancedMarkerRef>) => {
     const {children, style, className, anchorPoint} = props;
     const [marker, contentContainer] = useAdvancedMarker(props);
 
@@ -299,8 +300,7 @@ export const AdvancedMarker = forwardRef(
         )}
       </AdvancedMarkerContext.Provider>
     );
-  }
-);
+  });
 
 export function useAdvancedMarkerRef() {
   const [marker, setMarker] =

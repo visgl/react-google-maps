@@ -1,6 +1,7 @@
 /* eslint-disable complexity */
 import React, {
   forwardRef,
+  ForwardRefExoticComponent,
   useCallback,
   useEffect,
   useImperativeHandle,
@@ -118,13 +119,15 @@ function useMarker(props: MarkerProps) {
 /**
  * Component to render a marker on a map
  */
-export const Marker = forwardRef((props: MarkerProps, ref: MarkerRef) => {
-  const marker = useMarker(props);
+export const Marker: ForwardRefExoticComponent<MarkerProps> = forwardRef(
+  (props: MarkerProps, ref: MarkerRef) => {
+    const marker = useMarker(props);
 
-  useImperativeHandle(ref, () => marker, [marker]);
+    useImperativeHandle(ref, () => marker, [marker]);
 
-  return <></>;
-});
+    return <></>;
+  }
+);
 
 export function useMarkerRef() {
   const [marker, setMarker] = useState<google.maps.Marker | null>(null);

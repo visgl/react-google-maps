@@ -1,6 +1,6 @@
-import React, {CSSProperties} from 'react';
+import React, {CSSProperties, FunctionComponent} from 'react';
 
-export const AuthFailureMessage = () => {
+export const AuthFailureMessage: FunctionComponent = () => {
   const style: CSSProperties = {
     position: 'absolute',
     top: 0,

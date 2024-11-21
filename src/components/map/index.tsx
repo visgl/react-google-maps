@@ -1,6 +1,7 @@
 /* eslint-disable complexity */
 import React, {
   CSSProperties,
+  FunctionComponent,
   PropsWithChildren,
   useContext,
   useEffect,
@@ -63,61 +64,60 @@ export type RenderingType = (typeof RenderingType)[keyof typeof RenderingType];
 /**
  * Props for the Map Component
  */
-export type MapProps = Omit<
-  google.maps.MapOptions,
-  'renderingType' | 'colorScheme'
-> &
-  MapEventProps &
-  DeckGlCompatProps & {
-    /**
-     * An id for the map, this is required when multiple maps are present
-     * in the same APIProvider context.
-     */
-    id?: string;
+export type MapProps = PropsWithChildren<
+  Omit<google.maps.MapOptions, 'renderingType' | 'colorScheme'> &
+    MapEventProps &
+    DeckGlCompatProps & {
+      /**
+       * An id for the map, this is required when multiple maps are present
+       * in the same APIProvider context.
+       */
+      id?: string;
 
-    /**
-     * Additional style rules to apply to the map dom-element.
-     */
-    style?: CSSProperties;
+      /**
+       * Additional style rules to apply to the map dom-element.
+       */
+      style?: CSSProperties;
 
-    /**
-     * Additional css class-name to apply to the element containing the map.
-     */
-    className?: string;
+      /**
+       * Additional css class-name to apply to the element containing the map.
+       */
+      className?: string;
 
-    /**
-     * The color-scheme to use for the map.
-     */
-    colorScheme?: ColorScheme;
+      /**
+       * The color-scheme to use for the map.
+       */
+      colorScheme?: ColorScheme;
 
-    /**
-     * The rendering-type to be used.
-     */
-    renderingType?: RenderingType;
+      /**
+       * The rendering-type to be used.
+       */
+      renderingType?: RenderingType;
 
-    /**
-     * Indicates that the map will be controlled externally. Disables all controls provided by the map itself.
-     */
-    controlled?: boolean;
+      /**
+       * Indicates that the map will be controlled externally. Disables all controls provided by the map itself.
+       */
+      controlled?: boolean;
 
-    /**
-     * Enable caching of map-instances created by this component.
-     */
-    reuseMaps?: boolean;
+      /**
+       * Enable caching of map-instances created by this component.
+       */
+      reuseMaps?: boolean;
 
-    defaultCenter?: google.maps.LatLngLiteral;
-    defaultZoom?: number;
-    defaultHeading?: number;
-    defaultTilt?: number;
-    /**
-     * Alternative way to specify the default camera props as a geographic region that should be fully visible
-     */
-    defaultBounds?: google.maps.LatLngBoundsLiteral & {
-      padding?: number | google.maps.Padding;
-    };
-  };
+      defaultCenter?: google.maps.LatLngLiteral;
+      defaultZoom?: number;
+      defaultHeading?: number;
+      defaultTilt?: number;
+      /**
+       * Alternative way to specify the default camera props as a geographic region that should be fully visible
+       */
+      defaultBounds?: google.maps.LatLngBoundsLiteral & {
+        padding?: number | google.maps.Padding;
+      };
+    }
+>;
 
-export const Map = (props: PropsWithChildren<MapProps>) => {
+export const Map: FunctionComponent<MapProps> = (props: MapProps) => {
   const {children, id, className, style} = props;
   const context = useContext(APIProviderContext);
   const loadingStatus = useApiLoadingStatus();
@@ -240,4 +240,8 @@ export const Map = (props: PropsWithChildren<MapProps>) => {
     </div>
   );
 };
-Map.deckGLViewProps = true;
+
+// The deckGLViewProps flag here indicates to deck.gl that the Map component is
+// able to handle viewProps from deck.gl when deck.gl is used to control the map.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+(Map as any).deckGLViewProps = true;
