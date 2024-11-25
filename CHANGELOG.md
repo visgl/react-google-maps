@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.1](https://github.com/visgl/react-google-maps/compare/v1.4.0...v1.4.1) (2024-11-22)
+
+
+### Bug Fixes
+
+* add explicit type for exported function components ([#611](https://github.com/visgl/react-google-maps/issues/611)) ([a5b0359](https://github.com/visgl/react-google-maps/commit/a5b035986872b3abb8c28d6659034c2a897476a3)), closes [#583](https://github.com/visgl/react-google-maps/issues/583)
+* add support Next.js 15 ([#609](https://github.com/visgl/react-google-maps/issues/609)) ([0e673c2](https://github.com/visgl/react-google-maps/commit/0e673c262a0a704a0d85a7f34cf4409965d11a8b))
+
 ## [1.4.0](https://github.com/visgl/react-google-maps/compare/v1.3.0...v1.4.0) (2024-10-24)
 
 
