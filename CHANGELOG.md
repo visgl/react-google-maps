@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.2](https://github.com/visgl/react-google-maps/compare/v1.4.1...v1.4.2) (2024-11-28)
+
+
+### Bug Fixes
+
+* remove explicit types for components using forwardRef ([#620](https://github.com/visgl/react-google-maps/issues/620)) ([8448a33](https://github.com/visgl/react-google-maps/commit/8448a336fdd2e489493bc40068bfa58d23267409)), closes [#619](https://github.com/visgl/react-google-maps/issues/619) [#617](https://github.com/visgl/react-google-maps/issues/617)
+
 ## [1.4.1](https://github.com/visgl/react-google-maps/compare/v1.4.0...v1.4.1) (2024-11-22)
 
 
