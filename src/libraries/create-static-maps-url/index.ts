@@ -14,8 +14,9 @@ const STATIC_MAPS_BASE = 'https://maps.googleapis.com/maps/api/staticmap';
  * @param {string} options.apiKey - Your Google Maps API key (required)
  * @param {number} options.width - The width of the map image in pixels (required)
  * @param {number} options.height - The height of the map image in pixels (required)
- * @param {StaticMapsLocation} [options.center] - The center point of the map (lat/lng or address)
- * @param {number} [options.zoom] - The zoom level of the map (0-21)
+ * @param {StaticMapsLocation} [options.center] - The center point of the map (lat/lng or address).
+ *  Required if no markers or paths or "visible locations" are provided.
+ * @param {number} [options.zoom] - The zoom level of the map. Required if no markers or paths or "visible locations" are provided.
  * @param {1|2|4} [options.scale] - The resolution of the map (1, 2, or 4)
  * @param {string} [options.format] - The image format (png, png8, png32, gif, jpg, jpg-baseline)
  * @param {string} [options.mapType] - The type of map (roadmap, satellite, terrain, hybrid)
@@ -84,7 +85,7 @@ export function createStaticMapsUrl({
   mapType,
   language,
   region,
-  map_id,
+  mapId,
   markers = [],
   paths = [],
   visible = [],
@@ -100,10 +101,10 @@ export function createStaticMapsUrl({
     ...(zoom && {zoom}),
     ...(scale && {scale}),
     ...(format && {format}),
-    ...(mapType && {mapType}),
+    ...(mapType && {maptype: mapType}),
     ...(language && {language}),
     ...(region && {region}),
-    ...(map_id && {map_id})
+    ...(mapId && {map_id: mapId})
   };
 
   const url = new URL(STATIC_MAPS_BASE);

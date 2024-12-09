@@ -29,7 +29,7 @@ export type StaticMapsApiOptions = {
   mapType?: google.maps.MapTypeId;
   language?: string;
   region?: string;
-  map_id?: string;
+  mapId?: string;
   markers?: Array<StaticMapsMarker>;
   paths?: Array<StaticMapsPath>;
   visible?: Array<StaticMapsLocation>;

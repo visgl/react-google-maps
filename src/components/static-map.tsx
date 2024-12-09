@@ -13,9 +13,7 @@ export type StaticMapProps = {
 export const StaticMap = async (props: StaticMapProps) => {
   const {url} = props;
 
-  if (!url) {
-    return null;
-  }
+  if (!url) throw new Error('URL is required');
 
   return <img src={url} width="100%" />;
 };
