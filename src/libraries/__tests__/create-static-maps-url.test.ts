@@ -99,9 +99,11 @@ describe('createStaticMapsUrl', () => {
         }
       ]
     });
-    expect(url).toContain(
-      'markers=color%3Ared%7Clabel%3AA%7Csize%3Amid%7C40.714728%2C-73.998672'
+    const markerParam = encodeURIComponent(
+      'color:red|label:A|size:mid|40.714728,-73.998672'
     );
+
+    expect(url).toContain(`markers=${markerParam}`);
   });
 
   test('includes scale parameter', () => {

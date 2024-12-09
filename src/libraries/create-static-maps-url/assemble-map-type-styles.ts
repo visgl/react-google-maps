@@ -1,3 +1,5 @@
+import {formatParam} from './helpers';
+
 /**
  * Converts an array of Google Maps style objects into an array of style strings
  * compatible with the Google Static Maps API.
@@ -16,7 +18,7 @@
  * // Returns: ["|feature:road|element:geometry|color:0xff0000|weight:1"]
  *
  * Each style string follows the format:
- * "|feature:{featureType}|element:{elementType}|{stylerName}:{stylerValue}"
+ * "feature:{featureType}|element:{elementType}|{stylerName}:{stylerValue}"
  *
  * Note: Color values with hexadecimal notation (#) are automatically converted
  * to the required 0x format for the Static Maps API.
@@ -24,25 +26,27 @@
 export function assembleMapTypeStyles(
   styles: Array<google.maps.MapTypeStyle>
 ): string[] {
-  return styles.map((mapTypeStyle: google.maps.MapTypeStyle) => {
-    const {featureType, elementType, stylers = []} = mapTypeStyle;
+  return styles
+    .map((mapTypeStyle: google.maps.MapTypeStyle) => {
+      const {featureType, elementType, stylers = []} = mapTypeStyle;
 
-    let styleString = '';
+      let styleString = '';
 
-    if (featureType) {
-      styleString += `|feature:${featureType}`;
-    }
+      if (featureType) {
+        styleString += `|feature:${featureType}`;
+      }
 
-    if (elementType) {
-      styleString += `|element:${elementType}`;
-    }
+      if (elementType) {
+        styleString += `|element:${elementType}`;
+      }
 
-    for (const styler of stylers) {
-      Object.entries(styler).forEach(([name, value]) => {
-        styleString += `|${name}:${String(value).replace('#', '0x')}`;
-      });
-    }
+      for (const styler of stylers) {
+        Object.entries(styler).forEach(([name, value]) => {
+          styleString += `|${name}:${String(value).replace('#', '0x')}`;
+        });
+      }
 
-    return styleString;
-  });
+      return styleString;
+    })
+    .map(formatParam);
 }

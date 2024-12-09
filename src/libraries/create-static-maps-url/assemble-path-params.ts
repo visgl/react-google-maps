@@ -1,4 +1,4 @@
-import {formatLocation} from './helpers';
+import {formatLocation, formatParam} from './helpers';
 import {StaticMapsPath} from './types';
 
 /**
@@ -25,7 +25,7 @@ import {StaticMapsPath} from './types';
  *
  * const pathParams = assemblePathParams(paths);
  * Output: [
- *    '|color:red|weight:5|40.714728,-73.998672|40.718217,-73.998284'
+ *    'color:red|weight:5|40.714728,-73.998672|40.718217,-73.998284'
  *  ]
  */
 export function assemblePathParams(paths: Array<StaticMapsPath> = []) {
@@ -75,5 +75,5 @@ export function assemblePathParams(paths: Array<StaticMapsPath> = []) {
     pathParams.push(pathParam);
   });
 
-  return pathParams;
+  return pathParams.map(formatParam);
 }

@@ -116,12 +116,12 @@ export function createStaticMapsUrl({
 
   // Assemble Markers
   for (const markerParam of assembleMarkerParams(markers)) {
-    url.searchParams.append('markers', formatParam(markerParam));
+    url.searchParams.append('markers', markerParam);
   }
 
   // Assemble Paths
   for (const pathParam of assemblePathParams(paths)) {
-    url.searchParams.append('path', formatParam(pathParam));
+    url.searchParams.append('path', pathParam);
   }
 
   // Assemble visible locations
@@ -134,7 +134,7 @@ export function createStaticMapsUrl({
 
   // Assemble Map Type Styles
   for (const styleString of assembleMapTypeStyles(style)) {
-    url.searchParams.append('style', formatParam(styleString));
+    url.searchParams.append('style', styleString);
   }
 
   return url.toString();
