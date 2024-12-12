@@ -21,6 +21,7 @@ import {StaticMapsMarker} from './types';
  * // Params will be an array of strings representing the marker parameters
  * Example output: [
  *   "color:blue|label:A|size:mid|40.714728,-73.998672|40.714728,-73.998672",
+ *   "color:blue|label:B|size:mid|40.714728,-73.998672|40.714728,-73.998672",
  *   "icon:http://example.com/icon.png|40.714728,-73.998672"
  * ]
  */

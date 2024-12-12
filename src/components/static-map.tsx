@@ -8,12 +8,13 @@ export * from '../libraries/create-static-maps-url/types';
  */
 export type StaticMapProps = {
   url: string;
+  className?: string;
 };
 
-export const StaticMap = async (props: StaticMapProps) => {
-  const {url} = props;
+export const StaticMap = (props: StaticMapProps) => {
+  const {url, className} = props;
 
   if (!url) throw new Error('URL is required');
 
-  return <img src={url} width="100%" />;
+  return <img className={className} src={url} width="100%" />;
 };

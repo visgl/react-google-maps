@@ -1,6 +1,6 @@
 import {assembleMarkerParams} from './assemble-marker-params';
 import {assemblePathParams} from './assemble-path-params';
-import {formatLocation, formatParam} from './helpers';
+import {formatLocation} from './helpers';
 
 import {StaticMapsApiOptions} from './types';
 import {assembleMapTypeStyles} from './assemble-map-type-styles';

@@ -39,7 +39,8 @@
           "api-reference/components/info-window",
           "api-reference/components/marker",
           "api-reference/components/advanced-marker",
-          "api-reference/components/pin"
+          "api-reference/components/pin",
+          "api-reference/components/static-map"
         ]
       },
       {
