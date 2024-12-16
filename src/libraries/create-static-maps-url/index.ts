@@ -91,8 +91,12 @@ export function createStaticMapsUrl({
   visible = [],
   style = []
 }: StaticMapsApiOptions) {
-  if (!apiKey) throw new Error('API key is required');
-  if (!width || !height) throw new Error('Width and height are required');
+  if (!apiKey) {
+    console.warn('API key is required');
+  }
+  if (!width || !height) {
+    console.warn('Width and height are required');
+  }
 
   const params: Record<string, string | number | null> = {
     key: apiKey,
