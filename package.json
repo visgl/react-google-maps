@@ -11,6 +11,11 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.modern.mjs"
     },
+    "./server": {
+      "require": "./dist/server/index.umd.js",
+      "types": "./dist/server/index.d.ts",
+      "default": "./dist/server/index.modern.mjs"
+    },
     "./examples.css": "./dist/examples.css"
   },
   "types": "dist/index.d.ts",
@@ -25,10 +30,11 @@
   "license": "MIT",
   "scripts": {
     "clean": "rm -rf ./dist && mkdir ./dist",
-    "build": "npm-run-all clean -p build:*",
+    "build": "npm-run-all clean -p build:**",
     "start": "run-p start:*",
     "build:examples": "cp ./examples/examples.css dist",
     "build:microbundle": "microbundle -o dist/index.js -f modern,umd --globals react=React,react-dom=ReactDOM --jsx React.createElement --jsxFragment React.Fragment --no-compress --tsconfig tsconfig.build.json",
+    "build:microbundle:server": "microbundle -o dist/server/index.js -f modern,umd --globals react=React,react-dom=ReactDOM --jsx React.createElement --jsxFragment React.Fragment --no-compress --tsconfig tsconfig.build.json ./src/server/index.ts",
     "start:microbundle": "microbundle watch -o dist/index.js -f modern,umd --globals react=React,react-dom=ReactDOM --jsx React.createElement --jsxFragment React.Fragment --no-compress --tsconfig tsconfig.build.json",
     "test:linter": "eslint 'src/**/*.{ts,tsx}'",
     "test:tsc": "tsc --project tsconfig.test.json --noEmit",
