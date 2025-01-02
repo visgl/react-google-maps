@@ -23,6 +23,7 @@ export interface APIProviderContextValue {
   loadedLibraries: LoadedLibraries;
   importLibrary: typeof google.maps.importLibrary;
   mapInstances: Record<string, google.maps.Map>;
+  apiKey: string;
   addMapInstance: (map: google.maps.Map, id?: string) => void;
   removeMapInstance: (id?: string) => void;
   clearMapInstances: () => void;
@@ -241,7 +242,8 @@ export const APIProvider: FunctionComponent<APIProviderProps> = props => {
       clearMapInstances,
       status,
       loadedLibraries,
-      importLibrary
+      importLibrary,
+      apiKey: loaderProps.apiKey
     }),
     [
       mapInstances,
@@ -250,7 +252,8 @@ export const APIProvider: FunctionComponent<APIProviderProps> = props => {
       clearMapInstances,
       status,
       loadedLibraries,
-      importLibrary
+      importLibrary,
+      loaderProps.apiKey
     ]
   );
 
