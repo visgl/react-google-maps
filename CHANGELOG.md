@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.3](https://github.com/visgl/react-google-maps/compare/v1.4.2...v1.4.3) (2025-01-02)
+
+
+### Bug Fixes
+
+* use deep compare effect to prevent infowindow close ([#642](https://github.com/visgl/react-google-maps/issues/642)) ([bfa85c1](https://github.com/visgl/react-google-maps/commit/bfa85c177796ac05cb626590c2467a31edab86eb))
+
 ## [1.4.2](https://github.com/visgl/react-google-maps/compare/v1.4.1...v1.4.2) (2024-11-28)
 
 
