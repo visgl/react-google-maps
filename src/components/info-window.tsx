@@ -172,7 +172,7 @@ export const InfoWindow: FunctionComponent<
 
   // ## open info window when content and map are available
   const map = useMap();
-  useEffect(() => {
+  useDeepCompareEffect(() => {
     // `anchor === null` means an anchor is defined but not ready yet.
     if (!map || !infoWindow || anchor === null) return;
 
