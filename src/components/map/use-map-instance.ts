@@ -107,7 +107,7 @@ export function useMapInstance(
   const savedMapStateRef = useRef<{
     mapId?: string | null;
     cameraState: CameraState;
-  }>();
+  }>(undefined);
 
   // create the map instance and register it in the context
   useEffect(
