@@ -12,12 +12,12 @@
   "dependencies": {
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "styled-components": "^6.1.12"
+    "styled-components": "^6.1.14"
   },
   "devDependencies": {
-    "@docusaurus/core": "^3.6.3",
-    "@docusaurus/plugin-content-docs": "^3.6.3",
-    "@docusaurus/preset-classic": "^3.6.3",
+    "@docusaurus/core": "^3.7.0",
+    "@docusaurus/plugin-content-docs": "^3.7.0",
+    "@docusaurus/preset-classic": "^3.7.0",
     "@easyops-cn/docusaurus-search-local": "^0.46.1",
     "babel-plugin-styled-components": "^2.0.0",
     "babel-plugin-version-inline": "^1.0.0",
