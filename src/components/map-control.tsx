@@ -1,4 +1,4 @@
-import {useEffect, useMemo} from 'react';
+import {FunctionComponent, useEffect, useMemo} from 'react';
 import {createPortal} from 'react-dom';
 import {useMap} from '../hooks/use-map';
 
@@ -46,7 +46,10 @@ export const ControlPosition = {
 export type ControlPosition =
   (typeof ControlPosition)[keyof typeof ControlPosition];
 
-export const MapControl = ({children, position}: MapControlProps) => {
+export const MapControl: FunctionComponent<MapControlProps> = ({
+  children,
+  position
+}) => {
   const controlContainer = useMemo(() => document.createElement('div'), []);
   const map = useMap();
 

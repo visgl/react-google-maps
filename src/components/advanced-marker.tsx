@@ -282,7 +282,11 @@ export const AdvancedMarker = forwardRef(
     const advancedMarkerContextValue: AdvancedMarkerContextValue | null =
       useMemo(() => (marker ? {marker} : null), [marker]);
 
-    useImperativeHandle(ref, () => marker, [marker]);
+    useImperativeHandle(
+      ref,
+      () => marker as google.maps.marker.AdvancedMarkerElement,
+      [marker]
+    );
 
     if (!contentContainer) return null;
 

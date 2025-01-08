@@ -10,7 +10,7 @@
     "@vis.gl/react-google-maps": "latest",
     "react": "19.0.0-rc-66855b96-20241106",
     "react-dom": "19.0.0-rc-66855b96-20241106",
-    "next": "15.0.3"
+    "next": "15.1.2"
   },
   "devDependencies": {
     "typescript": "^5",

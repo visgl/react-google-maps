@@ -121,7 +121,7 @@ function useMarker(props: MarkerProps) {
 export const Marker = forwardRef((props: MarkerProps, ref: MarkerRef) => {
   const marker = useMarker(props);
 
-  useImperativeHandle(ref, () => marker, [marker]);
+  useImperativeHandle(ref, () => marker as google.maps.Marker, [marker]);
 
   return <></>;
 });

@@ -1,5 +1,28 @@
 # Changelog
 
+## [1.4.3](https://github.com/visgl/react-google-maps/compare/v1.4.2...v1.4.3) (2025-01-07)
+
+
+### Bug Fixes
+
+* **deps-dev:** bump react, react-dom and corresponding types ([#650](https://github.com/visgl/react-google-maps/issues/650)) ([02fe28f](https://github.com/visgl/react-google-maps/commit/02fe28fdc0e69a3ab0b3e8555b156b4c36d7c75c))
+* use deep compare effect to prevent infowindow close ([#642](https://github.com/visgl/react-google-maps/issues/642)) ([bfa85c1](https://github.com/visgl/react-google-maps/commit/bfa85c177796ac05cb626590c2467a31edab86eb))
+
+## [1.4.2](https://github.com/visgl/react-google-maps/compare/v1.4.1...v1.4.2) (2024-11-28)
+
+
+### Bug Fixes
+
+* remove explicit types for components using forwardRef ([#620](https://github.com/visgl/react-google-maps/issues/620)) ([8448a33](https://github.com/visgl/react-google-maps/commit/8448a336fdd2e489493bc40068bfa58d23267409)), closes [#619](https://github.com/visgl/react-google-maps/issues/619) [#617](https://github.com/visgl/react-google-maps/issues/617)
+
+## [1.4.1](https://github.com/visgl/react-google-maps/compare/v1.4.0...v1.4.1) (2024-11-22)
+
+
+### Bug Fixes
+
+* add explicit type for exported function components ([#611](https://github.com/visgl/react-google-maps/issues/611)) ([a5b0359](https://github.com/visgl/react-google-maps/commit/a5b035986872b3abb8c28d6659034c2a897476a3)), closes [#583](https://github.com/visgl/react-google-maps/issues/583)
+* add support Next.js 15 ([#609](https://github.com/visgl/react-google-maps/issues/609)) ([0e673c2](https://github.com/visgl/react-google-maps/commit/0e673c262a0a704a0d85a7f34cf4409965d11a8b))
+
 ## [1.4.0](https://github.com/visgl/react-google-maps/compare/v1.3.0...v1.4.0) (2024-10-24)
 
 

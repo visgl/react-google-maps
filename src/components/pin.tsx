@@ -1,5 +1,6 @@
 import {
   Children,
+  FunctionComponent,
   PropsWithChildren,
   useContext,
   useEffect,
@@ -12,12 +13,12 @@ import {logErrorOnce} from '../libraries/errors';
 /**
  * Props for the Pin component
  */
-export type PinProps = google.maps.marker.PinElementOptions;
+export type PinProps = PropsWithChildren<google.maps.marker.PinElementOptions>;
 
 /**
  * Component to configure the appearance of an AdvancedMarker
  */
-export const Pin = (props: PropsWithChildren<PinProps>) => {
+export const Pin: FunctionComponent<PinProps> = props => {
   const advancedMarker = useContext(AdvancedMarkerContext)?.marker;
   const glyphContainer = useMemo(() => document.createElement('div'), []);
 
