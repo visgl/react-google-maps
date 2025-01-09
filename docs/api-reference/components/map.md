@@ -86,10 +86,10 @@ Maps JavaScript API is based on map-views (effectively calls to the
 `google.maps.Map` constructor), this can quickly cause a problem.
 
 The `Map` component can be configured to re-use already created maps with
-the [`reuseMaps`](#reusemaps-boolean) prop. 
-When enabled, all `Map` components created with the same [`mapId`](#mapid-string), 
-[`colorScheme`](#colorscheme-googlemapscolorschemegmp-color-scheme-type) and 
-[`renderingType`](#renderingtype-googlemapsrenderingtypegmp-rendering-type) will reuse 
+the [`reuseMaps`](#reusemaps-boolean) prop.
+When enabled, all `Map` components created with the same [`mapId`](#mapid-string),
+[`colorScheme`](#colorscheme-googlemapscolorscheme) and
+[`renderingType`](#renderingtype-googlemapsrenderingtype) will reuse
 previously created instances instead of creating new ones.
 
 :::warning
@@ -162,7 +162,7 @@ of the [Cloud-based maps styling][gmp-map-styling].
 
 The [color-scheme][gmp-color-scheme] to be used by the map. Can be
 `'LIGHT'`, `'DARK'`, `'FOLLOW_SYSTEM'` or one of the
-`ColorScheme` constants 
+`ColorScheme` constants
 (`import {ColorScheme} from '@vis.gl/react-google-maps';`).
 
 :::note
@@ -174,7 +174,7 @@ Custom styles that use Map IDs only apply to the light color scheme for roadmap 
 #### `renderingType`: [google.maps.RenderingType][gmp-rendering-type]
 
 The desired rendering type the renderer should use. Can be `'RASTER'` or
-`'VECTOR'` or one of the `RenderingType` constants 
+`'VECTOR'` or one of the `RenderingType` constants
 (`import {RenderingType} from '@vis.gl/react-google-maps';`).
 
 If not set, the cloud configuration for the map ID will determine the
@@ -196,7 +196,7 @@ style-prop is no longer applied.
 #### `reuseMaps`: boolean
 
 Enable map-instance caching for this component. When caching is enabled,
-this component will reuse map instances created with the same `mapId`, 
+this component will reuse map instances created with the same `mapId`,
 `colorScheme` and `renderingType`.
 
 See also the section [Map Instance Caching](#map-instance-caching) above.

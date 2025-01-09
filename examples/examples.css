@@ -126,3 +126,44 @@ html[data-theme='dark'] .gm-style {
   opacity: 0.5;
   cursor: default;
 }
+
+.static-map-grid,
+.static-map-grid * {
+  box-sizing: border-box;
+}
+
+.static-map-grid {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
+  height: 100%;
+  width: 100%;
+  gap: 16px;
+  padding: 16px;
+  background: darkgray;
+}
+
+.static-map-grid .map-container {
+  display: flex;
+  position: relative;
+}
+
+.static-map-grid .map-container:nth-child(1) {
+  align-items: flex-end;
+  justify-content: flex-end;
+}
+
+.static-map-grid .map-container:nth-child(2) {
+  align-items: flex-end;
+}
+.static-map-grid .map-container:nth-child(3) {
+  justify-content: flex-end;
+}
+
+.static-map-grid .map {
+  object-fit: contain;
+  position: absolute;
+  max-height: 100%;
+  width: auto;
+  max-width: 100%;
+}

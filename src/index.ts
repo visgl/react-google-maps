@@ -4,6 +4,7 @@ export * from './components/advanced-marker';
 export * from './components/api-provider';
 export * from './components/info-window';
 export * from './components/map';
+export * from './components/static-map';
 export * from './components/map-control';
 export * from './components/marker';
 export * from './components/pin';
