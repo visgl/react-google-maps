@@ -3,6 +3,14 @@
 React component and utility function to create and render [Google Static Maps][gmp-static-map] images. This implementation provides both a React component for rendering and a URL generation utility that supports all Google Static Maps API features. The main purpose of the utility function is to enable 'url-signing' in various
 server environments.
 
+:::note
+
+Currently, the `StaticMap` component is just a thin wrapper for a 
+regular `img` element. This will likely change in future versions when 
+additional features are added to static maps.
+
+:::
+
 The main parameters to control the map are `center`,
 `zoom`, `width` and `height`. With a plain map all of these are required for the map to show. There are cases where `center` and `zoom` can be omitted and the viewport can be automatically be determined from other data. This is the case when having markers, paths or other `visible` locations which can form an automatic bounding box for the map view.
 
