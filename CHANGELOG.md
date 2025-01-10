@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.0](https://github.com/visgl/react-google-maps/compare/v1.4.3...v1.5.0) (2025-01-10)
+
+
+### Features
+
+* add StaticMap component with SSR support ([#633](https://github.com/visgl/react-google-maps/issues/633)) ([55acea2](https://github.com/visgl/react-google-maps/commit/55acea2a0b82727e487ee30fb788a05ba7dce153))
+
 ## [1.4.3](https://github.com/visgl/react-google-maps/compare/v1.4.2...v1.4.3) (2025-01-07)
 
 
