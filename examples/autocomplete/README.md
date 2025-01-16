@@ -18,7 +18,7 @@ When building your own you are completely free but also responsible for the user
 
 ### 3) Third Party Select Widget
 
-This is basically the same as the custom build, except for not having to implement the list/dropdown/DOM handling yourself. A lot of third party text box widgets provide functionionality for handling keyboard navigation and focus handling. For the demo we used the [Combobox][combobox] from `react-widgets`.
+This is basically the same as the custom build, except for not having to implement the list/dropdown/DOM handling yourself. A lot of third party text box widgets provide functionality for handling keyboard navigation and focus handling. For the demo we used the [Combobox][combobox] from `react-widgets`.
 
 ## Google Maps Platform API Key
 

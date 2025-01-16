@@ -14,7 +14,7 @@ function ControlPanel(props: Props) {
       <p>
         Markers scale on hover and change their color when they are selected by
         clicking on them. The default z-index is sorted by latitude. The z-index
-        hierachy is "hover" on top, then "selected" and then the default
+        hierarchy is "hover" on top, then "selected" and then the default
         (latitude).
       </p>
       <p>

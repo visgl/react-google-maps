@@ -18,7 +18,7 @@ function ControlPanel({
 
       <p>
         This example demonstrates three different methods of adding autocomplete
-        functionality to your appplication using the Google Places API.
+        functionality to your application using the Google Places API.
       </p>
 
       <div className="autocomplete-mode">

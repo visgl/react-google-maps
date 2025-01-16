@@ -90,7 +90,7 @@ export class GoogleMapsApiLoader {
   }
 
   /**
-   * Serialize the paramters used to load the library for easier comparison.
+   * Serialize the parameters used to load the library for easier comparison.
    */
   private static serializeParams(params: ApiParams): string {
     return [
