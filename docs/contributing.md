@@ -40,7 +40,7 @@ The default procedure for adding functionality to the library is as follows:
 - when implementing the desired feature is challenging or impossible with the
   library, that would be an excellent indicator that some abstraction is
   missing at a lower level and should be added to the library.
-- If a new feature proves to be useful and univeral (i.e. it can be used
+- If a new feature proves to be useful and universal (i.e. it can be used
   without needing much per-user customization), we will
   consider adding it to the library or providing it as a separate library.
 

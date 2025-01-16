@@ -22,7 +22,7 @@ export const ControlPanel = ({
       <h3>Marker Clustering</h3>
       <p>
         This example uses the <code>@googlemaps/markerclusterer</code> library
-        to demostrate how to render a large dataset of markers on the map.
+        to demonstrate how to render a large dataset of markers on the map.
       </p>
       <p>
         This example also includes a filter function to show dynamic updating of

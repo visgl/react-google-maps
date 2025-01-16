@@ -60,7 +60,7 @@ A class name that will be attached to the `img` tag.
 
 :::note
 
-Some explanations and syntax migh differ slighty from the official documentation since the Google documentation focuses on building and URL which has
+Some explanations and syntax migh differ slightly from the official documentation since the Google documentation focuses on building and URL which has
 been abstracted here in the helper function for better developer experience
 
 :::
