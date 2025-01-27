@@ -51,14 +51,14 @@ export const ColorScheme = {
   DARK: 'DARK',
   LIGHT: 'LIGHT',
   FOLLOW_SYSTEM: 'FOLLOW_SYSTEM'
-};
+} as const;
 export type ColorScheme = (typeof ColorScheme)[keyof typeof ColorScheme];
 
 export const RenderingType = {
   VECTOR: 'VECTOR',
   RASTER: 'RASTER',
   UNINITIALIZED: 'UNINITIALIZED'
-};
+} as const;
 export type RenderingType = (typeof RenderingType)[keyof typeof RenderingType];
 
 /**
