@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.1](https://github.com/visgl/react-google-maps/compare/v1.5.0...v1.5.1) (2025-01-28)
+
+
+### Bug Fixes
+
+* improve types ColorScheme and RenderingType ([#675](https://github.com/visgl/react-google-maps/issues/675)) ([785927a](https://github.com/visgl/react-google-maps/commit/785927a9b69e6a2c08ab013f607270d0dc0fc653))
+
 ## [1.5.0](https://github.com/visgl/react-google-maps/compare/v1.4.3...v1.5.0) (2025-01-10)
 
 
