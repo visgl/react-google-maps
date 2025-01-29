@@ -1,9 +1,9 @@
 import {useMap} from '@vis.gl/react-google-maps';
 import {useEffect, useMemo} from 'react';
 
-import {GoogleMapsOverlay} from '@deck.gl/google-maps/typed';
+import {GoogleMapsOverlay} from '@deck.gl/google-maps';
 
-import type {LayersList} from '@deck.gl/core/typed';
+import type {LayersList} from '@deck.gl/core';
 
 export type DeckglOverlayProps = {layers?: LayersList};
 

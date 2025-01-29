@@ -3,7 +3,7 @@ import {createRoot} from 'react-dom/client';
 
 import {APIProvider, Map} from '@vis.gl/react-google-maps';
 
-import {GeoJsonLayer} from '@deck.gl/layers/typed';
+import {GeoJsonLayer} from '@deck.gl/layers';
 import {DeckGlOverlay} from './deckgl-overlay';
 
 const DATA_URL =
