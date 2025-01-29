@@ -5,10 +5,10 @@
     "@types/geojson": "^7946.0.14",
     "@types/supercluster": "^7.1.3",
     "@vis.gl/react-google-maps": "latest",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "supercluster": "^8.0.1",
-    "vite": "^5.0.4"
+    "vite": "^6.0.11"
   },
   "scripts": {
     "start": "vite",

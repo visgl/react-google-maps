@@ -1,12 +1,12 @@
 {
   "type": "module",
   "dependencies": {
-    "@deck.gl/google-maps": "^8.9.34",
-    "deck.gl": "^8.9.34",
+    "@deck.gl/google-maps": "^9.1.0",
     "@vis.gl/react-google-maps": "latest",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "vite": "^5.0.4"
+    "deck.gl": "^9.1.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "vite": "^6.0.11"
   },
   "scripts": {
     "start": "vite",
