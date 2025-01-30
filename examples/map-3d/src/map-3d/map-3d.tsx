@@ -61,24 +61,16 @@ export const Map3D = forwardRef(
       google.maps.maps3d.Map3DElement | null
     >(forwardedRef, () => map3DElement, [map3DElement]);
 
-    const centerString = useMemo(() => {
-      const lat = center?.lat ?? 0.0;
-      const lng = center?.lng ?? 0.0;
-      const altitude = center?.altitude ?? 0.0;
-
-      return [lat, lng, altitude].join(',');
-    }, [center?.lat, center?.lng, center?.altitude]);
-
     if (!customElementsReady) return null;
 
     return (
       <gmp-map-3d
         ref={map3dRef}
-        center={centerString}
-        range={String(props.range)}
-        heading={String(props.heading)}
-        tilt={String(props.tilt)}
-        roll={String(props.roll)}></gmp-map-3d>
+        center={center}
+        range={props.range}
+        heading={props.heading}
+        tilt={props.tilt}
+        roll={props.roll}></gmp-map-3d>
     );
   }
 );
