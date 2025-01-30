@@ -10,24 +10,17 @@ declare module '@vis.gl/react-google-maps' {
 
 // add the <gmp-map-3d> custom-element to the JSX.IntrinsicElements
 // interface, so it can be used in jsx
-declare global {
+declare module 'react' {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace JSX {
     interface IntrinsicElements {
       ['gmp-map-3d']: CustomElement<
         google.maps.maps3d.Map3DElement,
-        {
-          [key in GmpMap3DAttributeNames]?: string;
-        }
+        google.maps.maps3d.Map3DElement
       >;
     }
   }
 }
-
-type GmpMap3DAttributeNames = keyof Omit<
-  google.maps.maps3d.Map3DElementOptions,
-  'bounds'
->;
 
 // a helper type for CustomElement definitions
 type CustomElement<TElem, TAttr> = Partial<
