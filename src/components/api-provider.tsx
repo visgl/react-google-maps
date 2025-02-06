@@ -5,14 +5,14 @@ import React, {
   useEffect,
   useMemo,
   useReducer,
-  useState,
+  useState
 } from 'react';
 
-import {APILoadingStatus} from '../libraries/api-loading-status';
 import {
   ApiParams,
-  GoogleMapsApiLoader,
+  GoogleMapsApiLoader
 } from '../libraries/google-maps-api-loader';
+import {APILoadingStatus} from '../libraries/api-loading-status';
 
 type ImportLibraryFunction = typeof google.maps.importLibrary;
 type GoogleMapsLibrary = Awaited<ReturnType<ImportLibraryFunction>>;
@@ -109,7 +109,7 @@ function useMapInstances() {
   >({});
 
   const addMapInstance = (mapInstance: google.maps.Map, id = 'default') => {
-    setMapInstances((instances) => ({...instances, [id]: mapInstance}));
+    setMapInstances(instances => ({...instances, [id]: mapInstance}));
   };
 
   const removeMapInstance = (id = 'default') => {
@@ -140,24 +140,24 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
   } = props;
 
   const [status, setStatus] = useState<APILoadingStatus>(
-    GoogleMapsApiLoader.loadingStatus,
+    GoogleMapsApiLoader.loadingStatus
   );
   const [loadedLibraries, addLoadedLibrary] = useReducer(
     (
       loadedLibraries: LoadedLibraries,
-      action: {name: keyof LoadedLibraries; value: LoadedLibraries[string]},
+      action: {name: keyof LoadedLibraries; value: LoadedLibraries[string]}
     ) => {
       return loadedLibraries[action.name]
         ? loadedLibraries
         : {...loadedLibraries, [action.name]: action.value};
     },
-    {},
+    {}
   );
 
   const librariesString = useMemo(() => libraries?.join(','), [libraries]);
   const serializedParams = useMemo(
     () => JSON.stringify({apiKey, version, ...otherApiParams}),
-    [apiKey, version, otherApiParams],
+    [apiKey, version, otherApiParams]
   );
 
   const importLibrary: typeof google.maps.importLibrary = useCallback(
@@ -169,7 +169,7 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
       if (!google?.maps?.importLibrary) {
         throw new Error(
           '[api-provider-internal] importLibrary was called before ' +
-            'google.maps.importLibrary was defined.',
+            'google.maps.importLibrary was defined.'
         );
       }
 
@@ -178,7 +178,7 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
 
       return res;
     },
-    [loadedLibraries],
+    [loadedLibraries]
   );
 
   const internalUsageAttributionIds = useMemo(
@@ -208,7 +208,7 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
             params.solutionChannel = DEFAULT_SOLUTION_CHANNEL;
           else if (params.solutionChannel === '') delete params.solutionChannel;
 
-          await GoogleMapsApiLoader.load(params, (status) => setStatus(status));
+          await GoogleMapsApiLoader.load(params, status => setStatus(status));
 
           for (const name of ['core', 'maps', ...libraries]) {
             await importLibrary(name);
@@ -223,28 +223,28 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
           } else {
             console.error(
               '<ApiProvider> failed to load the Google Maps JavaScript API',
-              error,
+              error
             );
           }
         }
       })();
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [apiKey, librariesString, serializedParams],
+    [apiKey, librariesString, serializedParams]
   );
 
   return {
     status,
     loadedLibraries,
     importLibrary,
-    internalUsageAttributionIds,
+    internalUsageAttributionIds
   };
 }
 
 /**
  * Component to wrap the components from this library and load the Google Maps JavaScript API
  */
-export const APIProvider: FunctionComponent<APIProviderProps> = (props) => {
+export const APIProvider: FunctionComponent<APIProviderProps> = props => {
   const {children, ...loaderProps} = props;
   const {mapInstances, addMapInstance, removeMapInstance, clearMapInstances} =
     useMapInstances();

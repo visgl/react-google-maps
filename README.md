@@ -111,7 +111,7 @@ samples are helpful to developers and is optional.
 
 To opt-out, use
 ```
-<APIProvider useInternalUsageAttributionId=false>
+<APIProvider useInternalUsageAttributionIds=false>
   <MyComponent />
 </APIProvider>
 ```
