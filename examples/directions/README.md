@@ -6,6 +6,8 @@ This is an example which shows how to use `useMapsLibrary` to load the `routes` 
 
 It allows the user to choose alternative routes, updating the route being rendered on the map.
 
+Users can also drag the markers around the map to change the route. The route is updated in real-time.
+
 ## Google Maps Platform API Key
 
 This example does not come with an API key. Running the examples locally requires a valid API key for the Google Maps Platform.
