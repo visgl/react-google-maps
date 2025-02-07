@@ -185,7 +185,7 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
     () =>
       useInternalUsageAttributionIds
         ? DEFAULT_INTERNAL_USAGE_ATTRIBUTION_IDS
-        : [],
+        : null,
     [useInternalUsageAttributionIds],
   );
 
