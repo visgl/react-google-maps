@@ -39,8 +39,31 @@ function Directions() {
   useEffect(() => {
     if (!routesLibrary || !map) return;
     setDirectionsService(new routesLibrary.DirectionsService());
-    setDirectionsRenderer(new routesLibrary.DirectionsRenderer({map}));
+    setDirectionsRenderer(
+      new routesLibrary.DirectionsRenderer({
+        draggable: true, // Only necessary for draggable markers
+        map
+      })
+    );
   }, [routesLibrary, map]);
+
+  // Add the following useEffect to make markers draggable
+  useEffect(() => {
+    if (!directionsRenderer) return;
+
+    // Add the listener to update routes when directions change
+    const listener = directionsRenderer.addListener(
+      'directions_changed',
+      () => {
+        const result = directionsRenderer.getDirections();
+        if (result) {
+          setRoutes(result.routes);
+        }
+      }
+    );
+
+    return () => google.maps.event.removeListener(listener);
+  }, [directionsRenderer]);
 
   // Use directions service
   useEffect(() => {
