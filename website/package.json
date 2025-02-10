@@ -12,13 +12,13 @@
   "dependencies": {
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "styled-components": "^6.1.14"
+    "styled-components": "^6.1.15"
   },
   "devDependencies": {
     "@docusaurus/core": "^3.7.0",
     "@docusaurus/plugin-content-docs": "^3.7.0",
     "@docusaurus/preset-classic": "^3.7.0",
-    "@easyops-cn/docusaurus-search-local": "^0.48.4",
+    "@easyops-cn/docusaurus-search-local": "^0.48.5",
     "babel-plugin-styled-components": "^2.0.0",
     "babel-plugin-version-inline": "^1.0.0",
     "glob": "^11.0.1"
