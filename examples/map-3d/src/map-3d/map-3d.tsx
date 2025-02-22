@@ -70,7 +70,8 @@ export const Map3D = forwardRef(
         range={props.range}
         heading={props.heading}
         tilt={props.tilt}
-        roll={props.roll}></gmp-map-3d>
+        roll={props.roll}
+        mode="hybrid"></gmp-map-3d>
     );
   }
 );
