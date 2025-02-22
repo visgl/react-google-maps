@@ -71,7 +71,7 @@ export const Map3D = forwardRef(
         heading={props.heading}
         tilt={props.tilt}
         roll={props.roll}
-        mode="hybrid"></gmp-map-3d>
+        mode="HYBRID"></gmp-map-3d>
     );
   }
 );
