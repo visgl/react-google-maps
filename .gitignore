@@ -4,3 +4,4 @@
 /examples/**/node_modules
 /examples/**/dist
 /examples/**/.env*
+.vscode/
