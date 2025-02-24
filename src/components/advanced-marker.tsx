@@ -128,9 +128,18 @@ const MarkerContent = ({
   const [xTranslation, yTranslation] =
     anchorPoint ?? AdvancedMarkerAnchorPoint['BOTTOM'];
 
+  let xTranslationFlipped = `-${xTranslation}`;
+  let yTranslationFlipped = `-${yTranslation}`;
+  if (xTranslation.trimStart().startsWith('-')) {
+    xTranslationFlipped = xTranslation.substring(1);
+  }
+  if (yTranslation.trimStart().startsWith('-')) {
+    yTranslationFlipped = yTranslation.substring(1);
+  }
+
   // The "translate(50%, 100%)" is here to counter and reset the default anchoring of the advanced marker element
   // that comes from the api
-  const transformStyle = `translate(50%, 100%) translate(-${xTranslation}, -${yTranslation})`;
+  const transformStyle = `translate(50%, 100%) translate(${xTranslationFlipped}, ${yTranslationFlipped})`;
 
   return (
     // anchoring container
