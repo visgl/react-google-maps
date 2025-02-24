@@ -104,6 +104,17 @@ const App = () => {
   );
 };
 ```
+### Internal usage attribution ID
+
+This library uses [`internalUsageAttributionIds`](https://developers.google.com/maps/documentation/javascript/reference/map#MapOptions.internalUsageAttributionIds), which helps Google understand which libraries and
+samples are helpful to developers and is optional.
+
+To opt-out, use
+```
+<APIProvider useInternalUsageAttributionIds=false>
+  <MyComponent />
+</APIProvider>
+```
 
 ## Examples
 
