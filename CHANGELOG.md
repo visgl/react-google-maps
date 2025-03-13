@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.2](https://github.com/visgl/react-google-maps/compare/v1.5.1...v1.5.2) (2025-03-13)
+
+
+### Bug Fixes
+
+* allow negative anchor values for AdvancedMarker ([#695](https://github.com/visgl/react-google-maps/issues/695)) ([d2de370](https://github.com/visgl/react-google-maps/commit/d2de370d4c938293b24b662bb333b2db40e14923))
+
 ## [1.5.1](https://github.com/visgl/react-google-maps/compare/v1.5.0...v1.5.1) (2025-01-28)
 
 
