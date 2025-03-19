@@ -18,10 +18,6 @@ export const AutocompleteCustom = ({onPlaceSelect}: Props) => {
   // https://developers.google.com/maps/documentation/javascript/reference/places-autocomplete-service
   const [autocompleteService, setAutocompleteService] =
     useState<google.maps.places.AutocompleteService | null>(null);
-
-  // https://developers.google.com/maps/documentation/javascript/reference/places-service
-  const [placesService, setPlacesService] =
-    useState<google.maps.places.PlacesService | null>(null);
     
   // https://developers.google.com/maps/documentation/javascript/reference/autocomplete-data#AutocompleteSuggestion
   const [autocompleteSuggestions, setAutocompleteSuggestions] = useState<
@@ -34,7 +30,6 @@ export const AutocompleteCustom = ({onPlaceSelect}: Props) => {
     if (!places || !map) return;
 
     setAutocompleteService(new places.AutocompleteService());
-    setPlacesService(new places.PlacesService(map));
     setSessionToken(new places.AutocompleteSessionToken());
 
     return () => setAutocompleteService(null);
