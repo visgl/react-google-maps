@@ -51,7 +51,8 @@ function ControlPanel({
         <div>
           This is the most flexible solution, but also requires quite a bit
           effort to get right. The example only implements a basic working
-          version for demonstration purposes.
+          version for demonstration purposes. This example now uses the new
+          Places API.
         </div>
       )}
       {selectedAutocompleteMode.id === 'custom-hybrid' && (
