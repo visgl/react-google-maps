@@ -62,12 +62,12 @@ export const AutocompleteCustom = ({onPlaceSelect}: Props) => {
       const {place} = await selectedSuggestion.placePrediction
         .toPlace()
         .fetchFields({
-          fields: ['viewport']
+          fields: ['viewport', 'formattedAddress']
         });
       if (!place.viewport) return;
       onPlaceSelect(place);
       setAutocompleteSuggestions([]);
-      setInputValue(selectedSuggestion.placePrediction.text.text ?? '');
+      setInputValue(place.formattedAddress ?? '');
       setSessionToken(new places.AutocompleteSessionToken());
     },
     [autocompleteSuggestions, onPlaceSelect, places]
