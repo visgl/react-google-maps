@@ -5,8 +5,7 @@ interface Props {
   onPlaceSelect: (place: google.maps.places.Place | null) => void;
 }
 
-// This is a custom built autocomplete component using the "Autocomplete Service" for predictions
-// and the "Places Service" for place details
+// This is a custom built autocomplete component using the new "fetchAutocompleteSuggestions" method and "AutocompleteSuggestion"
 export const AutocompleteCustom = ({onPlaceSelect}: Props) => {
   const places = useMapsLibrary('places');
 
