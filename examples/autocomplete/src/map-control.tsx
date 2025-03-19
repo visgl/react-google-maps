@@ -10,7 +10,7 @@ import type {AutocompleteMode} from './app';
 type CustomAutocompleteControlProps = {
   controlPosition: ControlPosition;
   selectedAutocompleteMode: AutocompleteMode;
-  onPlaceSelect: (place: google.maps.places.PlaceResult | null) => void;
+  onPlaceSelect: (place: google.maps.places.PlaceResult | google.maps.places.Place | null) => void;
 };
 
 export const CustomMapControl = ({
