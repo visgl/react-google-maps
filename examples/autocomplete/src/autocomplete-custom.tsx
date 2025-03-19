@@ -14,10 +14,6 @@ export const AutocompleteCustom = ({onPlaceSelect}: Props) => {
   // https://developers.google.com/maps/documentation/javascript/reference/places-autocomplete-service#AutocompleteSessionToken
   const [sessionToken, setSessionToken] =
     useState<google.maps.places.AutocompleteSessionToken>();
-
-  // https://developers.google.com/maps/documentation/javascript/reference/places-autocomplete-service
-  const [autocompleteService, setAutocompleteService] =
-    useState<google.maps.places.AutocompleteService | null>(null);
     
   // https://developers.google.com/maps/documentation/javascript/reference/autocomplete-data#AutocompleteSuggestion
   const [autocompleteSuggestions, setAutocompleteSuggestions] = useState<
@@ -29,10 +25,7 @@ export const AutocompleteCustom = ({onPlaceSelect}: Props) => {
   useEffect(() => {
     if (!places || !map) return;
 
-    setAutocompleteService(new places.AutocompleteService());
     setSessionToken(new places.AutocompleteSessionToken());
-
-    return () => setAutocompleteService(null);
   }, [map, places]);
 
   const fetchPredictions = useCallback(
