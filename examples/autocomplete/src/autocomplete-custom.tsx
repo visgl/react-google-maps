@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useCallback, FormEvent} from 'react';
-import {useMap, useMapsLibrary} from '@vis.gl/react-google-maps';
+import {useMapsLibrary} from '@vis.gl/react-google-maps';
 
 interface Props {
   onPlaceSelect: (place: google.maps.places.Place | null) => void;
@@ -8,13 +8,12 @@ interface Props {
 // This is a custom built autocomplete component using the "Autocomplete Service" for predictions
 // and the "Places Service" for place details
 export const AutocompleteCustom = ({onPlaceSelect}: Props) => {
-  const map = useMap();
   const places = useMapsLibrary('places');
 
   // https://developers.google.com/maps/documentation/javascript/reference/places-autocomplete-service#AutocompleteSessionToken
   const [sessionToken, setSessionToken] =
     useState<google.maps.places.AutocompleteSessionToken>();
-    
+
   // https://developers.google.com/maps/documentation/javascript/reference/autocomplete-data#AutocompleteSuggestion
   const [autocompleteSuggestions, setAutocompleteSuggestions] = useState<
     Array<google.maps.places.AutocompleteSuggestion>
@@ -23,10 +22,9 @@ export const AutocompleteCustom = ({onPlaceSelect}: Props) => {
   const [inputValue, setInputValue] = useState<string>('');
 
   useEffect(() => {
-    if (!places || !map) return;
-
+    if (!places) return;
     setSessionToken(new places.AutocompleteSessionToken());
-  }, [map, places]);
+  }, [places]);
 
   const fetchPredictions = useCallback(
     async (inputValue: string) => {
@@ -34,13 +32,11 @@ export const AutocompleteCustom = ({onPlaceSelect}: Props) => {
         setAutocompleteSuggestions([]);
         return;
       }
-
       const request = {input: inputValue, sessionToken};
-      const { suggestions } =
+      const {suggestions} =
         await places.AutocompleteSuggestion.fetchAutocompleteSuggestions(
-          request,
+          request
         );
-
       setAutocompleteSuggestions(suggestions);
     },
     [places, sessionToken]
@@ -56,15 +52,17 @@ export const AutocompleteCustom = ({onPlaceSelect}: Props) => {
     [fetchPredictions]
   );
 
+  // Following the migration guide for Places API (new)
+  // https://developers.google.com/maps/documentation/javascript/places-migration-autocomplete#retrieve-autocomplete-predictions-new
   const handleSuggestionClick = useCallback(
     async (index: number) => {
-      if(!places) return;
+      if (!places) return;
       const selectedSuggestion = autocompleteSuggestions[index];
       if (!selectedSuggestion?.placePrediction) return;
-      const { place } = await selectedSuggestion.placePrediction
+      const {place} = await selectedSuggestion.placePrediction
         .toPlace()
         .fetchFields({
-          fields: ["viewport"],
+          fields: ['viewport']
         });
       if (!place.viewport) return;
       onPlaceSelect(place);
@@ -85,7 +83,7 @@ export const AutocompleteCustom = ({onPlaceSelect}: Props) => {
 
       {autocompleteSuggestions.length > 0 && (
         <ul className="custom-list">
-          {autocompleteSuggestions.map(({placePrediction},index) => {
+          {autocompleteSuggestions.map(({placePrediction}, index) => {
             return (
               <li
                 key={index}
