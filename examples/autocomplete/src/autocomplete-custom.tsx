@@ -22,7 +22,8 @@ export const AutocompleteCustom = ({onPlaceSelect}: Props) => {
   // https://developers.google.com/maps/documentation/javascript/reference/places-service
   const [placesService, setPlacesService] =
     useState<google.maps.places.PlacesService | null>(null);
-
+    
+  // https://developers.google.com/maps/documentation/javascript/reference/autocomplete-data#AutocompleteSuggestion
   const [autocompleteSuggestions, setAutocompleteSuggestions] = useState<
     Array<google.maps.places.AutocompleteSuggestion>
   >([]);
