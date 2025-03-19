@@ -2,7 +2,7 @@ import React, {useEffect, useState, useCallback, FormEvent} from 'react';
 import {useMap, useMapsLibrary} from '@vis.gl/react-google-maps';
 
 interface Props {
-  onPlaceSelect: (place: google.maps.places.PlaceResult | null) => void;
+  onPlaceSelect: (place: google.maps.places.Place | null) => void;
 }
 
 // This is a custom built autocomplete component using the "Autocomplete Service" for predictions
@@ -23,8 +23,8 @@ export const AutocompleteCustom = ({onPlaceSelect}: Props) => {
   const [placesService, setPlacesService] =
     useState<google.maps.places.PlacesService | null>(null);
 
-  const [predictionResults, setPredictionResults] = useState<
-    Array<google.maps.places.AutocompletePrediction>
+  const [autocompleteSuggestions, setAutocompleteSuggestions] = useState<
+    Array<google.maps.places.AutocompleteSuggestion>
   >([]);
 
   const [inputValue, setInputValue] = useState<string>('');
@@ -41,17 +41,20 @@ export const AutocompleteCustom = ({onPlaceSelect}: Props) => {
 
   const fetchPredictions = useCallback(
     async (inputValue: string) => {
-      if (!autocompleteService || !inputValue) {
-        setPredictionResults([]);
+      if (!places || !inputValue) {
+        setAutocompleteSuggestions([]);
         return;
       }
 
       const request = {input: inputValue, sessionToken};
-      const response = await autocompleteService.getPlacePredictions(request);
+      const { suggestions } =
+        await places.AutocompleteSuggestion.fetchAutocompleteSuggestions(
+          request,
+        );
 
-      setPredictionResults(response.predictions);
+      setAutocompleteSuggestions(suggestions);
     },
-    [autocompleteService, sessionToken]
+    [places, sessionToken]
   );
 
   const onInputChange = useCallback(
@@ -65,27 +68,22 @@ export const AutocompleteCustom = ({onPlaceSelect}: Props) => {
   );
 
   const handleSuggestionClick = useCallback(
-    (placeId: string) => {
-      if (!places) return;
-
-      const detailRequestOptions = {
-        placeId,
-        fields: ['geometry', 'name', 'formatted_address'],
-        sessionToken
-      };
-
-      const detailsRequestCallback = (
-        placeDetails: google.maps.places.PlaceResult | null
-      ) => {
-        onPlaceSelect(placeDetails);
-        setPredictionResults([]);
-        setInputValue(placeDetails?.formatted_address ?? '');
-        setSessionToken(new places.AutocompleteSessionToken());
-      };
-
-      placesService?.getDetails(detailRequestOptions, detailsRequestCallback);
+    async (index: number) => {
+      if(!places) return;
+      const selectedSuggestion = autocompleteSuggestions[index];
+      if (!selectedSuggestion?.placePrediction) return;
+      const { place } = await selectedSuggestion.placePrediction
+        .toPlace()
+        .fetchFields({
+          fields: ["viewport"],
+        });
+      if (!place.viewport) return;
+      onPlaceSelect(place);
+      setAutocompleteSuggestions([]);
+      setInputValue(selectedSuggestion.placePrediction.text.text ?? '');
+      setSessionToken(new places.AutocompleteSessionToken());
     },
-    [onPlaceSelect, places, placesService, sessionToken]
+    [autocompleteSuggestions, onPlaceSelect, places]
   );
 
   return (
@@ -96,15 +94,15 @@ export const AutocompleteCustom = ({onPlaceSelect}: Props) => {
         placeholder="Search for a place"
       />
 
-      {predictionResults.length > 0 && (
+      {autocompleteSuggestions.length > 0 && (
         <ul className="custom-list">
-          {predictionResults.map(({place_id, description}) => {
+          {autocompleteSuggestions.map(({placePrediction},index) => {
             return (
               <li
-                key={place_id}
+                key={index}
                 className="custom-list-item"
-                onClick={() => handleSuggestionClick(place_id)}>
-                {description}
+                onClick={() => handleSuggestionClick(index)}>
+                {placePrediction?.text.text}
               </li>
             );
           })}
