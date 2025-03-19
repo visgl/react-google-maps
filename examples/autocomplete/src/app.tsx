@@ -13,7 +13,7 @@ export type AutocompleteMode = {id: string; label: string};
 
 const autocompleteModes: Array<AutocompleteMode> = [
   {id: 'classic', label: 'Google Autocomplete Widget'},
-  {id: 'custom', label: 'Custom Build'},
+  {id: 'custom', label: 'Custom Build - Places API (new)'},
   {id: 'custom-hybrid', label: 'Custom w/ Select Widget'}
 ];
 
@@ -21,8 +21,9 @@ const App = () => {
   const [selectedAutocompleteMode, setSelectedAutocompleteMode] =
     useState<AutocompleteMode>(autocompleteModes[0]);
 
-  const [selectedPlace, setSelectedPlace] =
-    useState<google.maps.places.PlaceResult | google.maps.places.Place | null>(null);
+  const [selectedPlace, setSelectedPlace] = useState<
+    google.maps.places.PlaceResult | google.maps.places.Place | null
+  >(null);
 
   return (
     <APIProvider apiKey={API_KEY}>
