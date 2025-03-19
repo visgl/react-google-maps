@@ -22,7 +22,7 @@ const App = () => {
     useState<AutocompleteMode>(autocompleteModes[0]);
 
   const [selectedPlace, setSelectedPlace] =
-    useState<google.maps.places.PlaceResult | null>(null);
+    useState<google.maps.places.PlaceResult | google.maps.places.Place | null>(null);
 
   return (
     <APIProvider apiKey={API_KEY}>
