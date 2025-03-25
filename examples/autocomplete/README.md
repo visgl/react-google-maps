@@ -21,15 +21,15 @@ This example uses the new [Autocomplete Data API][gmp-autocomplete-data] to
 retrieve predictions for the current value of an input field.
 The main logic for retrieving the suggestions is encapsulated into a custom
 hook [`useAutocompleteSuggestions`](./src/hooks/use-autocomplete-suggestions.ts)
-that you can copy into your project when you want to write your own 
+that you can copy into your project when you want to write your own
 implementation.
 
 ### 3) Third Party Combobox Widget
 
-This is basically the same as the custom build, but instead of implementing 
-the UI with HTML/CSS, we are using an existing combobox component. 
+This is basically the same as the custom build, but instead of implementing
+the UI with HTML/CSS, we are using an existing combobox component.
 
-Such a Combobox can be found in most React UI libraries, and we would 
+Such a Combobox can be found in most React UI libraries, and we would
 recommend building a custom implementation on an existing component.
 
 For this example we used the [Combobox][combobox] from `react-widgets`.
