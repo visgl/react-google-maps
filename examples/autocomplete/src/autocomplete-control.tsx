@@ -1,32 +1,28 @@
 import React from 'react';
 import {ControlPosition, MapControl} from '@vis.gl/react-google-maps';
 
-import {PlaceAutocompleteClassic} from './autocomplete-classic';
-import {AutocompleteCustom} from './autocomplete-custom';
+import {AutocompleteCustom} from './components/autocomplete-custom';
+import {AutocompleteCustomHybrid} from './components/autocomplete-custom-hybrid';
+import {AutocompleteWebComponent} from './components/autocomplete-webcomponent';
 
-import {AutocompleteCustomHybrid} from './autocomplete-custom-hybrid';
 import type {AutocompleteMode} from './app';
 
 type CustomAutocompleteControlProps = {
   controlPosition: ControlPosition;
-  selectedAutocompleteMode: AutocompleteMode;
-  onPlaceSelect: (place: google.maps.places.PlaceResult | null) => void;
+  selectedImplementation: AutocompleteMode;
+  onPlaceSelect: (place: google.maps.places.Place | null) => void;
 };
 
-export const CustomMapControl = ({
+const AutocompleteControl = ({
   controlPosition,
-  selectedAutocompleteMode,
+  selectedImplementation,
   onPlaceSelect
 }: CustomAutocompleteControlProps) => {
-  const {id} = selectedAutocompleteMode;
+  const {id} = selectedImplementation;
 
   return (
     <MapControl position={controlPosition}>
       <div className="autocomplete-control">
-        {id === 'classic' && (
-          <PlaceAutocompleteClassic onPlaceSelect={onPlaceSelect} />
-        )}
-
         {id === 'custom' && (
           <AutocompleteCustom onPlaceSelect={onPlaceSelect} />
         )}
@@ -34,7 +30,13 @@ export const CustomMapControl = ({
         {id === 'custom-hybrid' && (
           <AutocompleteCustomHybrid onPlaceSelect={onPlaceSelect} />
         )}
+
+        {id === 'webcomponent' && (
+          <AutocompleteWebComponent onPlaceSelect={onPlaceSelect} />
+        )}
       </div>
     </MapControl>
   );
 };
+
+export default React.memo(AutocompleteControl);

@@ -1,24 +1,38 @@
 # Autocomplete Examples
 
-Here you can find a few example implementations of the autocomplete functionality utilizing the Google Places API.
+Here you can find example implementations of the autocomplete functionality
+using the new Places API.
 
-## Examples
+We have three different implementations to demonstrate how to add
+autocomplete functionality to your application. The corresponding components
+can be found in the [./src/components/] directory.
 
-We have three different implementations to demonstrate how to add autocomplete functionality to your application
+### 1) `<gmp-place-autocomplete>` custom element (beta)
 
-### 1) Maps JavaScript API Autocomplete Widget
+By far the simplest possible implementation using the new
+`<gmp-place-autocomplete>` custom element. This is currently in preview and
+only available in alpha and beta channels.
 
-When using the [Autocomplete widget][autocomplete-widget] you provide an HTML input element of your choice and Google handles all the rest. It will fetch predictions when the user types and it will get the details for a place when the user selects a prediction from the list.
+Options to adjust styling and behavior details are very limited.
 
 ### 2) Custom Build
 
-When you need complete control over every aspect of your autocomplete you can choose to build your own by utilizing the [Autocomplete Service][autocomplete-service] for fetching query predictions and the [Places Service][place-details] for fetching the place details.
+This example uses the new [Autocomplete Data API][gmp-autocomplete-data] to
+retrieve predictions for the current value of an input field.
+The main logic for retrieving the suggestions is encapsulated into a custom
+hook [`useAutocompleteSuggestions`](./src/hooks/use-autocomplete-suggestions.ts)
+that you can copy into your project when you want to write your own
+implementation.
 
-When building your own you are completely free but also responsible for the user experience of the autocomplete. You are also responsible for handling the autocomplete session with a [Session token][session-token]. This can easily be overlooked and may lead to unexpected surprises when it comes to billing.
+### 3) Third Party Combobox Widget
 
-### 3) Third Party Select Widget
+This is basically the same as the custom build, but instead of implementing
+the UI with HTML/CSS, we are using an existing combobox component.
 
-This is basically the same as the custom build, except for not having to implement the list/dropdown/DOM handling yourself. A lot of third party text box widgets provide functionality for handling keyboard navigation and focus handling. For the demo we used the [Combobox][combobox] from `react-widgets`.
+Such a Combobox can be found in most React UI libraries, and we would
+recommend building a custom implementation on an existing component.
+
+For this example we used the [Combobox][combobox] from `react-widgets`.
 
 ## Google Maps Platform API Key
 
@@ -56,3 +70,4 @@ The regular `npm start` task is only used for the standalone versions of the exa
 [place-details]: https://developers.google.com/maps/documentation/javascript/reference/places-service#PlacesService.getDetails
 [session-token]: https://developers.google.com/maps/documentation/javascript/reference/places-autocomplete-service#AutocompleteSessionToken
 [combobox]: https://jquense.github.io/react-widgets/docs/Combobox
+[gmp-autocomplete-data]: https://developers.google.com/maps/documentation/javascript/place-autocomplete-data

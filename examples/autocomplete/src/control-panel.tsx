@@ -1,39 +1,41 @@
 import * as React from 'react';
 import {AutocompleteMode} from './app';
 
+import './control-panel.css';
+
 interface Props {
-  autocompleteModes: Array<AutocompleteMode>;
-  selectedAutocompleteMode: AutocompleteMode;
-  onAutocompleteModeChange: (autocompleteMode: AutocompleteMode) => void;
+  implementations: Array<AutocompleteMode>;
+  selectedImplementation: AutocompleteMode;
+  onImplementationChange: (autocompleteMode: AutocompleteMode) => void;
 }
 
 function ControlPanel({
-  autocompleteModes,
-  selectedAutocompleteMode,
-  onAutocompleteModeChange
+  implementations,
+  selectedImplementation,
+  onImplementationChange
 }: Props) {
   return (
     <div className="control-panel">
       <h3>Autocomplete Example</h3>
 
       <p>
-        This example demonstrates three different methods of adding autocomplete
-        functionality to your application using the Google Places API.
+        This example demonstrates different ways to add Places Autocomplete
+        functionality to your application with the new Places API.
       </p>
 
       <div className="autocomplete-mode">
-        <h4>Choose the example style: </h4>
+        <h4>Choose implementation: </h4>
         <select
-          value={selectedAutocompleteMode.id}
+          value={selectedImplementation.id}
           onChange={event => {
-            const newMode = autocompleteModes.find(
+            const newMode = implementations.find(
               mode => mode.id === event.target.value
             );
             if (newMode) {
-              onAutocompleteModeChange(newMode);
+              onImplementationChange(newMode);
             }
           }}>
-          {autocompleteModes.map(({id, label}) => (
+          {implementations.map(({id, label}) => (
             <option key={id} value={id}>
               {label}
             </option>
@@ -41,26 +43,30 @@ function ControlPanel({
         </select>
       </div>
 
-      {selectedAutocompleteMode.id === 'classic' && (
-        <div>
-          This is the easiest to setup. You only need an input element and
-          Google handles the rest.
-        </div>
-      )}
-      {selectedAutocompleteMode.id === 'custom' && (
-        <div>
-          This is the most flexible solution, but also requires quite a bit
-          effort to get right. The example only implements a basic working
-          version for demonstration purposes.
-        </div>
-      )}
-      {selectedAutocompleteMode.id === 'custom-hybrid' && (
-        <div>
-          This has the benefits of custom look, feel and solid UX out of the
-          box, but you still have to manage the prediction and details fetching
-          as well as the session yourself.
-        </div>
-      )}
+      <div className={'implementation-details'}>
+        {selectedImplementation.id === 'webcomponent' && (
+          <div>
+            This implementation makes use of the new{' '}
+            <code>&lt;gmp-place-autocomplete&gt;</code> web-component that is
+            currently in preview (only available in alpha and beta channels).
+          </div>
+        )}
+
+        {selectedImplementation.id === 'custom' && (
+          <div>
+            A custom implementation using the new Autocomplete Data API using
+            just basic HTML elements and minimal styling.
+          </div>
+        )}
+
+        {selectedImplementation.id === 'custom-hybrid' && (
+          <div>
+            This implementation uses the Autocomplete Data API and an existing
+            combobox component as it can be found in most React UI libraries.
+          </div>
+        )}
+      </div>
+
       <div className="links">
         <a
           href="https://codesandbox.io/s/github/visgl/react-google-maps/tree/main/examples/autocomplete"

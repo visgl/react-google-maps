@@ -1,0 +1,11 @@
+.control-panel {
+  select {
+    max-width: 100%;
+    text-overflow: ellipsis;
+  }
+
+  .implementation-details {
+    font-size: 0.8em;
+    margin: 1em 0;
+  }
+}
