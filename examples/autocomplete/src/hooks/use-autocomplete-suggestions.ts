@@ -14,9 +14,10 @@ export type UseAutocompleteSuggestionsReturn = {
  *
  * @param inputString The input string for which to fetch autocomplete suggestions.
  * @param requestOptions Additional options for the autocomplete request
- *                       (See {@link https://developers.google.com/maps/documentation/javascript/reference/places-service#AutocompleteRequest|google.maps.places.AutocompleteRequest}).
+ *   (See {@link https://developers.google.com/maps/documentation/javascript/reference/autocomplete-data#AutocompleteRequest}).
  *
- * @returns An object containing the autocomplete suggestions, the current loading-status and a function to reset the session.
+ * @returns An object containing the autocomplete suggestions, the current loading-status,
+ *   and a function to reset the session.
  *
  * @example
  * ```jsx
