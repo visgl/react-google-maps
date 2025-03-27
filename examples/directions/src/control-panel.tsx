@@ -1,4 +1,8 @@
 import * as React from 'react';
+import './control-panel.css';
+
+const GCP_DIRECTIONS_API =
+  'https://console.cloud.google.com/apis/library/directions-backend.googleapis.com';
 
 function ControlPanel() {
   return (
@@ -6,7 +10,17 @@ function ControlPanel() {
       <h3>Directions</h3>
       <p>
         Loading the routes library to render directions on the map using
-        DirectionsService and DirectionsRenderer.
+        <code>DirectionsService</code> and <code>DirectionsRenderer</code>.
+      </p>
+
+      <p className={'note'}>
+        <strong>Important:</strong> This example is only compatible with the
+        Directions API Legacy Service. Using this Services requires enabling the
+        API on your Google Cloud project by following the direct links:{' '}
+        <a target={'_new'} href={GCP_DIRECTIONS_API}>
+          Directions API (Legacy)
+        </a>
+        .
       </p>
 
       <div className="links">
