@@ -24,6 +24,7 @@ const sidebars = {
         'drawing',
         'autocomplete',
         'directions',
+        'routes-api',
         'deckgl-overlay',
         'map-3d',
         'extended-component-library',
