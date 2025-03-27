@@ -8,6 +8,13 @@ It allows the user to choose alternative routes, updating the route being render
 
 Users can also drag the markers around the map to change the route. The route is updated in real-time.
 
+> [!IMPORTANT]
+> 
+> This example is only compatible with the
+> Directions API Legacy Service. Using this Services requires enabling the
+> API on your Google Cloud project by following the direct links:
+> [Directions API (Legacy)][gcp-directions-api]
+
 ## Google Maps Platform API Key
 
 This example does not come with an API key. Running the examples locally requires a valid API key for the Google Maps Platform.
@@ -39,3 +46,4 @@ npm run start-local
 The regular `npm start` task is only used for the standalone versions of the example (CodeSandbox for example)
 
 [get-api-key]: https://developers.google.com/maps/documentation/javascript/get-api-key
+[gcp-directions-api]: https://console.cloud.google.com/apis/library/directions-backend.googleapis.com

@@ -7,6 +7,7 @@ import {
   useMapsLibrary,
   useMap
 } from '@vis.gl/react-google-maps';
+import ControlPanel from './control-panel';
 
 const API_KEY =
   globalThis.GOOGLE_MAPS_API_KEY ?? (process.env.GOOGLE_MAPS_API_KEY as string);
@@ -20,6 +21,7 @@ const App = () => (
       fullscreenControl={false}>
       <Directions />
     </Map>
+    <ControlPanel />
   </APIProvider>
 );
 
