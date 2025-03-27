@@ -9,7 +9,7 @@ It allows the user to choose alternative routes, updating the route being render
 Users can also drag the markers around the map to change the route. The route is updated in real-time.
 
 > [!IMPORTANT]
-> 
+>
 > This example is only compatible with the
 > Directions API Legacy Service. Using this Services requires enabling the
 > API on your Google Cloud project by following the direct links:
