@@ -2,6 +2,9 @@ const fields = ['routes.viewport', 'routes.legs', 'routes.polylineDetails'];
 
 // docs at https://developers.google.com/maps/documentation/routes/reference/rest/v2/TopLevel/computeRoutes
 
+const ROUTES_API_ENDPOINT =
+  'https://routes.googleapis.com/directions/v2:computeRoutes';
+
 export class RoutesApi {
   private readonly apiKey: string;
 
@@ -14,11 +17,6 @@ export class RoutesApi {
     to: google.maps.LatLngLiteral,
     options: any
   ) {
-    console.log('computeRoutes', from, to, options);
-    const url = new URL(
-      'https://routes.googleapis.com/directions/v2:computeRoutes'
-    );
-
     const routeRequest = {
       origin: {
         location: {latLng: {longitude: from.lng, latitude: from.lat}}
@@ -29,7 +27,9 @@ export class RoutesApi {
       ...options
     };
 
+    const url = new URL(ROUTES_API_ENDPOINT);
     url.searchParams.set('fields', fields.join(','));
+
     const response = await fetch(url, {
       method: 'POST',
       headers: {
