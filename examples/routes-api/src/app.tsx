@@ -19,6 +19,10 @@ const apiClient = new RoutesApi(API_KEY);
 const routeOrigin = {lng: 9.9004303, lat: 53.588241};
 const routeDestination = {lng: 13.43765, lat: 52.52967};
 
+// timestamp for tomorrow at 3pm UTC
+const timestamp = Math.ceil(Date.now() / 86_400_000) * 86_400_000 + 900_000;
+const departureTime = new Date(timestamp).toISOString();
+
 const appearance = {
   walkingPolylineColor: '#000',
   defaultPolylineColor: '#7c7c7c',
@@ -29,7 +33,7 @@ const appearance = {
 // for all options, see https://developers.google.com/maps/documentation/routes/reference/rest/v2/TopLevel/computeRoutes#request-body
 const routeOptions = {
   travelMode: 'TRANSIT',
-  departureTime: '2025-03-27T15:00:00Z',
+  departureTime,
   computeAlternativeRoutes: false,
   units: 'METRIC'
 };
