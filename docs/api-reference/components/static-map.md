@@ -193,7 +193,7 @@ type StaticMapsMarker = {
 
 For style options see [Path styles][gmp-path-styles].
 
-`coordinates` can either bei an array of locations/addresses or it can be an [encoded polyline][gmp-encoded-polyline]. Note that the encoded polyline needs an `enc:` prefix.
+`coordinates` can either be an array of locations/addresses or it can be an [encoded polyline][gmp-encoded-polyline]. Note that the encoded polyline needs an `enc:` prefix.
 
 ```tsx
 type StaticMapsPath = {
