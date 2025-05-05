@@ -21,6 +21,6 @@
     "@easyops-cn/docusaurus-search-local": "^0.49.2",
     "babel-plugin-styled-components": "^2.0.0",
     "babel-plugin-version-inline": "^1.0.0",
-    "glob": "^11.0.1"
+    "glob": "^11.0.2"
   }
 }
