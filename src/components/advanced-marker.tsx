@@ -221,9 +221,10 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
   // we set the className directly on the marker.content element that comes
   // with the AdvancedMarker.
   useEffect(() => {
-    if (!marker || !marker.content || numChildren > 0) return;
+    if (!marker?.content || !isElementNode(marker.content) || numChildren > 0)
+      return;
 
-    (marker.content as HTMLElement).className = className || '';
+    marker.content.className = className ?? '';
   }, [marker, className, numChildren]);
 
   // copy other props
