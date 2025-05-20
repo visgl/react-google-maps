@@ -13,7 +13,7 @@ interface PlaceTypeOption {
   label: string;
 }
 
-const SearchBar = memo(function SearchBar({
+export const SearchBar = memo(function SearchBar({
   placeType,
   setPlaceType,
   setLocationId
@@ -56,5 +56,3 @@ const SearchBar = memo(function SearchBar({
     </div>
   );
 });
-
-export default SearchBar;

@@ -6,6 +6,8 @@ interface ControlPanelProps {
   onDetailSizeChange: (size: DetailsSize) => void;
 }
 
+// ControlPanel provides UI configuration options for the place details view
+// This component is memoized to prevent unnecessary re-renders
 function ControlPanel(props: ControlPanelProps) {
   return (
     <div className="control-panel">
@@ -13,6 +15,13 @@ function ControlPanel(props: ControlPanelProps) {
       <p>This shows the use of the Places UI Kit webcomponents.</p>
 
       <p>Control the size of the place details infowindow:</p>
+      {/* 
+        Dropdown to select the level of detail shown in the place details infowindow
+        - SMALL: Compact view with minimal information
+        - MEDIUM: Standard view with moderate detail
+        - LARGE: Extended view with more information
+        - X_LARGE: Comprehensive view with all available details
+      */}
       <select
         name="detailsSize"
         id="detailsSize"

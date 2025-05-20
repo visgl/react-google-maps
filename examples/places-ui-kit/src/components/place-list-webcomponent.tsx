@@ -8,6 +8,7 @@ interface Props {
   placeType: string | null;
 }
 
+// Custom type definition for the Google Maps Web Component that isn't fully typed in the SDK
 type PlaceListElement = HTMLElement & {
   configureFromSearchNearbyRequest: (request: {
     locationRestriction?: {center: google.maps.LatLng; radius: number};
@@ -22,24 +23,30 @@ export const PlaceListWebComponent = ({
   locationId,
   placeType
 }: Props) => {
-  // make sure the `<gmp-place-list>` component gets loaded
+  // Load required Google Maps libraries
   const placesLib = useMapsLibrary('places');
   const geoLib = useMapsLibrary('geometry');
 
   const map = useMap();
 
+  // Use ref to interact with the DOM Web Component
   const placeListRef = useRef<PlaceListElement | null>(null);
 
+  // Calculate a circular region based on the map's current bounds
+  // This is used to restrict the places search to the visible map area
   const getContainingCircle = useCallback(
     (bounds?: google.maps.LatLngBounds) => {
       if (!bounds || !geoLib) return undefined;
 
+      // Calculate diameter between the northeast and southwest corners of the bounds
       const diameter = geoLib.spherical.computeDistanceBetween(
         bounds.getNorthEast(),
         bounds.getSouthWest()
       );
       const calculatedRadius = diameter / 2;
-      const cappedRadius = Math.min(calculatedRadius, 50000); // Cap the radius to avoid an error.
+
+      // Cap the radius at 50km to avoid exceeding Google Maps API limits
+      const cappedRadius = Math.min(calculatedRadius, 50000);
       return {center: bounds.getCenter(), radius: cappedRadius};
     },
     [geoLib]
@@ -56,12 +63,15 @@ export const PlaceListWebComponent = ({
 
     if (!circle) return;
 
+    // Configure the place list web component with the search parameters
+    // This triggers a nearby search using the Google Maps Places API
     placeList
       .configureFromSearchNearbyRequest({
         locationRestriction: circle,
         includedPrimaryTypes: placeType ? [placeType] : undefined
       })
       .then(() => {
+        // Update the parent component with the places received from the web component
         setPlaces(placeList.places);
       })
       .catch(error => {
@@ -69,12 +79,15 @@ export const PlaceListWebComponent = ({
       });
   }, [placesLib, geoLib, map, placeType, getContainingCircle, locationId]);
 
-  // Note: This is a React 19 thing to be able to treat custom elements this way.
-  //   In React before v19, you'd have to use a ref, or use the PlaceListElement
-  //   constructor instead.
+  // Return the Google Maps Place List Web Component
+  // This component is rendered as a custom HTML element (Web Component) provided by Google
   return (
     <div className="place-list-container">
-      {/* https://developers.google.com/maps/documentation/javascript/places-ui-kit/place-list */}
+      {/* 
+        gmp-place-list is a Google Maps Platform Web Component that displays a list of places
+        - 'selectable' enables click-to-select functionality
+        - When a place is selected, the ongmp-placeselect event is fired
+      */}
       <gmp-place-list
         selectable
         ref={placeListRef}
