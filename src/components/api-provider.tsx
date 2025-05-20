@@ -29,6 +29,9 @@ export interface APIProviderContextValue {
 }
 
 const DEFAULT_SOLUTION_CHANNEL = 'GMP_visgl_rgmlibrary_v1_default';
+const DEFAULT_INTERNAL_USAGE_ATTRIBUTION_IDS = [
+  'GMP_LIB_VISGL_REACT_GOOGLE_MAPS',
+];
 
 export const APIProviderContext =
   React.createContext<APIProviderContextValue | null>(null);
@@ -82,6 +85,12 @@ export type APIProviderProps = PropsWithChildren<{
    */
   solutionChannel?: string;
   /**
+   * To help Google understand which libraries and samples are helpful to developers, such as usage of this library. To opt out of sending the usage attribution ID, it is safe to set this to `false`.
+   * Read more in the
+   * [documentation](https://developers.google.com/maps/documentation/javascript/reference/map#MapOptions.internalUsageAttributionIds)
+   */
+  useInternalUsageAttributionIds?: boolean;
+  /**
    * A function that can be used to execute code after the Google Maps JavaScript API has been loaded.
    */
   onLoad?: () => void;
@@ -126,6 +135,7 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
     apiKey,
     version,
     libraries = [],
+    useInternalUsageAttributionIds = true,
     ...otherApiParams
   } = props;
 
@@ -169,6 +179,14 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
       return res;
     },
     [loadedLibraries]
+  );
+
+  const internalUsageAttributionIds = useMemo(
+    () =>
+      useInternalUsageAttributionIds
+        ? DEFAULT_INTERNAL_USAGE_ATTRIBUTION_IDS
+        : null,
+    [useInternalUsageAttributionIds],
   );
 
   useEffect(
@@ -218,7 +236,8 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
   return {
     status,
     loadedLibraries,
-    importLibrary
+    importLibrary,
+    internalUsageAttributionIds
   };
 }
 
@@ -230,7 +249,7 @@ export const APIProvider: FunctionComponent<APIProviderProps> = props => {
   const {mapInstances, addMapInstance, removeMapInstance, clearMapInstances} =
     useMapInstances();
 
-  const {status, loadedLibraries, importLibrary} =
+  const {status, loadedLibraries, importLibrary, internalUsageAttributionIds} =
     useGoogleMapsApiLoader(loaderProps);
 
   const contextValue: APIProviderContextValue = useMemo(
@@ -241,7 +260,8 @@ export const APIProvider: FunctionComponent<APIProviderProps> = props => {
       clearMapInstances,
       status,
       loadedLibraries,
-      importLibrary
+      importLibrary,
+      internalUsageAttributionIds
     }),
     [
       mapInstances,
@@ -250,8 +270,9 @@ export const APIProvider: FunctionComponent<APIProviderProps> = props => {
       clearMapInstances,
       status,
       loadedLibraries,
-      importLibrary
-    ]
+      importLibrary,
+      internalUsageAttributionIds
+    ],
   );
 
   return (
