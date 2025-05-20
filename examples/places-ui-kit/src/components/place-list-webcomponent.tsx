@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useCallback} from 'react';
 import {useMap, useMapsLibrary} from '@vis.gl/react-google-maps';
 
 interface Props {
@@ -7,6 +7,14 @@ interface Props {
   locationId: string | null;
   placeType: string | null;
 }
+
+type PlaceListElement = HTMLElement & {
+  configureFromSearchNearbyRequest: (request: {
+    locationRestriction?: {center: google.maps.LatLng; radius: number};
+    includedPrimaryTypes?: string[];
+  }) => Promise<void>;
+  readonly places: google.maps.places.Place[];
+};
 
 export const PlaceListWebComponent = ({
   onPlaceSelect,
@@ -20,15 +28,11 @@ export const PlaceListWebComponent = ({
 
   const map = useMap();
 
-  const placeListRef = useRef<any>(null);
+  const placeListRef = useRef<PlaceListElement | null>(null);
 
-  useEffect(() => {
-    if (!placesLib || !geoLib || !placeListRef.current || !map) {
-      return;
-    }
-
-    const getContainingCircle = (bounds?: google.maps.LatLngBounds) => {
-      if (!bounds || !geoLib) return;
+  const getContainingCircle = useCallback(
+    (bounds?: google.maps.LatLngBounds) => {
+      if (!bounds || !geoLib) return undefined;
 
       const diameter = geoLib.spherical.computeDistanceBetween(
         bounds.getNorthEast(),
@@ -37,28 +41,47 @@ export const PlaceListWebComponent = ({
       const calculatedRadius = diameter / 2;
       const cappedRadius = Math.min(calculatedRadius, 50000); // Cap the radius to avoid an error.
       return {center: bounds.getCenter(), radius: cappedRadius};
-    };
+    },
+    [geoLib]
+  );
 
-    placeListRef.current
+  useEffect(() => {
+    if (!placesLib || !geoLib || !placeListRef.current || !map) {
+      return;
+    }
+
+    const placeList = placeListRef.current;
+    const bounds = map.getBounds();
+    const circle = getContainingCircle(bounds);
+
+    if (!circle) return;
+
+    placeList
       .configureFromSearchNearbyRequest({
-        locationRestriction: getContainingCircle(map.getBounds()),
-        includedPrimaryTypes: [placeType]
+        locationRestriction: circle,
+        includedPrimaryTypes: placeType ? [placeType] : undefined
       })
       .then(() => {
-        setPlaces(placeListRef.current.places);
+        setPlaces(placeList.places);
+      })
+      .catch(error => {
+        console.error('Error configuring place list:', error);
       });
-  }, [placesLib, geoLib, map, locationId, placeType]);
+  }, [placesLib, geoLib, map, placeType, getContainingCircle, locationId]);
 
   // Note: This is a React 19 thing to be able to treat custom elements this way.
-  //   In React before v19, you'd have to use a ref, or use the PlaceAutocompleteElement
+  //   In React before v19, you'd have to use a ref, or use the PlaceListElement
   //   constructor instead.
   return (
     <div className="place-list-container">
+      {/* https://developers.google.com/maps/documentation/javascript/places-ui-kit/place-list */}
       <gmp-place-list
         selectable
         ref={placeListRef}
-        ongmp-placeselect={(ev: {place: google.maps.places.Place | null}) => {
-          onPlaceSelect(ev.place);
+        ongmp-placeselect={(event: {
+          place: google.maps.places.Place | null;
+        }) => {
+          onPlaceSelect(event.place);
         }}
       />
     </div>

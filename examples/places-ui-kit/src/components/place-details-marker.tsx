@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, memo} from 'react';
 import {
   AdvancedMarker,
   InfoWindow,
@@ -6,54 +6,84 @@ import {
   useMapsLibrary
 } from '@vis.gl/react-google-maps';
 
-export const PlaceDetailsMarker = ({place, selected, onClick}) => {
-  const [markerRef, marker] = useAdvancedMarkerRef();
+import {DetailsSize} from '../app';
 
-  const placesLib = useMapsLibrary('places');
-  const elevationLib = useMapsLibrary('elevation');
+// Define proper types for props
+interface PlaceDetailsMarkerProps {
+  place: google.maps.places.Place;
+  selected: boolean;
+  onClick: (placeId: string | null) => void;
+  detailsSize: DetailsSize;
+}
 
-  const handleClose = useCallback(() => onClick(null), []);
+export const PlaceDetailsMarker = memo(
+  ({place, selected, onClick, detailsSize}: PlaceDetailsMarkerProps) => {
+    const [markerRef, marker] = useAdvancedMarkerRef();
 
-  return (
-    <>
-      <AdvancedMarker
-        ref={markerRef}
-        position={place.location}
-        onClick={() => {
-          onClick(place.id);
-        }}
-      />
-      {selected && (
-        <InfoWindow
-          anchor={marker}
-          onCloseClick={handleClose}
-          minWidth={250}
-          maxWidth={400}
-          headerDisabled={true}>
-          <gmp-place-details
-            // @ts-expect-error PlaceDetailsSize not in types yet
-            size={placesLib?.PlaceDetailsSize.MEDIUM}
-            ref={placeDetailsElement => {
-              if (!placesLib || !placeDetailsElement) return;
+    useMapsLibrary('places');
+    useMapsLibrary('elevation');
 
-              placeDetailsElement.configureFromPlace(place);
-            }}></gmp-place-details>
+    const handleMarkerClick = useCallback(() => {
+      onClick(place.id);
+    }, [onClick, place.id]);
 
-          <br />
-          <gmp-elevation
-            ref={elevationElement => {
-              if (!elevationLib || !elevationElement) return;
+    const handleCloseClick = useCallback(() => {
+      onClick(null);
+    }, [onClick]);
 
-              elevationElement.path = [
-                {lat: place.location.lat(), lng: place.location.lng()}
-              ];
-            }}
-            unit-system="metric"></gmp-elevation>
-        </InfoWindow>
-      )}
-    </>
-  );
-};
+    const handlePlaceDetailsRef = useCallback(
+      (placeDetailsElement: any) => {
+        if (!placeDetailsElement) return;
+
+        try {
+          placeDetailsElement.configureFromPlace(place);
+        } catch (error) {
+          console.error('Error configuring place details:', error);
+        }
+      },
+      [place]
+    );
+
+    const handleElevationRef = useCallback(
+      (elevationElement: any) => {
+        if (!elevationElement) return;
+
+        try {
+          const {lat, lng} = place.location?.toJSON() ?? {};
+          elevationElement.path = [{lat, lng}];
+        } catch (error) {
+          console.error('Error setting elevation path:', error);
+        }
+      },
+      [place.location]
+    );
+
+    return (
+      <>
+        <AdvancedMarker
+          ref={markerRef}
+          position={place.location}
+          onClick={handleMarkerClick}
+        />
+        {selected && (
+          <InfoWindow
+            anchor={marker}
+            onCloseClick={handleCloseClick}
+            minWidth={250}
+            maxWidth={400}
+            headerDisabled={true}>
+            {/* https://developers.google.com/maps/documentation/javascript/places-ui-kit/place-details#place-details-element-experimental */}
+            <gmp-place-details size={detailsSize} ref={handlePlaceDetailsRef} />
+
+            <br />
+            {/* https://developers.google.com/maps/documentation/javascript/places-ui-kit/elevation */}
+            <gmp-elevation ref={handleElevationRef} unit-system="metric" />
+          </InfoWindow>
+        )}
+      </>
+    );
+  }
+);
 
 declare module 'react' {
   namespace JSX {

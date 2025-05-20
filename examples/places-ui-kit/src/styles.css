@@ -17,7 +17,7 @@
   flex: 1;
 }
 
-.places-ui-kit .map-wrapper {
+.places-ui-kit .map-container {
   position: relative;
 }
 
@@ -29,8 +29,15 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 16px;
+  padding: 8px;
   border-radius: 8px;
+  box-shadow:
+    0 3px 6px rgba(0, 0, 0, 0.16),
+    0 3px 6px rgba(0, 0, 0, 0.23);
+}
+
+.places-ui-kit #detailsSize {
+  margin-bottom: 8px;
 }
 
 [class$='alpha-banner'] {
