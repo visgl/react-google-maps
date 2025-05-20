@@ -28,7 +28,8 @@ const sidebars = {
         'deckgl-overlay',
         'map-3d',
         'extended-component-library',
-        'static-map'
+        'static-map',
+        'places-ui-kit'
       ]
     }
   ]

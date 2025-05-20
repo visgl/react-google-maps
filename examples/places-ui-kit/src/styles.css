@@ -1,0 +1,52 @@
+.places-ui-kit {
+  display: grid;
+  grid-template-columns: 400px 1fr;
+  width: 100%;
+  height: 100%;
+}
+
+.places-ui-kit .place-list-wrapper {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.places-ui-kit .place-list-container {
+  background-color: white;
+  height: 0;
+  flex: 1;
+}
+
+.places-ui-kit .map-container {
+  position: relative;
+}
+
+.places-ui-kit .autocomplete-wrapper {
+  position: absolute;
+  background-color: white;
+  top: 24px;
+  left: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  border-radius: 8px;
+  box-shadow:
+    0 3px 6px rgba(0, 0, 0, 0.16),
+    0 3px 6px rgba(0, 0, 0, 0.23);
+}
+
+.places-ui-kit #detailsSize {
+  margin-bottom: 8px;
+}
+
+[class$='alpha-banner'] {
+  right: auto;
+  left: 50%;
+  translate: -50% 0;
+  top: auto;
+  bottom: 1.5rem;
+  max-width: 600px;
+  font-size: 0.875em;
+  border-radius: 10px;
+}
