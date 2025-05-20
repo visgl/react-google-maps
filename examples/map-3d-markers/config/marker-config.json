@@ -1,0 +1,65 @@
+{
+  "basic": {
+    "markerOptions": {
+      "position": {"lat": 40.707275, "lng": -73.998332, "altitude": 80},
+      "altitudeMode": "RELATIVE_TO_GROUND"
+    }
+  },
+  "basicExtruded": {
+    "markerOptions": {
+      "position": {"lat": 40.707275, "lng": -73.998332, "altitude": 200},
+      "extruded": true,
+      "altitudeMode": "RELATIVE_TO_GROUND"
+    }
+  },
+  "basicColored": {
+    "markerOptions": {
+      "position": {
+        "lat": 40.706461,
+        "lng": -73.997409,
+        "altitude": 50
+      },
+      "altitudeMode": "RELATIVE_TO_GROUND"
+    },
+    "pinOptions": {
+      "borderColor": "blue",
+      "background": "blue",
+      "glyphColor": "white"
+    }
+  },
+  "customLogo": {
+    "markerOptions": {
+      "position": {
+        "lat": 40.705666,
+        "lng": -73.996382,
+        "altitude": 50
+      },
+      "altitudeMode": "RELATIVE_TO_GROUND"
+    },
+    "pinOptions": {
+      "borderColor": "white",
+      "background": "white",
+      "glyph": "https://www.gstatic.com/images/branding/productlogos/maps/v7/192px.svg"
+    }
+  },
+  "svg": {
+    "markerOptions": {
+      "position": {
+        "lat": 40.704876,
+        "lng": -73.995379,
+        "altitude": 50
+      },
+      "altitudeMode": "RELATIVE_TO_GROUND"
+    }
+  },
+  "model3d": {
+    "markerOptions": {
+      "position": {
+        "lat": 40.704118,
+        "lng": -73.994371,
+        "altitude": 100
+      },
+      "altitudeMode": "RELATIVE_TO_GROUND"
+    }
+  }
+}
