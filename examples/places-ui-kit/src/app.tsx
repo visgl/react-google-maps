@@ -30,7 +30,8 @@ const MAP_CONFIG = {
   defaultCenter: {lat: 53.55, lng: 9.99},
   mapId: '49ae42fed52588c3',
   gestureHandling: 'greedy' as const,
-  disableDefaultUI: true
+  disableDefaultUI: true,
+  clickableIcons: false
 };
 
 const App = () => {
