@@ -35,6 +35,17 @@ const MAP_CONFIG = {
 };
 
 const App = () => {
+  const nonAlphaVersionLoaded = Boolean(
+    globalThis &&
+      globalThis.google?.maps?.version &&
+      !globalThis.google?.maps?.version.endsWith('-alpha')
+  );
+
+  if (nonAlphaVersionLoaded) {
+    location.reload();
+    return;
+  }
+
   const [places, setPlaces] = useState<google.maps.places.Place[]>([]);
   const [selectedPlaceId, setSelectedPlaceId] = useState<string | null>(null);
   const [locationId, setLocationId] = useState<string | null>(null);
@@ -61,7 +72,7 @@ const App = () => {
     <APIProvider apiKey={API_KEY} version="alpha">
       <div className="places-ui-kit">
         <div className="place-list-wrapper">
-          {/* 
+          {/*
             PlaceListWebComponent displays a list of places based on:
             - The selected place type (restaurant, cafe, etc.)
             - The current map location and bounds
@@ -75,7 +86,7 @@ const App = () => {
         </div>
 
         <div className="map-container">
-          {/* 
+          {/*
             The Map component renders the Google Map
             Clicking on the map background will deselect any selected place
           */}
@@ -83,7 +94,7 @@ const App = () => {
             {placeMarkers}
           </Map>
 
-          {/* 
+          {/*
             SearchBar allows users to:
             - Select the type of place they want to find
             - Search for a specific location to center the map on
@@ -94,7 +105,7 @@ const App = () => {
             setLocationId={setLocationId}
           />
 
-          {/* 
+          {/*
             ControlPanel provides UI controls for adjusting the size of place details
             displayed in the InfoWindow
           */}
