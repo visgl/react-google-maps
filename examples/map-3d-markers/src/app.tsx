@@ -10,10 +10,10 @@ const API_KEY =
   globalThis.GOOGLE_MAPS_API_KEY ?? (process.env.GOOGLE_MAPS_API_KEY as string);
 
 const INITIAL_VIEW_PROPS = {
-  center: {lat: 40.7006119, lng: -74.0032485, altitude: 600},
-  range: 600,
-  heading: 45,
-  tilt: 60,
+  center: {lat: 40.7093, lng: -73.9968, altitude: 32},
+  range: 1733,
+  heading: 5,
+  tilt: 70,
   roll: 0
 };
 

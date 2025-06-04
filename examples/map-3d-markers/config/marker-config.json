@@ -1,13 +1,21 @@
 {
   "basic": {
     "markerOptions": {
-      "position": {"lat": 40.707275, "lng": -73.998332, "altitude": 80},
+      "position": {
+        "lat": 40.704876,
+        "lng": -73.995379,
+        "altitude": 50
+      },
       "altitudeMode": "RELATIVE_TO_GROUND"
     }
   },
   "basicExtruded": {
     "markerOptions": {
-      "position": {"lat": 40.707275, "lng": -73.998332, "altitude": 200},
+      "position": {
+        "lat": 40.704118,
+        "lng": -73.994371,
+        "altitude": 150
+      },
       "extruded": true,
       "altitudeMode": "RELATIVE_TO_GROUND"
     }
@@ -15,23 +23,23 @@
   "basicColored": {
     "markerOptions": {
       "position": {
-        "lat": 40.706461,
-        "lng": -73.997409,
+        "lat": 40.705666,
+        "lng": -73.996382,
         "altitude": 50
       },
       "altitudeMode": "RELATIVE_TO_GROUND"
     },
     "pinOptions": {
-      "borderColor": "blue",
-      "background": "blue",
+      "borderColor": "#0D652D",
+      "background": "#34A853",
       "glyphColor": "white"
     }
   },
   "customLogo": {
     "markerOptions": {
       "position": {
-        "lat": 40.705666,
-        "lng": -73.996382,
+        "lat": 40.706461,
+        "lng": -73.997409,
         "altitude": 50
       },
       "altitudeMode": "RELATIVE_TO_GROUND"
@@ -45,9 +53,9 @@
   "svg": {
     "markerOptions": {
       "position": {
-        "lat": 40.704876,
-        "lng": -73.995379,
-        "altitude": 50
+        "lat": 40.707275,
+        "lng": -73.998332,
+        "altitude": 80
       },
       "altitudeMode": "RELATIVE_TO_GROUND"
     }
@@ -55,9 +63,9 @@
   "model3d": {
     "markerOptions": {
       "position": {
-        "lat": 40.704118,
-        "lng": -73.994371,
-        "altitude": 100
+        "lat": 40.70880455562221,
+        "lng": -74.00022947934575,
+        "altitude": 150
       },
       "altitudeMode": "RELATIVE_TO_GROUND"
     }
