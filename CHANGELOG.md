@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.3](https://github.com/visgl/react-google-maps/compare/v1.5.2...v1.5.3) (2025-06-05)
+
+
+### Bug Fixes
+
+* ensure proper type inference of APILoadingStatus ([#747](https://github.com/visgl/react-google-maps/issues/747)) ([2c59d59](https://github.com/visgl/react-google-maps/commit/2c59d59b475b9bc1eef7d7f7bd9b08c2d215a3cb))
+
 ## [1.5.2](https://github.com/visgl/react-google-maps/compare/v1.5.1...v1.5.2) (2025-03-13)
 
 
