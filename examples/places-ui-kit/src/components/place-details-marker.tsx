@@ -33,21 +33,6 @@ export const PlaceDetailsMarker = memo(
       onClick(null);
     }, [onClick]);
 
-    // Configure the place details element with place data when it's mounted
-    const handlePlaceDetailsRef = useCallback(
-      (placeDetailsElement: any) => {
-        if (!placeDetailsElement) return;
-
-        try {
-          // Connect the web component to the place data
-          placeDetailsElement.configureFromPlace(place);
-        } catch (error) {
-          console.error('Error configuring place details:', error);
-        }
-      },
-      [place]
-    );
-
     // Configure the elevation element with the place's geographic coordinates
     const handleElevationRef = useCallback(
       (elevationElement: any) => {
@@ -80,11 +65,27 @@ export const PlaceDetailsMarker = memo(
             maxWidth={400}
             headerDisabled={true}>
             {/* 
-              gmp-place-details is a Google Maps Web Component that displays detailed information
-              about a place, including photos, reviews, open hours, etc.
-              The size parameter controls how much information is displayed.
-            */}
-            <gmp-place-details size={detailsSize} ref={handlePlaceDetailsRef} />
+             gmp-place-details is a Google Maps Web Component that displays detailed information
+             about a place, including photos, reviews, open hours, etc.
+             The size parameter controls how much information is displayed.
+             
+             
+             gmp-place-details-compact is a Google Maps Web Component that displays a lot of the same
+             information as the full version but in a more compact format.
+           */}
+            {detailsSize === 'FULL' ? (
+              <gmp-place-details>
+                <gmp-place-details-place-request
+                  place={place?.id ?? ''}></gmp-place-details-place-request>
+                <gmp-place-all-content></gmp-place-all-content>
+              </gmp-place-details>
+            ) : (
+              <gmp-place-details-compact>
+                <gmp-place-details-place-request
+                  place={place?.id ?? ''}></gmp-place-details-place-request>
+                <gmp-place-all-content></gmp-place-all-content>
+              </gmp-place-details-compact>
+            )}
 
             <br />
             {/* 
@@ -115,6 +116,28 @@ declare module 'react' {
         },
         // @ts-expect-error PlaceDetailsElement not in types yet
         google.maps.places.PlaceDetailsElement
+      >;
+      'gmp-place-details-compact': React.DetailedHTMLProps<
+        // @ts-expect-error PlaceDetailsCompactElement not in types yet
+        React.HTMLAttributes<google.maps.places.PlaceDetailsCompactElement> & {
+          size?: any;
+        },
+        // @ts-expect-error PlaceDetailsCompactElement not in types yet
+        google.maps.places.PlaceDetailsCompactElement
+      >;
+      'gmp-place-details-place-request': React.DetailedHTMLProps<
+        // @ts-expect-error PlaceDetailsPlaceRequestElement not in types yet
+        React.HTMLAttributes<google.maps.places.PlaceDetailsPlaceRequestElement> & {
+          place: string;
+        },
+        // @ts-expect-error PlaceDetailsPlaceRequestElement not in types yet
+        google.maps.places.PlaceDetailsPlaceRequestElement
+      >;
+      'gmp-place-all-content': React.DetailedHTMLProps<
+        // @ts-expect-error PlaceAllContentElement not in types yet
+        React.HTMLAttributes<google.maps.places.PlaceAllContentElement>,
+        // @ts-expect-error PlaceAllContentElement not in types yet
+        google.maps.places.PlaceAllContentElement
       >;
     }
   }

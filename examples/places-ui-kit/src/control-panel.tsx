@@ -29,10 +29,8 @@ function ControlPanel(props: ControlPanelProps) {
         onChange={event => {
           props.onDetailSizeChange(event.target.value as DetailsSize);
         }}>
-        <option value="SMALL">Small</option>
-        <option value="MEDIUM">Medium</option>
-        <option value="LARGE">Large</option>
-        <option value="X_LARGE">X-Large</option>
+        <option value="FULL">Full</option>
+        <option value="COMPACT">Compact</option>
       </select>
       <div className="links">
         <a

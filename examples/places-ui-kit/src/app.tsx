@@ -23,7 +23,7 @@ export type PlaceType =
   | 'electric_vehicle_charging_station'
   | null;
 
-export type DetailsSize = 'SMALL' | 'MEDIUM' | 'LARGE' | 'X_LARGE';
+export type DetailsSize = 'FULL' | 'COMPACT';
 
 const MAP_CONFIG = {
   defaultZoom: 15,
@@ -50,7 +50,7 @@ const App = () => {
   const [selectedPlaceId, setSelectedPlaceId] = useState<string | null>(null);
   const [locationId, setLocationId] = useState<string | null>(null);
   const [placeType, setPlaceType] = useState<PlaceType>('restaurant');
-  const [detailsSize, setDetailsSize] = useState<DetailsSize>('MEDIUM');
+  const [detailsSize, setDetailsSize] = useState<DetailsSize>('FULL');
 
   // Memoize the place markers to prevent unnecessary re-renders
   // Only recreate when places, selection, or details size changes
