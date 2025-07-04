@@ -9,12 +9,13 @@ import React, {
   useState
 } from 'react';
 import {createPortal} from 'react-dom';
+import isDeepEqual from 'fast-deep-equal';
 
 import {useMap} from '../hooks/use-map';
 import {useMapsEventListener} from '../hooks/use-maps-event-listener';
-import {setValueForStyles} from '../libraries/set-value-for-styles';
 import {useMapsLibrary} from '../hooks/use-maps-library';
-import {useDeepCompareEffect} from '../libraries/use-deep-compare-effect';
+import {useMemoized} from '../hooks/use-memoized';
+import {setValueForStyles} from '../libraries/set-value-for-styles';
 import {CustomMarkerContent, isAdvancedMarker} from './advanced-marker';
 
 export type InfoWindowProps = Omit<
@@ -56,7 +57,7 @@ export const InfoWindow: FunctionComponent<
     onCloseClick,
 
     // other options
-    ...infoWindowOptions
+    ...volatileInfoWindowOptions
   } = props;
 
   // ## create infowindow instance once the mapsLibrary is available.
@@ -67,6 +68,8 @@ export const InfoWindow: FunctionComponent<
 
   const contentContainerRef = useRef<HTMLElement | null>(null);
   const headerContainerRef = useRef<HTMLElement | null>(null);
+
+  const infoWindowOptions = useMemoized(volatileInfoWindowOptions, isDeepEqual);
 
   useEffect(
     () => {
@@ -118,8 +121,9 @@ export const InfoWindow: FunctionComponent<
     [mapsLibrary]
   );
 
-  // ## update className and styles for `contentContainer`
-  // stores previously applied style properties, so they can be removed when unset
+  // ---- update className and styles for `contentContainer`
+  // prevStyleRef stores previously applied style properties, so they can be
+  // removed when unset
   const prevStyleRef = useRef<CSSProperties | null>(null);
   useEffect(() => {
     if (!infoWindow || !contentContainerRef.current) return;
@@ -136,8 +140,8 @@ export const InfoWindow: FunctionComponent<
       contentContainerRef.current.className = className || '';
   }, [infoWindow, className, style]);
 
-  // ## update options
-  useDeepCompareEffect(
+  // ---- update options
+  useEffect(
     () => {
       if (!infoWindow) return;
 
@@ -170,9 +174,9 @@ export const InfoWindow: FunctionComponent<
   useMapsEventListener(infoWindow, 'close', onClose);
   useMapsEventListener(infoWindow, 'closeclick', onCloseClick);
 
-  // ## open info window when content and map are available
+  // ---- open info window when content and map are available
   const map = useMap();
-  useDeepCompareEffect(() => {
+  useEffect(() => {
     // `anchor === null` means an anchor is defined but not ready yet.
     if (!map || !infoWindow || anchor === null) return;
 
