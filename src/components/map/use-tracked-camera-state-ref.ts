@@ -1,5 +1,5 @@
 import {MutableRefObject, useEffect, useRef} from 'react';
-import {useForceUpdate} from '../../libraries/use-force-update';
+import {useForceUpdate} from '../../hooks/use-force-update';
 
 export type CameraState = {
   center: google.maps.LatLngLiteral;
