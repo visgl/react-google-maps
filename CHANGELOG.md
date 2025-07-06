@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.4](https://github.com/visgl/react-google-maps/compare/v1.5.3...v1.5.4) (2025-07-06)
+
+
+### Bug Fixes
+
+* **infowindow:** replace useDeepCompareEffect with useEffect ([#786](https://github.com/visgl/react-google-maps/issues/786)) ([1b25e80](https://github.com/visgl/react-google-maps/commit/1b25e80107ea7589c2354d6c44e88761fd50d12f))
+
 ## [1.5.3](https://github.com/visgl/react-google-maps/compare/v1.5.2...v1.5.3) (2025-06-05)
 
 
