@@ -3,7 +3,7 @@ import {Ref, useEffect, useRef, useState} from 'react';
 import {MapProps} from '../map';
 import {APIProviderContextValue} from '../api-provider';
 
-import {useCallbackRef} from '../../libraries/use-callback-ref';
+import {useCallbackRef} from '../../hooks/use-callback-ref';
 import {useApiIsLoaded} from '../../hooks/use-api-is-loaded';
 import {
   CameraState,

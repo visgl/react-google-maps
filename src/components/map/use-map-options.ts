@@ -1,5 +1,5 @@
 import {MapProps} from '../map';
-import {useDeepCompareEffect} from '../../libraries/use-deep-compare-effect';
+import {useDeepCompareEffect} from '../../hooks/use-deep-compare-effect';
 
 const mapOptionKeys: Set<keyof google.maps.MapOptions> = new Set([
   'backgroundColor',
