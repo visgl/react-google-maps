@@ -2,8 +2,8 @@ import React, {useState, useMemo} from 'react';
 import {createRoot} from 'react-dom/client';
 import {APIProvider, Map} from '@vis.gl/react-google-maps';
 
-import {PlaceListWebComponent} from './components/place-list-webcomponent';
 import {PlaceDetailsMarker} from './components/place-details-marker';
+import {PlaceSearchWebComponent} from './components/place-search-webcomponent';
 import {SearchBar} from './components/search-bar';
 
 import ControlPanel from './control-panel';
@@ -24,6 +24,7 @@ export type PlaceType =
   | null;
 
 export type DetailsSize = 'FULL' | 'COMPACT';
+export type ColorScheme = 'light' | 'dark';
 
 const MAP_CONFIG = {
   defaultZoom: 15,
@@ -35,22 +36,12 @@ const MAP_CONFIG = {
 };
 
 const App = () => {
-  const nonAlphaVersionLoaded = Boolean(
-    globalThis &&
-      globalThis.google?.maps?.version &&
-      !globalThis.google?.maps?.version.endsWith('-alpha')
-  );
-
-  if (nonAlphaVersionLoaded) {
-    location.reload();
-    return;
-  }
-
   const [places, setPlaces] = useState<google.maps.places.Place[]>([]);
   const [selectedPlaceId, setSelectedPlaceId] = useState<string | null>(null);
   const [locationId, setLocationId] = useState<string | null>(null);
   const [placeType, setPlaceType] = useState<PlaceType>('restaurant');
   const [detailsSize, setDetailsSize] = useState<DetailsSize>('FULL');
+  const [colorScheme, setColorScheme] = useState<ColorScheme>('light');
 
   // Memoize the place markers to prevent unnecessary re-renders
   // Only recreate when places, selection, or details size changes
@@ -69,15 +60,15 @@ const App = () => {
   return (
     // APIProvider sets up the Google Maps JavaScript API with the specified key
     // Using 'alpha' version to access the latest features including UI Kit components
-    <APIProvider apiKey={API_KEY} version="alpha">
-      <div className="places-ui-kit">
+    <APIProvider apiKey={API_KEY}>
+      <div className="places-ui-kit" style={{colorScheme: colorScheme}}>
         <div className="place-list-wrapper">
           {/*
-            PlaceListWebComponent displays a list of places based on:
+            PlaceSearchtWebComponent displays a list of places based on:
             - The selected place type (restaurant, cafe, etc.)
             - The current map location and bounds
           */}
-          <PlaceListWebComponent
+          <PlaceSearchWebComponent
             placeType={placeType}
             locationId={locationId}
             setPlaces={setPlaces}
@@ -112,6 +103,8 @@ const App = () => {
           <ControlPanel
             detailsSize={detailsSize}
             onDetailSizeChange={setDetailsSize}
+            colorScheme={colorScheme}
+            onColorSchemeChange={setColorScheme}
           />
         </div>
       </div>

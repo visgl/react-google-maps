@@ -8,13 +8,18 @@
 .places-ui-kit .place-list-wrapper {
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
+  overflow-y: hidden;
 }
 
 .places-ui-kit .place-list-container {
-  background-color: white;
   height: 0;
   flex: 1;
+}
+
+.places-ui-kit .place-list-container gmp-place-search {
+  height: 100%;
+  overflow-y: auto;
+  border-radius: 0;
 }
 
 .places-ui-kit .map-container {
@@ -49,4 +54,15 @@
   max-width: 600px;
   font-size: 0.875em;
   border-radius: 10px;
+}
+
+gmp-place-details,
+gmp-place-details-compact,
+gmp-place-search,
+gmp-basic-place-autocomplete {
+  color-scheme: inherit;
+}
+
+select {
+  color-scheme: light;
 }

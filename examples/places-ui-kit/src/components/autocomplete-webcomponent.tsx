@@ -4,15 +4,7 @@ import {useMap, useMapsLibrary} from '@vis.gl/react-google-maps';
 interface Props {
   onPlaceSelect: (place: google.maps.places.Place | null) => void;
 }
-
-// Type definitions for the events emitted by the gmp-place-autocomplete component
 interface GmpSelectEvent {
-  placePrediction: {
-    toPlace: () => google.maps.places.Place;
-  };
-}
-
-interface GmpPlaceSelectEvent {
   place: google.maps.places.Place;
 }
 
@@ -46,30 +38,16 @@ export const AutocompleteWebComponent = ({onPlaceSelect}: Props) => {
     [map, onPlaceSelect]
   );
 
-  // Handle the gmp-select event (used in alpha and future stable versions)
+  // Handle the gmp-select event, which returns a Place object, that contains only a place ID
   const handleGmpSelect = useCallback(
     (event: GmpSelectEvent) => {
-      try {
-        // Convert the place prediction to a full Place object
-        void handlePlaceSelect(event.placePrediction.toPlace());
-      } catch (error) {
-        console.error('Error handling gmp-select event:', error);
-        onPlaceSelect(null);
-      }
-    },
-    [handlePlaceSelect, onPlaceSelect]
-  );
-
-  // Handle the gmp-placeselect event (deprecated but used in beta channel)
-  const handleGmpPlaceSelect = useCallback(
-    (event: GmpPlaceSelectEvent) => {
       void handlePlaceSelect(event.place);
     },
     [handlePlaceSelect]
   );
 
   // Note: This is a React 19 thing to be able to treat custom elements this way.
-  //   In React before v19, you'd have to use a ref, or use the PlaceAutocompleteElement
+  //   In React before v19, you'd have to use a ref, or use the BasicPlaceAutocompleteElement
   //   constructor instead.
   return (
     <div className="autocomplete-container">
@@ -81,9 +59,8 @@ export const AutocompleteWebComponent = ({onPlaceSelect}: Props) => {
         - ongmp-select: Used in alpha and future stable versions
         - ongmp-placeselect: Deprecated but still used in beta channel
       */}
-      <gmp-place-autocomplete
-        ongmp-select={handleGmpSelect as any}
-        ongmp-placeselect={handleGmpPlaceSelect as any}
+      <gmp-basic-place-autocomplete
+        ongmp-select={handleGmpSelect}
         aria-label="Search for a location"
       />
     </div>
@@ -92,10 +69,16 @@ export const AutocompleteWebComponent = ({onPlaceSelect}: Props) => {
 
 declare module 'react' {
   namespace JSX {
+    interface GmpBasicPlaceAutocomplete
+      // @ts-expect-error BasicPlaceAutocompleteElement not in official types yet
+      extends React.HTMLAttributes<google.maps.places.BasicPlaceAutocompleteElement> {
+      'ongmp-select': (event: GmpSelectEvent) => void;
+    }
     interface IntrinsicElements {
-      'gmp-place-autocomplete': React.DetailedHTMLProps<
-        React.HTMLAttributes<google.maps.places.PlaceAutocompleteElement>,
-        google.maps.places.PlaceAutocompleteElement
+      'gmp-basic-place-autocomplete': React.DetailedHTMLProps<
+        GmpBasicPlaceAutocomplete,
+        // @ts-expect-error BasicPlaceAutocompleteElement not in official types yet
+        google.maps.places.BasicPlaceAutocompleteElement
       >;
     }
   }
