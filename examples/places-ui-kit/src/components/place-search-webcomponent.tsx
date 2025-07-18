@@ -107,21 +107,28 @@ export const PlaceSearchWebComponent = ({
   );
 };
 
+/**
+ * Augments the React JSX namespace to add type definitions for the
+ * Places UI Kit  web components. This provides
+ * type-checking and autocompletion for their props, including custom
+ * events, within JSX.
+ */
+interface GmpPlaceSearchAttributes
+  // @ts-expect-error PlaceSearchElement not in official types yet
+  extends React.HTMLAttributes<google.maps.places.PlaceSearchElement> {
+  selectable?: boolean;
+  'truncation-preferred'?: boolean;
+  orientation?: 'HORIZONTAL' | 'VERTICAL';
+}
+interface GmpPlaceNearbySearchRequestAttributes
+  // @ts-expect-error PlaceSearchElement not in official types yet
+  extends React.HTMLAttributes<google.maps.places.PlaceNearbySearchRequestElement> {
+  'location-restriction'?: string;
+  'included-primary-types'?: string;
+}
+
 declare module 'react' {
   namespace JSX {
-    interface GmpPlaceSearchAttributes
-      // @ts-expect-error PlaceSearchElement not in official types yet
-      extends React.HTMLAttributes<google.maps.places.PlaceSearchElement> {
-      selectable?: boolean;
-      'truncation-preferred'?: boolean;
-      orientation?: 'HORIZONTAL' | 'VERTICAL';
-    }
-    interface GmpPlaceNearbySearchRequestAttributes
-      // @ts-expect-error PlaceSearchElement not in official types yet
-      extends React.HTMLAttributes<google.maps.places.PlaceNearbySearchRequestElement> {
-      'location-restriction'?: string;
-      'included-primary-types'?: string;
-    }
     interface IntrinsicElements {
       'gmp-place-search': React.DetailedHTMLProps<
         GmpPlaceSearchAttributes,
