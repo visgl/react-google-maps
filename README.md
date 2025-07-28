@@ -32,6 +32,9 @@ access to the Maps JavaScript API.
 Any component within the context of the `APIProvider` can use the hooks and
 components provided by this library.
 
+> **Important:** For optimal compatibility and to avoid WebGLOverlay issues with clustering on mobile devices, 
+> use Google Maps JavaScript API version 3.58.8 or later. The `APIProvider` will warn you if you're using an older version.
+
 To render a simple map, add a [`Map`][api-map] component inside the `APIProvider`.
 Within the `Map` component, you can then add further components like
 [`Marker`][api-marker], [`AdvancedMarker`][api-adv-marker], or

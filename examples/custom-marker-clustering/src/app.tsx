@@ -33,7 +33,7 @@ const App = () => {
   );
 
   return (
-    <APIProvider apiKey={API_KEY} version={'beta'}>
+    <APIProvider apiKey={API_KEY} version={'3.58.8'}>
       <Map
         mapId={'b5387d230c6cf22f'}
         defaultCenter={{lat: 20, lng: 20}}

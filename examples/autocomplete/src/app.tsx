@@ -41,7 +41,7 @@ const App = () => {
 
   return (
     <>
-      <APIProvider apiKey={API_KEY} version={'beta'}>
+      <APIProvider apiKey={API_KEY} version={'3.58.8'}>
         <Map
           mapId={'49ae42fed52588c3'}
           defaultZoom={3}

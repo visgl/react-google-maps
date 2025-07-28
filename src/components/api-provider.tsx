@@ -18,6 +18,33 @@ type ImportLibraryFunction = typeof google.maps.importLibrary;
 type GoogleMapsLibrary = Awaited<ReturnType<ImportLibraryFunction>>;
 type LoadedLibraries = {[name: string]: GoogleMapsLibrary};
 
+// Minimum Google Maps API version that fixes the WebGLOverlay issue
+const MINIMUM_API_VERSION = '3.58.8';
+
+/**
+ * Validates if the provided version meets the minimum requirement
+ * @param version - The version to validate
+ * @returns true if version is valid, false otherwise
+ */
+function isValidVersion(version: string): boolean {
+  if (version === 'beta' || version === 'weekly') {
+    return true; // Beta and weekly versions are always considered valid
+  }
+  
+  const versionParts = version.split('.').map(Number);
+  const minimumParts = MINIMUM_API_VERSION.split('.').map(Number);
+  
+  for (let i = 0; i < Math.max(versionParts.length, minimumParts.length); i++) {
+    const versionPart = versionParts[i] || 0;
+    const minimumPart = minimumParts[i] || 0;
+    
+    if (versionPart > minimumPart) return true;
+    if (versionPart < minimumPart) return false;
+  }
+  
+  return true; // Versions are equal
+}
+
 export interface APIProviderContextValue {
   status: APILoadingStatus;
   loadedLibraries: LoadedLibraries;
@@ -48,6 +75,8 @@ export type APIProviderProps = PropsWithChildren<{
    * A specific version of the Google Maps JavaScript API can be used.
    * Read more about versioning: https://developers.google.com/maps/documentation/javascript/versions
    * Part of: https://developers.google.com/maps/documentation/javascript/url-params
+   * 
+   * @minimum 3.58.8 - Versions below 3.58.8 may cause WebGLOverlay issues with clustering on mobile devices
    */
   version?: string;
   /**
@@ -175,6 +204,15 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
     () => {
       (async () => {
         try {
+          // Validate version if provided
+          if (version && !isValidVersion(version)) {
+            console.warn(
+              `[APIProvider] Google Maps API version ${version} is below the recommended minimum version ${MINIMUM_API_VERSION}. ` +
+              `This may cause WebGLOverlay issues with clustering on mobile devices. ` +
+              `Consider upgrading to version ${MINIMUM_API_VERSION} or later.`
+            );
+          }
+          
           const params: ApiParams = {key: apiKey, ...otherApiParams};
           if (version) params.v = version;
           if (librariesString?.length > 0) params.libraries = librariesString;

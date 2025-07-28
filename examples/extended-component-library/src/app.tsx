@@ -52,7 +52,7 @@ const App = () => {
       <APIProvider
         solutionChannel="GMP_visgl_rgmlibrary_v1_extendedcomponentlibraryexample"
         apiKey={API_KEY}
-        version="beta">
+        version="3.58.8">
         <SplitLayout rowReverse rowLayoutMinWidth={700}>
           <div className="SplitLayoutContainer" slot="fixed">
             <OverlayLayout ref={overlayLayoutRef}>

@@ -195,3 +195,59 @@ test('calls onError when loading the Google Maps JavaScript API fails', async ()
 
   expect(onErrorMock).toHaveBeenCalled();
 });
+
+describe('APIProvider version validation', () => {
+  const originalConsoleWarn = console.warn;
+  let consoleWarnSpy: jest.SpyInstance;
+
+  beforeEach(() => {
+    consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation();
+  });
+
+  afterEach(() => {
+    consoleWarnSpy.mockRestore();
+    console.warn = originalConsoleWarn;
+  });
+
+  it('should warn when using version below 3.58.8', () => {
+    render(
+      <APIProvider apiKey="test-key" version="3.56.7">
+        <div>Test</div>
+      </APIProvider>
+    );
+
+    expect(consoleWarnSpy).toHaveBeenCalledWith(
+      expect.stringContaining('Google Maps API version 3.56.7 is below the recommended minimum version 3.58.8')
+    );
+  });
+
+  it('should not warn when using version 3.58.8 or higher', () => {
+    render(
+      <APIProvider apiKey="test-key" version="3.58.8">
+        <div>Test</div>
+      </APIProvider>
+    );
+
+    expect(consoleWarnSpy).not.toHaveBeenCalled();
+  });
+
+  it('should not warn when using beta version', () => {
+    render(
+      <APIProvider apiKey="test-key" version="beta">
+        <div>Test</div>
+      </APIProvider>
+    );
+
+    expect(consoleWarnSpy).not.toHaveBeenCalled();
+  });
+
+  it('should not warn when using weekly version', () => {
+    render(
+      <APIProvider apiKey="test-key" version="weekly">
+        <div>Test</div>
+      </APIProvider>
+    );
+
+    expect(consoleWarnSpy).not.toHaveBeenCalled();
+  });
+});
