@@ -15,7 +15,7 @@ export function useMapViewport({padding = 0}: MapViewportOptions = {}) {
   useEffect(() => {
     if (!map) return;
 
-    const listener = map.addListener('bounds_changed', () => {
+    const listener = map.addListener('idle', () => {
       const bounds = map.getBounds();
       const zoom = map.getZoom();
       const projection = map.getProjection();
