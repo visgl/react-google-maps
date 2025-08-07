@@ -68,17 +68,17 @@ export type APIProviderProps = PropsWithChildren<{
    */
   authReferrerPolicy?: string;
   /**
+   * To track usage of Google Maps JavaScript API via numeric channels. The only acceptable channel values are numbers from 0-999.
+   * Read more in the
+   * [documentation](https://developers.google.com/maps/reporting-and-monitoring/reporting#usage-tracking-per-channel)
+   */
+  channel?: number;
+  /**
    * To understand usage and ways to improve our solutions, Google includes the
    * `solution_channel` query parameter in API calls to gather information about
    * code usage. You may opt out at any time by setting this attribute to an
    * empty string. Read more in the
    * [documentation](https://developers.google.com/maps/reporting-and-monitoring/reporting#solutions-usage).
-   */
-  channel?: number;
-  /**
-   * To track usage of Google Maps JavaScript API via numeric channels. The only acceptable channel values are numbers from 0-999.
-   * Read more in the
-   * [documentation](https://developers.google.com/maps/reporting-and-monitoring/reporting#usage-tracking-per-channel)
    */
   solutionChannel?: string;
   /**
