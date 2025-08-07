@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.5.5](https://github.com/visgl/react-google-maps/compare/v1.5.4...v1.5.5) (2025-08-07)
+
+
+### Bug Fixes
+
+* **static-maps:** remove path grouping by style ([#809](https://github.com/visgl/react-google-maps/issues/809)) ([d1f499e](https://github.com/visgl/react-google-maps/commit/d1f499e6089086e40265c9b21c6a318d292e2f9e))
+* Update calc clusters to happen after Idle event - reduces issue 563 ([#806](https://github.com/visgl/react-google-maps/issues/806)) ([bed6ccd](https://github.com/visgl/react-google-maps/commit/bed6ccd31911ac82decc758bd4ecee0a18fe492f))
+
 ## [1.5.4](https://github.com/visgl/react-google-maps/compare/v1.5.3...v1.5.4) (2025-07-06)
 
 
