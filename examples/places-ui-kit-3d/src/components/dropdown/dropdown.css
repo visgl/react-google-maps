@@ -1,0 +1,19 @@
+.dropdown {
+  background: white;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #e8eaed;
+  padding: 18px 16px;
+
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  font-family: 'Roboto';
+  color: #5f6368;
+
+  label {
+    white-space: nowrap;
+  }
+}

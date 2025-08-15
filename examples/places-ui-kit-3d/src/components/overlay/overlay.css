@@ -1,0 +1,38 @@
+.overlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 352px;
+  height: 600px;
+  max-height: calc(100vh - 48px);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 24px 30px;
+}
+
+.overlay-header {
+  flex-shrink: 0;
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.overlay-header gmp-place-details-compact.custom {
+  --gmp-mat-color-surface: #ffeffe;
+  --gmp-mat-font-family: 'Bree Serif';
+  --gmp-mat-color-on-surface: #ff0fa7;
+  --gmp-mat-color-secondary-container: #ff0fa7;
+  --gmp-mat-color-on-secondary-container: white;
+  --gmp-mat-font-body-small: 500 0.75em / 1.3333333333 'Google Sans';
+}
+
+gmp-place-details-compact {
+  border-radius: 0;
+}
+
+gmp-place-details-compact,
+gmp-place-search {
+  color-scheme: light;
+  border-color: transparent;
+}
