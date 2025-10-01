@@ -150,7 +150,7 @@ describe('<InfoWindow> content rendering', () => {
     render(
       <InfoWindow
         className={'infowindow-content'}
-        style={{backgroundColor: 'red', padding: 8}}>
+        style={{backgroundColor: 'rgb(1,2,3)', padding: 8}}>
         <span data-testid={'content'}>Hello World!</span>
       </InfoWindow>
     );
@@ -165,7 +165,10 @@ describe('<InfoWindow> content rendering', () => {
 
     // style and className should be applied to the content element
     expect(contentEl).toHaveClass('infowindow-content');
-    expect(contentEl).toHaveStyle({backgroundColor: 'red', padding: '8px'});
+    expect(contentEl).toHaveStyle({
+      backgroundColor: 'rgb(1,2,3)',
+      padding: '8px'
+    });
 
     // child nodes should have been rendered into contentEl
     expect(queryByTestId(contentEl, 'content')).toHaveTextContent(
