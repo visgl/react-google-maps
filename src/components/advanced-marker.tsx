@@ -1,4 +1,3 @@
-/* eslint-disable complexity */
 import React, {
   Children,
   CSSProperties,
@@ -315,6 +314,8 @@ export const AdvancedMarker = forwardRef(
     );
   }
 );
+
+AdvancedMarker.displayName = 'AdvancedMarker';
 
 export function useAdvancedMarkerRef() {
   const [marker, setMarker] =

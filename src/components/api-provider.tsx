@@ -104,7 +104,6 @@ function useMapInstances() {
   };
 
   const removeMapInstance = (id = 'default') => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     setMapInstances(({[id]: _, ...remaining}) => remaining);
   };
 
