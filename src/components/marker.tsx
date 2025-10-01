@@ -1,4 +1,3 @@
-/* eslint-disable complexity */
 import React, {
   forwardRef,
   useCallback,
@@ -125,6 +124,8 @@ export const Marker = forwardRef((props: MarkerProps, ref: MarkerRef) => {
 
   return <></>;
 });
+
+Marker.displayName = 'Marker';
 
 export function useMarkerRef() {
   const [marker, setMarker] = useState<google.maps.Marker | null>(null);
