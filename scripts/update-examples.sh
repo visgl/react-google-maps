@@ -7,6 +7,7 @@ for d in `find ${rootDir}/examples -type d -depth 1` ; do
   echo ">>> updating example '$(basename $d)'"
   (
     cd $d
+
     npm --no-progress --no-audit --no-fund --silent update
     to_update=`npm outdated --json | jq -r 'to_entries[] | select(.value.wanted != .value.latest) | .key'`
 
