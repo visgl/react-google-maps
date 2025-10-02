@@ -1,0 +1,18 @@
+gmp-popover {
+  color-scheme: light;
+  --gmp-popover-pixel-offset-y: -48px;
+}
+
+gmp-popover gmp-place-details-compact {
+  width: 352px;
+  border-color: transparent;
+}
+
+.custom {
+  --gmp-mat-color-on-surface: #e37400;
+  --gmp-mat-color-on-secondary-container: white;
+  --gmp-mat-font-family: 'Bree Serif';
+
+  --gmp-mat-color-secondary-container: #e37400;
+  --gmp-mat-font-body-small: 500 0.75em / 1.3333333333 'Roboto';
+}
