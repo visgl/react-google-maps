@@ -101,6 +101,8 @@ export function useMapInstance(
   if (!mapOptions.tilt && Number.isFinite(defaultTilt))
     mapOptions.tilt = defaultTilt;
 
+  mapOptions.internalUsageAttributionIds = context.internalUsageAttributionIds;
+
   for (const key of Object.keys(mapOptions) as (keyof typeof mapOptions)[])
     if (mapOptions[key] === undefined) delete mapOptions[key];
 
