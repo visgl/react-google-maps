@@ -18,6 +18,7 @@ import type {Ref, PropsWithChildren} from 'react';
 import {useMapsEventListener} from '../hooks/use-maps-event-listener';
 import {usePropBinding} from '../hooks/use-prop-binding';
 import {useDomEventListener} from '../hooks/use-dom-event-listener';
+import {globalStyleManager} from '../libraries/global-style-manager';
 
 export interface AdvancedMarkerContextValue {
   marker: google.maps.marker.AdvancedMarkerElement;
@@ -119,42 +120,16 @@ type MarkerContentProps = PropsWithChildren & {
   anchorPoint?: AdvancedMarkerAnchorPoint | [string, string];
 };
 
-const MarkerContent = ({
-  children,
-  styles,
-  className,
-  anchorPoint
-}: MarkerContentProps) => {
-  const [xTranslation, yTranslation] =
-    anchorPoint ?? AdvancedMarkerAnchorPoint['BOTTOM'];
-
-  let xTranslationFlipped = `-${xTranslation}`;
-  let yTranslationFlipped = `-${yTranslation}`;
-  if (xTranslation.trimStart().startsWith('-')) {
-    xTranslationFlipped = xTranslation.substring(1);
-  }
-  if (yTranslation.trimStart().startsWith('-')) {
-    yTranslationFlipped = yTranslation.substring(1);
-  }
-
-  // The "translate(50%, 100%)" is here to counter and reset the default anchoring of the advanced marker element
-  // that comes from the api
-  const transformStyle = `translate(50%, 100%) translate(${xTranslationFlipped}, ${yTranslationFlipped})`;
-
+const MarkerContent = ({children, styles, className}: MarkerContentProps) => {
+  /* AdvancedMarker div that user can give styles and classes */
   return (
-    // anchoring container
-    <div style={{transform: transformStyle}}>
-      {/* AdvancedMarker div that user can give styles and classes */}
-      <div className={className} style={styles}>
-        {children}
-      </div>
+    <div className={className} style={styles}>
+      {children}
     </div>
   );
 };
 
-export type CustomMarkerContent =
-  | (HTMLDivElement & {isCustomMarker?: boolean})
-  | null;
+export type CustomMarkerContent = HTMLDivElement | null;
 
 export type AdvancedMarkerRef = google.maps.marker.AdvancedMarkerElement | null;
 function useAdvancedMarker(props: AdvancedMarkerProps) {
@@ -180,10 +155,14 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
     draggable,
     position,
     title,
-    zIndex
+    zIndex,
+    anchorPoint
   } = props;
 
   const numChildren = Children.count(children);
+
+  const [xTranslation, yTranslation] =
+    anchorPoint ?? AdvancedMarkerAnchorPoint['BOTTOM'];
 
   // create an AdvancedMarkerElement instance and add it to the map once available
   useEffect(() => {
@@ -200,9 +179,25 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
       contentElement = document.createElement('div');
 
       // We need some kind of flag to identify the custom marker content
-      // in the infowindow component. Choosing a custom property instead of a className
-      // to not encourage users to style the marker content directly.
-      contentElement.isCustomMarker = true;
+      // in the infowindow component. Choosing a data attribute to also be able
+      // to target it via CSS to disable pointer event when using custom anchor point
+      newMarker.dataset.origin = 'rgm';
+
+      let xTranslationFlipped = `-${xTranslation}`;
+      let yTranslationFlipped = `-${yTranslation}`;
+
+      if (xTranslation.trimStart().startsWith('-')) {
+        xTranslationFlipped = xTranslation.substring(1);
+      }
+      if (yTranslation.trimStart().startsWith('-')) {
+        yTranslationFlipped = yTranslation.substring(1);
+      }
+
+      // The "translate(50%, 100%)" is here to counter and reset the default anchoring of the advanced marker element
+      // that comes from the api
+      const transformStyle = `translate(50%, 100%) translate(${xTranslationFlipped}, ${yTranslationFlipped})`;
+      contentElement.style.transform = transformStyle;
+      globalStyleManager.addAdvancedMarkerPointerEventsOverwrite();
 
       newMarker.content = contentElement;
       setContentContainer(contentElement);
@@ -214,7 +209,7 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
       setMarker(null);
       setContentContainer(null);
     };
-  }, [map, markerLibrary, numChildren]);
+  }, [xTranslation, yTranslation, map, markerLibrary, numChildren]);
 
   // When no children are present we don't have our own wrapper div
   // which usually gets the user provided className. In this case
@@ -264,11 +259,10 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
 
     // enable pointer events for the markers with custom content
     if (gmpClickable && marker?.content && isElementNode(marker.content)) {
-      marker.content.style.pointerEvents = 'none';
+      marker.content.style.pointerEvents = 'all';
 
-      if (marker.content.firstElementChild) {
-        (marker.content.firstElementChild as HTMLElement).style.pointerEvents =
-          'all';
+      if (onClick) {
+        marker.content.style.cursor = 'pointer';
       }
     }
   }, [marker, clickable, onClick, onMouseEnter, onMouseLeave]);
