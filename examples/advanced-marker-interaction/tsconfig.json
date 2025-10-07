@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@vis.gl/react-google-maps": ["../../src"]
+    }
+  },
+  "include": ["src/**/*", "../../src/**/*", "./types/**/*"],
+  "exclude": ["node_modules", "dist"]
+}
