@@ -195,3 +195,33 @@ test('calls onError when loading the Google Maps JavaScript API fails', async ()
 
   expect(onErrorMock).toHaveBeenCalled();
 });
+
+describe('internalUsageAttributionIds', () => {
+  test('provides default attribution IDs in context', () => {
+    render(
+      <APIProvider apiKey={'apikey'}>
+        <ContextSpyComponent />
+      </APIProvider>
+    );
+
+    const contextSpy = ContextSpyComponent.spy;
+    const actualContext: APIProviderContextValue = contextSpy.mock.lastCall[0];
+
+    expect(actualContext.internalUsageAttributionIds).toEqual([
+      'GMP_LIB_VISGL_REACT_GOOGLE_MAPS'
+    ]);
+  });
+
+  test('sets internalUsageAttributionIds to null when disableUsageAttribution is true', () => {
+    render(
+      <APIProvider apiKey={'apikey'} disableUsageAttribution>
+        <ContextSpyComponent />
+      </APIProvider>
+    );
+
+    const contextSpy = ContextSpyComponent.spy;
+    const actualContext: APIProviderContextValue = contextSpy.mock.lastCall[0];
+
+    expect(actualContext.internalUsageAttributionIds).toBeNull();
+  });
+});

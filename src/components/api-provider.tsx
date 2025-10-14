@@ -26,9 +26,13 @@ export interface APIProviderContextValue {
   addMapInstance: (map: google.maps.Map, id?: string) => void;
   removeMapInstance: (id?: string) => void;
   clearMapInstances: () => void;
+  internalUsageAttributionIds: string[] | null;
 }
 
 const DEFAULT_SOLUTION_CHANNEL = 'GMP_visgl_rgmlibrary_v1_default';
+const DEFAULT_INTERNAL_USAGE_ATTRIBUTION_IDS = [
+  'GMP_LIB_VISGL_REACT_GOOGLE_MAPS'
+];
 
 export const APIProviderContext =
   React.createContext<APIProviderContextValue | null>(null);
@@ -68,7 +72,8 @@ export type APIProviderProps = PropsWithChildren<{
    */
   authReferrerPolicy?: string;
   /**
-   * To track usage of Google Maps JavaScript API via numeric channels. The only acceptable channel values are numbers from 0-999.
+   * To track usage of Google Maps JavaScript API via numeric channels.
+   * The only acceptable channel values are numbers from 0-999.
    * Read more in the
    * [documentation](https://developers.google.com/maps/reporting-and-monitoring/reporting#usage-tracking-per-channel)
    */
@@ -81,6 +86,12 @@ export type APIProviderProps = PropsWithChildren<{
    * [documentation](https://developers.google.com/maps/reporting-and-monitoring/reporting#solutions-usage).
    */
   solutionChannel?: string;
+  /**
+   * To help Google understand which libraries and samples are helpful to developers, such as usage of this library.
+   * To opt out of sending the usage attribution ID, use this boolean prop. Read more in the
+   * [documentation](https://developers.google.com/maps/documentation/javascript/reference/map#MapOptions.internalUsageAttributionIds).
+   */
+  disableUsageAttribution?: boolean;
   /**
    * A function that can be used to execute code after the Google Maps JavaScript API has been loaded.
    */
@@ -221,6 +232,18 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
   };
 }
 
+function useInternalUsageAttributionIds(props: APIProviderProps) {
+  const internalUsageAttributionIds = useMemo(
+    () =>
+      props.disableUsageAttribution
+        ? null
+        : DEFAULT_INTERNAL_USAGE_ATTRIBUTION_IDS,
+    [props.disableUsageAttribution]
+  );
+
+  return internalUsageAttributionIds;
+}
+
 /**
  * Component to wrap the components from this library and load the Google Maps JavaScript API
  */
@@ -232,6 +255,9 @@ export const APIProvider: FunctionComponent<APIProviderProps> = props => {
   const {status, loadedLibraries, importLibrary} =
     useGoogleMapsApiLoader(loaderProps);
 
+  const internalUsageAttributionIds =
+    useInternalUsageAttributionIds(loaderProps);
+
   const contextValue: APIProviderContextValue = useMemo(
     () => ({
       mapInstances,
@@ -240,7 +266,8 @@ export const APIProvider: FunctionComponent<APIProviderProps> = props => {
       clearMapInstances,
       status,
       loadedLibraries,
-      importLibrary
+      importLibrary,
+      internalUsageAttributionIds
     }),
     [
       mapInstances,
@@ -249,7 +276,8 @@ export const APIProvider: FunctionComponent<APIProviderProps> = props => {
       clearMapInstances,
       status,
       loadedLibraries,
-      importLibrary
+      importLibrary,
+      internalUsageAttributionIds
     ]
   );
 

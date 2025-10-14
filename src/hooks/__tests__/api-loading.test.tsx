@@ -23,7 +23,8 @@ beforeEach(() => {
     mapInstances: {},
     addMapInstance: jest.fn(),
     removeMapInstance: jest.fn(),
-    clearMapInstances: jest.fn()
+    clearMapInstances: jest.fn(),
+    internalUsageAttributionIds: null
   };
 
   wrapper = ({children}) => (
