@@ -101,6 +101,21 @@ export function useMapInstance(
   if (!mapOptions.tilt && Number.isFinite(defaultTilt))
     mapOptions.tilt = defaultTilt;
 
+  // Handle internalUsageAttributionIds
+  const customIds = mapOptions.internalUsageAttributionIds;
+
+  if (customIds == null) {
+    // Not specified - use context default (which may be null if disabled)
+    mapOptions.internalUsageAttributionIds =
+      context.internalUsageAttributionIds;
+  } else {
+    // Merge context defaults with custom IDs
+    mapOptions.internalUsageAttributionIds = [
+      ...(context.internalUsageAttributionIds || []),
+      ...customIds
+    ];
+  }
+
   for (const key of Object.keys(mapOptions) as (keyof typeof mapOptions)[])
     if (mapOptions[key] === undefined) delete mapOptions[key];
 
