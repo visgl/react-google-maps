@@ -2,9 +2,14 @@
 
 examplesRoot="$(cd -P "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"/examples
 
-for d in */; do
+for d in $examplesRoot/*/; do
+  # Skip the template directory
+  if [ "$(basename $d)" = "_template" ]; then
+    continue
+  fi
+
   echo ">>> installing example '$(basename $d)'"
-  cd $examplesRoot/$d
+  cd $d
   npm i --silent
 done
 

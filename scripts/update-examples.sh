@@ -4,6 +4,11 @@
 rootDir="$(cd -P "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 for d in `find ${rootDir}/examples -type d -depth 1` ; do
+  # Skip the template directory
+  if [ "$(basename $d)" = "_template" ]; then
+    continue
+  fi
+
   echo ">>> updating example '$(basename $d)'"
   (
     cd $d
