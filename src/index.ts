@@ -1,5 +1,5 @@
 /// <reference types="google.maps" preserve="true" />
-
+export * from './version';
 export * from './components/advanced-marker';
 export * from './components/api-provider';
 export * from './components/info-window';

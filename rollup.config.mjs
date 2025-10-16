@@ -1,7 +1,11 @@
+import {readFileSync} from 'node:fs';
+import replace from '@rollup/plugin-replace';
 import typescript from '@rollup/plugin-typescript';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import dts from 'rollup-plugin-dts';
+
+const {version: VERSION} = JSON.parse(readFileSync('./package.json', 'utf-8'));
 
 const external = ['react', 'react-dom', 'react/jsx-runtime', 'fast-deep-equal'];
 
@@ -12,6 +16,13 @@ const plugins = [
     tsconfig: './tsconfig.build.json',
     declaration: false,
     declarationDir: undefined
+  }),
+  replace({
+    preventAssignment: true,
+    include: ['src/version.ts'],
+    values: {
+      __PACKAGE_VERSION__: VERSION
+    }
   })
 ];
 

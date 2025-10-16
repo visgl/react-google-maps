@@ -6,6 +6,7 @@ import '@testing-library/jest-dom';
 // FIXME: this should no longer be needed with the next version of @googlemaps/jest-mocks
 import {importLibraryMock} from '../../libraries/__mocks__/lib/import-library-mock';
 
+import {VERSION} from '../../version';
 import {
   APIProvider,
   APIProviderContext,
@@ -208,7 +209,7 @@ describe('internalUsageAttributionIds', () => {
     const actualContext: APIProviderContextValue = contextSpy.mock.lastCall[0];
 
     expect(actualContext.internalUsageAttributionIds).toEqual([
-      'GMP_LIB_VISGL_REACT_GOOGLE_MAPS'
+      `gmp_visgl_reactgooglemaps_v${VERSION}`
     ]);
   });
 

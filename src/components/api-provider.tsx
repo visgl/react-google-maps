@@ -13,6 +13,7 @@ import {
   GoogleMapsApiLoader
 } from '../libraries/google-maps-api-loader';
 import {APILoadingStatus} from '../libraries/api-loading-status';
+import {VERSION} from '../version';
 
 type ImportLibraryFunction = typeof google.maps.importLibrary;
 type GoogleMapsLibrary = Awaited<ReturnType<ImportLibraryFunction>>;
@@ -31,7 +32,7 @@ export interface APIProviderContextValue {
 
 const DEFAULT_SOLUTION_CHANNEL = 'GMP_visgl_rgmlibrary_v1_default';
 const DEFAULT_INTERNAL_USAGE_ATTRIBUTION_IDS = [
-  'GMP_LIB_VISGL_REACT_GOOGLE_MAPS'
+  `gmp_visgl_reactgooglemaps_v${VERSION}`
 ];
 
 export const APIProviderContext =
