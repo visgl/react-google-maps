@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.0](https://github.com/visgl/react-google-maps/compare/v1.5.5...v1.6.0) (2025-10-16)
+
+
+### Features
+
+* implement usage attribution ([#844](https://github.com/visgl/react-google-maps/issues/844)) ([af36b8f](https://github.com/visgl/react-google-maps/commit/af36b8feee4acdf44ee17a73e962a7ea062e72db))
+
 ## [1.5.5](https://github.com/visgl/react-google-maps/compare/v1.5.4...v1.5.5) (2025-08-07)
 
 
