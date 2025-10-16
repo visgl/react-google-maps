@@ -201,6 +201,18 @@ this component will reuse map instances created with the same `mapId`,
 
 See also the section [Map Instance Caching](#map-instance-caching) above.
 
+#### `internalUsageAttributionIds`: string[]
+
+Specify custom usage attribution IDs for this map. These IDs help Google
+understand which libraries and samples are being used. When specified, the
+custom IDs are appended to a default attribution ID from the
+`APIProvider` context.
+
+If the `APIProvider` has `disableUsageAttribution` set to `true`, only the
+custom IDs specified here will be used.
+
+Read more in the [documentation][gmp-usage-attribution].
+
 ### Camera Control
 
 #### `center`: [google.maps.LatLngLiteral][gmp-ll]
@@ -368,6 +380,7 @@ to get access to the `google.maps.Map` object rendered in the `<Map>` component.
 [gmp-mapid]: https://developers.google.com/maps/documentation/get-map-id
 [gmp-map-styling]: https://developers.google.com/maps/documentation/javascript/cloud-customization
 [gmp-rendering-type]: https://developers.google.com/maps/documentation/javascript/reference/map#RenderingType
+[gmp-usage-attribution]: https://developers.google.com/maps/documentation/javascript/reference/map#MapOptions.internalUsageAttributionIds
 [api-provider]: ./api-provider.md
 [get-max-tilt]: https://github.com/visgl/react-google-maps/blob/4319bd3b68c40b9aa9b0ce7f377b52d20e824849/src/libraries/limit-tilt-range.ts#L4-L19
 [map-source]: https://github.com/visgl/react-google-maps/tree/main/src/components/map

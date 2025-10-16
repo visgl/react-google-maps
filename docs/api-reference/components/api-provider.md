@@ -118,6 +118,19 @@ this to a generic value unique to this library (`GMP_VISGL_react`). You may
 opt out at any time by setting this prop to an empty string.
 Read more in the [documentation][gmp-solutions-usage].
 
+#### `disableUsageAttribution`: boolean
+
+To help Google understand which libraries and samples are helpful to
+developers, usage attribution IDs are sent with map requests by default.
+Set this prop to `true` to opt out of sending the usage attribution ID for
+this library.
+
+Individual maps can still specify custom attribution IDs via the
+`internalUsageAttributionIds` prop on the `<Map>` component, which will be
+used even when this option is enabled.
+
+Read more in the [documentation][gmp-usage-attribution].
+
 ### Events
 
 #### `onLoad`: () => void {#onLoad}
@@ -165,6 +178,7 @@ The following hooks are built to work with the `APIProvider` Component:
 [gmp-region]: https://developers.google.com/maps/documentation/javascript/localization#Region
 [gmp-lang]: https://developers.google.com/maps/documentation/javascript/localization
 [gmp-solutions-usage]: https://developers.google.com/maps/reporting-and-monitoring/reporting#solutions-usage
+[gmp-usage-attribution]: https://developers.google.com/maps/documentation/javascript/reference/map#MapOptions.internalUsageAttributionIds
 [api-provider-src]: https://github.com/visgl/react-google-maps/blob/main/src/components/api-provider.tsx
 [rgm-new-issue]: https://github.com/visgl/react-google-maps/issues/new/choose
 [gmp-channel-usage]: https://developers.google.com/maps/reporting-and-monitoring/reporting#usage-tracking-per-channel

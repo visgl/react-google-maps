@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "typeRoots": ["./src/types", "./node_modules/@types"],
+    "typeRoots": ["./types", "./node_modules/@types"],
     "strict": true,
     "sourceMap": true,
     "noEmit": true,
@@ -17,6 +17,6 @@
       "@vis.gl/react-google-maps": ["./src"]
     }
   },
-  "include": ["src/**/*"],
+  "include": ["./src/**/*"],
   "exclude": ["./dist", "./node_modules"]
 }
