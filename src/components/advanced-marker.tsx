@@ -81,6 +81,8 @@ export type AdvancedMarkerProps = PropsWithChildren<
       clickable?: boolean;
       collisionBehavior?: CollisionBehavior;
       /**
+       * @deprecated Use `anchorLeft` and `anchorTop` instead.
+       *
        * The anchor point for the Advanced Marker.
        * Either use one of the predefined anchor point from the "AdvancedMarkerAnchorPoint" export
        * or provide a string tuple in the form of ["xPosition", "yPosition"].
@@ -362,6 +364,7 @@ function useAdvancedMarkerAnchoring(
     }
 
     if (anchorPoint !== undefined) {
+      // TODO: add console.warn in a future version to inform about deprecation
       const [x, y] = anchorPoint ?? AdvancedMarkerAnchorPoint['BOTTOM'];
 
       // NOTE: since x and y can theoretically be any valid CSS length-percentage
