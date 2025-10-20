@@ -4,7 +4,7 @@ import {initialize, mockInstances} from '@googlemaps/jest-mocks';
 import {cleanup, queryByTestId, render} from '@testing-library/react';
 import '@testing-library/jest-dom';
 
-import {AdvancedMarker} from '../advanced-marker';
+import {AdvancedMarker, AdvancedMarkerAnchorPoint} from '../advanced-marker';
 import {useMap} from '../../hooks/use-map';
 import {useMapsLibrary} from '../../hooks/use-maps-library';
 
@@ -162,4 +162,95 @@ describe('map and marker-library loaded', () => {
 
   test.todo('marker should work with options');
   test.todo('marker should have a click listener');
+
+  describe('anchoring with modern API', () => {
+    beforeEach(() => {
+      google.maps.version = '3.62.9';
+    });
+
+    test('anchorLeft/anchorTop should have precedence over anchorPoint', async () => {
+      const consoleWarnSpy = jest
+        .spyOn(console, 'warn')
+        .mockImplementation(() => {});
+
+      render(
+        <AdvancedMarker
+          position={{lat: 0, lng: 0}}
+          anchorLeft={'10px'}
+          anchorTop={'20px'}
+          anchorPoint={['10%', '20%']}>
+          <div />
+        </AdvancedMarker>
+      );
+      const marker = await waitForMockInstance(
+        google.maps.marker.AdvancedMarkerElement
+      );
+
+      expect(marker.anchorLeft).toBe('10px');
+      expect(marker.anchorTop).toBe('20px');
+      expect(consoleWarnSpy.mock.calls).toMatchSnapshot();
+
+      consoleWarnSpy.mockRestore();
+    });
+
+    test('anchorPoint should be used as fallback', async () => {
+      render(
+        <AdvancedMarker
+          position={{lat: 0, lng: 0}}
+          anchorPoint={['12%', '34%']}>
+          <div />
+        </AdvancedMarker>
+      );
+      const marker = await waitForMockInstance(
+        google.maps.marker.AdvancedMarkerElement
+      );
+
+      expect(marker.anchorLeft).toBe('calc(-1 * 12%)');
+      expect(marker.anchorTop).toBe('calc(-1 * 34%)');
+    });
+  });
+
+  describe('anchoring with legacy API', () => {
+    beforeEach(() => {
+      google.maps.version = '3.61.0';
+    });
+
+    test('anchorPoint is applied as css transform', async () => {
+      render(
+        <AdvancedMarker
+          position={{lat: 0, lng: 0}}
+          anchorPoint={AdvancedMarkerAnchorPoint.CENTER}>
+          <div />
+        </AdvancedMarker>
+      );
+      const marker = await waitForMockInstance(
+        google.maps.marker.AdvancedMarkerElement
+      );
+
+      expect(marker.content).toBeInstanceOf(HTMLElement);
+      expect((marker.content as HTMLElement).style.transform).toBe(
+        'translate(50%, 100%) translate(calc(-1 * 50%), calc(-1 * 50%))'
+      );
+    });
+
+    test('should warn when using anchorLeft/Top', async () => {
+      const consoleWarnSpy = jest
+        .spyOn(console, 'warn')
+        .mockImplementation(() => {});
+
+      render(
+        <AdvancedMarker
+          position={{lat: 0, lng: 0}}
+          anchorLeft={'10px'}
+          anchorTop={'20px'}>
+          <div />
+        </AdvancedMarker>
+      );
+      await waitForMockInstance(google.maps.marker.AdvancedMarkerElement);
+
+      expect(consoleWarnSpy.mock.calls).toMatchSnapshot();
+
+      consoleWarnSpy.mockRestore();
+    });
+  });
 });

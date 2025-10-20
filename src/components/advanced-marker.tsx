@@ -258,7 +258,7 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
     marker.content.className = className ?? '';
   }, [marker, className, numChildren]);
 
-  useAdvancedMarkerAnchorPoint(
+  useAdvancedMarkerAnchoring(
     marker,
     anchorPoint,
     anchorLeft,
@@ -322,7 +322,7 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
   return [marker, contentContainer] as const;
 }
 
-function useAdvancedMarkerAnchorPoint(
+function useAdvancedMarkerAnchoring(
   marker: google.maps.marker.AdvancedMarkerElement | null,
   anchorPoint: AdvancedMarkerAnchorPoint | [string, string] | undefined,
   anchorLeft: string | undefined,
@@ -363,6 +363,9 @@ function useAdvancedMarkerAnchorPoint(
 
     if (anchorPoint !== undefined) {
       const [x, y] = anchorPoint ?? AdvancedMarkerAnchorPoint['BOTTOM'];
+
+      // NOTE: since x and y can theoretically be any valid CSS length-percentage
+      //   value, we need to use calc() to negate them.
       const translateX = `calc(-1 * ${x})`;
       const translateY = `calc(-1 * ${y})`;
 
