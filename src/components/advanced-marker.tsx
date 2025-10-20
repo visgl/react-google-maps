@@ -1,3 +1,4 @@
+import type {PropsWithChildren, Ref} from 'react';
 import React, {
   Children,
   CSSProperties,
@@ -12,27 +13,14 @@ import React, {
 import {createPortal} from 'react-dom';
 import {useMap} from '../hooks/use-map';
 import {useMapsLibrary} from '../hooks/use-maps-library';
-
-import type {Ref, PropsWithChildren} from 'react';
 import {useMapsEventListener} from '../hooks/use-maps-event-listener';
 import {usePropBinding} from '../hooks/use-prop-binding';
 import {useDomEventListener} from '../hooks/use-dom-event-listener';
 import {globalStyleManager} from '../libraries/global-style-manager';
+import {isVersionGreaterEqual} from '../libraries/version-utils';
 
 export interface AdvancedMarkerContextValue {
   marker: google.maps.marker.AdvancedMarkerElement;
-}
-
-export function isAdvancedMarker(
-  marker: google.maps.Marker | google.maps.marker.AdvancedMarkerElement
-): marker is google.maps.marker.AdvancedMarkerElement {
-  return (
-    (marker as google.maps.marker.AdvancedMarkerElement).content !== undefined
-  );
-}
-
-function isElementNode(node: Node): node is HTMLElement {
-  return node.nodeType === Node.ELEMENT_NODE;
 }
 
 /**
@@ -102,6 +90,14 @@ export type AdvancedMarkerProps = PropsWithChildren<
        */
       anchorPoint?: AdvancedMarkerAnchorPoint | [string, string];
       /**
+       * A CSS length-percentage value which is used to offset the anchor point of the marker from the top left corner of the marker. This is useful when using a visual which has an anchor point that is different than the typical bottom center point of the default marker. The default value is "-%50".
+       */
+      anchorLeft?: string;
+      /**
+       * A CSS length-percentage value which is used to offset the anchor point of the marker from the top left corner of the marker. This is useful when using a visual which has an anchor point that is different than the typical bottom center point of the default marker. The default value is "-%100".
+       */
+      anchorTop?: string;
+      /**
        * A className for the content element.
        * (can only be used with HTML Marker content)
        */
@@ -119,6 +115,63 @@ type MarkerContentProps = PropsWithChildren & {
   anchorPoint?: AdvancedMarkerAnchorPoint | [string, string];
 };
 
+export const AdvancedMarker = forwardRef(
+  (props: AdvancedMarkerProps, ref: Ref<AdvancedMarkerRef>) => {
+    const {children, style, className, anchorPoint} = props;
+    const [marker, contentContainer] = useAdvancedMarker(props);
+
+    const advancedMarkerContextValue: AdvancedMarkerContextValue | null =
+      useMemo(() => (marker ? {marker} : null), [marker]);
+
+    useImperativeHandle(
+      ref,
+      () => marker as google.maps.marker.AdvancedMarkerElement,
+      [marker]
+    );
+
+    if (!contentContainer) return null;
+
+    return (
+      <AdvancedMarkerContext.Provider value={advancedMarkerContextValue}>
+        {createPortal(
+          <MarkerContent
+            anchorPoint={anchorPoint}
+            styles={style}
+            className={className}>
+            {children}
+          </MarkerContent>,
+          contentContainer
+        )}
+      </AdvancedMarkerContext.Provider>
+    );
+  }
+);
+
+AdvancedMarker.displayName = 'AdvancedMarker';
+
+export function useAdvancedMarkerRef() {
+  const [marker, setMarker] =
+    useState<google.maps.marker.AdvancedMarkerElement | null>(null);
+
+  const refCallback = useCallback((m: AdvancedMarkerRef | null) => {
+    setMarker(m);
+  }, []);
+
+  return [refCallback, marker] as const;
+}
+
+export function isAdvancedMarker(
+  marker: google.maps.Marker | google.maps.marker.AdvancedMarkerElement
+): marker is google.maps.marker.AdvancedMarkerElement {
+  return (
+    (marker as google.maps.marker.AdvancedMarkerElement).content !== undefined
+  );
+}
+
+function isElementNode(node: Node): node is HTMLElement {
+  return node.nodeType === Node.ELEMENT_NODE;
+}
+
 const MarkerContent = ({children, styles, className}: MarkerContentProps) => {
   /* AdvancedMarker div that user can give styles and classes */
   return (
@@ -131,6 +184,7 @@ const MarkerContent = ({children, styles, className}: MarkerContentProps) => {
 export type CustomMarkerContent = HTMLDivElement | null;
 
 export type AdvancedMarkerRef = google.maps.marker.AdvancedMarkerElement | null;
+
 function useAdvancedMarker(props: AdvancedMarkerProps) {
   const [marker, setMarker] =
     useState<google.maps.marker.AdvancedMarkerElement | null>(null);
@@ -155,13 +209,12 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
     position,
     title,
     zIndex,
-    anchorPoint
+    anchorPoint,
+    anchorLeft,
+    anchorTop
   } = props;
 
   const numChildren = Children.count(children);
-
-  const [xTranslation, yTranslation] =
-    anchorPoint ?? AdvancedMarkerAnchorPoint['BOTTOM'];
 
   // create an AdvancedMarkerElement instance and add it to the map once available
   useEffect(() => {
@@ -182,22 +235,6 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
       // to target it via CSS to disable pointer event when using custom anchor point
       newMarker.dataset.origin = 'rgm';
 
-      let xTranslationFlipped = `-${xTranslation}`;
-      let yTranslationFlipped = `-${yTranslation}`;
-
-      if (xTranslation.trimStart().startsWith('-')) {
-        xTranslationFlipped = xTranslation.substring(1);
-      }
-      if (yTranslation.trimStart().startsWith('-')) {
-        yTranslationFlipped = yTranslation.substring(1);
-      }
-
-      // The "translate(50%, 100%)" is here to counter and reset the default anchoring of the advanced marker element
-      // that comes from the api
-      const transformStyle = `translate(50%, 100%) translate(${xTranslationFlipped}, ${yTranslationFlipped})`;
-      contentElement.style.transform = transformStyle;
-      globalStyleManager.addAdvancedMarkerPointerEventsOverwrite();
-
       newMarker.content = contentElement;
       setContentContainer(contentElement);
     }
@@ -208,7 +245,7 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
       setMarker(null);
       setContentContainer(null);
     };
-  }, [xTranslation, yTranslation, map, markerLibrary, numChildren]);
+  }, [map, markerLibrary, numChildren]);
 
   // When no children are present we don't have our own wrapper div
   // which usually gets the user provided className. In this case
@@ -220,6 +257,14 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
 
     marker.content.className = className ?? '';
   }, [marker, className, numChildren]);
+
+  useAdvancedMarkerAnchorPoint(
+    marker,
+    anchorPoint,
+    anchorLeft,
+    anchorTop,
+    numChildren > 0
+  );
 
   // copy other props
   usePropBinding(marker, 'position', position);
@@ -277,47 +322,64 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
   return [marker, contentContainer] as const;
 }
 
-export const AdvancedMarker = forwardRef(
-  (props: AdvancedMarkerProps, ref: Ref<AdvancedMarkerRef>) => {
-    const {children, style, className, anchorPoint} = props;
-    const [marker, contentContainer] = useAdvancedMarker(props);
+function useAdvancedMarkerAnchorPoint(
+  marker: google.maps.marker.AdvancedMarkerElement | null,
+  anchorPoint: AdvancedMarkerAnchorPoint | [string, string] | undefined,
+  anchorLeft: string | undefined,
+  anchorTop: string | undefined,
+  hasChildren: boolean
+) {
+  useEffect(() => {
+    if (!marker || !hasChildren) return;
 
-    const advancedMarkerContextValue: AdvancedMarkerContextValue | null =
-      useMemo(() => (marker ? {marker} : null), [marker]);
+    // The anchorLeft and anchorTop options are available since version 3.62.9c
+    // With the release of 3.65 (~May 2026) there will no longer be a version
+    // that doesn't support it.
+    const anchorOptionsSupported = isVersionGreaterEqual(3, 62);
+    const contentElement = marker.content;
+    if (!contentElement || !isElementNode(contentElement)) return;
 
-    useImperativeHandle(
-      ref,
-      () => marker as google.maps.marker.AdvancedMarkerElement,
-      [marker]
-    );
+    if (anchorLeft !== undefined || anchorTop !== undefined) {
+      if (!anchorOptionsSupported) {
+        console.warn(
+          'AdvancedMarker: The anchorLeft and anchorTop props are only supported ' +
+            'in Google Maps API version 3.62 and above. ' +
+            `The current version is ${google.maps.version}.`
+        );
+      }
 
-    if (!contentContainer) return null;
+      marker.anchorLeft = anchorLeft;
+      marker.anchorTop = anchorTop;
 
-    return (
-      <AdvancedMarkerContext.Provider value={advancedMarkerContextValue}>
-        {createPortal(
-          <MarkerContent
-            anchorPoint={anchorPoint}
-            styles={style}
-            className={className}>
-            {children}
-          </MarkerContent>,
-          contentContainer
-        )}
-      </AdvancedMarkerContext.Provider>
-    );
-  }
-);
+      // when anchorLeft and/or anchorTop are set, we'll ignore the anchorPoint
+      if (anchorPoint !== undefined) {
+        console.warn(
+          'AdvancedMarker: the anchorPoint prop is ignored when anchorLeft ' +
+            'and/or anchorTop are set.'
+        );
+      }
+      return;
+    }
 
-AdvancedMarker.displayName = 'AdvancedMarker';
+    if (anchorPoint !== undefined) {
+      const [x, y] = anchorPoint ?? AdvancedMarkerAnchorPoint['BOTTOM'];
+      const translateX = `calc(-1 * ${x})`;
+      const translateY = `calc(-1 * ${y})`;
 
-export function useAdvancedMarkerRef() {
-  const [marker, setMarker] =
-    useState<google.maps.marker.AdvancedMarkerElement | null>(null);
+      if (anchorOptionsSupported) {
+        // implement anchorPoint using the new anchorLeft and anchorTop options
+        marker.anchorLeft = translateX;
+        marker.anchorTop = translateY;
 
-  const refCallback = useCallback((m: AdvancedMarkerRef | null) => {
-    setMarker(m);
-  }, []);
+        // reset transform from legacy implementation
+        contentElement.style.transform = '';
+      } else {
+        // The "translate(50%, 100%)" counters and resets the default
+        // anchoring of the advanced marker element from the api
+        contentElement.style.transform = `translate(50%, 100%) translate(${translateX}, ${translateY})`;
 
-  return [refCallback, marker] as const;
+        globalStyleManager.addAdvancedMarkerPointerEventsOverwrite();
+      }
+    }
+  }, [marker, anchorPoint, anchorLeft, anchorTop, hasChildren]);
 }
