@@ -189,7 +189,8 @@ export const InfoWindow: FunctionComponent<
         const anchorBcr = anchor?.getBoundingClientRect();
 
         // This checks whether or not the anchor has custom content with our own
-        // div wrapper. If not, that means we have a regular AdvancedMarker without any children.
+        // div wrapper. If not, that means we have a regular AdvancedMarker without
+        // children, or an AdvancedMarker that uses the anchorLeft/anchorTop props.
         // In that case we do not want to adjust the infowindow since it is all handled correctly
         // by the Google Maps API.
         if (anchorBcr && anchor.dataset.origin === 'rgm') {

@@ -232,11 +232,6 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
     if (numChildren > 0) {
       contentElement = document.createElement('div');
 
-      // We need some kind of flag to identify the custom marker content
-      // in the infowindow component. Choosing a data attribute to also be able
-      // to target it via CSS to disable pointer event when using custom anchor point
-      newMarker.dataset.origin = 'rgm';
-
       newMarker.content = contentElement;
       setContentContainer(contentElement);
     }
@@ -367,7 +362,7 @@ function useAdvancedMarkerAnchoring(
       // TODO: add console.warn in a future version to inform about deprecation
       const [x, y] = anchorPoint ?? AdvancedMarkerAnchorPoint['BOTTOM'];
 
-      // NOTE: since x and y can theoretically be any valid CSS length-percentage
+      // NOTE: since x and y can be any valid CSS length-percentage
       //   value, we need to use calc() to negate them.
       const translateX = `calc(-1 * ${x})`;
       const translateY = `calc(-1 * ${y})`;
@@ -383,6 +378,11 @@ function useAdvancedMarkerAnchoring(
         // The "translate(50%, 100%)" counters and resets the default
         // anchoring of the advanced marker element from the api
         contentElement.style.transform = `translate(50%, 100%) translate(${translateX}, ${translateY})`;
+
+        // We need some kind of flag to identify the custom marker content
+        // in the infowindow component. Choosing a data attribute to also be able
+        // to target it via CSS to disable pointer event when using custom anchor point
+        marker.dataset.origin = 'rgm';
 
         globalStyleManager.addAdvancedMarkerPointerEventsOverwrite();
       }
