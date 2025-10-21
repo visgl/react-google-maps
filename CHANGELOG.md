@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.6.0](https://github.com/visgl/react-google-maps/compare/v1.5.5...v1.6.0) (2025-10-21)
+
+
+### Features
+
+* implement usage attribution ([#844](https://github.com/visgl/react-google-maps/issues/844)) ([af36b8f](https://github.com/visgl/react-google-maps/commit/af36b8feee4acdf44ee17a73e962a7ea062e72db))
+* updated AdvancedMarker anchoring implementation ([#841](https://github.com/visgl/react-google-maps/issues/841)) ([d7b128e](https://github.com/visgl/react-google-maps/commit/d7b128e132fbb76855bcf56f1947796480a97705))
+
 ## [1.5.5](https://github.com/visgl/react-google-maps/compare/v1.5.4...v1.5.5) (2025-08-07)
 
 
