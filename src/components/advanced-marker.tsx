@@ -39,6 +39,10 @@ export const AdvancedMarkerContext =
   React.createContext<AdvancedMarkerContextValue | null>(null);
 
 // [xPosition, yPosition] when the top left corner is [0, 0]
+/**
+ * @deprecated Using `anchorPosition` is deprecated.
+ *   Use `anchorLeft` and `anchorTop` instead.
+ */
 export const AdvancedMarkerAnchorPoint = {
   TOP_LEFT: ['0%', '0%'],
   TOP_CENTER: ['50%', '0%'],
