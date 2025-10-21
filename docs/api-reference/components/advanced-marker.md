@@ -173,6 +173,25 @@ The position is measured from the top-left corner and
 can be anything that can be consumed by a CSS translate() function.
 For example in percent `[10%, 90%]` or in pixels `[10px, 20px]`.
 
+#### `anchorLeft`: string
+
+A [CSS length-percentage] value which is used to translate the marker
+content relative to the anchor point. A value of 0 means the anchor-point
+will be at the left edge of the content-element. The default value is `-%50`,
+so the anchor point will be at the center of the content element.
+You can also use CSS `calc()` expressions to combine percentage and pixel
+values.
+
+#### `anchorTop`: string
+
+A [CSS length-percentage] value which is used to translate the marker content
+relative to the anchor point. When this value is 0, the anchor-point will be
+at the top-edge of the content element. The default value is `-%100`, which
+places the anchor-point at the bottom edge. You can also use CSS `calc()`
+expressions to combine percentage and pixel values.
+
+[CSS length-percentage]: https://developer.mozilla.org/en-US/docs/Web/CSS/length-percentage
+
 ### Other Props
 
 #### `clickable`: boolean

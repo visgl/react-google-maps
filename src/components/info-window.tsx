@@ -15,7 +15,7 @@ import {useMapsEventListener} from '../hooks/use-maps-event-listener';
 import {useMapsLibrary} from '../hooks/use-maps-library';
 import {useMemoized} from '../hooks/use-memoized';
 import {setValueForStyles} from '../libraries/set-value-for-styles';
-import {CustomMarkerContent, isAdvancedMarker} from './advanced-marker';
+import {isAdvancedMarker} from './advanced-marker';
 
 export type InfoWindowProps = Omit<
   google.maps.InfoWindowOptions,
@@ -186,14 +186,14 @@ export const InfoWindow: FunctionComponent<
 
       // Only do the infowindow adjusting when dealing with an AdvancedMarker
       if (isAdvancedMarker(anchor) && anchor.content instanceof Element) {
-        const wrapper = anchor.content as CustomMarkerContent;
-        const wrapperBcr = wrapper?.getBoundingClientRect();
+        const anchorBcr = anchor?.getBoundingClientRect();
 
         // This checks whether or not the anchor has custom content with our own
-        // div wrapper. If not, that means we have a regular AdvancedMarker without any children.
+        // div wrapper. If not, that means we have a regular AdvancedMarker without
+        // children, or an AdvancedMarker that uses the anchorLeft/anchorTop props.
         // In that case we do not want to adjust the infowindow since it is all handled correctly
         // by the Google Maps API.
-        if (wrapperBcr && wrapper?.isCustomMarker) {
+        if (anchorBcr && anchor.dataset.origin === 'rgm') {
           // We can safely typecast here since we control that element and we know that
           // it is a div
           const anchorDomContent = anchor.content.firstElementChild
@@ -204,9 +204,10 @@ export const InfoWindow: FunctionComponent<
           // center infowindow above marker
           const anchorOffsetX =
             contentBcr.x -
-            wrapperBcr.x +
-            (contentBcr.width - wrapperBcr.width) / 2;
-          const anchorOffsetY = contentBcr.y - wrapperBcr.y;
+            anchorBcr.x +
+            (contentBcr.width - anchorBcr.width) / 2;
+
+          const anchorOffsetY = contentBcr.y - anchorBcr.y;
 
           const opts: google.maps.InfoWindowOptions = infoWindowOptions;
 

@@ -13,9 +13,9 @@ import {
   CollisionBehavior
 } from '@vis.gl/react-google-maps';
 
-import {getData} from './data';
-
 import ControlPanel from './control-panel';
+
+import {getData, MarkerType, textSnippets} from './data';
 
 import './style.css';
 
@@ -27,7 +27,10 @@ export type AnchorPointName = keyof typeof AdvancedMarkerAnchorPoint;
 // thus appear in front.
 const data = getData()
   .sort((a, b) => b.position.lat - a.position.lat)
-  .map((dataItem, index) => ({...dataItem, zIndex: index}));
+  .map((dataItem, index) => ({
+    ...dataItem,
+    zIndex: index
+  }));
 
 const Z_INDEX_SELECTED = data.length;
 const Z_INDEX_HOVER = data.length + 1;
@@ -40,8 +43,13 @@ const App = () => {
 
   const [hoverId, setHoverId] = useState<string | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [infowindowContent, setInfowindowContent] = useState<string | null>(
+    null
+  );
 
-  const [anchorPoint, setAnchorPoint] = useState('BOTTOM' as AnchorPointName);
+  const [anchorPoint, setAnchorPoint] = useState(
+    'LEFT_CENTER' as AnchorPointName
+  );
   const [selectedMarker, setSelectedMarker] =
     useState<google.maps.marker.AdvancedMarkerElement | null>(null);
   const [infoWindowShown, setInfoWindowShown] = useState(false);
@@ -49,12 +57,18 @@ const App = () => {
   const onMouseEnter = useCallback((id: string | null) => setHoverId(id), []);
   const onMouseLeave = useCallback(() => setHoverId(null), []);
   const onMarkerClick = useCallback(
-    (id: string | null, marker?: google.maps.marker.AdvancedMarkerElement) => {
+    (
+      id: string | null,
+      marker?: google.maps.marker.AdvancedMarkerElement,
+      type?: MarkerType
+    ) => {
       setSelectedId(id);
 
       if (marker) {
         setSelectedMarker(marker);
       }
+
+      setInfowindowContent(type ? textSnippets[type] : null);
 
       if (id !== selectedId) {
         setInfoWindowShown(true);
@@ -97,12 +111,25 @@ const App = () => {
             zIndex = Z_INDEX_SELECTED;
           }
 
+          if (type === 'default') {
+            return (
+              <AdvancedMarkerWithRef
+                key={id}
+                zIndex={zIndex}
+                position={position}
+                onMarkerClick={marker => onMarkerClick(id, marker, type)}
+                onMouseEnter={() => onMouseEnter(id)}
+                onMouseLeave={onMouseLeave}
+              />
+            );
+          }
+
           if (type === 'pin') {
             return (
               <AdvancedMarkerWithRef
                 onMarkerClick={(
                   marker: google.maps.marker.AdvancedMarkerElement
-                ) => onMarkerClick(id, marker)}
+                ) => onMarkerClick(id, marker, type)}
                 onMouseEnter={() => onMouseEnter(id)}
                 onMouseLeave={onMouseLeave}
                 key={id}
@@ -114,7 +141,7 @@ const App = () => {
                 }}
                 position={position}>
                 <Pin
-                  background={selectedId === id ? '#22ccff' : null}
+                  background={selectedId === id ? '#22ccff' : 'orange'}
                   borderColor={selectedId === id ? '#1e89a1' : null}
                   glyphColor={selectedId === id ? '#0f677a' : null}
                 />
@@ -137,7 +164,9 @@ const App = () => {
                   }}
                   onMarkerClick={(
                     marker: google.maps.marker.AdvancedMarkerElement
-                  ) => onMarkerClick(id, marker)}
+                  ) => {
+                    onMarkerClick(id, marker, type);
+                  }}
                   onMouseEnter={() => onMouseEnter(id)}
                   collisionBehavior={
                     CollisionBehavior.OPTIONAL_AND_HIDES_LOWER_PRIORITY
@@ -166,11 +195,12 @@ const App = () => {
 
         {infoWindowShown && selectedMarker && (
           <InfoWindow
+            headerDisabled={true}
             anchor={selectedMarker}
             pixelOffset={[0, -2]}
             onCloseClick={handleInfowindowCloseClick}>
             <h2>Marker {selectedId}</h2>
-            <p>Some arbitrary html to be rendered into the InfoWindow.</p>
+            <p>{infowindowContent}</p>
           </InfoWindow>
         )}
       </Map>

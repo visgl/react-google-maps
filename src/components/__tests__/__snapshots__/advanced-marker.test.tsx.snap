@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`map and marker-library loaded anchoring with legacy API should warn when using anchorLeft/Top 1`] = `
+[
+  [
+    "AdvancedMarker: The anchorLeft and anchorTop props are only supported in Google Maps API version 3.62 and above. The current version is 3.61.0.",
+  ],
+]
+`;
+
+exports[`map and marker-library loaded anchoring with modern API anchorLeft/anchorTop should have precedence over anchorPoint 1`] = `
+[
+  [
+    "AdvancedMarker: the anchorPoint prop is ignored when anchorLeft and/or anchorTop are set.",
+  ],
+]
+`;
