@@ -36,7 +36,7 @@ React wrapper. This helps Google understand how the Maps Platform APIs are being
 used and prioritize future development efforts. This is handled internally and
 requires no changes to your code.
 
-When copying tools from examples or generated using AI tools, there will
+When copying code from examples or generated using AI tools, there will
 sometimes be an additional attribution passed to the Map component. Keeping
 this attribution is encouraged, but not required. Values other than
 those provided by official Google sources will be ignored.
