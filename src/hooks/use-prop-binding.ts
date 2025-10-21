@@ -17,6 +17,7 @@ export function usePropBinding<T extends object, K extends keyof T>(
   useEffect(() => {
     if (!object) return;
 
+    // eslint-disable-next-line react-hooks/immutability
     object[prop] = value;
   }, [object, prop, value]);
 }
