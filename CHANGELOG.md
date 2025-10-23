@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.6.1](https://github.com/visgl/react-google-maps/compare/v1.6.0...v1.6.1) (2025-10-23)
+
+
+### Features
+
+* update eslint-plugin-react-hooks ([#851](https://github.com/visgl/react-google-maps/issues/851)) ([6ebe344](https://github.com/visgl/react-google-maps/commit/6ebe344d4baf36cf18924037dec43b82cf9b5561))
+
+
+### Miscellaneous Chores
+
+* add tslib as devDependency ([#854](https://github.com/visgl/react-google-maps/issues/854)) ([fe42240](https://github.com/visgl/react-google-maps/commit/fe42240abbca9ef30d247759bccfdbb93067ae45))
+
 ## [1.6.0](https://github.com/visgl/react-google-maps/compare/v1.5.5...v1.6.0) (2025-10-21)
 
 
