@@ -92,6 +92,7 @@
     "ts-jest": "^29.0.5",
     "typescript": "^5.1.6",
     "typescript-eslint": "^8.45.0",
+    "tslib": "^2.6.2",
     "vite": "^7.1.7"
   }
 }
