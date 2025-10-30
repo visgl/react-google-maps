@@ -57,7 +57,7 @@ type Marker3DProps = {
   'altitude-mode'?: string;
   'collision-behavior'?: string;
   'draws-when-occluded'?: boolean | string;
-  'size-preserved'?: string;
+  'size-preserved'?: boolean | string;
   'z-index'?: string;
 };
 
@@ -105,7 +105,7 @@ type Polyline3DProps = {
   zIndex?: number | null;
 
   'altitude-mode'?: string;
-  'draws-occluded-segments'?: string;
+  'draws-occluded-segments'?: boolean | string;
   'outer-color'?: string;
   'outer-width'?: string;
   'stroke-color'?: string;
@@ -135,7 +135,7 @@ type Polygon3DProps = {
   zIndex?: number | null;
 
   'altitude-mode'?: string;
-  'draws-occluded-segments'?: string;
+  'draws-occluded-segments'?: boolean | string;
   'fill-color'?: string;
   'inner-paths'?: string;
   'stroke-color'?: string;
@@ -156,7 +156,7 @@ type PopoverProps = {
     | null;
 
   'altitude-mode'?: string;
-  'light-dismiss-disabled'?: string;
+  'light-dismiss-disabled'?: boolean | string;
   'position-anchor'?: string;
 };
 
