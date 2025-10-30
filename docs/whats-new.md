@@ -5,6 +5,16 @@ recent versions of the library. For a complete list of changes, including bug
 fixes, please refer to
 the [Changelog](https://github.com/visgl/react-google-maps/blob/main/CHANGELOG.md).
 
+## Version 1.7 (October 2025)
+
+### Add support for Custom Elements
+
+The library now ships with all the types needed to use the custom elements
+from the Maps JavaScript API seamlessly in your React/TypeScript application.
+
+With this, you can use the 3D maps and Places UI Kit components in your
+application without having to define the `JSX.IntrinsicElements` types.
+
 ## Version 1.6 (October 2025)
 
 ### New Anchoring Props for Advanced Markers

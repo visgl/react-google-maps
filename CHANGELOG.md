@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.7.0](https://github.com/visgl/react-google-maps/compare/v1.6.1...v1.7.0) (2025-10-30)
+
+
+### Features
+
+* add TypeScript type definitions for Google Maps custom elements ([#857](https://github.com/visgl/react-google-maps/issues/857)) ([a946a36](https://github.com/visgl/react-google-maps/commit/a946a36ab41b092631987c04bebcd34ad4f84aa0))
+
+
+### Bug Fixes
+
+* **custom-element-types:** update type definitions for boolean values ([8db4ad0](https://github.com/visgl/react-google-maps/commit/8db4ad07c285056842e50e69a7866f3578f4100f))
+* update useMapsLibrary hook to include maps3d ([bd218bb](https://github.com/visgl/react-google-maps/commit/bd218bb65f8a308f59cbce16cce32019c27101e6))
+
 ## [1.6.1](https://github.com/visgl/react-google-maps/compare/v1.6.0...v1.6.1) (2025-10-23)
 
 
