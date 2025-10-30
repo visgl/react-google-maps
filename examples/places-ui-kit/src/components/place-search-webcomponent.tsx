@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useCallback} from 'react';
+import React, {useCallback, useEffect, useRef} from 'react';
 import {useMap, useMapsLibrary} from '@vis.gl/react-google-maps';
 
 interface Props {
@@ -84,7 +84,7 @@ export const PlaceSearchWebComponent = ({
   // This component is rendered as a custom HTML element (Web Component) provided by Google
   return (
     <div className="place-list-container">
-      {/* 
+      {/*
         gmp-place-list is a Google Maps Platform Web Component that displays a list of places
         - 'selectable' enables click-to-select functionality
         - When a place is selected, the ongmp-placeselect event is fired
@@ -107,39 +107,4 @@ export const PlaceSearchWebComponent = ({
   );
 };
 
-/**
- * Augments the React JSX namespace to add type definitions for the
- * Places UI Kit  web components. This provides
- * type-checking and autocompletion for their props, including custom
- * events, within JSX.
- */
-interface GmpPlaceSearchAttributes
-  // @ts-expect-error PlaceSearchElement not in official types yet
-  extends React.HTMLAttributes<google.maps.places.PlaceSearchElement> {
-  selectable?: boolean;
-  'truncation-preferred'?: boolean;
-  orientation?: 'HORIZONTAL' | 'VERTICAL';
-}
-interface GmpPlaceNearbySearchRequestAttributes
-  // @ts-expect-error PlaceSearchElement not in official types yet
-  extends React.HTMLAttributes<google.maps.places.PlaceNearbySearchRequestElement> {
-  'location-restriction'?: string;
-  'included-primary-types'?: string;
-}
-
-declare module 'react' {
-  namespace JSX {
-    interface IntrinsicElements {
-      'gmp-place-search': React.DetailedHTMLProps<
-        GmpPlaceSearchAttributes,
-        // @ts-expect-error PlaceSearchElement not in official types yet
-        google.maps.places.PlaceSearchElement
-      >;
-      'gmp-place-nearby-search-request': React.DetailedHTMLProps<
-        GmpPlaceNearbySearchRequestAttributes,
-        // @ts-expect-error TODO not in official types yet
-        google.maps.places.PlaceNearbySearchRequestElement
-      >;
-    }
-  }
-}
+PlaceSearchWebComponent.displayName = 'PlaceSearchWebComponent';

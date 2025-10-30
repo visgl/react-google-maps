@@ -13,11 +13,11 @@ interface PlaceTypeOption {
   label: string;
 }
 
-export const SearchBar = memo(function SearchBar({
+const SearchBarComponent = ({
   placeType,
   setPlaceType,
   setLocationId
-}: Props) {
+}: Props) => {
   const placeTypeOptions: PlaceTypeOption[] = useMemo(
     () => [
       {value: 'restaurant', label: 'Restaurants'},
@@ -55,4 +55,8 @@ export const SearchBar = memo(function SearchBar({
       />
     </div>
   );
-});
+};
+
+SearchBarComponent.displayName = 'SearchBar';
+
+export const SearchBar = memo(SearchBarComponent);
