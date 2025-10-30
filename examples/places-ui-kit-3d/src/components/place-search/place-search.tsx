@@ -10,7 +10,7 @@ type PlaceSearchProps = {
   setPlaces: (places: google.maps.places.Place[]) => void;
 };
 
-export const PlaceSearch = memo((props: PlaceSearchProps) => {
+const PlaceSearchComponent = (props: PlaceSearchProps) => {
   return (
     <gmp-place-search
       className={props.useCustomStyling ? 'custom' : undefined}
@@ -37,4 +37,7 @@ export const PlaceSearch = memo((props: PlaceSearchProps) => {
         }></gmp-place-nearby-search-request>
     </gmp-place-search>
   );
-});
+};
+PlaceSearchComponent.displayName = 'PlaceSearch';
+
+export const PlaceSearch = memo(PlaceSearchComponent);

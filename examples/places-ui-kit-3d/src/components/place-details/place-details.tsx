@@ -15,7 +15,7 @@ export const PlaceDetailsOrientation = {
 export type PlaceDetailsOrientation =
   (typeof PlaceDetailsOrientation)[keyof typeof PlaceDetailsOrientation];
 
-export const PlaceDetails = memo((props: PlaceDetailsProps) => {
+const PlaceDetailsComponent = (props: PlaceDetailsProps) => {
   const [customElementsReady, setCustomElementsReady] = useState(false);
   useEffect(() => {
     customElements.whenDefined('gmp-place-details-compact').then(() => {
@@ -42,4 +42,7 @@ export const PlaceDetails = memo((props: PlaceDetailsProps) => {
       )}
     </gmp-place-details-compact>
   );
-});
+};
+PlaceDetailsComponent.displayName = 'PlaceDetails';
+
+export const PlaceDetails = memo(PlaceDetailsComponent);

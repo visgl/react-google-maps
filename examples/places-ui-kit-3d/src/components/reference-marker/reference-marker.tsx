@@ -5,7 +5,7 @@ type ReferenceMarkerProps = {
   onClick: () => void;
 };
 
-export const ReferenceMarker = memo((props: ReferenceMarkerProps) => {
+const ReferenceMarkerComponent = (props: ReferenceMarkerProps) => {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -32,4 +32,7 @@ export const ReferenceMarker = memo((props: ReferenceMarkerProps) => {
   });
 
   return <div ref={ref} />;
-});
+};
+ReferenceMarkerComponent.displayName = 'ReferenceMarker';
+
+export const ReferenceMarker = memo(ReferenceMarkerComponent);

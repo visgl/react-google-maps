@@ -10,7 +10,7 @@ type PopoverProps = {
   useCustomStyling: boolean;
 };
 
-export const Popover = memo((props: PopoverProps) => {
+const PopoverComponent = (props: PopoverProps) => {
   if (!props.place) return null;
 
   const locationString = props.place
@@ -29,4 +29,7 @@ export const Popover = memo((props: PopoverProps) => {
       />
     </gmp-popover>
   );
-});
+};
+PopoverComponent.displayName = 'Popover';
+
+export const Popover = memo(PopoverComponent);
