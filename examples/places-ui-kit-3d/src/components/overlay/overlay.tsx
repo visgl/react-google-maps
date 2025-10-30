@@ -17,7 +17,7 @@ type OverlayProps = {
   setPlaces: (places: google.maps.places.Place[]) => void;
 };
 
-export const Overlay = memo((props: OverlayProps) => {
+const OverlayComponent = (props: OverlayProps) => {
   useMapsLibrary('places');
 
   return (
@@ -43,4 +43,7 @@ export const Overlay = memo((props: OverlayProps) => {
       />
     </div>
   );
-});
+};
+OverlayComponent.displayName = 'Overlay';
+
+export const Overlay = memo(OverlayComponent);

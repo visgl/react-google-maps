@@ -9,7 +9,7 @@ type DropdownProps = {
   onPlaceTypeSelect: (placeType: PlaceType) => void;
 };
 
-export const Dropdown = memo((props: DropdownProps) => {
+const DropdownComponent = (props: DropdownProps) => {
   const handlePlaceTypeChange = (
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
@@ -31,4 +31,7 @@ export const Dropdown = memo((props: DropdownProps) => {
       </select>
     </div>
   );
-});
+};
+DropdownComponent.displayName = 'Dropdown';
+
+export const Dropdown = memo(DropdownComponent);

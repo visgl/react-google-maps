@@ -1,10 +1,11 @@
-import * as React from 'react';
+import React, {memo} from 'react';
 
 type ControlPanelProps = {
   useCustomStyling: boolean;
   setUseCustomStyling: (use: boolean) => void;
 };
-function ControlPanel(props: ControlPanelProps) {
+
+const ControlPanel = (props: ControlPanelProps) => {
   return (
     <div className="control-panel">
       <h3>Places UI Kit 3D</h3>
@@ -40,6 +41,7 @@ function ControlPanel(props: ControlPanelProps) {
       </div>
     </div>
   );
-}
+};
+ControlPanel.displayName = 'ControlPanel';
 
-export default React.memo(ControlPanel);
+export default memo(ControlPanel);

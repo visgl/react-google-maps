@@ -5,12 +5,7 @@ import {APIProvider} from '@vis.gl/react-google-maps';
 import ControlPanel from './control-panel';
 
 import {Map3D} from './components/map-3d/map-3d';
-
-import '../types/places-ui-kit-types';
-import '../types/map-3d-types';
 import {Overlay} from './components/overlay/overlay';
-import {PlaceMarker} from './components/place-marker/place-marker';
-import {ReferenceMarker} from './components/reference-marker/reference-marker';
 
 const API_KEY =
   globalThis.GOOGLE_MAPS_API_KEY ?? (process.env.GOOGLE_MAPS_API_KEY as string);
@@ -45,17 +40,6 @@ const INITIAL_VIEW_PROPS = {
 };
 
 const App = () => {
-  const nonBetaVersionLoaded = Boolean(
-    globalThis &&
-      globalThis.google?.maps?.version &&
-      !globalThis.google?.maps?.version.endsWith('-beta')
-  );
-
-  if (nonBetaVersionLoaded) {
-    location.reload();
-    return;
-  }
-
   const [places, setPlaces] = useState<google.maps.places.Place[]>([]);
   const [placeType, setPlaceType] = useState<PlaceType>('restaurant');
   const [selectedPlace, setSelectedPlace] =

@@ -1,5 +1,5 @@
 import {useMapsLibrary} from '@vis.gl/react-google-maps';
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {memo, useEffect, useMemo, useState} from 'react';
 import {useMap3DCameraEvents} from './use-map-3d-camera-events';
 import {useCallbackRef, useDeepCompareEffect} from '../../utility-hooks';
 import {ReferenceMarker} from '../reference-marker/reference-marker';
@@ -24,7 +24,7 @@ export type Map3DCameraProps = {
   roll: number;
 };
 
-export const Map3D = (props: React.PropsWithChildren<Map3DProps>) => {
+const Map3DComponent = (props: React.PropsWithChildren<Map3DProps>) => {
   useMapsLibrary('maps3d');
 
   const [map3DElement, map3dRef] =
@@ -43,8 +43,9 @@ export const Map3D = (props: React.PropsWithChildren<Map3DProps>) => {
     });
   }, []);
 
+  const {places, handleClick} = props;
   const placeMarkers = useMemo(() => {
-    return props.places.map((place, index) => {
+    return places.map((place, index) => {
       const placeWithLocation = {
         id: place.id,
         location: place.location!.toJSON()
@@ -58,11 +59,11 @@ export const Map3D = (props: React.PropsWithChildren<Map3DProps>) => {
             drawsWhenOccluded: true,
             altitudeMode: google.maps.maps3d.AltitudeMode.RELATIVE_TO_MESH
           }}
-          onClick={() => props.handleClick(placeWithLocation)}
+          onClick={() => handleClick(placeWithLocation)}
         />
       );
     });
-  }, [props.places]);
+  }, [places, handleClick]);
 
   const {center, heading, tilt, range, roll, ...map3dOptions} = props;
 
@@ -100,3 +101,6 @@ export const Map3D = (props: React.PropsWithChildren<Map3DProps>) => {
     </gmp-map-3d>
   );
 };
+Map3DComponent.displayName = 'Map3D';
+
+export const Map3D = memo(Map3DComponent);
