@@ -52,10 +52,10 @@ export const AutocompleteWebComponent = ({onPlaceSelect}: Props) => {
   //   constructor instead.
   return (
     <div className="autocomplete-container">
-      {/* 
+      {/*
         gmp-place-autocomplete is a Google Maps Web Component that provides a search box
         with automatic place suggestions as the user types.
-        
+
         It supports two event types for backward compatibility:
         - ongmp-select: Used in alpha and future stable versions
         - ongmp-placeselect: Deprecated but still used in beta channel
@@ -68,26 +68,4 @@ export const AutocompleteWebComponent = ({onPlaceSelect}: Props) => {
   );
 };
 
-/**
- * Augments the React JSX namespace to add type definitions for the
- * Places UI Kit  web components. This provides
- * type-checking and autocompletion for their props, including custom
- * events, within JSX.
- */
-interface GmpBasicPlaceAutocomplete
-  // @ts-expect-error BasicPlaceAutocompleteElement not in official types yet
-  extends React.HTMLAttributes<google.maps.places.BasicPlaceAutocompleteElement> {
-  'ongmp-select': (event: GmpSelectEvent) => void;
-}
-
-declare module 'react' {
-  namespace JSX {
-    interface IntrinsicElements {
-      'gmp-basic-place-autocomplete': React.DetailedHTMLProps<
-        GmpBasicPlaceAutocomplete,
-        // @ts-expect-error BasicPlaceAutocompleteElement not in official types yet
-        google.maps.places.BasicPlaceAutocompleteElement
-      >;
-    }
-  }
-}
+AutocompleteWebComponent.displayName = 'AutocompleteWebComponent';
