@@ -1,4 +1,6 @@
 /// <reference types="google.maps" preserve="true" />
+export type * from './custom-elements-types';
+
 export * from './version';
 export * from './components/advanced-marker';
 export * from './components/api-provider';
