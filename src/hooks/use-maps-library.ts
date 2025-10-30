@@ -16,6 +16,7 @@ interface ApiLibraries {
   journeySharing: google.maps.JourneySharingLibrary;
   drawing: google.maps.DrawingLibrary;
   visualization: google.maps.VisualizationLibrary;
+  maps3d: google.maps.Maps3DLibrary;
 }
 
 export function useMapsLibrary<
