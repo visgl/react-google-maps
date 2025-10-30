@@ -105,6 +105,35 @@ const App = () => {
 };
 ```
 
+### Using Custom Elements of the Maps JavaScript API
+
+The maps JavaScript API also provides a lot of custom elements like the
+[Places UI Kit][gmp-places-ui-kit] or the [Maps 3D][gmp-maps-3d] elements.
+This library provides the types needed to use these custom elements in a
+TypeScript / React application.
+
+```tsx
+import {useMapsLibrary} from '@vis.gl/react-google-maps';
+
+const My3DMap = (props: My3DMapProps) => {
+  useMapsLibrary('maps3d');
+
+  const {center, heading, tilt, range, roll} = props;
+
+  return (
+    <>
+      <gmp-map-3d
+        center={center}
+        range={range}
+        heading={heading}
+        tilt={tilt}
+        roll={roll}
+        mode="SATELLITE"></gmp-map-3d>
+    </>
+  );
+};
+```
+
 ## Examples
 
 Explore our [examples directory on GitHub](./examples) or the
@@ -139,8 +168,8 @@ do not apply to this library.
 
 ### European Economic Area (EEA) developers
 
-If your billing address is in the European Economic Area, effective on 
-8 July 2025, the [Google Maps Platform EEA Terms of Service][gmp-tos-eea] 
+If your billing address is in the European Economic Area, effective on
+8 July 2025, the [Google Maps Platform EEA Terms of Service][gmp-tos-eea]
 will apply to your use of the Services. Functionality varies by region.
 [Learn more][gmp-tos-eea-faq].
 
@@ -185,3 +214,5 @@ You can also discuss this library on [our Discord server][gmp-discord].
 [gmp-community]: https://developers.google.com/maps/developer-community
 [gmp-discord]: https://discord.gg/f4hvx8Rp2q
 [gmp-browsersupport]: https://developers.google.com/maps/documentation/javascript/browsersupport
+[gmp-places-ui-kit]: https://developers.google.com/maps/documentation/javascript/places-ui-kit/overview
+[gmp-maps-3d]: https://developers.google.com/maps/documentation/javascript/3d/overview
