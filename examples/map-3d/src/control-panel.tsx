@@ -9,8 +9,8 @@ function ControlPanel() {
       <h3>3D Maps</h3>
       <p>
         This example implements a new <code>Map3D</code> component that renders
-        a 3D Globe based on the new experimental{' '}
-        <a href={GMP_3D_MAPS_OVERVIEW_URL} target={'_blank'}>
+        a 3D Globe based on the new{' '}
+        <a href={GMP_3D_MAPS_OVERVIEW_URL} target={'_blank'} rel="noreferrer">
           <code>Map3DElement</code>
         </a>{' '}
         web-component.
