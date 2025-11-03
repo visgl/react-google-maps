@@ -48,17 +48,6 @@ const Map3DExample = () => {
 };
 
 const App = () => {
-  const nonAlphaVersionLoaded = Boolean(
-    globalThis &&
-      globalThis.google?.maps?.version &&
-      !globalThis.google?.maps?.version.endsWith('-alpha')
-  );
-
-  if (nonAlphaVersionLoaded) {
-    location.reload();
-    return;
-  }
-
   return (
     <APIProvider apiKey={API_KEY} version={'alpha'}>
       <Map3DExample />
