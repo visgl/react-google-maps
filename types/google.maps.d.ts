@@ -17,17 +17,36 @@ declare namespace google.maps {
      */
     internalUsageAttributionIds?: Iterable<string> | null;
   }
+}
 
-  namespace marker {
-    interface AdvancedMarkerElementOptions {
-      anchorLeft?: string;
-      anchorTop?: string;
-    }
+namespace google.maps.marker {
+  interface AdvancedMarkerElementOptions {
+    anchorLeft?: string;
+    anchorTop?: string;
+  }
 
-    interface AdvancedMarkerElement {
-      anchorLeft?: string;
-      anchorTop?: string;
-    }
+  interface AdvancedMarkerElement {
+    anchorLeft?: string;
+    anchorTop?: string;
+  }
+
+  interface PinElementOptions {
+    /** @deprecated use glyphSrc or glyphText instead */
+    glyph?: string | Element | URL | null;
+    /** @deprecated use DOM children instead */
+    readonly element?: HTMLElement | null;
+
+    glyphColor?: string | null;
+    glyphSrc?: string | URL | null;
+    glyphText?: string | null;
+  }
+
+  interface PinElement {
+    /** @deprecated use glyphSrc or glyphText instead */
+    glyph?: string | Element | URL | null;
+    glyphColor?: string | null;
+    glyphSrc?: string | URL | null;
+    glyphText?: string | null;
   }
 }
 
