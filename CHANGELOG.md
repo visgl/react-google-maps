@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.7.1](https://github.com/visgl/react-google-maps/compare/v1.7.0...v1.7.1) (2025-11-03)
+
+
+### Bug Fixes
+
+* **types:** add new PinElement and PinElementOptions types to augmentations ([3751d0d](https://github.com/visgl/react-google-maps/commit/3751d0d76a884fe76cb8bd23a993720416932c03))
+* **types:** inline PlaceContextualElementOptions in types for 'gmp-place-contextual' ([0626be2](https://github.com/visgl/react-google-maps/commit/0626be24df8deb98b4779a121da6fbdb5023793d))
+
 ## [1.7.0](https://github.com/visgl/react-google-maps/compare/v1.6.1...v1.7.0) (2025-10-30)
 
 
