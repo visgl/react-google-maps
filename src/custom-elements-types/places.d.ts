@@ -51,7 +51,8 @@ declare module 'react' {
 
       // alpha only
       'gmp-place-contextual': CustomElement<
-        google.maps.places.PlaceContextualElementOptions & {
+        {
+          contextToken?: string | null;
           // html-attribute versions
           'context-token'?: string;
         },
