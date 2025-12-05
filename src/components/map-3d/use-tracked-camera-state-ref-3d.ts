@@ -1,4 +1,4 @@
-import {MutableRefObject, RefObject, useEffect, useRef} from 'react';
+import {RefObject, useEffect, useRef} from 'react';
 
 import {useForceUpdate} from '../../hooks/use-force-update';
 

@@ -69,6 +69,12 @@ declare namespace google.maps {
       defaultUIHidden?: boolean;
 
       /**
+       * Specifies how gesture events should be handled on the map element.
+       * @default GestureHandling.AUTO
+       */
+      gestureHandling?: GestureHandling;
+
+      /**
        * The compass heading of the map, in degrees, where due north is zero.
        */
       heading?: number;
@@ -203,6 +209,31 @@ declare namespace google.maps {
       HYBRID = 'HYBRID',
       /** This map mode displays satellite or photorealistic imagery. */
       SATELLITE = 'SATELLITE'
+    }
+
+    /**
+     * Specifies how gesture events should be handled on the map element.
+     * @see https://developers.google.com/maps/documentation/javascript/reference/3d-map#GestureHandling
+     */
+    enum GestureHandling {
+      /**
+       * This lets the map choose whether to use cooperative or greedy gesture handling.
+       * This is the default behavior if not specified.
+       * This will cause the map to enter cooperative mode if the map is dominating its
+       * scroll parent (usually the host page) to where the user cannot scroll away from
+       * the map to other content.
+       */
+      AUTO = 'AUTO',
+      /**
+       * This forces cooperative mode, where modifier keys or two-finger gestures
+       * are required to scroll the map.
+       */
+      COOPERATIVE = 'COOPERATIVE',
+      /**
+       * This forces greedy mode, where the host page cannot be scrolled from user
+       * events on the map element.
+       */
+      GREEDY = 'GREEDY'
     }
 
     /**
@@ -888,6 +919,7 @@ declare namespace google.maps {
     Polyline3DElement: typeof maps3d.Polyline3DElement;
     Polygon3DElement: typeof maps3d.Polygon3DElement;
     AltitudeMode: typeof maps3d.AltitudeMode;
+    GestureHandling: typeof maps3d.GestureHandling;
     MapMode: typeof maps3d.MapMode;
   }
 }

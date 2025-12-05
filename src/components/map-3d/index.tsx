@@ -17,7 +17,6 @@ import {useMap3DOptions} from './use-map-3d-options';
  * Augment React's JSX namespace to include the gmp-map-3d custom element.
  */
 declare module 'react' {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace JSX {
     interface IntrinsicElements {
       'gmp-map-3d': React.DetailedHTMLProps<
@@ -36,6 +35,41 @@ export type {
   Map3DSteadyChangeEvent,
   Map3DEventProps
 } from './use-map-3d-events';
+
+/**
+ * MapMode for specifying how the 3D map should be rendered.
+ * This mirrors google.maps.maps3d.MapMode but is available without waiting for the API to load.
+ */
+export const MapMode = {
+  /** This map mode displays a transparent layer of major streets on satellite imagery. */
+  HYBRID: 'HYBRID',
+  /** This map mode displays satellite or photorealistic imagery. */
+  SATELLITE: 'SATELLITE'
+} as const;
+export type MapMode = (typeof MapMode)[keyof typeof MapMode];
+
+/**
+ * GestureHandling for specifying how gesture events should be handled on the map.
+ * This mirrors google.maps.maps3d.GestureHandling but is available without waiting for the API to load.
+ */
+export const GestureHandling = {
+  /**
+   * This lets the map choose whether to use cooperative or greedy gesture handling.
+   * This is the default behavior if not specified.
+   */
+  AUTO: 'AUTO',
+  /**
+   * This forces cooperative mode, where modifier keys or two-finger gestures
+   * are required to scroll the map.
+   */
+  COOPERATIVE: 'COOPERATIVE',
+  /**
+   * This forces greedy mode, where the host page cannot be scrolled from user
+   * events on the map element.
+   */
+  GREEDY: 'GREEDY'
+} as const;
+export type GestureHandling = (typeof GestureHandling)[keyof typeof GestureHandling];
 
 /**
  * Extended Map3DElement type with animation methods that may not be in @types/google.maps yet.
@@ -80,7 +114,10 @@ export interface Map3DRef {
  * Props for the Map3D component.
  */
 export type Map3DProps = PropsWithChildren<
-  Omit<google.maps.maps3d.Map3DElementOptions, 'center'> &
+  Omit<
+    google.maps.maps3d.Map3DElementOptions,
+    'center' | 'mode' | 'gestureHandling'
+  > &
     Map3DEventProps & {
       /**
        * An id for the map, this is required when multiple maps are present
@@ -102,6 +139,18 @@ export type Map3DProps = PropsWithChildren<
        * The center of the map. Can be a LatLngAltitude or LatLngAltitudeLiteral.
        */
       center?: google.maps.LatLngAltitude | google.maps.LatLngAltitudeLiteral;
+
+      /**
+       * Specifies a mode the map should be rendered in.
+       * Import MapMode from '@vis.gl/react-google-maps' to use this.
+       */
+      mode?: MapMode;
+
+      /**
+       * Specifies how gesture events should be handled on the map.
+       * Import GestureHandling from '@vis.gl/react-google-maps' to use this.
+       */
+      gestureHandling?: GestureHandling;
 
       // Default values for uncontrolled usage
       defaultCenter?: google.maps.LatLngAltitudeLiteral;
