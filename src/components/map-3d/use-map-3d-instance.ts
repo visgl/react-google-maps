@@ -72,6 +72,7 @@ export function useMap3DInstance(
       id,
       style,
       className,
+      children,
       // Extract event props
       onCenterChanged,
       onHeadingChanged,

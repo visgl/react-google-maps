@@ -3,6 +3,7 @@ import React, {
   forwardRef,
   PropsWithChildren,
   useContext,
+  useEffect,
   useImperativeHandle,
   useMemo
 } from 'react';
@@ -69,7 +70,8 @@ export const GestureHandling = {
    */
   GREEDY: 'GREEDY'
 } as const;
-export type GestureHandling = (typeof GestureHandling)[keyof typeof GestureHandling];
+export type GestureHandling =
+  (typeof GestureHandling)[keyof typeof GestureHandling];
 
 /**
  * Extended Map3DElement type with animation methods that may not be in @types/google.maps yet.
@@ -196,6 +198,8 @@ export const Map3D = forwardRef<Map3DRef, Map3DProps>((props, ref) => {
     );
   }
 
+  const {addMap3DInstance, removeMap3DInstance} = context;
+
   // Set up the map instance
   const [map3d, containerRef, map3dRef, cameraStateRef, isReady] =
     useMap3DInstance(props);
@@ -208,6 +212,18 @@ export const Map3D = forwardRef<Map3DRef, Map3DProps>((props, ref) => {
 
   // Set up options updates
   useMap3DOptions(map3d, props);
+
+  // Register/unregister map3d instance with APIProvider
+  useEffect(() => {
+    if (!map3d) return;
+
+    const instanceId = id ?? 'default';
+    addMap3DInstance(map3d, instanceId);
+
+    return () => {
+      removeMap3DInstance(instanceId);
+    };
+  }, [map3d, id, addMap3DInstance, removeMap3DInstance]);
 
   // Expose imperative handle for animations
   // Cast to extended type since @types/google.maps may not have animation methods yet
