@@ -75,7 +75,6 @@ export function useTrackedCameraStateRef3D(
 
       const handler = () => {
         updateCameraState(map3d, ref, prop);
-        // Force update to allow controlled component pattern to work
         forceUpdate();
       };
 

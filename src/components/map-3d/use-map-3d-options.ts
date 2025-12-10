@@ -5,11 +5,10 @@ import {Map3DProps} from './index';
  * Set of option keys that can be updated on Map3DElement.
  * Camera props (center, heading, tilt, range, roll) are handled separately.
  */
-const MAP_3D_OPTION_KEYS = new Set<
-  keyof google.maps.maps3d.Map3DElementOptions
->([
+const MAP_3D_OPTION_KEYS = new Set([
   'bounds',
   'defaultUIHidden',
+  'gestureHandling',
   'internalUsageAttributionIds',
   'maxAltitude',
   'maxHeading',
@@ -18,7 +17,7 @@ const MAP_3D_OPTION_KEYS = new Set<
   'minHeading',
   'minTilt',
   'mode'
-]);
+] as const);
 
 /**
  * Hook to update Map3D options when props change.
@@ -30,16 +29,21 @@ export function useMap3DOptions(
   props: Map3DProps
 ) {
   // Filter props to only include valid option keys
-  const options: Partial<google.maps.maps3d.Map3DElementOptions> = {};
-  const keys = Object.keys(
-    props
-  ) as (keyof google.maps.maps3d.Map3DElementOptions)[];
+  const options: Record<string, unknown> = {};
+  const keys = Object.keys(props);
 
   for (const key of keys) {
-    if (!MAP_3D_OPTION_KEYS.has(key)) continue;
-    if (props[key] === undefined) continue;
+    if (
+      !MAP_3D_OPTION_KEYS.has(
+        key as typeof MAP_3D_OPTION_KEYS extends Set<infer T> ? T : never
+      )
+    )
+      continue;
+    const value = (props as Record<string, unknown>)[key];
 
-    options[key] = props[key] as never;
+    if (value === undefined) continue;
+
+    options[key] = value;
   }
 
   useDeepCompareEffect(() => {

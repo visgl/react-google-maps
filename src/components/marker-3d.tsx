@@ -206,8 +206,9 @@ export function Marker3D(props: Marker3DProps) {
   // Sync collisionBehavior prop
   useEffect(() => {
     if (!marker || collisionBehavior === undefined) return;
+    // Cast to the google.maps.CollisionBehavior type expected by Marker3DElement
     marker.collisionBehavior =
-      collisionBehavior as unknown as google.maps.CollisionBehavior;
+      collisionBehavior as google.maps.CollisionBehavior;
   }, [marker, collisionBehavior]);
 
   // Sync simple props

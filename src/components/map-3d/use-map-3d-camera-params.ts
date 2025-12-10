@@ -25,7 +25,9 @@ function toLatLngAltitudeLiteral(
 
 /**
  * Hook to update Map3D camera parameters when props change.
- * Compares the current camera state with props and updates only when there are differences.
+ * Compares props to the tracked camera state and updates the map if different.
+ *
+ * This follows the same pattern as the regular Map component's useMapCameraParams.
  *
  * @internal
  */
@@ -45,51 +47,75 @@ export function useMap3DCameraParams(
   const tilt = props.tilt ?? null;
   const roll = props.roll ?? null;
 
-  // This effect runs on every render to check for camera differences
+  // This effect runs on every render and checks if there are differences
+  // between the known state of the map (cameraStateRef, updated by events)
+  // and the desired state in props.
   useLayoutEffect(() => {
     if (!map3d) return;
 
-    const currentState = cameraStateRef.current;
+    const state = cameraStateRef.current;
+
+    const nextCamera: {
+      center?: google.maps.LatLngAltitudeLiteral;
+      range?: number;
+      heading?: number;
+      tilt?: number;
+    } = {};
     let needsUpdate = false;
 
     // Check center
     if (
       lat !== null &&
       lng !== null &&
-      (currentState.center.lat !== lat ||
-        currentState.center.lng !== lng ||
-        (altitude !== null && currentState.center.altitude !== altitude))
+      (state.center.lat !== lat ||
+        state.center.lng !== lng ||
+        (altitude !== null && state.center.altitude !== altitude))
     ) {
-      map3d.center = {
+      nextCamera.center = {
         lat,
         lng,
-        altitude: altitude ?? currentState.center.altitude ?? 0
+        altitude: altitude ?? state.center.altitude ?? 0
       };
       needsUpdate = true;
     }
 
     // Check range
-    if (range !== null && currentState.range !== range) {
-      map3d.range = range;
+    if (range !== null && state.range !== range) {
+      nextCamera.range = range;
       needsUpdate = true;
     }
 
     // Check heading
-    if (heading !== null && currentState.heading !== heading) {
-      map3d.heading = heading;
+    if (heading !== null && state.heading !== heading) {
+      nextCamera.heading = heading;
       needsUpdate = true;
     }
 
     // Check tilt
-    if (tilt !== null && currentState.tilt !== tilt) {
-      map3d.tilt = tilt;
+    if (tilt !== null && state.tilt !== tilt) {
+      nextCamera.tilt = tilt;
       needsUpdate = true;
     }
 
-    // Check roll
-    if (roll !== null && currentState.roll !== roll) {
+    // Check roll (handled separately since flyCameraTo doesn't support it)
+    if (roll !== null && state.roll !== roll) {
       map3d.roll = roll;
-      needsUpdate = true;
+    }
+
+    if (needsUpdate) {
+      // Use flyCameraTo with 0 duration for instant camera updates.
+      // Direct property assignment doesn't reliably trigger visual updates
+      // after manual user interaction due to Map3D's internal dirty-checking.
+      // Cast to 'any' because flyCameraTo may not be in @types/google.maps yet.
+      (map3d as any).flyCameraTo({
+        endCamera: {
+          center: nextCamera.center ?? state.center,
+          range: nextCamera.range ?? state.range,
+          heading: nextCamera.heading ?? state.heading,
+          tilt: nextCamera.tilt ?? state.tilt
+        },
+        durationMillis: 0
+      });
     }
   });
 }

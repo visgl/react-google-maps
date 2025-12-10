@@ -223,7 +223,8 @@ export const Map3D = forwardRef<Map3DRef, Map3DProps>((props, ref) => {
     return () => {
       removeMap3DInstance(instanceId);
     };
-  }, [map3d, id, addMap3DInstance, removeMap3DInstance]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [map3d, id]);
 
   // Expose imperative handle for animations
   // Cast to extended type since @types/google.maps may not have animation methods yet
