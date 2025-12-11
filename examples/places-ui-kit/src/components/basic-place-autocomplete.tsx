@@ -1,5 +1,6 @@
 import {useMapsLibrary} from '@vis.gl/react-google-maps';
 import React, {
+  Children,
   FunctionComponent,
   PropsWithChildren,
   useEffect,
@@ -7,6 +8,8 @@ import React, {
   useState
 } from 'react';
 import {createPortal} from 'react-dom';
+import {usePropBinding} from '../../../../src/hooks/use-prop-binding';
+import {useDomEventListener} from '../../../../src/hooks/use-dom-event-listener';
 
 export type BasicPlaceAutocompleteElementProps = PropsWithChildren<{
   /**
@@ -75,6 +78,8 @@ export type BasicPlaceAutocompleteElementProps = PropsWithChildren<{
 export const BasicPlaceAutocomplete: FunctionComponent<
   BasicPlaceAutocompleteElementProps
 > = props => {
+  const placesLibrary = useMapsLibrary('places');
+
   const {
     children,
     className,
@@ -92,15 +97,36 @@ export const BasicPlaceAutocomplete: FunctionComponent<
     onError
   } = props;
 
-  const placesLibrary = useMapsLibrary('places');
-
-  const ref = useRef<google.maps.places.PlaceAutocompleteElement | null>(null);
+  const numChildren = Children.count(children);
 
   const [templateElement, setTemplateElement] =
     useState<HTMLTemplateElement | null>(null);
 
+  const ref = useRef<google.maps.places.PlaceAutocompleteElement | null>(null);
+
+  // types have not yet been officially updated so we need to typecast here
+  // to avoid TS errors
+  const autocomplete = ref.current as any;
+
+  // bind props to the autocomplete element
+  usePropBinding(autocomplete, 'includedPrimaryTypes', includedPrimaryTypes);
+  usePropBinding(autocomplete, 'includedRegionCodes', includedRegionCodes);
+  usePropBinding(autocomplete, 'locationBias', locationBias);
+  usePropBinding(autocomplete, 'locationRestriction', locationRestriction);
+  usePropBinding(autocomplete, 'name', name);
+  usePropBinding(autocomplete, 'origin', origin);
+  usePropBinding(autocomplete, 'requestedLanguage', requestedLanguage);
+  usePropBinding(autocomplete, 'requestedRegion', requestedRegion);
+  usePropBinding(autocomplete, 'unitSystem', unitSystem);
+
+  // bind events to the autocomplete element
+  useDomEventListener(autocomplete, 'gmp-select', onSelect);
+  useDomEventListener(autocomplete, 'gmp-error', onError);
+
+  // create a template element to wrap the children if they exist
   useEffect(() => {
-    const autocomplete = ref.current;
+    if (numChildren === 0) return;
+
     if (!placesLibrary || !autocomplete || !children) return;
 
     const template = document.createElement('template');
@@ -115,29 +141,13 @@ export const BasicPlaceAutocomplete: FunctionComponent<
         autocomplete.removeChild(template);
       }
     };
-  }, [placesLibrary, children]);
+  }, [placesLibrary, numChildren, autocomplete]);
 
   if (!placesLibrary) return null;
 
   return (
-    <gmp-basic-place-autocomplete
-      ref={ref}
-      className={className}
-      style={style}
-      includedPrimaryTypes={includedPrimaryTypes}
-      includedRegionCodes={includedRegionCodes}
-      locationBias={locationBias}
-      locationRestriction={locationRestriction}
-      name={name}
-      origin={origin}
-      requestedLanguage={requestedLanguage}
-      requestedRegion={requestedRegion}
-      unitSystem={unitSystem}
-      ongmp-select={onSelect}
-      ongmp-error={onError}>
-      {templateElement &&
-        children &&
-        createPortal(children, templateElement.content)}
+    <gmp-basic-place-autocomplete ref={ref} className={className} style={style}>
+      {templateElement && createPortal(children, templateElement.content)}
     </gmp-basic-place-autocomplete>
   );
 };
