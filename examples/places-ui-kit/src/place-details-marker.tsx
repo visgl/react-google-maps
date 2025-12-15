@@ -46,8 +46,10 @@ const PlaceDetailsMarkerComponent = ({
            */}
           <PlaceDetails
             compact={detailsSize === 'COMPACT'}
+            truncationPreferred
             contentConfig="all"
-            placeId={place.id}></PlaceDetails>
+            placeId={place.id}
+          />
         </InfoWindow>
       )}
     </>
