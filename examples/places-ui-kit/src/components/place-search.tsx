@@ -1,5 +1,7 @@
 import {useMapsLibrary} from '@vis.gl/react-google-maps';
-import React, {FunctionComponent} from 'react';
+import React, {FunctionComponent, useEffect, useState} from 'react';
+import {useDomEventListener} from '../../../../src/hooks/use-dom-event-listener';
+import {usePropBinding} from '../../../../src/hooks/use-prop-binding';
 import {
   ContentConfig,
   ContentItem,
@@ -73,10 +75,10 @@ export type PlaceSearchProps = {
 
   /**
    * Show list of results based on either a nearby or a text search
-   * text search takes priority if both are provided
+   * nearby search takes priority if both are provided
    */
-  textSearch?: TextSearchOptions;
   nearbySearch?: NearbySearchOptions;
+  textSearch?: TextSearchOptions;
 
   /**
    *  Content config. Defaults to 'standard'
@@ -130,27 +132,86 @@ export const PlaceSearch: FunctionComponent<PlaceSearchProps> = props => {
   // Load required Google Maps library for places
   const placesLibrary = useMapsLibrary('places');
 
+  const [placeSearch, setPlaceSearch] =
+    // @ts-ignore
+    useState<google.maps.places.PlaceSearchElement | null>(null);
+
+  usePropBinding(placeSearch, 'attributionPosition', attributionPosition);
+  usePropBinding(placeSearch, 'orientation', orientation);
+  usePropBinding(placeSearch, 'truncationPreferred', truncationPreferred);
+  usePropBinding(placeSearch, 'selectable', selectable);
+
+  useDomEventListener(placeSearch, 'gmp-load', onLoad);
+  useDomEventListener(placeSearch, 'gmp-select', onSelect);
+  useDomEventListener(placeSearch, 'gmp-error', onError);
+
+  useEffect(() => {
+    if (!placesLibrary || !textSearch || !placeSearch) return;
+
+    const textSearchRequest =
+      // @ts-ignore
+      new placesLibrary.PlaceTextSearchRequestElement();
+
+    textSearchRequest.textQuery = textSearch.textQuery;
+    textSearchRequest.evConnectorTypes = textSearch.evConnectorTypes;
+    textSearchRequest.evMinimumChargingRateKw =
+      textSearch.evMinimumChargingRateKw;
+    textSearchRequest.includedType = textSearch.includedType;
+    textSearchRequest.isOpenNow = textSearch.isOpenNow;
+    textSearchRequest.locationBias = textSearch.locationBias;
+    textSearchRequest.locationRestriction = textSearch.locationRestriction;
+    textSearchRequest.maxResultCount = textSearch.maxResultCount;
+    textSearchRequest.minRating = textSearch.minRating;
+    textSearchRequest.priceLevels = textSearch.priceLevels;
+    textSearchRequest.rankPreference = textSearch.rankPreference;
+    textSearchRequest.useStrictTypeFiltering =
+      textSearch.useStrictTypeFiltering;
+
+    placeSearch.appendChild(textSearchRequest);
+
+    return () => {
+      if (placeSearch.contains(textSearchRequest)) {
+        placeSearch.removeChild(textSearchRequest);
+      }
+    };
+  }, [placesLibrary, textSearch, placeSearch]);
+
+  useEffect(() => {
+    if (!placesLibrary || !nearbySearch || !placeSearch) return;
+    const {
+      locationRestriction,
+      excludedPrimaryTypes,
+      excludedTypes,
+      includedPrimaryTypes,
+      includedTypes,
+      maxResultCount,
+      rankPreference
+    } = nearbySearch;
+
+    const nearbySearchRequest =
+      // @ts-ignore
+      new placesLibrary.PlaceNearbySearchRequestElement();
+    nearbySearchRequest.locationRestriction = locationRestriction;
+    nearbySearchRequest.excludedPrimaryTypes = excludedPrimaryTypes;
+    nearbySearchRequest.excludedTypes = excludedTypes;
+    nearbySearchRequest.includedPrimaryTypes = includedPrimaryTypes;
+    nearbySearchRequest.includedTypes = includedTypes;
+    nearbySearchRequest.maxResultCount = maxResultCount;
+    nearbySearchRequest.rankPreference = rankPreference;
+
+    placeSearch.appendChild(nearbySearchRequest);
+
+    return () => {
+      if (placeSearch.contains(nearbySearchRequest)) {
+        placeSearch.removeChild(nearbySearchRequest);
+      }
+    };
+  }, [placesLibrary, nearbySearch, placeSearch]);
+
   if (!placesLibrary || !(nearbySearch || textSearch)) return null;
 
   return (
-    <gmp-place-search
-      className={className}
-      style={style}
-      attributionPosition={attributionPosition}
-      orientation={orientation}
-      truncationPreferred={truncationPreferred}
-      selectable={selectable}
-      ongmp-load={onLoad}
-      ongmp-select={onSelect}
-      ongmp-error={onError}>
-      {textSearch && (
-        <gmp-place-text-search-request
-          {...textSearch}></gmp-place-text-search-request>
-      )}
-      {nearbySearch && (
-        <gmp-place-nearby-search-request
-          {...nearbySearch}></gmp-place-nearby-search-request>
-      )}
+    <gmp-place-search ref={setPlaceSearch} className={className} style={style}>
       <PlaceContentConfig
         contentConfig={contentConfig}
         customContent={customContent}
