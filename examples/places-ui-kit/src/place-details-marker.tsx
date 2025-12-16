@@ -47,7 +47,28 @@ const PlaceDetailsMarkerComponent = ({
           <PlaceDetails
             compact={detailsSize === 'COMPACT'}
             truncationPreferred
-            contentConfig="all"
+            contentConfig="custom"
+            orientation={google.maps.places.PlaceDetailsOrientation.HORIZONTAL}
+            customContent={[
+              {
+                attribute: 'media',
+                options: {preferredSize: 'MEDIUM', lightboxPreferred: true}
+              },
+              {attribute: 'address'},
+              {attribute: 'open-now-status'},
+              {attribute: 'rating'},
+              {attribute: 'price'},
+              {attribute: 'reviews'},
+              {attribute: 'summary'},
+              {attribute: 'website'},
+              {
+                attribute: 'attribution',
+                options: {
+                  lightSchemeColor: google.maps.places.AttributionColor.BLACK,
+                  darkSchemeColor: google.maps.places.AttributionColor.GRAY
+                }
+              }
+            ]}
             placeId={place.id}
           />
         </InfoWindow>

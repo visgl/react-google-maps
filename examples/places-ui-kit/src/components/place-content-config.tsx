@@ -1,4 +1,4 @@
-import React, {FunctionComponent} from 'react';
+import React, {FunctionComponent, useEffect, useRef} from 'react';
 
 export const ContentConfig = {
   STANDARD: 'standard',
@@ -30,21 +30,25 @@ export type PlaceDetailsContentItem =
   | 'type-specific-highlights'
   | 'website';
 
+type AttributionProps = {
+  lightSchemeColor?: google.maps.places.AttributionColor | null;
+  darkSchemeColor?: google.maps.places.AttributionColor | null;
+};
+
+type MediaProps = {
+  lightboxPreferred?: boolean;
+  // FIXME: update to google.maps.places.MediaSize
+  preferredSize?: 'SMALL' | 'MEDIUM' | 'LARGE';
+};
+
 type AttributionContentItem = {
   attribute: 'attribution';
-  options?: {
-    lightSchemeColor?: google.maps.places.AttributionColor | null;
-    darkSchemeColor?: google.maps.places.AttributionColor | null;
-  };
+  options?: AttributionProps;
 };
 
 type MediaContentItem = {
   attribute: 'media';
-  options?: {
-    lightboxPreferred?: boolean;
-    // FIXME: update to google.maps.places.MediaSize
-    preferredSize?: 'SMALL' | 'MEDIUM' | 'LARGE';
-  };
+  options?: MediaProps;
 };
 
 type DefaultContentItem = {
@@ -66,6 +70,38 @@ export type PlaceContentConfigProps = {
   customContent?: Array<ContentItem>;
 };
 
+const AttributionWrapper: FunctionComponent<AttributionProps> = ({
+  lightSchemeColor,
+  darkSchemeColor
+}) => {
+  const ref = useRef<any>(null);
+
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.lightSchemeColor = lightSchemeColor;
+      ref.current.darkSchemeColor = darkSchemeColor;
+    }
+  }, [lightSchemeColor, darkSchemeColor]);
+
+  return <gmp-place-attribution ref={ref} />;
+};
+
+const MediaWrapper: FunctionComponent<MediaProps> = ({
+  lightboxPreferred,
+  preferredSize
+}) => {
+  const ref = useRef<any>(null);
+
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.lightboxPreferred = lightboxPreferred;
+      ref.current.preferredSize = preferredSize;
+    }
+  }, [lightboxPreferred, preferredSize]);
+
+  return <gmp-place-media ref={ref} />;
+};
+
 /**
  * Maps a content item string to its corresponding Google Maps Web Component JSX.
  */
@@ -76,9 +112,27 @@ const renderContentItem = (itemConfig: ContentItem, key: number) => {
     case 'accessible-entrance-icon':
       return <gmp-place-accessible-entrance-icon key={key} />;
     case 'attribution':
-      return <gmp-place-attribution key={key} {...itemConfig.options} />;
+      const {lightSchemeColor, darkSchemeColor} =
+        (itemConfig.options as AttributionContentItem['options']) || {};
+
+      return (
+        <AttributionWrapper
+          key={key}
+          lightSchemeColor={lightSchemeColor}
+          darkSchemeColor={darkSchemeColor}
+        />
+      );
     case 'media':
-      return <gmp-place-media key={key} {...itemConfig.options} />;
+      const {lightboxPreferred, preferredSize} =
+        (itemConfig.options as MediaContentItem['options']) || {};
+
+      return (
+        <MediaWrapper
+          key={key}
+          lightboxPreferred={lightboxPreferred}
+          preferredSize={preferredSize}
+        />
+      );
     case 'open-now-status':
       return <gmp-place-open-now-status key={key} />;
     case 'price':

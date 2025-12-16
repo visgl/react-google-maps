@@ -149,7 +149,7 @@ export const PlaceSearch: FunctionComponent<PlaceSearchProps> = props => {
     if (!placesLibrary || !textSearch || !placeSearch) return;
 
     const textSearchRequest =
-      // @ts-ignore
+      // @ts-ignore types are not up to date here
       new placesLibrary.PlaceTextSearchRequestElement();
 
     textSearchRequest.textQuery = textSearch.textQuery;

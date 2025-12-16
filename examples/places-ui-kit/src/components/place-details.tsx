@@ -1,10 +1,12 @@
 import {useMapsLibrary} from '@vis.gl/react-google-maps';
-import React, {FunctionComponent} from 'react';
+import React, {FunctionComponent, useRef, useState} from 'react';
 import {
   ContentConfig,
   ContentItem,
   PlaceContentConfig
 } from './place-content-config';
+import {useDomEventListener} from '../../../../src/hooks/use-dom-event-listener';
+import {usePropBinding} from '../../../../src/hooks/use-prop-binding';
 
 export const Orientation = {
   HORIZONTAL: 'HORIZONTAL',
@@ -57,7 +59,7 @@ export type PlaceDetailsProps = {
   /**
    * Orientation of the displayed information. Defaults to vertical.
    */
-  orientation?: Orientation;
+  orientation?: google.maps.places.PlaceDetailsOrientation;
   /**
    * Whether or not text should be truncated.
    */
@@ -83,6 +85,9 @@ export type PlaceDetailsProps = {
  * and https://developers.google.com/maps/documentation/javascript/reference/places-widget#PlaceDetailsCompactElement
  */
 export const PlaceDetails: FunctionComponent<PlaceDetailsProps> = props => {
+  // Load required Google Maps library for places
+  const placesLibrary = useMapsLibrary('places');
+
   const {
     className,
     style,
@@ -91,25 +96,37 @@ export const PlaceDetails: FunctionComponent<PlaceDetailsProps> = props => {
     location,
     contentConfig = ContentConfig.STANDARD,
     customContent,
-    orientation = Orientation.VERTICAL,
-    truncationPreferred,
+    orientation,
+    truncationPreferred = false,
     onLoad,
     onError
   } = props;
 
-  // Load required Google Maps library for places
-  const placesLibrary = useMapsLibrary('places');
+  const [compactDetailsElement, setCompactDetailsElement] =
+    useState<google.maps.places.PlaceDetailsCompactElement | null>(null);
+  const [standardDetailsElement, setStandardDetailsElement] =
+    useState<google.maps.places.PlaceDetailsElement | null>(null);
+  const detailsElement = compact
+    ? compactDetailsElement
+    : standardDetailsElement;
+
+  usePropBinding(compactDetailsElement, 'orientation', orientation);
+  usePropBinding(
+    compactDetailsElement,
+    'truncationPreferred',
+    truncationPreferred
+  );
+
+  useDomEventListener(detailsElement, 'gmp-load', onLoad);
+  useDomEventListener(detailsElement, 'gmp-error', onError);
 
   if (!placesLibrary || !(placeId || location)) return null;
 
   return compact ? (
     <gmp-place-details-compact
+      ref={setCompactDetailsElement}
       className={className}
-      style={style}
-      ongmp-load={onLoad}
-      ongmp-error={onError}
-      orientation={orientation}
-      truncationPreferred={truncationPreferred}>
+      style={style}>
       <gmp-place-details-place-request
         place={placeId}></gmp-place-details-place-request>
       <gmp-place-details-location-request
@@ -121,10 +138,9 @@ export const PlaceDetails: FunctionComponent<PlaceDetailsProps> = props => {
     </gmp-place-details-compact>
   ) : (
     <gmp-place-details
+      ref={setStandardDetailsElement}
       className={className}
-      style={style}
-      ongmp-load={onLoad}
-      ongmp-error={onError}>
+      style={style}>
       <gmp-place-details-location-request
         location={location}></gmp-place-details-location-request>
       <gmp-place-details-place-request
