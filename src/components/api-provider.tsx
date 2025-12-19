@@ -7,6 +7,7 @@ import React, {
   useReducer,
   useState
 } from 'react';
+import {importLibrary} from '@googlemaps/js-api-loader';
 
 import {
   ApiParams,
@@ -15,14 +16,14 @@ import {
 import {APILoadingStatus} from '../libraries/api-loading-status';
 import {VERSION} from '../version';
 
-type ImportLibraryFunction = typeof google.maps.importLibrary;
+type ImportLibraryFunction = typeof importLibrary;
 type GoogleMapsLibrary = Awaited<ReturnType<ImportLibraryFunction>>;
 type LoadedLibraries = {[name: string]: GoogleMapsLibrary};
 
 export interface APIProviderContextValue {
   status: APILoadingStatus;
   loadedLibraries: LoadedLibraries;
-  importLibrary: typeof google.maps.importLibrary;
+  importLibrary: typeof importLibrary;
   mapInstances: Record<string, google.maps.Map>;
   addMapInstance: (map: google.maps.Map, id?: string) => void;
   removeMapInstance: (id?: string) => void;
@@ -161,20 +162,13 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
     [apiKey, version, otherApiParams]
   );
 
-  const importLibrary: typeof google.maps.importLibrary = useCallback(
+  const importLibraryCallback: typeof importLibrary = useCallback(
     async (name: string) => {
       if (loadedLibraries[name]) {
         return loadedLibraries[name];
       }
 
-      if (!google?.maps?.importLibrary) {
-        throw new Error(
-          '[api-provider-internal] importLibrary was called before ' +
-            'google.maps.importLibrary was defined.'
-        );
-      }
-
-      const res = await window.google.maps.importLibrary(name);
+      const res = await importLibrary(name);
       addLoadedLibrary({name, value: res});
 
       return res;
@@ -204,7 +198,7 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
           await GoogleMapsApiLoader.load(params, status => setStatus(status));
 
           for (const name of ['core', 'maps', ...libraries]) {
-            await importLibrary(name);
+            await importLibraryCallback(name);
           }
 
           if (onLoad) {
@@ -229,7 +223,7 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
   return {
     status,
     loadedLibraries,
-    importLibrary
+    importLibrary: importLibraryCallback
   };
 }
 
