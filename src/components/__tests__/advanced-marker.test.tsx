@@ -36,8 +36,9 @@ beforeEach(async () => {
   // custom implementation of the AdvancedMarkerElement that has a properly
   // initialized content and an observeable constructor.
   createMarkerSpy = jest.fn();
-  const AdvancedMarkerElement = class extends google.maps.marker
-    .AdvancedMarkerElement {
+  const AdvancedMarkerElement = class
+    extends google.maps.marker.AdvancedMarkerElement
+  {
     constructor(o?: google.maps.marker.AdvancedMarkerElementOptions) {
       createMarkerSpy(o);
       super(o);
