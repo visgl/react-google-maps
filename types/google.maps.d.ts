@@ -916,8 +916,12 @@ declare namespace google.maps {
     Marker3DElement: typeof maps3d.Marker3DElement;
     Marker3DInteractiveElement: typeof maps3d.Marker3DInteractiveElement;
     Model3DElement: typeof maps3d.Model3DElement;
+    Model3DInteractiveElement: typeof maps3d.Model3DInteractiveElement;
     Polyline3DElement: typeof maps3d.Polyline3DElement;
+    Polyline3DInteractiveElement: typeof maps3d.Polyline3DInteractiveElement;
     Polygon3DElement: typeof maps3d.Polygon3DElement;
+    Polygon3DInteractiveElement: typeof maps3d.Polygon3DInteractiveElement;
+    PopoverElement: typeof maps3d.PopoverElement;
     AltitudeMode: typeof maps3d.AltitudeMode;
     GestureHandling: typeof maps3d.GestureHandling;
     MapMode: typeof maps3d.MapMode;

@@ -1,13 +1,15 @@
-import type {PropsWithChildren} from 'react';
+import type {PropsWithChildren, Ref} from 'react';
 import React, {
   createContext,
   useCallback,
   useContext,
   useEffect,
+  useImperativeHandle,
   useLayoutEffect,
   useMemo,
   useRef,
-  useState
+  useState,
+  forwardRef
 } from 'react';
 import {createPortal} from 'react-dom';
 
@@ -122,7 +124,14 @@ export type Marker3DProps = PropsWithChildren<
  * </Marker3D>
  * ```
  */
-export function Marker3D(props: Marker3DProps) {
+export const Marker3D = forwardRef(function Marker3D(
+  props: Marker3DProps,
+  ref: Ref<
+    | google.maps.maps3d.Marker3DElement
+    | google.maps.maps3d.Marker3DInteractiveElement
+    | null
+  >
+) {
   const {
     children,
     onClick,
@@ -153,6 +162,9 @@ export function Marker3D(props: Marker3DProps) {
 
   // Track whether we need the interactive variant
   const isInteractive = Boolean(onClick);
+
+  // Expose marker element via ref
+  useImperativeHandle(ref, () => marker, [marker]);
 
   // Create marker element and attach to map
   useEffect(() => {
@@ -295,6 +307,6 @@ export function Marker3D(props: Marker3DProps) {
       {createPortal(children, contentContainer)}
     </Marker3DContext.Provider>
   );
-}
+});
 
 Marker3D.displayName = 'Marker3D';
