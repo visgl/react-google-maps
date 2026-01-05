@@ -53,14 +53,6 @@ export class GoogleMapsApiLoader {
     const serializedParams = this.serializeParams(params);
     this.listeners.push(onLoadingStatusChange);
 
-    // Set global callbacks for Maps JS API to use (always define them).
-    // These will be called by the Google Maps script when it loads or fails authentication.
-    window.__googleMapsCallback__ = () => {
-      if (this.loadingStatus !== APILoadingStatus.LOADED) {
-        this.loadingStatus = APILoadingStatus.LOADED;
-        this.notifyLoadingStatusListeners();
-      }
-    };
     window.gm_authFailure = () => {
       if (this.loadingStatus !== APILoadingStatus.AUTH_FAILURE) {
         this.loadingStatus = APILoadingStatus.AUTH_FAILURE;
@@ -195,7 +187,6 @@ export class GoogleMapsApiLoader {
 // Declare global maps callback functions
 declare global {
   interface Window {
-    __googleMapsCallback__?: () => void;
     gm_authFailure?: () => void;
   }
 }
