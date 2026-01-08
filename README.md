@@ -75,7 +75,7 @@ For example, if you just want to use the `google.maps.geocoding.Geocoder` class 
 a component and you don't even need a map, it can be implemented like this:
 
 ```tsx
-import {useMap, useMapsLibrary} from '@vis.gl/react-google-maps';
+import {useMapsLibrary} from '@vis.gl/react-google-maps';
 
 const MyComponent = () => {
   // useMapsLibrary loads the geocoding library, it might initially return `null`
