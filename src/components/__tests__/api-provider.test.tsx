@@ -17,8 +17,12 @@ import {
 import {useApiIsLoaded} from '../../hooks/use-api-is-loaded';
 import {APILoadingStatus} from '../../libraries/api-loading-status';
 
-let importLibraryPromise: Promise<google.maps.CoreLibrary | null>;
-let resolveImportLibrary: (value: google.maps.CoreLibrary | null) => void;
+type ImportLibraryResult = Awaited<
+  ReturnType<typeof google.maps.importLibrary>
+>;
+
+let importLibraryPromise: Promise<ImportLibraryResult>;
+let resolveImportLibrary: (value: ImportLibraryResult) => void;
 let rejectImportLibrary: (reason?: unknown) => void;
 
 const resetImportLibraryPromise = () => {
@@ -26,11 +30,11 @@ const resetImportLibraryPromise = () => {
     promise: importLibraryPromise,
     resolve: resolveImportLibrary,
     reject: rejectImportLibrary
-  } = Promise.withResolvers<google.maps.CoreLibrary | null>());
+  } = Promise.withResolvers<ImportLibraryResult>());
 };
 
 const triggerMapsApiLoaded = () => {
-  resolveImportLibrary(null);
+  resolveImportLibrary({} as google.maps.CoreLibrary);
 };
 
 const triggerLoadingFailed = () => {
