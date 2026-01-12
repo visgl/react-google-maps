@@ -24,11 +24,11 @@ const App = () => {
 
   const incompatibleVersionLoaded = Boolean(
     globalThis &&
-      globalThis.google?.maps?.version &&
-      !(
-        globalThis.google?.maps?.version.endsWith('-alpha') ||
-        globalThis.google?.maps?.version.endsWith('-beta')
-      )
+    globalThis.google?.maps?.version &&
+    !(
+      globalThis.google?.maps?.version.endsWith('-alpha') ||
+      globalThis.google?.maps?.version.endsWith('-beta')
+    )
   );
 
   if (incompatibleVersionLoaded) {

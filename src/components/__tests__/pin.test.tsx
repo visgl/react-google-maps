@@ -43,8 +43,9 @@ beforeEach(async () => {
 
   createMarkerSpy = jest.fn();
 
-  const AdvancedMarkerElement = class extends google.maps.marker
-    .AdvancedMarkerElement {
+  const AdvancedMarkerElement = class
+    extends google.maps.marker.AdvancedMarkerElement
+  {
     constructor(options: google.maps.marker.AdvancedMarkerElementOptions) {
       createMarkerSpy(options);
       super(options);
