@@ -9,7 +9,7 @@
     "moduleResolution": "bundler",
     "esModuleInterop": true,
     "target": "ES2015",
-    "lib": ["es2022", "dom"],
+    "lib": ["es2024", "dom"],
     "jsx": "react",
 
     "skipLibCheck": true,

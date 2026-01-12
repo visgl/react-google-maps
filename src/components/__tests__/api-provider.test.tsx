@@ -1,23 +1,56 @@
 import React, {useContext} from 'react';
-import {act, render, screen} from '@testing-library/react';
-import {initialize} from '@googlemaps/jest-mocks';
+import {act, cleanup, render, screen, waitFor} from '@testing-library/react';
+import {
+  importLibrary as importLibraryMock,
+  initialize
+} from '@googlemaps/jest-mocks';
 import '@testing-library/jest-dom';
-
-// FIXME: this should no longer be needed with the next version of @googlemaps/jest-mocks
-import {importLibraryMock} from '../../libraries/__mocks__/lib/import-library-mock';
 
 import {VERSION} from '../../version';
 import {
+  __resetModuleState as resetAPIProviderState,
   APIProvider,
   APIProviderContext,
   APIProviderContextValue
 } from '../api-provider';
-import {ApiParams} from '../../libraries/google-maps-api-loader';
+
 import {useApiIsLoaded} from '../../hooks/use-api-is-loaded';
 import {APILoadingStatus} from '../../libraries/api-loading-status';
 
+let importLibraryPromise: Promise<google.maps.CoreLibrary | null>;
+let resolveImportLibrary: (value: google.maps.CoreLibrary | null) => void;
+let rejectImportLibrary: (reason?: unknown) => void;
+
+const resetImportLibraryPromise = () => {
+  ({
+    promise: importLibraryPromise,
+    resolve: resolveImportLibrary,
+    reject: rejectImportLibrary
+  } = Promise.withResolvers<google.maps.CoreLibrary | null>());
+};
+
+const triggerMapsApiLoaded = () => {
+  resolveImportLibrary(null);
+};
+
+const triggerLoadingFailed = () => {
+  rejectImportLibrary(new Error('loading failed'));
+};
+
 const apiLoadSpy = jest.fn();
-const apiUnloadSpy = jest.fn();
+
+jest.mock('@googlemaps/js-api-loader', () => {
+  return {
+    setOptions: jest.fn((options: Record<string, unknown>) => {
+      apiLoadSpy(options);
+    }),
+    importLibrary: jest.fn(async (name: string) => {
+      await importLibraryPromise;
+
+      return importLibraryMock(name);
+    })
+  };
+});
 
 const ContextSpyComponent = () => {
   const context = useContext(APIProviderContext);
@@ -27,47 +60,20 @@ const ContextSpyComponent = () => {
 };
 ContextSpyComponent.spy = jest.fn();
 
-let triggerMapsApiLoaded: () => void;
-let triggerLoadingFailed: () => void;
-
-jest.mock('../../libraries/google-maps-api-loader', () => {
-  class GoogleMapsApiLoader {
-    static async load(
-      params: ApiParams,
-      onLoadingStatusChange: (s: APILoadingStatus) => void
-    ): Promise<void> {
-      apiLoadSpy(params);
-      onLoadingStatusChange(APILoadingStatus.LOADING);
-
-      google.maps.importLibrary = importLibraryMock;
-
-      return new Promise((resolve, reject) => {
-        triggerLoadingFailed = () => {
-          reject();
-          onLoadingStatusChange(APILoadingStatus.FAILED);
-        };
-
-        triggerMapsApiLoaded = () => {
-          resolve();
-          onLoadingStatusChange(APILoadingStatus.LOADED);
-        };
-      });
-    }
-
-    static unload() {
-      apiUnloadSpy();
-    }
-  }
-
-  return {__esModule: true, GoogleMapsApiLoader};
-});
-
 beforeEach(() => {
   initialize();
   jest.clearAllMocks();
+  // @ts-expect-error - accessing mock implementation
+  window.google.maps.importLibrary = undefined;
+  resetAPIProviderState();
+  resetImportLibraryPromise();
 });
 
-test('passes parameters to GoogleMapsAPILoader', () => {
+afterEach(() => {
+  cleanup();
+});
+
+test('passes parameters to GoogleMapsAPILoader', async () => {
   render(
     <APIProvider
       apiKey={'apikey'}
@@ -79,9 +85,11 @@ test('passes parameters to GoogleMapsAPILoader', () => {
       authReferrerPolicy={'origin'}></APIProvider>
   );
 
+  await waitFor(() => expect(apiLoadSpy).toHaveBeenCalled());
+
   expect(apiLoadSpy.mock.lastCall[0]).toMatchObject({
     key: 'apikey',
-    libraries: 'places,marker',
+    libraries: ['places', 'marker'],
     v: 'beta',
     language: 'en',
     region: 'us',
@@ -90,22 +98,28 @@ test('passes parameters to GoogleMapsAPILoader', () => {
   });
 });
 
-test('passes parameters to GoogleMapsAPILoader', () => {
+test('passes parameters to GoogleMapsAPILoader', async () => {
   render(<APIProvider apiKey={'apikey'} version={'version'}></APIProvider>);
+
+  await waitFor(() => expect(apiLoadSpy).toHaveBeenCalled());
 
   const actual = apiLoadSpy.mock.lastCall[0];
   expect(actual).toMatchObject({key: 'apikey', v: 'version'});
 });
 
-test('uses default solutionChannel', () => {
+test('uses default solutionChannel', async () => {
   render(<APIProvider apiKey={'apikey'}></APIProvider>);
+
+  await waitFor(() => expect(apiLoadSpy).toHaveBeenCalled());
 
   const actual = apiLoadSpy.mock.lastCall[0];
   expect(actual.solutionChannel).toBe('GMP_visgl_rgmlibrary_v1_default');
 });
 
-test("doesn't set solutionChannel when specified as empty string", () => {
+test("doesn't set solutionChannel when specified as empty string", async () => {
   render(<APIProvider apiKey={'apikey'} solutionChannel={''}></APIProvider>);
+
+  await waitFor(() => expect(apiLoadSpy).toHaveBeenCalled());
 
   const actual = apiLoadSpy.mock.lastCall[0];
   expect(actual).not.toHaveProperty('solutionChannel');
@@ -125,7 +139,9 @@ test('renders inner components', async () => {
 
   expect(screen.getByText('not loaded')).toBeInTheDocument();
 
-  await act(() => triggerMapsApiLoaded());
+  await act(async () => {
+    triggerMapsApiLoaded();
+  });
 
   expect(screen.getByText('loaded')).toBeInTheDocument();
 });
@@ -145,7 +161,10 @@ test('provides context values', async () => {
   expect(actualContext.mapInstances).toEqual({});
 
   contextSpy.mockReset();
-  await act(() => triggerMapsApiLoaded());
+
+  await act(async () => {
+    triggerMapsApiLoaded();
+  });
 
   expect(contextSpy).toHaveBeenCalled();
 
@@ -192,9 +211,9 @@ test('calls onError when loading the Google Maps JavaScript API fails', async ()
 
   render(<APIProvider apiKey={'apikey'} onError={onErrorMock}></APIProvider>);
 
-  await act(() => triggerLoadingFailed());
+  triggerLoadingFailed();
 
-  expect(onErrorMock).toHaveBeenCalled();
+  await waitFor(() => expect(onErrorMock).toHaveBeenCalled());
 });
 
 describe('internalUsageAttributionIds', () => {

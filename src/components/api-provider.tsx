@@ -369,3 +369,14 @@ export const APIProvider: FunctionComponent<APIProviderProps> = props => {
     </APIProviderContext.Provider>
   );
 };
+
+/**
+ * @internal
+ * Resets module-level state for testing purposes only.
+ * This should never be used in production code.
+ */
+export function __resetModuleState() {
+  loadingStatus = APILoadingStatus.NOT_LOADED;
+  serializedApiParams = undefined;
+  listeners.clear();
+}
