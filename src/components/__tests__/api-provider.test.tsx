@@ -37,12 +37,12 @@ const triggerLoadingFailed = () => {
   rejectImportLibrary(new Error('loading failed'));
 };
 
-const apiLoadSpy = jest.fn();
+const setOptionsSpy = jest.fn();
 
 jest.mock('@googlemaps/js-api-loader', () => {
   return {
     setOptions: jest.fn((options: Record<string, unknown>) => {
-      apiLoadSpy(options);
+      setOptionsSpy(options);
     }),
     importLibrary: jest.fn(async (name: string) => {
       await importLibraryPromise;
@@ -85,9 +85,9 @@ test('passes parameters to GoogleMapsAPILoader', async () => {
       authReferrerPolicy={'origin'}></APIProvider>
   );
 
-  await waitFor(() => expect(apiLoadSpy).toHaveBeenCalled());
+  await waitFor(() => expect(setOptionsSpy).toHaveBeenCalled());
 
-  expect(apiLoadSpy.mock.lastCall[0]).toMatchObject({
+  expect(setOptionsSpy.mock.lastCall[0]).toMatchObject({
     key: 'apikey',
     libraries: ['places', 'marker'],
     v: 'beta',
@@ -101,27 +101,27 @@ test('passes parameters to GoogleMapsAPILoader', async () => {
 test('passes parameters to GoogleMapsAPILoader', async () => {
   render(<APIProvider apiKey={'apikey'} version={'version'}></APIProvider>);
 
-  await waitFor(() => expect(apiLoadSpy).toHaveBeenCalled());
+  await waitFor(() => expect(setOptionsSpy).toHaveBeenCalled());
 
-  const actual = apiLoadSpy.mock.lastCall[0];
+  const actual = setOptionsSpy.mock.lastCall[0];
   expect(actual).toMatchObject({key: 'apikey', v: 'version'});
 });
 
 test('uses default solutionChannel', async () => {
   render(<APIProvider apiKey={'apikey'}></APIProvider>);
 
-  await waitFor(() => expect(apiLoadSpy).toHaveBeenCalled());
+  await waitFor(() => expect(setOptionsSpy).toHaveBeenCalled());
 
-  const actual = apiLoadSpy.mock.lastCall[0];
+  const actual = setOptionsSpy.mock.lastCall[0];
   expect(actual.solutionChannel).toBe('GMP_visgl_rgmlibrary_v1_default');
 });
 
 test("doesn't set solutionChannel when specified as empty string", async () => {
   render(<APIProvider apiKey={'apikey'} solutionChannel={''}></APIProvider>);
 
-  await waitFor(() => expect(apiLoadSpy).toHaveBeenCalled());
+  await waitFor(() => expect(setOptionsSpy).toHaveBeenCalled());
 
-  const actual = apiLoadSpy.mock.lastCall[0];
+  const actual = setOptionsSpy.mock.lastCall[0];
   expect(actual).not.toHaveProperty('solutionChannel');
 });
 
