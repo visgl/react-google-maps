@@ -330,15 +330,13 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
 }
 
 function useInternalUsageAttributionIds(props: APIProviderProps) {
-  const internalUsageAttributionIds = useMemo(
+  return useMemo(
     () =>
       props.disableUsageAttribution
         ? null
         : DEFAULT_INTERNAL_USAGE_ATTRIBUTION_IDS,
     [props.disableUsageAttribution]
   );
-
-  return internalUsageAttributionIds;
 }
 
 /**
