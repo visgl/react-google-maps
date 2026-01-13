@@ -101,12 +101,18 @@ export type APIProviderProps = PropsWithChildren<{
   onError?: (error: unknown) => void;
 }>;
 
-// Module-level state to mimic the static GoogleMapsApiLoader properties.
-// This is necessary to ensure the Google Maps script is only loaded once.
+// loading the Maps JavaScript API can only happen once in the runtime, so these
+// variables are kept at the module level.
 let loadingStatus: APILoadingStatus = APILoadingStatus.NOT_LOADED;
 let serializedApiParams: string | undefined;
+
 const listeners = new Set<LoadingStatusCallback>();
 
+/**
+ * Called to update the local status and notify the listeners for any mounted
+ * components.
+ * @internal
+ */
 function updateLoadingStatus(status: APILoadingStatus) {
   if (status === loadingStatus) {
     return;
@@ -116,7 +122,8 @@ function updateLoadingStatus(status: APILoadingStatus) {
 }
 
 /**
- * local hook to set up the map-instance management context.
+ * Local hook to set up the map-instance management context.
+ * @internal
  */
 function useMapInstances() {
   const [mapInstances, setMapInstances] = useState<
@@ -139,8 +146,8 @@ function useMapInstances() {
 }
 
 /**
- * local hook to handle the loading of the maps API, returns the current loading status
- * @param props
+ * Local hook to handle the loading of the maps API.
+ * @internal
  */
 function useGoogleMapsApiLoader(props: APIProviderProps) {
   const {
@@ -168,16 +175,6 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
     },
     {}
   );
-
-  useEffect(() => {
-    listeners.add(setStatus);
-    // sync on mount
-    setStatus(loadingStatus);
-
-    return () => {
-      listeners.delete(setStatus);
-    };
-  }, []);
 
   const currentSerializedParams = useMemo(() => {
     const params = {
@@ -216,6 +213,19 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
     [loadedLibraries]
   );
 
+  // effect: we want to get notified of global loading-status changes
+  useEffect(() => {
+    listeners.add(setStatus);
+
+    // sync component state on mount (shouldn't be different from the initial state)
+    setStatus(loadingStatus);
+
+    return () => {
+      listeners.delete(setStatus);
+    };
+  }, []);
+
+  // effect:
   useEffect(
     () => {
       (async () => {
@@ -274,14 +284,19 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
             options.channel = String(channel);
           }
 
+          // solution-channel: when undefined, use the default; otherwise use
+          // an explicit value.
           if (solutionChannel === undefined) {
             options.solutionChannel = DEFAULT_SOLUTION_CHANNEL;
           } else if (solutionChannel !== '') {
             options.solutionChannel = solutionChannel;
           }
 
+          // this will actually trigger loading the maps API
           setOptions(options);
 
+          // wait for all requested libraries (inluding 'core' and 'maps') to
+          // finish loading
           await Promise.all(
             librariesToLoad.map(name => importLibraryCallback(name))
           );
