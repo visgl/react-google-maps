@@ -65,24 +65,32 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Calculate RC Version
+      - name: Calculate prerelease Version
         id: semver
         run: |
-          # The version release-please wants to release (e.g., 1.2.0)
-          TARGET_VERSION=$(echo '${{ needs.release-please.outputs.pr }}' | jq -r '.version')
+          # Extract the version from the PR title (e.g., "chore(main): release 1.8.0" -> "1.8.0")
+          PR_TITLE=$(echo '${{ needs.release-please.outputs.pr }}' | jq -r '.title')
+          TARGET_VERSION=$(echo "$PR_TITLE" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
 
-          # Get the current @next version from npm. 
-          # The `|| echo """` prevents an error if the tag doesn't exist.
+          if [ -z "$TARGET_VERSION" ]; then
+            echo "Could not extract version from PR title: $PR_TITLE" >&2
+            exit 1
+          fi
+
+          # Get the current @next version from npm
           CURRENT_NEXT=$(npm view @vis.gl/react-google-maps dist-tags.next 2>/dev/null || echo "")
 
-          # If we are already on this version's RC cycle, increment it; otherwise, start fresh at rc.1 
+          # If current @next is already an RC for this version, increment it; Otherwise, start at rc.1
           if [[ "$CURRENT_NEXT" == "$TARGET_VERSION-rc."* ]]; then
             NEXT_VERSION=$(npx -y semver $CURRENT_NEXT -i prerelease --preid rc)
           else
+            
             NEXT_VERSION="${TARGET_VERSION}-rc.1"
           fi
 
           echo "version=$NEXT_VERSION" >> $GITHUB_OUTPUT
+          echo "Target version detected: $TARGET_VERSION"
+          echo "Next RC version: $NEXT_VERSION"
 
       - name: Build and Publish to @next
         run: |
