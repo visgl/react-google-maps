@@ -1,20 +1,21 @@
 import React, {FunctionComponent, PropsWithChildren} from 'react';
+import {cleanup, renderHook} from '@testing-library/react';
 import {initialize} from '@googlemaps/jest-mocks';
-import {renderHook} from '@testing-library/react';
 
 import {
   APIProviderContext,
   APIProviderContextValue
 } from '../../components/api-provider';
-
 import {useApiLoadingStatus} from '../use-api-loading-status';
 import {useApiIsLoaded} from '../use-api-is-loaded';
 import {APILoadingStatus} from '../../libraries/api-loading-status';
 
 let wrapper: FunctionComponent<PropsWithChildren>;
 let mockContextValue: jest.MockedObject<APIProviderContextValue>;
+
 beforeEach(() => {
   initialize();
+  jest.clearAllMocks();
 
   mockContextValue = {
     importLibrary: jest.fn(),
@@ -35,8 +36,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  jest.resetAllMocks();
-  jest.restoreAllMocks();
+  cleanup();
 });
 
 describe('useApiIsLoaded()', () => {
