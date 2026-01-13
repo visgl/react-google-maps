@@ -5,43 +5,102 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  id-token: write # Required for npm provenance
 
 name: Release Please
 
 jobs:
   release-please:
     runs-on: ubuntu-latest
+    outputs:
+      # Capture the PR object and release status
+      release_created: ${{ steps.release.outputs.release_created }}
+      pr: ${{ steps.release.outputs.pr }}
     steps:
-      - id: release
-        name: Release Please
+      - name: Release Please
+        id: release
         uses: googleapis/release-please-action@v4
 
         with:
           release-type: node
-          package-name: '@vis.gl/react-google-maps'
-          bump-minor-pre-major: true
 
-      # Below are the actions for actual npm publishing when a release-branch was merged.
+  publish-release:
+    needs: release-please
+    if: ${{ needs.release-please.outputs.release_created == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
 
-      - if: ${{ steps.release.outputs.release_created }}
-        name: Checkout
-        uses: actions/checkout@v4
-
-      - if: ${{ steps.release.outputs.release_created }}
-        name: Setup Node
-        uses: actions/setup-node@v4
+      - name: Setup Node
+        uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
           registry-url: 'https://registry.npmjs.org'
 
-      - if: ${{ steps.release.outputs.release_created }}
-        name: Install Dependencies
+      - name: Install Dependencies
         run: npm ci
 
-      - if: ${{ steps.release.outputs.release_created }}
-        name: Publish
-        # npm publish will trigger the build via the prepack hook
+      - name: Build and Publish
         run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.NODE_AUTH_TOKEN}}
+
+  publish-prerelease:
+    needs: release-please
+    if: ${{ needs.release-please.outputs.pr != '' && needs.release-please.outputs.release_created != 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Calculate RC Version
+        id: semver
+        run: |
+          # The version release-please wants to release (e.g., 1.2.0)
+          TARGET_VERSION=$(echo '${{ needs.release-please.outputs.pr }}' | jq -r '.version')
+
+          # Get the current @next version from npm. 
+          # The `|| echo """` prevents an error if the tag doesn't exist.
+          CURRENT_NEXT=$(npm view @vis.gl/react-google-maps dist-tags.next 2>/dev/null || echo "")
+
+          # If we are already on this version's RC cycle, increment it; otherwise, start fresh at rc.1 
+          if [[ "$CURRENT_NEXT" == "$TARGET_VERSION-rc."* ]]; then
+            NEXT_VERSION=$(npx -y semver $CURRENT_NEXT -i prerelease --preid rc)
+          else
+            NEXT_VERSION="${TARGET_VERSION}-rc.1"
+          fi
+
+          echo "version=$NEXT_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Build and Publish to @next
+        run: |
+          # Overwrite package.json version locally for publish
+          npm version ${{ steps.semver.outputs.version }} --no-git-tag-version
+          npm publish --tag next --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Comment on PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prNumber = JSON.parse('${{ needs.release-please.outputs.pr }}').number;
+            const version = '${{ steps.semver.outputs.version }}';
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              body: `🚀 **Pre-release published!**\n\nInstall this version for testing:\n\`\`\`bash\nnpm install @vis.gl/react-google-maps@${version}\n\`\`\`\nOr use the tag:\n\`\`\`bash\nnpm install @vis.gl/react-google-maps@next\n\`\`\``
+            })
