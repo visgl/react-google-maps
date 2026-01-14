@@ -100,12 +100,21 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
+      - name: Extract PR Number
+        id: extract-pr
+        run: |
+          PR_NUMBER=$(echo '${{ needs.release-please.outputs.pr }}' | jq -r '.number')
+          echo "prNumber=$PR_NUMBER" >> $GITHUB_OUTPUT
+
       - name: Comment on PR
         uses: actions/github-script@v7
+        env:
+          PR_NUMBER: ${{ steps.extract-pr.outputs.prNumber }}
+          VERSION: ${{ steps.semver.outputs.version }}
         with:
           script: |
-            const prNumber = JSON.parse('${{ needs.release-please.outputs.pr }}').number;
-            const version = '${{ steps.semver.outputs.version }}';
+            const prNumber = process.env.PR_NUMBER;
+            const version = process.env.VERSION;
             github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
