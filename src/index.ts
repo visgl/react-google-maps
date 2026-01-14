@@ -14,8 +14,6 @@ export * from './hooks/use-api-loading-status';
 export * from './hooks/use-api-is-loaded';
 export * from './hooks/use-maps-library';
 export * from './hooks/use-map';
-export * from './hooks/use-map-viewport';
-export * from './hooks/use-supercluster-worker';
 export * from './libraries/lat-lng-utils';
 export * from './libraries/api-loading-status';
 export {limitTiltRange} from './libraries/limit-tilt-range';

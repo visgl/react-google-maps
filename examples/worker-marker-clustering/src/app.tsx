@@ -19,12 +19,15 @@ import {
   Map,
   useMap,
   AdvancedMarker,
-  InfoWindow,
+  InfoWindow
+} from '@vis.gl/react-google-maps';
+
+import {useMapViewport} from './hooks/use-map-viewport';
+import {
   useSuperclusterWorker,
-  useMapViewport,
   type ClusterFeature,
   type ClusterProperties
-} from '@vis.gl/react-google-maps';
+} from './hooks/use-supercluster-worker';
 
 import {ControlPanel} from './control-panel';
 import {generateRandomPoints} from './generate-points';
@@ -37,8 +40,9 @@ const API_KEY =
   globalThis.GOOGLE_MAPS_API_KEY ?? process.env.GOOGLE_MAPS_API_KEY;
 
 // Supercluster options
+// Increased radius from 80 to 120 to reduce the number of markers rendered
 const CLUSTER_OPTIONS = {
-  radius: 80,
+  radius: 120,
   maxZoom: 16,
   minPoints: 2
 };

@@ -22,12 +22,15 @@ This example uses the `useSuperclusterWorker` hook which:
 ## Key Files
 
 - `src/clustering.worker.ts` - Web Worker that runs Supercluster
-- `src/app.tsx` - Main application using `useSuperclusterWorker`
+- `src/hooks/use-map-viewport.ts` - Hook to track map viewport bounds and zoom
+- `src/hooks/use-supercluster-worker.ts` - Hook for Web Worker-based clustering
+- `src/app.tsx` - Main application using the clustering hooks
 
 ## Usage
 
 ```tsx
-import {useSuperclusterWorker, useMapViewport} from '@vis.gl/react-google-maps';
+import {useMapViewport} from './hooks/use-map-viewport';
+import {useSuperclusterWorker} from './hooks/use-supercluster-worker';
 
 // Create worker URL (Vite handles bundling)
 const workerUrl = new URL('./clustering.worker.ts', import.meta.url);
@@ -37,7 +40,7 @@ function ClusteredMarkers({geojson}) {
 
   const {clusters, isLoading, error} = useSuperclusterWorker(
     geojson,
-    {radius: 80, maxZoom: 16},
+    {radius: 120, maxZoom: 16},
     viewport,
     workerUrl
   );
