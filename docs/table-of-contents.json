@@ -55,6 +55,7 @@
 
         "items": [
           "api-reference/hooks/use-map",
+          "api-reference/hooks/use-map-3d",
           "api-reference/hooks/use-maps-library",
           "api-reference/hooks/use-api-is-loaded",
           "api-reference/hooks/use-api-loading-status"

@@ -237,4 +237,29 @@ describe('Popover3D', () => {
     const popover = createPopoverSpy.mock.calls[0][0];
     expect(popover.parentElement).toBeNull();
   });
+
+  test('exposes popover element via ref', async () => {
+    const refCallback = jest.fn();
+
+    render(
+      <Popover3D
+        position={{lat: 37.7749, lng: -122.4194}}
+        open
+        ref={refCallback}>
+        <div>Content</div>
+      </Popover3D>
+    );
+
+    await waitFor(() => {
+      expect(createPopoverSpy).toHaveBeenCalled();
+    });
+
+    await waitFor(() => {
+      expect(refCallback).toHaveBeenCalled();
+    });
+
+    // Verify the ref received the popover element
+    const popover = createPopoverSpy.mock.calls[0][0];
+    expect(refCallback).toHaveBeenCalledWith(popover);
+  });
 });

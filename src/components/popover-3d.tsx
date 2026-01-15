@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/immutability -- Google Maps API objects are designed to be mutated */
-import type {PropsWithChildren} from 'react';
-import {useEffect, useState} from 'react';
+import type {PropsWithChildren, Ref} from 'react';
+import {forwardRef, useEffect, useImperativeHandle, useState} from 'react';
 import {createPortal} from 'react-dom';
 
 import {useMap3D} from '../hooks/use-map-3d';
@@ -85,7 +85,10 @@ export type Popover3DProps = PropsWithChildren<
  * </Popover3D>
  * ```
  */
-export function Popover3D(props: Popover3DProps) {
+export const Popover3D = forwardRef(function Popover3D(
+  props: Popover3DProps,
+  ref: Ref<google.maps.maps3d.PopoverElement>
+) {
   const {
     children,
     open,
@@ -106,6 +109,11 @@ export function Popover3D(props: Popover3DProps) {
   // Container for rendering React children
   const [contentContainer, setContentContainer] =
     useState<HTMLDivElement | null>(null);
+
+  // Expose popover element via ref
+  useImperativeHandle(ref, () => popover as google.maps.maps3d.PopoverElement, [
+    popover
+  ]);
 
   // Create popover element and attach to map
   useEffect(() => {
@@ -183,6 +191,6 @@ export function Popover3D(props: Popover3DProps) {
   if (!contentContainer) return null;
 
   return createPortal(children, contentContainer);
-}
+});
 
 Popover3D.displayName = 'Popover3D';

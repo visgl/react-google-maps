@@ -247,5 +247,31 @@ It will not fire when you programmatically set `open={false}`.
 
 :::
 
+## Ref
+
+The Popover3D component supports a ref that exposes the underlying
+`google.maps.maps3d.PopoverElement` instance:
+
+```tsx
+import {useRef} from 'react';
+import {Popover3D} from '@vis.gl/react-google-maps';
+
+const MyComponent = () => {
+  const popoverRef = useRef<google.maps.maps3d.PopoverElement>(null);
+
+  const handleToggle = () => {
+    if (popoverRef.current) {
+      popoverRef.current.open = !popoverRef.current.open;
+    }
+  };
+
+  return (
+    <Popover3D ref={popoverRef} position={position}>
+      Content here
+    </Popover3D>
+  );
+};
+```
+
 [gmp-popover]: https://developers.google.com/maps/documentation/javascript/reference/3d-map-draw#PopoverElement
 [gmp-popover-options]: https://developers.google.com//maps/documentation/javascript/reference/3d-map-draw#PopoverElementOptions
