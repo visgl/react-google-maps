@@ -13,6 +13,7 @@ import {APIProvider, Map3D} from '@vis.gl/react-google-maps';
 const App = () => (
   <APIProvider apiKey={process.env.GOOGLE_MAPS_API_KEY}>
     <Map3D
+      mode="SATELLITE"
       defaultCenter={{lat: 37.7749, lng: -122.4194, altitude: 1000}}
       defaultRange={5000}
       defaultHeading={0}
@@ -46,6 +47,7 @@ synchronized with the specified values.
 const UncontrolledMap3D = () => {
   return (
     <Map3D
+      mode="SATELLITE"
       defaultCenter={{lat: 37.7749, lng: -122.4194, altitude: 500}}
       defaultRange={2000}
       defaultHeading={0}
@@ -85,6 +87,7 @@ const ControlledMap3D = () => {
 
   return (
     <Map3D
+      mode="SATELLITE"
       center={center}
       range={range}
       heading={heading}
@@ -134,7 +137,7 @@ const AnimatedMap = () => {
 
   return (
     <>
-      <Map3D ref={map3dRef} {...cameraProps} />
+      <Map3D ref={map3dRef} mode="SATELLITE" {...cameraProps} />
       <button onClick={handleFlyAround}>Fly Around</button>
       <button onClick={handleFlyTo}>Fly To Golden Gate</button>
     </>
