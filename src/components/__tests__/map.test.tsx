@@ -27,6 +27,10 @@ beforeEach(() => {
     addMapInstance: jest.fn(),
     removeMapInstance: jest.fn(),
     clearMapInstances: jest.fn(),
+    map3dInstances: {},
+    addMap3DInstance: jest.fn(),
+    removeMap3DInstance: jest.fn(),
+    clearMap3DInstances: jest.fn(),
     internalUsageAttributionIds: null
   };
 

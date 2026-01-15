@@ -197,6 +197,9 @@ export const importLibraryMock = jest.fn(async (name: string) => {
     case 'visualization': {
       return google.maps.visualization as google.maps.VisualizationLibrary;
     }
+    case 'maps3d': {
+      return google.maps.maps3d as google.maps.Maps3DLibrary;
+    }
   }
 
   throw new TypeError(`unknown library name: ${name}`);
