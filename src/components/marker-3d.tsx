@@ -161,10 +161,8 @@ export const Marker3D = forwardRef(function Marker3D(
   const [contentContainer, setContentContainer] =
     useState<HTMLDivElement | null>(null);
 
-  // Track whether we need the interactive variant
   const isInteractive = Boolean(onClick);
 
-  // Expose marker element via ref
   useImperativeHandle(
     ref,
     () =>
@@ -174,7 +172,6 @@ export const Marker3D = forwardRef(function Marker3D(
     [marker]
   );
 
-  // Create marker element and attach to map
   useEffect(() => {
     if (!map3d || !maps3dLibrary) return;
 
@@ -188,50 +185,42 @@ export const Marker3D = forwardRef(function Marker3D(
       newMarker = new maps3dLibrary.Marker3DElement();
     }
 
-    // Append marker to map3d element
     map3d.appendChild(newMarker);
     setMarker(newMarker);
 
-    // Create content container for children
+    // Hidden container used as React portal target for custom marker content
     const container = document.createElement('div');
     container.style.display = 'none';
     document.body.appendChild(container);
     setContentContainer(container);
 
     return () => {
-      // Remove marker from map
       if (newMarker.parentElement) {
         newMarker.parentElement.removeChild(newMarker);
       }
-      // Clean up content container
       container.remove();
       setMarker(null);
       setContentContainer(null);
     };
   }, [map3d, maps3dLibrary, isInteractive]);
 
-  // Sync position prop
   useEffect(() => {
     if (!marker || position === undefined) return;
     marker.position = position;
   }, [marker, position]);
 
-  // Sync altitudeMode prop
   useEffect(() => {
     if (!marker || altitudeMode === undefined) return;
     marker.altitudeMode =
       altitudeMode as unknown as google.maps.maps3d.AltitudeMode;
   }, [marker, altitudeMode]);
 
-  // Sync collisionBehavior prop
   useEffect(() => {
     if (!marker || collisionBehavior === undefined) return;
-    // Cast to the google.maps.CollisionBehavior type expected by Marker3DElement
     marker.collisionBehavior =
       collisionBehavior as google.maps.CollisionBehavior;
   }, [marker, collisionBehavior]);
 
-  // Sync simple props
   useEffect(() => {
     if (!marker) return;
     if (drawsWhenOccluded !== undefined)
@@ -258,7 +247,7 @@ export const Marker3D = forwardRef(function Marker3D(
     if (zIndex !== undefined) marker.zIndex = zIndex;
   }, [marker, zIndex]);
 
-  // Sync title prop (interactive only)
+  // title is only available on Marker3DInteractiveElement
   useEffect(() => {
     if (!marker || !isInteractive) return;
     const interactiveMarker =
@@ -266,21 +255,17 @@ export const Marker3D = forwardRef(function Marker3D(
     if (title !== undefined) interactiveMarker.title = title;
   }, [marker, title, isInteractive]);
 
-  // Bind click event for interactive marker
   useDomEventListener(marker, 'gmp-click', onClick);
 
-  // Process children and move to marker slot with template wrapping
+  // Move React children to marker's slot, wrapping img/svg in <template> as required by the API
   useLayoutEffect(() => {
-    // Skip if a child component (like Pin) is handling content
     if (contentHandledExternally) return;
     if (!marker || !contentContainer) return;
 
-    // Clear any existing slotted content
     while (marker.firstChild) {
       marker.removeChild(marker.firstChild);
     }
 
-    // Process each child node in the content container
     const childNodes = Array.from(contentContainer.childNodes);
 
     for (const node of childNodes) {
@@ -290,24 +275,20 @@ export const Marker3D = forwardRef(function Marker3D(
       const tagName = element.tagName.toLowerCase();
 
       if (tagName === 'img' || tagName === 'svg') {
-        // Wrap img and svg in template element
         const template = document.createElement('template');
         template.content.appendChild(element.cloneNode(true));
         marker.appendChild(template);
       } else {
-        // Append other elements directly (e.g., PinElement)
         marker.appendChild(element.cloneNode(true));
       }
     }
   }, [marker, contentContainer, children, contentHandledExternally]);
 
-  // Memoize context value
   const contextValue = useMemo(
     () => ({marker, setContentHandledExternally}),
     [marker]
   );
 
-  // Render children into hidden container, then useLayoutEffect moves them
   if (!contentContainer) return null;
 
   return (

@@ -186,20 +186,13 @@ export const Map3D = forwardRef<Map3DRef, Map3DProps>((props, ref) => {
 
   const {addMap3DInstance, removeMap3DInstance} = context;
 
-  // Set up the map instance
   const [map3d, containerRef, map3dRef, cameraStateRef, isReady] =
     useMap3DInstance(props);
 
-  // Set up camera params tracking and updates
   useMap3DCameraParams(map3d, cameraStateRef, props);
-
-  // Set up event handlers
   useMap3DEvents(map3d, props);
-
-  // Set up options updates
   useMap3DOptions(map3d, props);
 
-  // Register/unregister map3d instance with APIProvider
   useEffect(() => {
     if (!map3d) return;
 
@@ -212,8 +205,6 @@ export const Map3D = forwardRef<Map3DRef, Map3DProps>((props, ref) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [map3d, id]);
 
-  // Expose imperative handle for animations
-  // Cast to extended type since @types/google.maps may not have animation methods yet
   const map3dWithAnimations = map3d as Map3DElementWithAnimations | null;
   useImperativeHandle(
     ref,
@@ -234,7 +225,6 @@ export const Map3D = forwardRef<Map3DRef, Map3DProps>((props, ref) => {
     [map3d, map3dWithAnimations]
   );
 
-  // Combine styles
   const combinedStyle = useMemo(
     () => ({
       ...DEFAULT_CONTAINER_STYLE,
@@ -243,13 +233,11 @@ export const Map3D = forwardRef<Map3DRef, Map3DProps>((props, ref) => {
     [style]
   );
 
-  // Context value for child components
   const contextValue = useMemo<GoogleMaps3DContextValue>(
     () => ({map3d}),
     [map3d]
   );
 
-  // Don't render the custom element until everything is ready
   if (!isReady) {
     return (
       <div

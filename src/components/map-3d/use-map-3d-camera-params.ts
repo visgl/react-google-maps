@@ -46,13 +46,12 @@ export function useMap3DCameraParams(
   const tilt = props.tilt ?? null;
   const roll = props.roll ?? null;
 
-  // This effect runs on every render to check for camera differences
+  // Runs on every render to sync controlled camera props with the map element
   useLayoutEffect(() => {
     if (!map3d) return;
 
     const currentState = cameraStateRef.current;
 
-    // Check center
     if (
       lat !== null &&
       lng !== null &&
@@ -67,22 +66,18 @@ export function useMap3DCameraParams(
       };
     }
 
-    // Check range
     if (range !== null && currentState.range !== range) {
       map3d.range = range;
     }
 
-    // Check heading
     if (heading !== null && currentState.heading !== heading) {
       map3d.heading = heading;
     }
 
-    // Check tilt
     if (tilt !== null && currentState.tilt !== tilt) {
       map3d.tilt = tilt;
     }
 
-    // Check roll
     if (roll !== null && currentState.roll !== roll) {
       map3d.roll = roll;
     }

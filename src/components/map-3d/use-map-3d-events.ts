@@ -170,7 +170,6 @@ export function useMap3DEvents(
     onError
   } = props;
 
-  // Individual camera events
   useMap3DEvent(map3d, 'gmp-centerchange', onCenterChanged, createCameraEvent);
   useMap3DEvent(
     map3d,
@@ -182,7 +181,7 @@ export function useMap3DEvents(
   useMap3DEvent(map3d, 'gmp-rangechange', onRangeChanged, createCameraEvent);
   useMap3DEvent(map3d, 'gmp-rollchange', onRollChanged, createCameraEvent);
 
-  // Aggregated camera changed event
+  // onCameraChanged aggregates all camera property change events into one handler
   useEffect(() => {
     if (!map3d || !onCameraChanged) return;
 
@@ -201,7 +200,6 @@ export function useMap3DEvents(
     };
   }, [map3d, onCameraChanged]);
 
-  // Click event
   useEffect(() => {
     if (!map3d || !onClick) return;
 
@@ -220,7 +218,6 @@ export function useMap3DEvents(
     return () => map3d.removeEventListener('gmp-click', handler);
   }, [map3d, onClick]);
 
-  // Steady change event
   useEffect(() => {
     if (!map3d || !onSteadyChange) return;
 
@@ -237,13 +234,11 @@ export function useMap3DEvents(
     return () => map3d.removeEventListener('gmp-steadychange', handler);
   }, [map3d, onSteadyChange]);
 
-  // Animation end event
   useMap3DEvent(map3d, 'gmp-animationend', onAnimationEnd, (map3d, type) => ({
     type,
     map3d
   }));
 
-  // Error event
   useMap3DEvent(map3d, 'gmp-error', onError, (map3d, type) => ({
     type,
     map3d

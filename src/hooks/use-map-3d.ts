@@ -49,12 +49,8 @@ export function useMap3D(
 
   const {map3dInstances} = apiContext;
 
-  // if an id is specified, the corresponding map3d or null is returned
+  // Lookup priority: explicit id > parent context > default instance
   if (id !== null) return map3dInstances[id] || null;
-
-  // otherwise, return the closest ancestor
   if (map3dContext?.map3d) return map3dContext.map3d;
-
-  // finally, return the default map3d instance
   return map3dInstances['default'] || null;
 }

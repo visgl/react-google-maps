@@ -110,12 +110,10 @@ export const Popover3D = forwardRef(function Popover3D(
   const [contentContainer, setContentContainer] =
     useState<HTMLDivElement | null>(null);
 
-  // Expose popover element via ref
   useImperativeHandle(ref, () => popover as google.maps.maps3d.PopoverElement, [
     popover
   ]);
 
-  // Create popover element and attach to map
   useEffect(() => {
     if (!map3d || !maps3dLibrary) return;
 
@@ -129,19 +127,15 @@ export const Popover3D = forwardRef(function Popover3D(
 
     const newPopover = new maps3dLibrary.PopoverElement();
 
-    // Create content container for children - this stays as React's render target
+    // Container element serves as React portal target for children
     const container = document.createElement('div');
     setContentContainer(container);
-
-    // Append container to popover (container stays in popover, React manages its contents)
     newPopover.appendChild(container);
 
-    // Append popover to map3d element
     map3d.appendChild(newPopover);
     setPopover(newPopover);
 
     return () => {
-      // Remove popover from map
       if (newPopover.parentElement) {
         newPopover.parentElement.removeChild(newPopover);
       }
@@ -150,13 +144,12 @@ export const Popover3D = forwardRef(function Popover3D(
     };
   }, [map3d, maps3dLibrary]);
 
-  // Sync open prop
   useEffect(() => {
     if (!popover) return;
     popover.open = open ?? false;
   }, [popover, open]);
 
-  // Sync positionAnchor - can be position, anchor element, or anchorId string
+  // positionAnchor accepts a position, marker element, or marker ID string
   useEffect(() => {
     if (!popover) return;
 
@@ -169,14 +162,12 @@ export const Popover3D = forwardRef(function Popover3D(
     }
   }, [popover, position, anchor, anchorId]);
 
-  // Sync altitudeMode prop
   useEffect(() => {
     if (!popover || altitudeMode === undefined) return;
     popover.altitudeMode =
       altitudeMode as unknown as google.maps.maps3d.AltitudeMode;
   }, [popover, altitudeMode]);
 
-  // Sync lightDismissDisabled prop
   useEffect(() => {
     if (!popover) return;
     if (lightDismissDisabled !== undefined) {
@@ -184,7 +175,6 @@ export const Popover3D = forwardRef(function Popover3D(
     }
   }, [popover, lightDismissDisabled]);
 
-  // Bind close event (gmp-close fires on light dismiss)
   useDomEventListener(popover, 'gmp-close', onClose);
 
   // Render children directly into contentContainer which is already inside the popover

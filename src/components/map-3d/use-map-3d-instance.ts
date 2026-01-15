@@ -29,51 +29,38 @@ export function useMap3DInstance(
   cameraStateRef: CameraStateRef3D,
   isReady: boolean
 ] {
-  // Load the maps3d library
   const maps3dLib = useMapsLibrary('maps3d');
-
-  // Track if the custom element is defined
   const [customElementReady, setCustomElementReady] = useState(false);
-
-  // Container ref for the wrapper div
   const [, containerRef] = useCallbackRef<HTMLDivElement>();
-
-  // Ref for the gmp-map-3d element
   const [map3d, map3dRef] = useCallbackRef<google.maps.maps3d.Map3DElement>();
-
-  // Track camera state
   const cameraStateRef = useTrackedCameraStateRef3D(map3d);
 
-  // Wait for custom element definition
   useEffect(() => {
     customElements.whenDefined('gmp-map-3d').then(() => {
       setCustomElementReady(true);
     });
   }, []);
 
-  // Apply initial options when map3d element is ready
+  // Apply initial options once when the element is first available
   useEffect(() => {
     if (!map3d) return;
 
     const {
-      // Extract camera props
       center,
       heading,
       tilt,
       range,
       roll,
-      // Extract default* props (not applied to element)
       defaultCenter,
       defaultHeading,
       defaultTilt,
       defaultRange,
       defaultRoll,
-      // Extract non-element props
+      // Non-element props to exclude
       id,
       style,
       className,
       children,
-      // Extract event props
       onCenterChanged,
       onHeadingChanged,
       onTiltChanged,
@@ -84,21 +71,17 @@ export function useMap3DInstance(
       onSteadyChange,
       onAnimationEnd,
       onError,
-      // Extract options handled elsewhere (use-map-3d-options)
       mode,
       gestureHandling,
-      // Remaining are element options
       ...elementOptions
     } = props;
 
-    // Apply initial camera state from props or defaults
     const initialCenter = center ?? defaultCenter;
     const initialHeading = heading ?? defaultHeading;
     const initialTilt = tilt ?? defaultTilt;
     const initialRange = range ?? defaultRange;
     const initialRoll = roll ?? defaultRoll;
 
-    // Build initial options object
     const initialOptions: Partial<google.maps.maps3d.Map3DElementOptions> = {
       ...elementOptions
     };
@@ -109,7 +92,6 @@ export function useMap3DInstance(
     if (initialRange !== undefined) initialOptions.range = initialRange;
     if (initialRoll !== undefined) initialOptions.roll = initialRoll;
 
-    // Apply all initial options to the element
     Object.assign(map3d, initialOptions);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [map3d]); // Only run when map3d element first becomes available
