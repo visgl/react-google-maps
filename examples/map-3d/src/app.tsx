@@ -12,7 +12,8 @@ import {MiniMap} from './minimap';
 
 import './style.css';
 
-const API_KEY = 'AIzaSyDawI6PNc2EjUnzHhADtph4YWTj2PL-X6A';
+const API_KEY =
+  globalThis.GOOGLE_MAPS_API_KEY ?? (process.env.GOOGLE_MAPS_API_KEY as string);
 
 export type Map3DCameraProps = {
   center: google.maps.LatLngAltitudeLiteral;
