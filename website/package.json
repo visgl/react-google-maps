@@ -12,15 +12,15 @@
   "dependencies": {
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-    "styled-components": "^6.1.19"
+    "styled-components": "^6.3.5"
   },
   "devDependencies": {
-    "@docusaurus/core": "^3.8.1",
-    "@docusaurus/plugin-content-docs": "^3.8.1",
-    "@docusaurus/preset-classic": "^3.8.1",
+    "@docusaurus/core": "^3.9.2",
+    "@docusaurus/plugin-content-docs": "^3.9.2",
+    "@docusaurus/preset-classic": "^3.9.2",
     "@easyops-cn/docusaurus-search-local": "^0.52.1",
     "babel-plugin-styled-components": "^2.0.0",
     "babel-plugin-version-inline": "^1.0.0",
-    "glob": "^11.0.3"
+    "glob": "^13.0.0"
   }
 }

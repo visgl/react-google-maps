@@ -50,7 +50,7 @@ afterEach(() => {
 });
 
 describe('<InfoWindow> basic functionality', () => {
-  test('Infowindow is created once mapsLibrary is ready', async () => {
+  test('Infowindow is created once mapsLibrary is ready', () => {
     useMapsLibraryMock.mockReturnValue(null);
     useMapMock.mockReturnValue(null);
 
@@ -75,7 +75,7 @@ describe('<InfoWindow> basic functionality', () => {
     expect(iw.open).toHaveBeenCalled();
   });
 
-  test('props get forwarded to constructor on initial creation', async () => {
+  test('props get forwarded to constructor on initial creation', () => {
     render(
       <InfoWindow
         ariaLabel={'ariaLabel'}
@@ -105,7 +105,7 @@ describe('<InfoWindow> basic functionality', () => {
     expect(actualOptions.pixelOffset.height).toBe(6);
   });
 
-  test('changing options get passed to setOptions()', async () => {
+  test('changing options get passed to setOptions()', () => {
     const position = {lat: 1, lng: 2};
     const {rerender} = render(<InfoWindow position={position}></InfoWindow>);
 
@@ -131,7 +131,7 @@ describe('<InfoWindow> basic functionality', () => {
     });
   });
 
-  test('props get forwarded to openOptions', async () => {
+  test('props get forwarded to openOptions', () => {
     const marker = new google.maps.marker.AdvancedMarkerElement();
 
     render(<InfoWindow anchor={marker} shouldFocus={false}></InfoWindow>);
@@ -146,7 +146,7 @@ describe('<InfoWindow> basic functionality', () => {
 });
 
 describe('<InfoWindow> content rendering', () => {
-  test('InfoWindow should render content into portal node', async () => {
+  test('InfoWindow should render content into portal node', () => {
     render(
       <InfoWindow
         className={'infowindow-content'}
@@ -178,7 +178,7 @@ describe('<InfoWindow> content rendering', () => {
 });
 
 describe('<InfoWindow> headerContent rendering', () => {
-  test('passes headerContent to options when its a string', async () => {
+  test('passes headerContent to options when its a string', () => {
     render(<InfoWindow headerContent={'Infowindow Header'}></InfoWindow>);
 
     expect(createInfowindowSpy).toHaveBeenCalled();
@@ -186,7 +186,7 @@ describe('<InfoWindow> headerContent rendering', () => {
     expect(options).toEqual({headerContent: 'Infowindow Header'});
   });
 
-  test('creates a dom-element when passing a ReactNode', async () => {
+  test('creates a dom-element when passing a ReactNode', () => {
     render(<InfoWindow headerContent={<h3>Infowindow Header</h3>} />);
 
     expect(createInfowindowSpy).toHaveBeenCalled();
@@ -195,7 +195,7 @@ describe('<InfoWindow> headerContent rendering', () => {
     expect(options.headerContent).toContainHTML('<h3>Infowindow Header</h3>');
   });
 
-  test('updates html-content when content props changes', async () => {
+  test('updates html-content when content props changes', () => {
     const {rerender} = render(
       <InfoWindow headerContent={<h3>Infowindow Header</h3>}></InfoWindow>
     );
@@ -215,7 +215,7 @@ describe('<InfoWindow> headerContent rendering', () => {
     );
   });
 
-  test('changes from text- to html-content', async () => {
+  test('changes from text- to html-content', () => {
     const {rerender} = render(<InfoWindow headerContent="abcd"></InfoWindow>);
 
     rerender(
@@ -233,7 +233,7 @@ describe('<InfoWindow> headerContent rendering', () => {
     );
   });
 
-  test('changes from html-content to no content', async () => {
+  test('changes from html-content to no content', () => {
     const {rerender} = render(
       <InfoWindow headerContent={<h3>New Infowindow Header</h3>}></InfoWindow>
     );
@@ -270,7 +270,7 @@ describe('<InfoWindow> cleanup', () => {
 });
 
 describe('<InfoWindow> events', () => {
-  test('triggers onClose and onCloseClick handlers on event', async () => {
+  test('triggers onClose and onCloseClick handlers on event', () => {
     const onCloseSpy = jest.fn();
     const onCloseClickSpy = jest.fn();
 
@@ -294,7 +294,7 @@ describe('<InfoWindow> events', () => {
     );
   });
 
-  test('removes handlers on unmount', async () => {
+  test('removes handlers on unmount', () => {
     const listeners = {
       close: {remove: jest.fn()},
       closeclick: {remove: jest.fn()}

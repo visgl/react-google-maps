@@ -1,29 +1,24 @@
-import React, {FunctionComponent, PropsWithChildren} from 'react';
+import React from 'react';
 import {initialize, mockInstances} from '@googlemaps/jest-mocks';
-import {cleanup, render, waitFor} from '@testing-library/react';
+import {cleanup, render} from '@testing-library/react';
 
-import {APIProvider} from '../api-provider';
-import {Map as GoogleMap} from '../map';
 import {Marker as GoogleMapsMarker} from '../marker';
+import {useMap} from '../../hooks/use-map';
 import MockedFunction = jest.MockedFunction;
 
-jest.mock('../../libraries/google-maps-api-loader');
+jest.mock('../../hooks/use-map');
 
-let wrapper: FunctionComponent<PropsWithChildren>;
+let useMapMock: jest.MockedFn<typeof useMap>;
+let mapInstance: google.maps.Map;
 let createMarkerSpy: jest.Mock;
 
 beforeEach(() => {
-  // initialize the Maps JavaScript API mocks
   initialize();
+  jest.clearAllMocks();
 
-  // Create wrapper component
-  wrapper = ({children}) => (
-    <APIProvider apiKey={'apikey'}>
-      <GoogleMap zoom={10} center={{lat: 0, lng: 0}}>
-        {children}
-      </GoogleMap>
-    </APIProvider>
-  );
+  useMapMock = jest.mocked(useMap);
+  mapInstance = new google.maps.Map(document.createElement('div'));
+  useMapMock.mockReturnValue(mapInstance);
 
   // overwrite marker mock so we can spy on the constructor
   createMarkerSpy = jest.fn();
@@ -37,14 +32,12 @@ beforeEach(() => {
 
 afterEach(() => {
   cleanup();
-  jest.restoreAllMocks();
 });
 
-test('marker should be initialized', async () => {
-  render(<GoogleMapsMarker position={{lat: 1, lng: 2}} />, {wrapper});
+test('marker should be initialized', () => {
+  render(<GoogleMapsMarker position={{lat: 1, lng: 2}} />);
 
-  // wait for Maps JavaScript API to load and the marker to be created
-  await waitFor(() => expect(createMarkerSpy).toHaveBeenCalled());
+  expect(createMarkerSpy).toHaveBeenCalled();
 
   const markers = mockInstances.get(google.maps.Marker);
   expect(markers).toHaveLength(1);
@@ -62,13 +55,10 @@ test('marker should be initialized', async () => {
   expect(map).toBeInstanceOf(google.maps.Map);
 });
 
-test('marker position should update when re-rendering', async () => {
-  const {rerender} = render(<GoogleMapsMarker position={{lat: 1, lng: 2}} />, {
-    wrapper
-  });
+test('marker position should update when re-rendering', () => {
+  const {rerender} = render(<GoogleMapsMarker position={{lat: 1, lng: 2}} />);
 
-  // wait for (mock) Maps JavaScript API to load and the marker to be created
-  await waitFor(() => expect(createMarkerSpy).toHaveBeenCalled());
+  expect(createMarkerSpy).toHaveBeenCalled();
 
   const markers = mockInstances.get(google.maps.Marker);
   expect(markers).not.toHaveLength(0);
@@ -80,16 +70,14 @@ test('marker position should update when re-rendering', async () => {
   expect(marker.setPosition).toHaveBeenCalledWith({lat: 2, lng: 3});
 });
 
-test('marker should have a click listener', async () => {
+test('marker should have a click listener', () => {
   const handleClick = jest.fn();
 
   render(
-    <GoogleMapsMarker position={{lat: 0, lng: 0}} onClick={handleClick} />,
-    {wrapper}
+    <GoogleMapsMarker position={{lat: 0, lng: 0}} onClick={handleClick} />
   );
 
-  // wait for (mock) Maps JavaScript API to load and the marker to be created
-  await waitFor(() => expect(createMarkerSpy).toHaveBeenCalled());
+  expect(createMarkerSpy).toHaveBeenCalled();
 
   const markerMocks = mockInstances.get(google.maps.Marker);
   const markerMock = markerMocks[0];

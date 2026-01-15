@@ -1,3 +1,11 @@
+// The `react-hooks/immutability` rule is disabled in this file because the
+// google.maps.marker.AdvancedMarkerElement object is designed to be mutated
+// directly. This is a common pattern when working with imperative APIs like
+// the Google Maps JavaScript API. While this goes against the principles of
+// immutable state in React, it is a necessary evil to integrate with the
+// Google Maps API. The mutations are carefully managed within the `useEffect`
+// hooks to ensure that they only happen when the props change.
+
 import type {PropsWithChildren, Ref} from 'react';
 import React, {
   Children,
@@ -39,6 +47,10 @@ export const AdvancedMarkerContext =
   React.createContext<AdvancedMarkerContextValue | null>(null);
 
 // [xPosition, yPosition] when the top left corner is [0, 0]
+/**
+ * @deprecated Using `anchorPosition` is deprecated.
+ *   Use `anchorLeft` and `anchorTop` instead.
+ */
 export const AdvancedMarkerAnchorPoint = {
   TOP_LEFT: ['0%', '0%'],
   TOP_CENTER: ['50%', '0%'],
@@ -379,9 +391,10 @@ function useAdvancedMarkerAnchoring(
         // anchoring of the advanced marker element from the api
         contentElement.style.transform = `translate(50%, 100%) translate(${translateX}, ${translateY})`;
 
-        // We need some kind of flag to identify the custom marker content
-        // in the infowindow component. Choosing a data attribute to also be able
-        // to target it via CSS to disable pointer event when using custom anchor point
+        // data-origin is needed to identify the custom marker content in the
+        // InfoWindow component as well as in the global CSS used to disable
+        // the pointer event when anchor points are used in older Google Maps
+        // versions.
         marker.dataset.origin = 'rgm';
 
         globalStyleManager.addAdvancedMarkerPointerEventsOverwrite();

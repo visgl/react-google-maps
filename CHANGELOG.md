@@ -1,5 +1,46 @@
 # Changelog
 
+## [1.7.1](https://github.com/visgl/react-google-maps/compare/v1.7.0...v1.7.1) (2025-11-03)
+
+
+### Bug Fixes
+
+* **types:** add new PinElement and PinElementOptions types to augmentations ([3751d0d](https://github.com/visgl/react-google-maps/commit/3751d0d76a884fe76cb8bd23a993720416932c03))
+* **types:** inline PlaceContextualElementOptions in types for 'gmp-place-contextual' ([0626be2](https://github.com/visgl/react-google-maps/commit/0626be24df8deb98b4779a121da6fbdb5023793d))
+
+## [1.7.0](https://github.com/visgl/react-google-maps/compare/v1.6.1...v1.7.0) (2025-10-30)
+
+
+### Features
+
+* add TypeScript type definitions for Google Maps custom elements ([#857](https://github.com/visgl/react-google-maps/issues/857)) ([a946a36](https://github.com/visgl/react-google-maps/commit/a946a36ab41b092631987c04bebcd34ad4f84aa0))
+
+
+### Bug Fixes
+
+* **custom-element-types:** update type definitions for boolean values ([8db4ad0](https://github.com/visgl/react-google-maps/commit/8db4ad07c285056842e50e69a7866f3578f4100f))
+* update useMapsLibrary hook to include maps3d ([bd218bb](https://github.com/visgl/react-google-maps/commit/bd218bb65f8a308f59cbce16cce32019c27101e6))
+
+## [1.6.1](https://github.com/visgl/react-google-maps/compare/v1.6.0...v1.6.1) (2025-10-23)
+
+
+### Features
+
+* update eslint-plugin-react-hooks ([#851](https://github.com/visgl/react-google-maps/issues/851)) ([6ebe344](https://github.com/visgl/react-google-maps/commit/6ebe344d4baf36cf18924037dec43b82cf9b5561))
+
+
+### Miscellaneous Chores
+
+* add tslib as devDependency ([#854](https://github.com/visgl/react-google-maps/issues/854)) ([fe42240](https://github.com/visgl/react-google-maps/commit/fe42240abbca9ef30d247759bccfdbb93067ae45))
+
+## [1.6.0](https://github.com/visgl/react-google-maps/compare/v1.5.5...v1.6.0) (2025-10-21)
+
+
+### Features
+
+* implement usage attribution ([#844](https://github.com/visgl/react-google-maps/issues/844)) ([af36b8f](https://github.com/visgl/react-google-maps/commit/af36b8feee4acdf44ee17a73e962a7ea062e72db))
+* updated AdvancedMarker anchoring implementation ([#841](https://github.com/visgl/react-google-maps/issues/841)) ([d7b128e](https://github.com/visgl/react-google-maps/commit/d7b128e132fbb76855bcf56f1947796480a97705))
+
 ## [1.5.5](https://github.com/visgl/react-google-maps/compare/v1.5.4...v1.5.5) (2025-08-07)
 
 

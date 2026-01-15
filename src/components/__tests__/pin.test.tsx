@@ -1,17 +1,21 @@
-import React, {FunctionComponent, PropsWithChildren} from 'react';
+import React from 'react';
 import {initialize, mockInstances} from '@googlemaps/jest-mocks';
 import {cleanup, render} from '@testing-library/react';
 
-import {APIProvider} from '../api-provider';
-import {Map as GoogleMap} from '../map';
 import {AdvancedMarker} from '../advanced-marker';
 import {Pin, PinProps} from '../pin';
+import {useMap} from '../../hooks/use-map';
+import {useMapsLibrary} from '../../hooks/use-maps-library';
 
 import {waitForSpy} from './__utils__/wait-for-spy';
 
-jest.mock('../../libraries/google-maps-api-loader');
+jest.mock('../../hooks/use-map');
+jest.mock('../../hooks/use-maps-library');
 
-let wrapper: FunctionComponent<PropsWithChildren>;
+let useMapMock: jest.MockedFn<typeof useMap>;
+let useMapsLibraryMock: jest.MockedFn<typeof useMapsLibrary>;
+let mapInstance: google.maps.Map;
+let markerLib: google.maps.MarkerLibrary;
 
 let createMarkerSpy: jest.Mock<
   void,
@@ -22,28 +26,40 @@ let createPinElementSpy: jest.Mock<
   [google.maps.marker.PinElementOptions]
 >;
 
-beforeEach(() => {
+beforeEach(async () => {
   initialize();
+  jest.clearAllMocks();
 
-  // Create wrapper component
-  wrapper = ({children}) => (
-    <APIProvider apiKey={'apikey'} libraries={['places']}>
-      <GoogleMap zoom={10} center={{lat: 0, lng: 0}}>
-        {children}
-      </GoogleMap>
-    </APIProvider>
-  );
+  useMapMock = jest.mocked(useMap);
+  useMapsLibraryMock = jest.mocked(useMapsLibrary);
+
+  mapInstance = new google.maps.Map(document.createElement('div'));
+  useMapMock.mockReturnValue(mapInstance);
+
+  markerLib = (await google.maps.importLibrary(
+    'marker'
+  )) as google.maps.MarkerLibrary;
+  useMapsLibraryMock.mockReturnValue(markerLib);
 
   createMarkerSpy = jest.fn();
 
-  google.maps.marker.AdvancedMarkerElement = class extends (
-    google.maps.marker.AdvancedMarkerElement
-  ) {
+  const AdvancedMarkerElement = class
+    extends google.maps.marker.AdvancedMarkerElement
+  {
     constructor(options: google.maps.marker.AdvancedMarkerElementOptions) {
       createMarkerSpy(options);
       super(options);
+      this.content = document.createElement('div');
     }
   };
+
+  customElements.define(
+    `gmp-advanced-marker-${Math.random().toString(36).slice(2)}`,
+    AdvancedMarkerElement
+  );
+
+  google.maps.marker.AdvancedMarkerElement = markerLib.AdvancedMarkerElement =
+    AdvancedMarkerElement;
 
   createPinElementSpy = jest.fn();
 
@@ -59,15 +75,12 @@ beforeEach(() => {
 
 afterEach(() => {
   cleanup();
-  jest.restoreAllMocks();
 });
 
 test('pin view logs an error when used outside of AdvancedMarker', async () => {
   const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
 
-  render(<Pin />, {
-    wrapper
-  });
+  render(<Pin />);
 
   // expect an error-message to be written to console
   const errorArgs = await waitForSpy(errorSpy);
@@ -88,10 +101,7 @@ xtest('props are passed to Pin instance', async () => {
   const {rerender} = render(
     <AdvancedMarker>
       <Pin {...pinViewProps} />
-    </AdvancedMarker>,
-    {
-      wrapper
-    }
+    </AdvancedMarker>
   );
 
   await waitForSpy(createPinElementSpy);

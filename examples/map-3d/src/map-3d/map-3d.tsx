@@ -4,13 +4,10 @@ import React, {
   forwardRef,
   useEffect,
   useImperativeHandle,
-  useMemo,
   useState
 } from 'react';
 import {useMap3DCameraEvents} from './use-map-3d-camera-events';
 import {useCallbackRef, useDeepCompareEffect} from '../utility-hooks';
-
-import './map-3d-types';
 
 export type Map3DProps = google.maps.maps3d.Map3DElementOptions & {
   onCameraChange?: (cameraProps: Map3DCameraProps) => void;
@@ -75,3 +72,5 @@ export const Map3D = forwardRef(
     );
   }
 );
+
+Map3D.displayName = 'Map3D';
