@@ -14,21 +14,6 @@ import {useMap3DCameraParams} from './use-map-3d-camera-params';
 import {Map3DEventProps, useMap3DEvents} from './use-map-3d-events';
 import {useMap3DOptions} from './use-map-3d-options';
 
-/**
- * Augment React's JSX namespace to include the gmp-map-3d custom element.
- */
-declare module 'react' {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
-  namespace JSX {
-    interface IntrinsicElements {
-      'gmp-map-3d': React.DetailedHTMLProps<
-        React.HTMLAttributes<google.maps.maps3d.Map3DElement>,
-        google.maps.maps3d.Map3DElement
-      >;
-    }
-  }
-}
-
 // Re-export event types for consumers
 export type {
   Map3DEvent,

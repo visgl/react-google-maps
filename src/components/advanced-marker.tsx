@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/immutability */
 // The `react-hooks/immutability` rule is disabled in this file because the
 // google.maps.marker.AdvancedMarkerElement object is designed to be mutated
 // directly. This is a common pattern when working with imperative APIs like
@@ -5,7 +6,6 @@
 // immutable state in React, it is a necessary evil to integrate with the
 // Google Maps API. The mutations are carefully managed within the `useEffect`
 // hooks to ensure that they only happen when the props change.
-
 import type {PropsWithChildren, Ref} from 'react';
 import React, {
   Children,

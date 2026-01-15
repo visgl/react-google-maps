@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/immutability -- Google Maps API objects are designed to be mutated */
 import {useLayoutEffect} from 'react';
 
 import {CameraStateRef3D} from './use-tracked-camera-state-ref-3d';

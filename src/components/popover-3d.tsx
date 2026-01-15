@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/immutability -- Google Maps API objects are designed to be mutated */
 import type {PropsWithChildren} from 'react';
 import {useEffect, useState} from 'react';
 import {createPortal} from 'react-dom';

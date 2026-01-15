@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/immutability -- Google Maps API objects are designed to be mutated */
 import type {PropsWithChildren, Ref} from 'react';
 import React, {
   createContext,
