@@ -1,0 +1,152 @@
+/* Cluster marker */
+.cluster-marker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: 3px solid white;
+  border-radius: 50%;
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.cluster-marker:hover {
+  transform: scale(1.1);
+}
+
+/* Individual point marker */
+.point-marker {
+  width: 12px;
+  height: 12px;
+  background: #4285f4;
+  border: 2px solid white;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.point-marker:hover {
+  transform: scale(1.3);
+}
+
+/* Loading overlay */
+.loading-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255, 255, 255, 0.95);
+  padding: 24px 32px;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  z-index: 1000;
+  font-size: 14px;
+  color: #333;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #e0e0e0;
+  border-top-color: #667eea;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Control panel */
+.control-panel {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: white;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  max-width: 280px;
+  z-index: 100;
+}
+
+.control-panel h3 {
+  margin: 0 0 16px 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.control-group {
+  margin-bottom: 16px;
+}
+
+.control-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  color: #666;
+}
+
+.control-group select {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.control-group select:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.control-panel .info {
+  font-size: 12px;
+  color: #666;
+  line-height: 1.5;
+  padding: 12px;
+  background: #f5f5f5;
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+
+.control-panel .info p {
+  margin: 0 0 8px 0;
+}
+
+.control-panel .info p:last-child {
+  margin-bottom: 0;
+}
+
+.control-panel .instructions {
+  font-size: 12px;
+  color: #888;
+}
+
+.control-panel .instructions p {
+  margin: 4px 0;
+}
+
+/* Error message */
+.error {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fee;
+  color: #c00;
+  padding: 16px 24px;
+  border-radius: 8px;
+  border: 1px solid #fcc;
+}
