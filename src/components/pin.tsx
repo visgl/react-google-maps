@@ -119,7 +119,7 @@ export const Pin: FunctionComponent<PinProps> = props => {
     if (markerContent) {
       markerContent.appendChild(pinElement.element);
     }
-  }, [advancedMarker, glyphContainer, props]);
+  }, [advancedMarker, glyphContainer, marker3d, props]);
 
   return createPortal(props.children, glyphContainer);
 };

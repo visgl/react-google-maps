@@ -1,3 +1,5 @@
+import {useMemo} from 'react';
+
 import {useDeepCompareEffect} from '../../hooks/use-deep-compare-effect';
 import {Map3DProps} from './index';
 
@@ -28,23 +30,27 @@ export function useMap3DOptions(
   map3d: google.maps.maps3d.Map3DElement | null,
   props: Map3DProps
 ) {
-  // Filter props to only include valid option keys
-  const options: Record<string, unknown> = {};
-  const keys = Object.keys(props);
+  // Filter props to only include valid option keys, memoized to avoid
+  // creating a new object on every render
+  const options = useMemo(() => {
+    const result: Record<string, unknown> = {};
+    const keys = Object.keys(props);
 
-  for (const key of keys) {
-    if (
-      !MAP_3D_OPTION_KEYS.has(
-        key as typeof MAP_3D_OPTION_KEYS extends Set<infer T> ? T : never
+    for (const key of keys) {
+      if (
+        !MAP_3D_OPTION_KEYS.has(
+          key as typeof MAP_3D_OPTION_KEYS extends Set<infer T> ? T : never
+        )
       )
-    )
-      continue;
-    const value = (props as Record<string, unknown>)[key];
+        continue;
+      const value = (props as Record<string, unknown>)[key];
 
-    if (value === undefined) continue;
+      if (value === undefined) continue;
 
-    options[key] = value;
-  }
+      result[key] = value;
+    }
+    return result;
+  }, [props]);
 
   useDeepCompareEffect(() => {
     if (!map3d) return;

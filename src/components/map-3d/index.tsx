@@ -18,6 +18,7 @@ import {useMap3DOptions} from './use-map-3d-options';
  * Augment React's JSX namespace to include the gmp-map-3d custom element.
  */
 declare module 'react' {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace JSX {
     interface IntrinsicElements {
       'gmp-map-3d': React.DetailedHTMLProps<
@@ -262,9 +263,6 @@ export const Map3D = forwardRef<Map3DRef, Map3DProps>((props, ref) => {
     () => ({map3d}),
     [map3d]
   );
-
-  // Apply default mode if not specified
-  const mode = props.mode ?? google.maps?.maps3d?.MapMode?.HYBRID ?? 'HYBRID';
 
   // Don't render the custom element until everything is ready
   if (!isReady) {

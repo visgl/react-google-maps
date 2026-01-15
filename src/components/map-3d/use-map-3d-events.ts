@@ -67,22 +67,6 @@ export interface Map3DEventProps {
 }
 
 /**
- * Mapping from prop names to DOM event names.
- */
-const EVENT_MAP: Record<keyof Map3DEventProps, string> = {
-  onCenterChanged: 'gmp-centerchange',
-  onHeadingChanged: 'gmp-headingchange',
-  onTiltChanged: 'gmp-tiltchange',
-  onRangeChanged: 'gmp-rangechange',
-  onRollChanged: 'gmp-rollchange',
-  onCameraChanged: '', // Special case: synthetic event
-  onClick: 'gmp-click',
-  onSteadyChange: 'gmp-steadychange',
-  onAnimationEnd: 'gmp-animationend',
-  onError: 'gmp-error'
-};
-
-/**
  * Camera-related event types for the aggregated onCameraChanged handler.
  */
 const CAMERA_EVENTS = [

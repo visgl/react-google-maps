@@ -1,13 +1,11 @@
 import type {PropsWithChildren, Ref} from 'react';
 import React, {
   createContext,
-  useCallback,
   useContext,
   useEffect,
   useImperativeHandle,
   useLayoutEffect,
   useMemo,
-  useRef,
   useState,
   forwardRef
 } from 'react';
@@ -129,7 +127,6 @@ export const Marker3D = forwardRef(function Marker3D(
   ref: Ref<
     | google.maps.maps3d.Marker3DElement
     | google.maps.maps3d.Marker3DInteractiveElement
-    | null
   >
 ) {
   const {
@@ -149,8 +146,11 @@ export const Marker3D = forwardRef(function Marker3D(
   const map3d = useMap3D();
   const maps3dLibrary = useMapsLibrary('maps3d');
 
-  const [marker, setMarker] =
-    useState<google.maps.maps3d.Marker3DElement | null>(null);
+  const [marker, setMarker] = useState<
+    | google.maps.maps3d.Marker3DElement
+    | google.maps.maps3d.Marker3DInteractiveElement
+    | null
+  >(null);
 
   // Track if a child component (like Pin) is handling its own content
   const [contentHandledExternally, setContentHandledExternally] =
@@ -164,7 +164,14 @@ export const Marker3D = forwardRef(function Marker3D(
   const isInteractive = Boolean(onClick);
 
   // Expose marker element via ref
-  useImperativeHandle(ref, () => marker, [marker]);
+  useImperativeHandle(
+    ref,
+    () =>
+      marker as
+        | google.maps.maps3d.Marker3DElement
+        | google.maps.maps3d.Marker3DInteractiveElement,
+    [marker]
+  );
 
   // Create marker element and attach to map
   useEffect(() => {

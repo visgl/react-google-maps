@@ -1,5 +1,5 @@
 import type {PropsWithChildren} from 'react';
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {createPortal} from 'react-dom';
 
 import {useMap3D} from '../hooks/use-map-3d';

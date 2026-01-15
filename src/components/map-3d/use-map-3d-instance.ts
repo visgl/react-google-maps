@@ -36,7 +36,7 @@ export function useMap3DInstance(
   const [customElementReady, setCustomElementReady] = useState(false);
 
   // Container ref for the wrapper div
-  const [container, containerRef] = useCallbackRef<HTMLDivElement>();
+  const [, containerRef] = useCallbackRef<HTMLDivElement>();
 
   // Ref for the gmp-map-3d element
   const [map3d, map3dRef] = useCallbackRef<google.maps.maps3d.Map3DElement>();
@@ -84,6 +84,9 @@ export function useMap3DInstance(
       onSteadyChange,
       onAnimationEnd,
       onError,
+      // Extract options handled elsewhere (use-map-3d-options)
+      mode,
+      gestureHandling,
       // Remaining are element options
       ...elementOptions
     } = props;
@@ -108,6 +111,7 @@ export function useMap3DInstance(
 
     // Apply all initial options to the element
     Object.assign(map3d, initialOptions);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [map3d]); // Only run when map3d element first becomes available
 
   const isReady = !!maps3dLib && customElementReady;
