@@ -43,7 +43,7 @@ export function useMap3DOptions(
         )
       )
         continue;
-      const value = (props as Record<string, unknown>)[key];
+      const value = (props as unknown as Record<string, unknown>)[key];
 
       if (value === undefined) continue;
 

@@ -52,6 +52,7 @@ describe('Map3D', () => {
     render(
       <APIProviderContext.Provider value={createMockContextValue()}>
         <Map3D
+          mode="SATELLITE"
           center={{lat: 37.7749, lng: -122.4194, altitude: 0}}
           range={1000}
         />
@@ -66,6 +67,7 @@ describe('Map3D', () => {
       <APIProviderContext.Provider value={createMockContextValue()}>
         <Map3D
           id="my-map"
+          mode="SATELLITE"
           center={{lat: 37.7749, lng: -122.4194, altitude: 0}}
           range={1000}
         />
@@ -80,6 +82,7 @@ describe('Map3D', () => {
       <APIProviderContext.Provider value={createMockContextValue()}>
         <Map3D
           className="custom-class"
+          mode="SATELLITE"
           center={{lat: 37.7749, lng: -122.4194, altitude: 0}}
           range={1000}
         />
@@ -94,6 +97,7 @@ describe('Map3D', () => {
       <APIProviderContext.Provider value={createMockContextValue()}>
         <Map3D
           style={{border: '1px solid red'}}
+          mode="SATELLITE"
           center={{lat: 37.7749, lng: -122.4194, altitude: 0}}
           range={1000}
         />
@@ -109,6 +113,7 @@ describe('Map3D', () => {
     render(
       <APIProviderContext.Provider value={createMockContextValue()}>
         <Map3D
+          mode="SATELLITE"
           center={{lat: 37.7749, lng: -122.4194, altitude: 0}}
           range={1000}>
           <div data-testid="child-element">Child content</div>
