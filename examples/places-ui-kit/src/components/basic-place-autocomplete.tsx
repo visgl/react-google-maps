@@ -18,8 +18,11 @@ export type BasicPlaceAutocompleteElementProps = PropsWithChildren<{
   className?: string;
   /**
    * CSS properties to pass on to gmp-basic-place-autocomplete
+   * See https://developers.google.com/maps/documentation/javascript/reference/places-widget#BasicPlaceAutocompleteElement-CSS-Properties
    */
-  style?: React.CSSProperties;
+  style?: React.CSSProperties & {
+    [key: `--${string}`]: string | number;
+  };
   /**
    * Restricts predictions to a set of pre-defined primary types.
    */

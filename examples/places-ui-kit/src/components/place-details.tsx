@@ -1,7 +1,7 @@
 import {useMapsLibrary} from '@vis.gl/react-google-maps';
-import React, {FunctionComponent, useRef, useState} from 'react';
+import React, {FunctionComponent, useState} from 'react';
 import {
-  ContentConfig,
+  ConfigPreset,
   ContentItem,
   PlaceContentConfig
 } from './place-content-config';
@@ -22,8 +22,12 @@ export type PlaceDetailsProps = {
   className?: string;
   /**
    * CSS properties to pass on to gmp-place-details (compact and non-compact)
+   * See https://developers.google.com/maps/documentation/javascript/reference/places-widget#PlaceDetailsElement-CSS-Properties
+   * and https://developers.google.com/maps/documentation/javascript/reference/places-widget#PlaceDetailsCompactElement-CSS-Properties
    */
-  style?: React.CSSProperties;
+  style?: React.CSSProperties & {
+    [key: `--${string}`]: string | number;
+  };
 
   /**
    * If true, shows the compact version of place-details
@@ -46,14 +50,15 @@ export type PlaceDetailsProps = {
     | null;
 
   /**
-   * Content config. Defaults to 'standard'
+   * The config preset to use in case no custom config is wanted
+   * Allowed values are standard and all, default is standard.
    */
-  contentConfig: ContentConfig;
+  configPreset?: ConfigPreset;
   /**
-   * Required only if type is 'custom'.
    * The array lists the content elements to display.
+   * If populated, a custom config will be rendered
    */
-  customContent?: Array<ContentItem>;
+  contentItems?: Array<ContentItem>;
 
   // compact only
   /**
@@ -94,8 +99,8 @@ export const PlaceDetails: FunctionComponent<PlaceDetailsProps> = props => {
     compact = false,
     placeId,
     location,
-    contentConfig = ContentConfig.STANDARD,
-    customContent,
+    configPreset,
+    contentItems,
     orientation,
     truncationPreferred = false,
     onLoad,
@@ -131,10 +136,7 @@ export const PlaceDetails: FunctionComponent<PlaceDetailsProps> = props => {
         place={placeId}></gmp-place-details-place-request>
       <gmp-place-details-location-request
         location={location}></gmp-place-details-location-request>
-      <PlaceContentConfig
-        contentConfig={contentConfig}
-        customContent={customContent}
-      />
+      <PlaceContentConfig preset={configPreset} contentItems={contentItems} />
     </gmp-place-details-compact>
   ) : (
     <gmp-place-details
@@ -145,10 +147,7 @@ export const PlaceDetails: FunctionComponent<PlaceDetailsProps> = props => {
         location={location}></gmp-place-details-location-request>
       <gmp-place-details-place-request
         place={placeId}></gmp-place-details-place-request>
-      <PlaceContentConfig
-        contentConfig={contentConfig}
-        customContent={customContent}
-      />
+      <PlaceContentConfig preset={configPreset} contentItems={contentItems} />
     </gmp-place-details>
   );
 };

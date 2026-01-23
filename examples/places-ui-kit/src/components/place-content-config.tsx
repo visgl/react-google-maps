@@ -1,34 +1,34 @@
 import React, {FunctionComponent, useEffect, useRef} from 'react';
 
-export const ContentConfig = {
+export const ConfigPreset = {
   STANDARD: 'standard',
-  ALL: 'all',
-  CUSTOM: 'custom'
+  ALL: 'all'
 } as const;
 
-export type ContentConfig = (typeof ContentConfig)[keyof typeof ContentConfig];
+export type ConfigPreset = (typeof ConfigPreset)[keyof typeof ConfigPreset];
 
 // --- 2. Custom Element Options ---
 // These are the possible children for gmp-place-content-config when type is 'custom'.
 // Note: We've made these specific to PlaceDetailsElement as per the prompt.
-export type PlaceDetailsContentItem =
-  | 'address'
-  | 'accessible-entrance-icon'
-  | 'attribution'
-  | 'media'
-  | 'open-now-status'
-  | 'price'
-  | 'rating'
-  | 'type'
-  // noncompact only
-  | 'feature-list'
-  | 'opening-hours'
-  | 'phone-number'
-  | 'plus-code'
-  | 'reviews'
-  | 'summary'
-  | 'type-specific-highlights'
-  | 'website';
+export const BasicContentItem = {
+  ADDRESS: 'address',
+  ACCESSIBLE_ENTRANCE_ICON: 'accessible-entrance-icon',
+  OPEN_NOW_STATUS: 'open-now-status',
+  PRICE: 'price',
+  RATING: 'rating',
+  TYPE: 'type',
+  FEATURE_LIST: 'feature-list',
+  OPENING_HOURS: 'opening-hours',
+  PHONE_NUMBER: 'phone-number',
+  PLUS_CODE: 'plus-code',
+  REVIEWS: 'reviews',
+  SUMMARY: 'summary',
+  TYPE_SPECIFIC_HIGHLIGHTS: 'type-specific-highlights',
+  WEBSITE: 'website'
+} as const;
+
+export type BasicContentItem =
+  (typeof BasicContentItem)[keyof typeof BasicContentItem];
 
 type AttributionProps = {
   lightSchemeColor?: google.maps.places.AttributionColor | null;
@@ -42,32 +42,31 @@ type MediaProps = {
 };
 
 type AttributionContentItem = {
-  attribute: 'attribution';
+  type: 'attribution';
   options?: AttributionProps;
 };
 
 type MediaContentItem = {
-  attribute: 'media';
+  type: 'media';
   options?: MediaProps;
 };
 
-type DefaultContentItem = {
-  attribute: Omit<PlaceDetailsContentItem, 'attribution' | 'media'>;
-  options?: never;
-};
-
 export type ContentItem =
+  | BasicContentItem
   | AttributionContentItem
-  | MediaContentItem
-  | DefaultContentItem;
+  | MediaContentItem;
 
 export type PlaceContentConfigProps = {
-  contentConfig: ContentConfig;
   /**
-   * Required only if type is 'custom'.
-   * The array lists the content elements to display.
+   * The preset to use in case no custom config is wanted
+   * Allowed values are standard and all, default is standard.
    */
-  customContent?: Array<ContentItem>;
+  preset?: ConfigPreset;
+  /**
+   * The array lists the content elements to display.
+   * If populated, a custom config will be rendered
+   */
+  contentItems?: Array<ContentItem>;
 };
 
 const AttributionWrapper: FunctionComponent<AttributionProps> = ({
@@ -106,14 +105,16 @@ const MediaWrapper: FunctionComponent<MediaProps> = ({
  * Maps a content item string to its corresponding Google Maps Web Component JSX.
  */
 const renderContentItem = (itemConfig: ContentItem, key: number) => {
-  switch (itemConfig.attribute) {
-    case 'address':
+  const itemType =
+    typeof itemConfig === 'string' ? itemConfig : itemConfig.type;
+  switch (itemType) {
+    case BasicContentItem.ADDRESS:
       return <gmp-place-address key={key} />;
-    case 'accessible-entrance-icon':
+    case BasicContentItem.ACCESSIBLE_ENTRANCE_ICON:
       return <gmp-place-accessible-entrance-icon key={key} />;
     case 'attribution':
       const {lightSchemeColor, darkSchemeColor} =
-        (itemConfig.options as AttributionContentItem['options']) || {};
+        (itemConfig as AttributionContentItem).options || {};
 
       return (
         <AttributionWrapper
@@ -124,7 +125,7 @@ const renderContentItem = (itemConfig: ContentItem, key: number) => {
       );
     case 'media':
       const {lightboxPreferred, preferredSize} =
-        (itemConfig.options as MediaContentItem['options']) || {};
+        (itemConfig as MediaContentItem).options || {};
 
       return (
         <MediaWrapper
@@ -133,29 +134,29 @@ const renderContentItem = (itemConfig: ContentItem, key: number) => {
           preferredSize={preferredSize}
         />
       );
-    case 'open-now-status':
+    case BasicContentItem.OPEN_NOW_STATUS:
       return <gmp-place-open-now-status key={key} />;
-    case 'price':
+    case BasicContentItem.PRICE:
       return <gmp-place-price key={key} />;
-    case 'rating':
+    case BasicContentItem.RATING:
       return <gmp-place-rating key={key} />;
-    case 'type':
+    case BasicContentItem.TYPE:
       return <gmp-place-type key={key} />;
-    case 'feature-list':
+    case BasicContentItem.FEATURE_LIST:
       return <gmp-place-feature-list key={key} />;
-    case 'opening-hours':
+    case BasicContentItem.OPENING_HOURS:
       return <gmp-place-opening-hours key={key} />;
-    case 'phone-number':
+    case BasicContentItem.PHONE_NUMBER:
       return <gmp-place-phone-number key={key} />;
-    case 'plus-code':
+    case BasicContentItem.PLUS_CODE:
       return <gmp-place-plus-code key={key} />;
-    case 'reviews':
+    case BasicContentItem.REVIEWS:
       return <gmp-place-reviews key={key} />;
-    case 'summary':
+    case BasicContentItem.SUMMARY:
       return <gmp-place-summary key={key} />;
-    case 'type-specific-highlights':
+    case BasicContentItem.TYPE_SPECIFIC_HIGHLIGHTS:
       return <gmp-place-type-specific-highlights key={key} />;
-    case 'website':
+    case BasicContentItem.WEBSITE:
       return <gmp-place-website key={key} />;
     default:
       return null;
@@ -165,29 +166,19 @@ const renderContentItem = (itemConfig: ContentItem, key: number) => {
 export const PlaceContentConfig: FunctionComponent<
   PlaceContentConfigProps
 > = props => {
-  const {contentConfig, customContent} = props;
+  const {preset, contentItems} = props;
 
-  // Determine the content element to render based on the config type
-  switch (contentConfig) {
-    case ContentConfig.STANDARD:
-      return <gmp-place-standard-content />;
-    case ContentConfig.ALL:
-      return <gmp-place-all-content />;
-    case ContentConfig.CUSTOM:
-      if (!customContent || customContent.length === 0) {
-        console.error(
-          'PlaceContentConfig: customContent must be provided for type "custom".'
-        );
-        return null;
-      }
-
-      // Render the custom config element with its children
-      return (
-        <gmp-place-content-config>
-          {customContent.map(renderContentItem)}
-        </gmp-place-content-config>
-      );
-    default:
-      return null;
+  // the config will default to custom if contentItems are explicitely set
+  if (contentItems && contentItems.length) {
+    // Render the custom config element with its children
+    return (
+      <gmp-place-content-config>
+        {contentItems.map(renderContentItem)}
+      </gmp-place-content-config>
+    );
+  } else if (preset === ConfigPreset.ALL) {
+    return <gmp-place-all-content />;
+  } else {
+    return <gmp-place-standard-content />;
   }
 };

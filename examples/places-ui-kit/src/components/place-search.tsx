@@ -3,7 +3,7 @@ import React, {FunctionComponent, useEffect, useState} from 'react';
 import {useDomEventListener} from '../../../../src/hooks/use-dom-event-listener';
 import {usePropBinding} from '../../../../src/hooks/use-prop-binding';
 import {
-  ContentConfig,
+  ConfigPreset,
   ContentItem,
   PlaceContentConfig
 } from './place-content-config';
@@ -53,8 +53,11 @@ export type PlaceSearchProps = {
   className?: string;
   /**
    * CSS properties to pass on to gmp-place-search
+   * See https://developers.google.com/maps/documentation/javascript/reference/places-widget#PlaceSearchElement-CSS-Properties
    */
-  style?: React.CSSProperties;
+  style?: React.CSSProperties & {
+    [key: `--${string}`]: string | number;
+  };
   /**
    * Position of attribution, defaults to TOP
    */
@@ -81,14 +84,15 @@ export type PlaceSearchProps = {
   textSearch?: TextSearchOptions;
 
   /**
-   *  Content config. Defaults to 'standard'
+   * The config preset to use in case no custom config is wanted
+   * Allowed values are standard and all, default is standard.
    */
-  contentConfig: ContentConfig;
+  configPreset?: ConfigPreset;
   /**
-   * Required only if type is 'custom'.
    * The array lists the content elements to display.
+   * If populated, a custom config will be rendered
    */
-  customContent?: Array<ContentItem>;
+  contentItems?: Array<ContentItem>;
 
   /**
    * Fired when the search results are loaded
@@ -118,8 +122,8 @@ export const PlaceSearch: FunctionComponent<PlaceSearchProps> = props => {
     style,
     nearbySearch,
     textSearch,
-    contentConfig = ContentConfig.STANDARD,
-    customContent,
+    configPreset,
+    contentItems,
     attributionPosition,
     orientation = Orientation.VERTICAL,
     truncationPreferred,
@@ -212,10 +216,7 @@ export const PlaceSearch: FunctionComponent<PlaceSearchProps> = props => {
 
   return (
     <gmp-place-search ref={setPlaceSearch} className={className} style={style}>
-      <PlaceContentConfig
-        contentConfig={contentConfig}
-        customContent={customContent}
-      />
+      <PlaceContentConfig preset={configPreset} contentItems={contentItems} />
     </gmp-place-search>
   );
 };
