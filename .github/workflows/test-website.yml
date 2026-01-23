@@ -7,22 +7,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
-          cache-dependency-path: ./website/package-lock.json
 
-      - name: Install dependencies
+      - name: Install dependencies (main)
+        run: npm ci
+
+      - name: Install dependencies (website)
         working-directory: ./website
         run: npm ci
 
       - name: Build website
         working-directory: ./website
-        run: |
-          npm run build
+        run: npm run build
         env:
           GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
