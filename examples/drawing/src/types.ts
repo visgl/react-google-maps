@@ -5,8 +5,18 @@ export type OverlayGeometry =
   | google.maps.Rectangle
   | google.maps.Circle;
 
+export type DrawingMode =
+  | 'marker'
+  | 'circle'
+  | 'polygon'
+  | 'polyline'
+  | 'rectangle'
+  | null;
+
+export type OverlayType = Exclude<DrawingMode, null>;
+
 export interface DrawResult {
-  type: google.maps.drawing.OverlayType;
+  type: OverlayType;
   overlay: OverlayGeometry;
 }
 
@@ -19,7 +29,7 @@ export interface Snapshot {
 }
 
 export interface Overlay {
-  type: google.maps.drawing.OverlayType;
+  type: OverlayType;
   geometry: OverlayGeometry;
   snapshot: Snapshot;
 }
@@ -33,12 +43,16 @@ export interface State {
 export enum DrawingActionKind {
   SET_OVERLAY = 'SET_OVERLAY',
   UPDATE_OVERLAYS = 'UPDATE_OVERLAYS',
+  DELETE_OVERLAY = 'DELETE_OVERLAY',
   UNDO = 'UNDO',
   REDO = 'REDO'
 }
 
 export interface ActionWithTypeOnly {
-  type: Exclude<DrawingActionKind, DrawingActionKind.SET_OVERLAY>;
+  type: Exclude<
+    DrawingActionKind,
+    DrawingActionKind.SET_OVERLAY | DrawingActionKind.DELETE_OVERLAY
+  >;
 }
 
 export interface SetOverlayAction {
@@ -46,7 +60,15 @@ export interface SetOverlayAction {
   payload: DrawResult;
 }
 
-export type Action = ActionWithTypeOnly | SetOverlayAction;
+export interface DeleteOverlayAction {
+  type: DrawingActionKind.DELETE_OVERLAY;
+  payload: OverlayGeometry;
+}
+
+export type Action =
+  | ActionWithTypeOnly
+  | SetOverlayAction
+  | DeleteOverlayAction;
 
 export function isCircle(
   overlay: OverlayGeometry

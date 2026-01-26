@@ -81,6 +81,21 @@ export default function reducer(state: State, action: Action) {
       };
     }
 
+    case DrawingActionKind.DELETE_OVERLAY: {
+      const overlayToDelete = action.payload;
+      const nextNow = state.now.filter(
+        overlay => overlay.geometry !== overlayToDelete
+      );
+
+      if (nextNow.length === state.now.length) return state;
+
+      return {
+        past: [...state.past, state.now],
+        now: nextNow,
+        future: []
+      };
+    }
+
     // This action is called when the undo button is clicked.
     // Get the top item from the "past" stack and set it as the new "now".
     // Add the old "now" to the "future" stack to enable redo functionality
@@ -115,12 +130,12 @@ export default function reducer(state: State, action: Action) {
 
 // Handle drawing manager events
 export function useDrawingManagerEvents(
-  drawingManager: google.maps.drawing.DrawingManager | null,
+  drawingController: google.maps.MVCObject | null,
   overlaysShouldUpdateRef: MutableRefObject<boolean>,
   dispatch: Dispatch<Action>
 ) {
   useEffect(() => {
-    if (!drawingManager) return;
+    if (!drawingController) return;
 
     const eventListeners: Array<google.maps.MapsEventListener> = [];
 
@@ -147,30 +162,30 @@ export function useDrawingManagerEvents(
     };
 
     const overlayCompleteListener = google.maps.event.addListener(
-      drawingManager,
+      drawingController,
       'overlaycomplete',
       (drawResult: DrawResult) => {
         switch (drawResult.type) {
-          case google.maps.drawing.OverlayType.CIRCLE:
+          case 'circle':
             ['center_changed', 'radius_changed'].forEach(eventName =>
               addUpdateListener(eventName, drawResult)
             );
             break;
 
-          case google.maps.drawing.OverlayType.MARKER:
+          case 'marker':
             ['dragend'].forEach(eventName =>
               addUpdateListener(eventName, drawResult)
             );
 
             break;
 
-          case google.maps.drawing.OverlayType.POLYGON:
-          case google.maps.drawing.OverlayType.POLYLINE:
+          case 'polygon':
+          case 'polyline':
             ['mouseup'].forEach(eventName =>
               addUpdateListener(eventName, drawResult)
             );
 
-          case google.maps.drawing.OverlayType.RECTANGLE:
+          case 'rectangle':
             ['bounds_changed', 'dragstart', 'dragend'].forEach(eventName =>
               addUpdateListener(eventName, drawResult)
             );
@@ -189,7 +204,111 @@ export function useDrawingManagerEvents(
         google.maps.event.removeListener(listener)
       );
     };
-  }, [dispatch, drawingManager, overlaysShouldUpdateRef]);
+  }, [dispatch, drawingController, overlaysShouldUpdateRef]);
+}
+
+export function useOverlaySelection(
+  map: google.maps.Map | null,
+  overlays: Array<Overlay>,
+  selectedOverlayRef: MutableRefObject<OverlayGeometry | null>,
+  deleteModeRef: MutableRefObject<boolean>,
+  setDeleteMode: Dispatch<boolean>,
+  ignoreNextMapClickRef: MutableRefObject<boolean>,
+  dispatch: Dispatch<Action>,
+  onOverlaySelect?: (() => void) | null
+) {
+  useEffect(() => {
+    if (!map) return;
+
+    const eventListeners: Array<google.maps.MapsEventListener> = [];
+
+    const setOverlayEditable = (overlay: OverlayGeometry, enabled: boolean) => {
+      if (isCircle(overlay)) {
+        overlay.setEditable(enabled);
+      } else if (isRectangle(overlay)) {
+        overlay.setEditable(enabled);
+        overlay.setDraggable(enabled);
+      } else if (isPolygon(overlay) || isPolyline(overlay)) {
+        overlay.setEditable(enabled);
+        overlay.setDraggable(enabled);
+      }
+    };
+
+    const clearSelection = () => {
+      if (!selectedOverlayRef.current) return;
+
+      setOverlayEditable(selectedOverlayRef.current, false);
+      selectedOverlayRef.current = null;
+    };
+
+    const selectOverlay = (overlay: OverlayGeometry) => {
+      if (selectedOverlayRef.current === overlay) return;
+
+      clearSelection();
+
+      if (isMarker(overlay)) {
+        selectedOverlayRef.current = overlay;
+        return;
+      }
+
+      setOverlayEditable(overlay, true);
+      selectedOverlayRef.current = overlay;
+    };
+
+    const handleOverlayClick = (overlay: OverlayGeometry) => {
+      ignoreNextMapClickRef.current = true;
+      onOverlaySelect?.();
+
+      if (deleteModeRef.current) {
+        overlay.setMap(null);
+        clearSelection();
+        setDeleteMode(false);
+        dispatch({
+          type: DrawingActionKind.DELETE_OVERLAY,
+          payload: overlay
+        });
+        return;
+      }
+
+      selectOverlay(overlay);
+    };
+
+    const mapClickListener = map.addListener('click', () => {
+      if (ignoreNextMapClickRef.current) {
+        ignoreNextMapClickRef.current = false;
+        return;
+      }
+
+      clearSelection();
+    });
+
+    eventListeners.push(mapClickListener);
+
+    for (const overlay of overlays) {
+      const listener = google.maps.event.addListener(
+        overlay.geometry,
+        'click',
+        () => handleOverlayClick(overlay.geometry)
+      );
+
+      eventListeners.push(listener);
+    }
+
+    return () => {
+      eventListeners.forEach(listener =>
+        google.maps.event.removeListener(listener)
+      );
+    };
+  }, [
+    map,
+    overlays,
+    selectedOverlayRef,
+    deleteModeRef,
+    setDeleteMode,
+    ignoreNextMapClickRef,
+    dispatch,
+    onOverlaySelect
+  ]);
 }
 
 // Update overlays with the current "snapshot" when the "now" state changes
