@@ -1,13 +1,13 @@
 import {useMapsLibrary} from '@vis.gl/react-google-maps';
 import React, {FunctionComponent, useEffect, useState} from 'react';
-import {useDomEventListener} from '../../../../src/hooks/use-dom-event-listener';
-import {usePropBinding} from '../../../../src/hooks/use-prop-binding';
 import {
   ConfigPreset,
   ContentItem,
   PlaceContentConfig
 } from './place-content-config';
 import {Orientation} from './place-details';
+import {useDomEventListener, usePropBinding} from '../utility-hooks';
+import {CSSWithCustomProperties} from '../places';
 
 export const AttributionPosition = {
   TOP: 'TOP',
@@ -55,9 +55,8 @@ export type PlaceSearchProps = {
    * CSS properties to pass on to gmp-place-search
    * See https://developers.google.com/maps/documentation/javascript/reference/places-widget#PlaceSearchElement-CSS-Properties
    */
-  style?: React.CSSProperties & {
-    [key: `--${string}`]: string | number;
-  };
+  style?: CSSWithCustomProperties;
+
   /**
    * Position of attribution, defaults to TOP
    */

@@ -8,8 +8,7 @@ import React, {
   useState
 } from 'react';
 import {createPortal} from 'react-dom';
-import {usePropBinding} from '../../../../src/hooks/use-prop-binding';
-import {useDomEventListener} from '../../../../src/hooks/use-dom-event-listener';
+import {useDomEventListener, usePropBinding} from '../utility-hooks';
 
 export type BasicPlaceAutocompleteElementProps = PropsWithChildren<{
   /**
@@ -20,9 +19,7 @@ export type BasicPlaceAutocompleteElementProps = PropsWithChildren<{
    * CSS properties to pass on to gmp-basic-place-autocomplete
    * See https://developers.google.com/maps/documentation/javascript/reference/places-widget#BasicPlaceAutocompleteElement-CSS-Properties
    */
-  style?: React.CSSProperties & {
-    [key: `--${string}`]: string | number;
-  };
+  style?: React.CSSProperties;
   /**
    * Restricts predictions to a set of pre-defined primary types.
    */

@@ -5,8 +5,8 @@ import {
   ContentItem,
   PlaceContentConfig
 } from './place-content-config';
-import {useDomEventListener} from '../../../../src/hooks/use-dom-event-listener';
-import {usePropBinding} from '../../../../src/hooks/use-prop-binding';
+import {useDomEventListener, usePropBinding} from '../utility-hooks';
+import {CSSWithCustomProperties} from '../places';
 
 export const Orientation = {
   HORIZONTAL: 'HORIZONTAL',
@@ -25,9 +25,7 @@ export type PlaceDetailsProps = {
    * See https://developers.google.com/maps/documentation/javascript/reference/places-widget#PlaceDetailsElement-CSS-Properties
    * and https://developers.google.com/maps/documentation/javascript/reference/places-widget#PlaceDetailsCompactElement-CSS-Properties
    */
-  style?: React.CSSProperties & {
-    [key: `--${string}`]: string | number;
-  };
+  style?: CSSWithCustomProperties;
 
   /**
    * If true, shows the compact version of place-details
