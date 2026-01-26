@@ -7,11 +7,14 @@ import {
   Overlay,
   Snapshot,
   State,
+  getMarkerPosition,
   isCircle,
   isMarker,
   isPolygon,
   isPolyline,
-  isRectangle
+  isRectangle,
+  setMarkerPosition,
+  setOverlayMap
 } from './types';
 
 export default function reducer(state: State, action: Action) {
@@ -28,7 +31,7 @@ export default function reducer(state: State, action: Action) {
           snapshot.center = geometry.getCenter()?.toJSON();
           snapshot.radius = geometry.getRadius();
         } else if (isMarker(geometry)) {
-          snapshot.position = geometry.getPosition()?.toJSON();
+          snapshot.position = getMarkerPosition(geometry);
         } else if (isPolygon(geometry) || isPolyline(geometry)) {
           snapshot.path = geometry.getPath()?.getArray();
         } else if (isRectangle(geometry)) {
@@ -60,7 +63,7 @@ export default function reducer(state: State, action: Action) {
         snapshot.center = overlay.getCenter()?.toJSON();
         snapshot.radius = overlay.getRadius();
       } else if (isMarker(overlay)) {
-        snapshot.position = overlay.getPosition()?.toJSON();
+        snapshot.position = getMarkerPosition(overlay);
       } else if (isPolygon(overlay) || isPolyline(overlay)) {
         snapshot.path = overlay.getPath()?.getArray();
       } else if (isRectangle(overlay)) {
@@ -260,7 +263,7 @@ export function useOverlaySelection(
       onOverlaySelect?.();
 
       if (deleteModeRef.current) {
-        overlay.setMap(null);
+        setOverlayMap(overlay, null);
         clearSelection();
         setDeleteMode(false);
         dispatch({
@@ -323,7 +326,7 @@ export function useOverlaySnapshots(
     for (const overlay of state.now) {
       overlaysShouldUpdateRef.current = false;
 
-      overlay.geometry.setMap(map);
+      setOverlayMap(overlay.geometry, map);
 
       const {radius, center, position, path, bounds} = overlay.snapshot;
 
@@ -331,7 +334,7 @@ export function useOverlaySnapshots(
         overlay.geometry.setRadius(radius ?? 0);
         overlay.geometry.setCenter(center ?? null);
       } else if (isMarker(overlay.geometry)) {
-        overlay.geometry.setPosition(position);
+        setMarkerPosition(overlay.geometry, position);
       } else if (isPolygon(overlay.geometry) || isPolyline(overlay.geometry)) {
         overlay.geometry.setPath(path ?? []);
       } else if (isRectangle(overlay.geometry)) {
@@ -343,7 +346,7 @@ export function useOverlaySnapshots(
 
     return () => {
       for (const overlay of state.now) {
-        overlay.geometry.setMap(null);
+        setOverlayMap(overlay.geometry, null);
       }
     };
   }, [map, overlaysShouldUpdateRef, state.now]);

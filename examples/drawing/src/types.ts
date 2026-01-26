@@ -1,5 +1,6 @@
 export type OverlayGeometry =
   | google.maps.Marker
+  | google.maps.marker.AdvancedMarkerElement
   | google.maps.Polygon
   | google.maps.Polyline
   | google.maps.Rectangle
@@ -78,8 +79,61 @@ export function isCircle(
 
 export function isMarker(
   overlay: OverlayGeometry
-): overlay is google.maps.Marker {
-  return (overlay as google.maps.Marker).getPosition !== undefined;
+): overlay is google.maps.Marker | google.maps.marker.AdvancedMarkerElement {
+  return (
+    (overlay as google.maps.Marker).getPosition !== undefined ||
+    (overlay as google.maps.marker.AdvancedMarkerElement).gmpDraggable !==
+      undefined
+  );
+}
+
+export function isAdvancedMarker(
+  overlay: OverlayGeometry
+): overlay is google.maps.marker.AdvancedMarkerElement {
+  return (
+    (overlay as google.maps.marker.AdvancedMarkerElement).gmpDraggable !==
+    undefined
+  );
+}
+
+export function getMarkerPosition(
+  overlay: google.maps.Marker | google.maps.marker.AdvancedMarkerElement
+): google.maps.LatLngLiteral | undefined {
+  if (isAdvancedMarker(overlay)) {
+    if (!overlay.position) return undefined;
+
+    return overlay.position instanceof google.maps.LatLng
+      ? overlay.position.toJSON()
+      : overlay.position;
+  }
+
+  return overlay.getPosition()?.toJSON();
+}
+
+export function setMarkerPosition(
+  overlay: google.maps.Marker | google.maps.marker.AdvancedMarkerElement,
+  position?: google.maps.LatLngLiteral
+) {
+  if (!position) return;
+
+  if (isAdvancedMarker(overlay)) {
+    overlay.position = position;
+    return;
+  }
+
+  overlay.setPosition(position);
+}
+
+export function setOverlayMap(
+  overlay: OverlayGeometry,
+  map: google.maps.Map | null
+) {
+  if (isAdvancedMarker(overlay)) {
+    overlay.map = map;
+    return;
+  }
+
+  overlay.setMap(map);
 }
 
 export function isPolygon(

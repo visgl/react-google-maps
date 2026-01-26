@@ -1,7 +1,13 @@
 import {useMap, useMapsLibrary} from '@vis.gl/react-google-maps';
 import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 
-import {DrawResult, DrawingMode, OverlayGeometry, OverlayType} from './types';
+import {
+  DrawResult,
+  DrawingMode,
+  OverlayGeometry,
+  OverlayType,
+  setOverlayMap
+} from './types';
 
 export interface DrawingController {
   eventTarget: google.maps.MVCObject | null;
@@ -16,6 +22,7 @@ export function useDrawingManager(
 ): DrawingController {
   const map = useMap();
   const geometry = useMapsLibrary('geometry');
+  const markerLibrary = useMapsLibrary('marker');
 
   const [activeMode, setActiveModeState] = useState<DrawingMode>(initialMode);
   const activeModeRef = useRef(activeMode);
@@ -27,7 +34,9 @@ export function useDrawingManager(
   const startPointRef = useRef<google.maps.LatLng | null>(null);
   const pathRef = useRef<Array<google.maps.LatLng>>([]);
   const inProgressOverlayRef = useRef<OverlayGeometry | null>(null);
-  const firstVertexMarkerRef = useRef<google.maps.Marker | null>(null);
+  const firstVertexMarkerRef = useRef<
+    google.maps.Marker | google.maps.marker.AdvancedMarkerElement | null
+  >(null);
   const inProgressListenersRef = useRef<Array<google.maps.MapsEventListener>>(
     []
   );
@@ -50,7 +59,7 @@ export function useDrawingManager(
     if (!marker) return;
 
     google.maps.event.clearInstanceListeners(marker);
-    marker.setMap(null);
+    setOverlayMap(marker, null);
     firstVertexMarkerRef.current = null;
   }, []);
 
@@ -80,7 +89,7 @@ export function useDrawingManager(
       const overlay = inProgressOverlayRef.current;
 
       if (overlay && removeOverlay) {
-        overlay.setMap(null);
+        setOverlayMap(overlay, null);
       }
 
       clearInProgressListeners();
@@ -238,17 +247,28 @@ export function useDrawingManager(
     };
 
     const createFirstVertexMarker = (position: google.maps.LatLng) => {
-      const marker = new google.maps.Marker({
+      const AdvancedMarker =
+        markerLibrary?.AdvancedMarkerElement ??
+        google.maps.marker?.AdvancedMarkerElement;
+
+      if (!AdvancedMarker) return;
+
+      const markerElement = document.createElement('div');
+      markerElement.style.width = '14px';
+      markerElement.style.height = '14px';
+      markerElement.style.borderRadius = '50%';
+      markerElement.style.background = 'rgba(25, 82, 171, 0.9)';
+      markerElement.style.border = '2px solid white';
+      markerElement.style.boxShadow = '0 1px 4px rgba(0, 0, 0, 0.35)';
+
+      const marker = new AdvancedMarker({
         map,
         position,
-        clickable: true,
+        gmpClickable: true,
         zIndex: 1000,
-        icon: {
-          path: google.maps.SymbolPath.CIRCLE,
-          scale: 10,
-          fillOpacity: 0,
-          strokeOpacity: 0
-        }
+        content: markerElement,
+        anchorTop: '-50%',
+        anchorLeft: '-50%'
       });
 
       const listener = marker.addListener('click', () => {
@@ -266,7 +286,7 @@ export function useDrawingManager(
 
       return () => {
         google.maps.event.removeListener(listener);
-        marker.setMap(null);
+        setOverlayMap(marker, null);
       };
     };
 
@@ -278,10 +298,16 @@ export function useDrawingManager(
       if (!mode) return;
 
       if (mode === 'marker') {
-        const marker = new google.maps.Marker({
+        const AdvancedMarker =
+          markerLibrary?.AdvancedMarkerElement ??
+          google.maps.marker?.AdvancedMarkerElement;
+
+        if (!AdvancedMarker) return;
+
+        const marker = new AdvancedMarker({
           map,
           position: event.latLng,
-          draggable: true
+          gmpDraggable: true
         });
 
         finalizeOverlay('marker', marker);

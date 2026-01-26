@@ -9,7 +9,7 @@ const API_KEY =
 
 const App = () => {
   return (
-    <APIProvider apiKey={API_KEY} libraries={['geometry']}>
+    <APIProvider apiKey={API_KEY} libraries={['geometry', 'marker']}>
       <DrawingExample />
     </APIProvider>
   );

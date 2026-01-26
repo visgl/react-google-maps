@@ -14,6 +14,7 @@ const DrawingExample = () => {
       <Map
         defaultZoom={3}
         defaultCenter={{lat: 22.54992, lng: 0}}
+        mapId="712dec71c4c9382b"
         gestureHandling={'greedy'}
         disableDefaultUI={true}
         disableDoubleClickZoom={true}
