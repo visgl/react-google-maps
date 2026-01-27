@@ -73,11 +73,10 @@ export const InfoWindow: FunctionComponent<
   useEffect(
     () => {
       if (!mapsLibrary) return;
-
       contentContainerRef.current = document.createElement('div');
       headerContainerRef.current = document.createElement('div');
 
-      const opts: google.maps.InfoWindowOptions = infoWindowOptions;
+      const opts: google.maps.InfoWindowOptions = {...infoWindowOptions};
       if (pixelOffset) {
         opts.pixelOffset = new google.maps.Size(pixelOffset[0], pixelOffset[1]);
       }
@@ -144,7 +143,7 @@ export const InfoWindow: FunctionComponent<
     () => {
       if (!infoWindow) return;
 
-      const opts: google.maps.InfoWindowOptions = infoWindowOptions;
+      const opts: google.maps.InfoWindowOptions = {...infoWindowOptions};
       if (!pixelOffset) {
         opts.pixelOffset = null;
       } else {
@@ -159,7 +158,6 @@ export const InfoWindow: FunctionComponent<
             ? headerContent
             : headerContainerRef.current;
       }
-
       infoWindow.setOptions(infoWindowOptions);
     },
 
@@ -209,7 +207,7 @@ export const InfoWindow: FunctionComponent<
 
           const anchorOffsetY = contentBcr.y - anchorBcr.y;
 
-          const opts: google.maps.InfoWindowOptions = infoWindowOptions;
+          const opts: google.maps.InfoWindowOptions = {...infoWindowOptions};
 
           opts.pixelOffset = new google.maps.Size(
             pixelOffset ? pixelOffset[0] + anchorOffsetX : anchorOffsetX,
