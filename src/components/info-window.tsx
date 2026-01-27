@@ -160,7 +160,7 @@ export const InfoWindow: FunctionComponent<
             : headerContainerRef.current;
       }
 
-      infoWindow.setOptions(infoWindowOptions);
+      infoWindow.setOptions(opts);
     },
 
     // dependency `infoWindow` isn't needed since options are also passed
