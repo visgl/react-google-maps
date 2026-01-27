@@ -92,7 +92,7 @@ export const InfoWindow: FunctionComponent<
       }
 
       // intentionally shadowing the state variables here
-      const infoWindow = new google.maps.InfoWindow(infoWindowOptions);
+      const infoWindow = new google.maps.InfoWindow(opts);
       infoWindow.setContent(contentContainerRef.current);
 
       setInfoWindow(infoWindow);
