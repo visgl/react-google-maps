@@ -73,6 +73,7 @@ export const InfoWindow: FunctionComponent<
   useEffect(
     () => {
       if (!mapsLibrary) return;
+
       contentContainerRef.current = document.createElement('div');
       headerContainerRef.current = document.createElement('div');
 
@@ -158,6 +159,7 @@ export const InfoWindow: FunctionComponent<
             ? headerContent
             : headerContainerRef.current;
       }
+      
       infoWindow.setOptions(infoWindowOptions);
     },
 
