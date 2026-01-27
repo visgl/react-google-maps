@@ -159,7 +159,7 @@ export const InfoWindow: FunctionComponent<
             ? headerContent
             : headerContainerRef.current;
       }
-      
+
       infoWindow.setOptions(infoWindowOptions);
     },
 
