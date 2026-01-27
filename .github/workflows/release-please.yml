@@ -16,6 +16,7 @@ jobs:
       # Capture the PR object and release status
       release_created: ${{ steps.release.outputs.release_created }}
       pr: ${{ steps.release.outputs.pr }}
+      prs_created: ${{ steps.release.outputs.prs_created }}
     steps:
       - name: Release Please
         id: release
@@ -49,7 +50,10 @@ jobs:
 
   publish-prerelease:
     needs: release-please
-    if: ${{ needs.release-please.outputs.pr != '' && needs.release-please.outputs.release_created != 'true' }}
+    if: >-
+      ${{ needs.release-please.outputs.pr != ''
+        && needs.release-please.outputs.release_created != 'true'
+        && needs.release-please.outputs.prs_created == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
