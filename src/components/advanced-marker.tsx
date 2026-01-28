@@ -200,7 +200,25 @@ export type CustomMarkerContent = HTMLDivElement | null;
 
 export type AdvancedMarkerRef = google.maps.marker.AdvancedMarkerElement | null;
 
-function useAdvancedMarker(props: AdvancedMarkerProps) {
+function useAdvancedMarker({
+  children,
+  onClick,
+  className,
+  onMouseEnter,
+  onMouseLeave,
+  onDrag,
+  onDragStart,
+  onDragEnd,
+  collisionBehavior,
+  clickable,
+  draggable,
+  position: positionProp,
+  title,
+  zIndex,
+  anchorPoint,
+  anchorLeft,
+  anchorTop
+}: AdvancedMarkerProps) {
   const [marker, setMarker] =
     useState<google.maps.marker.AdvancedMarkerElement | null>(null);
   const [contentContainer, setContentContainer] =
@@ -209,25 +227,19 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
   const map = useMap();
   const markerLibrary = useMapsLibrary('marker');
 
-  const {
-    children,
-    onClick,
-    className,
-    onMouseEnter,
-    onMouseLeave,
-    onDrag,
-    onDragStart,
-    onDragEnd,
-    collisionBehavior,
-    clickable,
-    draggable,
-    position,
-    title,
-    zIndex,
-    anchorPoint,
-    anchorLeft,
-    anchorTop
-  } = props;
+  const positionLng = positionProp?.lng;
+  const positionLat = positionProp?.lat;
+  const position = useMemo(
+    (): google.maps.marker.AdvancedMarkerElement['position'] =>
+      positionLng !== undefined && positionLat !== undefined
+        ? {
+            lat:
+              typeof positionLat === 'function' ? positionLat() : positionLat,
+            lng: typeof positionLng === 'function' ? positionLng() : positionLng
+          }
+        : undefined,
+    [positionLat, positionLng]
+  );
 
   const numChildren = Children.count(children);
 
