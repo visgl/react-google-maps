@@ -210,6 +210,8 @@ export function useDrawingManagerEvents(
   }, [dispatch, drawingController, overlaysShouldUpdateRef]);
 }
 
+// Selection is reattached whenever `state.now` changes (e.g., undo/redo).
+// This keeps overlays selectable after snapshot restores.
 export function useOverlaySelection(
   map: google.maps.Map | null,
   overlays: Array<Overlay>,
@@ -259,7 +261,12 @@ export function useOverlaySelection(
     };
 
     const handleOverlayClick = (overlay: OverlayGeometry) => {
+      // Workaround: prevent the next map click (bubbled from overlay) from
+      // immediately clearing selection. Reset on next tick.
       ignoreNextMapClickRef.current = true;
+      window.setTimeout(() => {
+        ignoreNextMapClickRef.current = false;
+      }, 0);
       onOverlaySelect?.();
 
       if (deleteModeRef.current) {

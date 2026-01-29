@@ -191,6 +191,7 @@ export function useDrawingManager(
         return;
       }
 
+      // Enter finishes the active in-progress shape.
       if (event.key !== 'Enter') return;
 
       if (!isDrawingRef.current) return;
@@ -246,6 +247,7 @@ export function useDrawingManager(
       return 0;
     };
 
+    // Visible first-vertex marker enables polygon close by clicking the start.
     const createFirstVertexMarker = (position: google.maps.LatLng) => {
       const AdvancedMarker =
         markerLibrary?.AdvancedMarkerElement ??

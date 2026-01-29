@@ -96,6 +96,10 @@ export function isAdvancedMarker(
   );
 }
 
+// AdvancedMarkerElement exposes `position` while legacy Marker uses getters.
+// These helpers normalize read/write access across both APIs.
+// AdvancedMarkerElement exposes `position` while legacy Marker uses getters.
+// These helpers normalize read/write access across both APIs.
 export function getMarkerPosition(
   overlay: google.maps.Marker | google.maps.marker.AdvancedMarkerElement
 ): google.maps.LatLngLiteral | undefined {
@@ -124,6 +128,10 @@ export function setMarkerPosition(
   overlay.setPosition(position);
 }
 
+// AdvancedMarkerElement uses the `map` property instead of `setMap`.
+// Keep all overlay map changes centralized here.
+// AdvancedMarkerElement uses the `map` property instead of `setMap`.
+// Keep all overlay map changes centralized here.
 export function setOverlayMap(
   overlay: OverlayGeometry,
   map: google.maps.Map | null
