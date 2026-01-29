@@ -158,7 +158,7 @@ const Layout = () => {
             - The current map location and bounds
           */}
           <PlaceSearch
-            configPreset="standard"
+            allContent
             selectable
             truncationPreferred
             nearbySearch={nearbySearch}

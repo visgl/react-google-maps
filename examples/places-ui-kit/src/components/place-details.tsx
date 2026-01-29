@@ -1,10 +1,6 @@
 import {useMapsLibrary} from '@vis.gl/react-google-maps';
 import React, {FunctionComponent, useState} from 'react';
-import {
-  ConfigPreset,
-  ContentItem,
-  PlaceContentConfig
-} from './place-content-config';
+import {ContentItem, PlaceContentConfig} from './place-content-config';
 import {useDomEventListener, usePropBinding} from '../utility-hooks';
 import {CSSWithCustomProperties} from '../places';
 
@@ -48,13 +44,12 @@ export type PlaceDetailsProps = {
     | null;
 
   /**
-   * The config preset to use in case no custom config is wanted
-   * Allowed values are standard and all, default is standard.
+   * Show all available content. If set, this overwrites any custom content config
    */
-  configPreset?: ConfigPreset;
+  allContent?: boolean;
   /**
    * The array lists the content elements to display.
-   * If populated, a custom config will be rendered
+   * If populated, a custom config will be rendered, unless allContent is true
    */
   contentItems?: Array<ContentItem>;
 
@@ -97,7 +92,7 @@ export const PlaceDetails: FunctionComponent<PlaceDetailsProps> = props => {
     compact = false,
     placeId,
     location,
-    configPreset,
+    allContent,
     contentItems,
     orientation,
     truncationPreferred = false,
@@ -134,7 +129,7 @@ export const PlaceDetails: FunctionComponent<PlaceDetailsProps> = props => {
         place={placeId}></gmp-place-details-place-request>
       <gmp-place-details-location-request
         location={location}></gmp-place-details-location-request>
-      <PlaceContentConfig preset={configPreset} contentItems={contentItems} />
+      <PlaceContentConfig allContent={allContent} contentItems={contentItems} />
     </gmp-place-details-compact>
   ) : (
     <gmp-place-details
@@ -145,7 +140,7 @@ export const PlaceDetails: FunctionComponent<PlaceDetailsProps> = props => {
         location={location}></gmp-place-details-location-request>
       <gmp-place-details-place-request
         place={placeId}></gmp-place-details-place-request>
-      <PlaceContentConfig preset={configPreset} contentItems={contentItems} />
+      <PlaceContentConfig allContent={allContent} contentItems={contentItems} />
     </gmp-place-details>
   );
 };

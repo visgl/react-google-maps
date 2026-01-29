@@ -1,12 +1,5 @@
 import React, {FunctionComponent, useEffect, useRef} from 'react';
 
-export const ConfigPreset = {
-  STANDARD: 'standard',
-  ALL: 'all'
-} as const;
-
-export type ConfigPreset = (typeof ConfigPreset)[keyof typeof ConfigPreset];
-
 // --- 2. Custom Element Options ---
 // These are the possible children for gmp-place-content-config when type is 'custom'.
 // Note: We've made these specific to PlaceDetailsElement as per the prompt.
@@ -58,13 +51,12 @@ export type ContentItem =
 
 export type PlaceContentConfigProps = {
   /**
-   * The preset to use in case no custom config is wanted
-   * Allowed values are standard and all, default is standard.
+   * Show all available content. If set, this overwrites any custom content config
    */
-  preset?: ConfigPreset;
+  allContent?: boolean;
   /**
    * The array lists the content elements to display.
-   * If populated, a custom config will be rendered
+   * If populated, a custom config will be rendered, unless allContent is true
    */
   contentItems?: Array<ContentItem>;
 };
@@ -166,19 +158,22 @@ const renderContentItem = (itemConfig: ContentItem, key: number) => {
 export const PlaceContentConfig: FunctionComponent<
   PlaceContentConfigProps
 > = props => {
-  const {preset, contentItems} = props;
+  const {allContent, contentItems} = props;
 
-  // the config will default to custom if contentItems are explicitely set
-  if (contentItems && contentItems.length) {
-    // Render the custom config element with its children
+  // allContent takes priority over any custom content config
+  if (allContent) {
+    return <gmp-place-all-content />;
+  }
+  // to render a custom content config allContent needs to be unset or false and contentItems must not be empty
+  else if (contentItems && contentItems.length) {
     return (
       <gmp-place-content-config>
         {contentItems.map(renderContentItem)}
       </gmp-place-content-config>
     );
-  } else if (preset === ConfigPreset.ALL) {
-    return <gmp-place-all-content />;
-  } else {
+  }
+  // default is standard-content
+  else {
     return <gmp-place-standard-content />;
   }
 };

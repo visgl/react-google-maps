@@ -1,10 +1,6 @@
 import {useMapsLibrary} from '@vis.gl/react-google-maps';
 import React, {FunctionComponent, useEffect, useState} from 'react';
-import {
-  ConfigPreset,
-  ContentItem,
-  PlaceContentConfig
-} from './place-content-config';
+import {ContentItem, PlaceContentConfig} from './place-content-config';
 import {Orientation} from './place-details';
 import {useDomEventListener, usePropBinding} from '../utility-hooks';
 import {CSSWithCustomProperties} from '../places';
@@ -83,13 +79,12 @@ export type PlaceSearchProps = {
   textSearch?: TextSearchOptions;
 
   /**
-   * The config preset to use in case no custom config is wanted
-   * Allowed values are standard and all, default is standard.
+   * Show all available content. If set, this overwrites any custom content config
    */
-  configPreset?: ConfigPreset;
+  allContent?: boolean;
   /**
    * The array lists the content elements to display.
-   * If populated, a custom config will be rendered
+   * If populated, a custom config will be rendered, unless allContent is true
    */
   contentItems?: Array<ContentItem>;
 
@@ -121,7 +116,7 @@ export const PlaceSearch: FunctionComponent<PlaceSearchProps> = props => {
     style,
     nearbySearch,
     textSearch,
-    configPreset,
+    allContent,
     contentItems,
     attributionPosition,
     orientation = Orientation.VERTICAL,
@@ -215,7 +210,7 @@ export const PlaceSearch: FunctionComponent<PlaceSearchProps> = props => {
 
   return (
     <gmp-place-search ref={setPlaceSearch} className={className} style={style}>
-      <PlaceContentConfig preset={configPreset} contentItems={contentItems} />
+      <PlaceContentConfig allContent={allContent} contentItems={contentItems} />
     </gmp-place-search>
   );
 };
