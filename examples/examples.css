@@ -120,11 +120,52 @@ html[data-theme='dark'] .gm-style {
   background: rgb(235, 235, 235);
 }
 
+.drawing-history button.is-active {
+  background: rgb(255, 231, 231);
+  color: rgb(171, 25, 25);
+}
+
 .drawing-history button:disabled:hover,
 .drawing-history button:disabled {
   background: rgb(255, 255, 255);
   opacity: 0.5;
   cursor: default;
+}
+
+.drawing-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.drawing-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 27px;
+  box-sizing: border-box;
+}
+
+.drawing-toolbar button {
+  height: 100%;
+  background: rgb(255, 255, 255);
+  border: 0px;
+  margin: 0px;
+  cursor: pointer;
+  color: rgb(86, 86, 86);
+  padding: 0 8px;
+  border-radius: 2px;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px -1px;
+  font-size: 12px;
+}
+
+.drawing-toolbar button:hover {
+  background: rgb(235, 235, 235);
+}
+
+.drawing-toolbar button.is-active {
+  background: rgb(227, 239, 255);
+  color: rgb(25, 82, 171);
 }
 
 .static-map-grid,
