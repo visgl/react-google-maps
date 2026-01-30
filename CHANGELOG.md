@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.8.0](https://github.com/visgl/react-google-maps/compare/v1.7.1...v1.8.0) (2026-01-30)
+
+
+### Features
+
+* **api-loader:** migrate to @googlemaps/js-api-loader ([#885](https://github.com/visgl/react-google-maps/issues/885)) ([4af51dd](https://github.com/visgl/react-google-maps/commit/4af51ddf42953a7b0ca3050be712aed0e8efce32))
+
+
+### Bug Fixes
+
+* trigger release-please action ([0eaabeb](https://github.com/visgl/react-google-maps/commit/0eaabeba45349fae98118e38929d8111134a5ba5))
+
 ## [1.7.1](https://github.com/visgl/react-google-maps/compare/v1.7.0...v1.7.1) (2025-11-03)
 
 
