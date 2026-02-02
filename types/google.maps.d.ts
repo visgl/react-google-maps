@@ -510,8 +510,7 @@ declare namespace google.maps {
      * Polyline3DInteractiveElementOptions object used to define the properties that can be set on a Polyline3DInteractiveElement.
      * @see https://developers.google.com/maps/documentation/javascript/reference/3d-map#Polyline3DInteractiveElementOptions
      */
-    interface Polyline3DInteractiveElementOptions
-      extends Polyline3DElementOptions {}
+    interface Polyline3DInteractiveElementOptions extends Polyline3DElementOptions {}
 
     /**
      * A 3D polygon defines a series of connected coordinates in an ordered sequence.
@@ -666,8 +665,7 @@ declare namespace google.maps {
      * Polygon3DInteractiveElementOptions object used to define the properties that can be set on a Polygon3DInteractiveElement.
      * @see https://developers.google.com/maps/documentation/javascript/reference/3d-map#Polygon3DInteractiveElementOptions
      */
-    interface Polygon3DInteractiveElementOptions
-      extends Polygon3DElementOptions {}
+    interface Polygon3DInteractiveElementOptions extends Polygon3DElementOptions {}
 
     /**
      * A custom HTML element that renders a popover.
@@ -753,6 +751,53 @@ declare namespace google.maps {
        */
       RELATIVE_TO_MESH = 'RELATIVE_TO_MESH'
     }
+
+    /**
+     * Map3DElementOptions object used to define the properties that can be set on a Map3DElement.
+     * @see https://developers.google.com/maps/documentation/javascript/reference/3d-map#Map3DElementOptions
+     */
+    interface Map3DElementOptions {
+      bounds?: google.maps.LatLngBounds | google.maps.LatLngBoundsLiteral;
+      center?: google.maps.LatLngAltitude | google.maps.LatLngAltitudeLiteral;
+      defaultLabelsDisabled?: boolean;
+      defaultUIDisabled?: boolean;
+      gestureHandling?: GestureHandling;
+      heading?: number;
+      maxAltitude?: number;
+      maxHeading?: number;
+      maxTilt?: number;
+      minAltitude?: number;
+      minHeading?: number;
+      minTilt?: number;
+      mode?: MapMode;
+      range?: number;
+      roll?: number;
+      tilt?: number;
+    }
+
+    /**
+     * Augmentation for Map3DElement to add animation methods.
+     * The base Map3DElement class is defined in @types/google.maps.
+     * @see https://developers.google.com/maps/documentation/javascript/reference/3d-map#Map3DElement
+     */
+    interface Map3DElement {
+      /**
+       * Starts an animation that makes the camera orbit around a point.
+       * @param options Configuration options for the animation
+       */
+      flyCameraAround(options: FlyAroundAnimationOptions): void;
+
+      /**
+       * Starts an animation that moves the camera to a new position.
+       * @param options Configuration options for the animation
+       */
+      flyCameraTo(options: FlyToAnimationOptions): void;
+
+      /**
+       * Stops any currently running camera animation.
+       */
+      stopCameraAnimation(): void;
+    }
   }
 
   /**
@@ -803,317 +848,6 @@ namespace google.maps.marker {
     glyphColor?: string | null;
     glyphSrc?: string | URL | null;
     glyphText?: string | null;
-  }
-}
-
-declare namespace google.maps.maps3d {
-  export enum AltitudeMode {
-    ABSOLUTE = 'ABSOLUTE',
-    CLAMP_TO_GROUND = 'CLAMP_TO_GROUND',
-    RELATIVE_TO_GROUND = 'RELATIVE_TO_GROUND',
-    RELATIVE_TO_MESH = 'RELATIVE_TO_MESH'
-  }
-
-  export interface CameraOptions {
-    center?:
-      | google.maps.LatLngAltitude
-      | google.maps.LatLngAltitudeLiteral
-      | null;
-    heading?: number | null;
-    range?: number | null;
-    roll?: number | null;
-    tilt?: number | null;
-  }
-
-  export interface FlyAroundAnimationOptions {
-    camera: google.maps.maps3d.CameraOptions;
-    durationMillis?: number;
-    rounds?: number;
-  }
-
-  export interface FlyToAnimationOptions {
-    durationMillis?: number;
-    endCamera: google.maps.maps3d.CameraOptions;
-  }
-
-  export class Map3DElement
-    extends HTMLElement
-    implements google.maps.maps3d.Map3DElementOptions
-  {
-    constructor(options?: google.maps.maps3d.Map3DElementOptions);
-    bounds?: google.maps.LatLngBounds | google.maps.LatLngBoundsLiteral | null;
-    center?:
-      | google.maps.LatLngAltitude
-      | google.maps.LatLngAltitudeLiteral
-      | null;
-    defaultUIDisabled?: boolean | null;
-    heading?: number | null;
-    maxAltitude?: number | null;
-    maxHeading?: number | null;
-    maxTilt?: number | null;
-    minAltitude?: number | null;
-    minHeading?: number | null;
-    minTilt?: number | null;
-    mode?: google.maps.maps3d.MapMode | null;
-    range?: number | null;
-    roll?: number | null;
-    tilt?: number | null;
-    flyCameraAround(
-      options: google.maps.maps3d.FlyAroundAnimationOptions
-    ): void;
-    flyCameraTo(options: google.maps.maps3d.FlyToAnimationOptions): void;
-    stopCameraAnimation(): void;
-  }
-
-  export interface Map3DElementOptions {
-    bounds?: google.maps.LatLngBounds | google.maps.LatLngBoundsLiteral | null;
-    center?:
-      | google.maps.LatLngAltitude
-      | google.maps.LatLngAltitudeLiteral
-      | null;
-    defaultUIDisabled?: boolean | null;
-    heading?: number | null;
-    maxAltitude?: number | null;
-    maxHeading?: number | null;
-    maxTilt?: number | null;
-    minAltitude?: number | null;
-    minHeading?: number | null;
-    minTilt?: number | null;
-    mode?: google.maps.maps3d.MapMode | null;
-    range?: number | null;
-    roll?: number | null;
-    tilt?: number | null;
-  }
-
-  export enum MapMode {
-    HYBRID = 'HYBRID',
-    SATELLITE = 'SATELLITE'
-  }
-
-  export class Marker3DElement
-    extends HTMLElement
-    implements google.maps.maps3d.Marker3DElementOptions
-  {
-    constructor(options?: google.maps.maps3d.Marker3DElementOptions);
-    altitudeMode?: google.maps.maps3d.AltitudeMode | null;
-    collisionBehavior?: google.maps.CollisionBehavior | null;
-    drawsWhenOccluded?: boolean | null;
-    extruded?: boolean | null;
-    label?: string | null;
-    position?:
-      | google.maps.LatLngLiteral
-      | google.maps.LatLngAltitude
-      | google.maps.LatLngAltitudeLiteral
-      | null;
-    sizePreserved?: boolean | null;
-    zIndex?: number | null;
-  }
-
-  export interface Marker3DElementOptions {
-    altitudeMode?: google.maps.maps3d.AltitudeMode | null;
-    collisionBehavior?: google.maps.CollisionBehavior | null;
-    drawsWhenOccluded?: boolean | null;
-    extruded?: boolean | null;
-    label?: string | null;
-    position?:
-      | google.maps.LatLngLiteral
-      | google.maps.LatLngAltitude
-      | google.maps.LatLngAltitudeLiteral
-      | null;
-    sizePreserved?: boolean | null;
-    zIndex?: number | null;
-  }
-
-  export class Marker3DInteractiveElement
-    extends google.maps.maps3d.Marker3DElement
-    implements google.maps.maps3d.Marker3DInteractiveElementOptions
-  {
-    constructor(options?: google.maps.maps3d.Marker3DInteractiveElementOptions);
-    gmpPopoverTargetElement?: google.maps.maps3d.PopoverElement | null;
-    title: string;
-  }
-
-  export interface Marker3DInteractiveElementOptions
-    extends google.maps.maps3d.Marker3DElementOptions {
-    gmpPopoverTargetElement?: google.maps.maps3d.PopoverElement | null;
-    title?: string;
-  }
-
-  export class Model3DElement
-    extends HTMLElement
-    implements google.maps.maps3d.Model3DElementOptions
-  {
-    constructor(options?: google.maps.maps3d.Model3DElementOptions);
-    altitudeMode?: google.maps.maps3d.AltitudeMode | null;
-    orientation?:
-      | google.maps.Orientation3D
-      | google.maps.Orientation3DLiteral
-      | null;
-    position?:
-      | google.maps.LatLngLiteral
-      | google.maps.LatLngAltitude
-      | google.maps.LatLngAltitudeLiteral
-      | null;
-    scale?: number | google.maps.Vector3D | google.maps.Vector3DLiteral | null;
-    src?: string | URL | null;
-  }
-
-  export interface Model3DElementOptions {
-    altitudeMode?: google.maps.maps3d.AltitudeMode | null;
-    orientation?:
-      | google.maps.Orientation3D
-      | google.maps.Orientation3DLiteral
-      | null;
-    position?:
-      | google.maps.LatLngLiteral
-      | google.maps.LatLngAltitude
-      | google.maps.LatLngAltitudeLiteral
-      | null;
-    scale?: number | google.maps.Vector3D | google.maps.Vector3DLiteral | null;
-    src?: string | URL | null;
-  }
-
-  export class Model3DInteractiveElement
-    extends google.maps.maps3d.Model3DElement
-    implements google.maps.maps3d.Model3DInteractiveElementOptions
-  {
-    constructor(options?: google.maps.maps3d.Model3DElementOptions);
-  }
-
-  export interface Model3DInteractiveElementOptions
-    extends google.maps.maps3d.Model3DElementOptions {}
-
-  export class Polygon3DElement
-    extends HTMLElement
-    implements google.maps.maps3d.Polygon3DElementOptions
-  {
-    constructor(options?: google.maps.maps3d.Polygon3DElementOptions);
-    altitudeMode?: google.maps.maps3d.AltitudeMode | null;
-    drawsOccludedSegments?: boolean | null;
-    extruded?: boolean | null;
-    fillColor?: string | null;
-    geodesic?: boolean | null;
-    innerCoordinates?: Iterable<
-      Iterable<
-        | google.maps.LatLngAltitude
-        | google.maps.LatLngAltitudeLiteral
-        | google.maps.LatLngLiteral
-      >
-    > | null;
-    outerCoordinates?: Iterable<
-      | google.maps.LatLngAltitude
-      | google.maps.LatLngAltitudeLiteral
-      | google.maps.LatLngLiteral
-    > | null;
-    strokeColor?: string | null;
-    strokeWidth?: number | null;
-    zIndex?: number | null;
-  }
-
-  export interface Polygon3DElementOptions {
-    altitudeMode?: google.maps.maps3d.AltitudeMode | null;
-    drawsOccludedSegments?: boolean | null;
-    extruded?: boolean | null;
-    fillColor?: string | null;
-    geodesic?: boolean | null;
-    innerCoordinates?: Iterable<
-      | Iterable<google.maps.LatLngAltitude | google.maps.LatLngAltitudeLiteral>
-      | Iterable<google.maps.LatLngLiteral>
-    > | null;
-    outerCoordinates?: Iterable<
-      | google.maps.LatLngAltitude
-      | google.maps.LatLngAltitudeLiteral
-      | google.maps.LatLngLiteral
-    > | null;
-    strokeColor?: string | null;
-    strokeWidth?: number | null;
-    zIndex?: number | null;
-  }
-
-  export class Polygon3DInteractiveElement
-    extends google.maps.maps3d.Polygon3DElement
-    implements google.maps.maps3d.Polygon3DInteractiveElementOptions
-  {
-    constructor(options?: google.maps.maps3d.Polygon3DElementOptions);
-  }
-
-  export interface Polygon3DInteractiveElementOptions
-    extends google.maps.maps3d.Polygon3DElementOptions {}
-
-  export class Polyline3DElement
-    extends HTMLElement
-    implements google.maps.maps3d.Polyline3DElementOptions
-  {
-    constructor(options?: google.maps.maps3d.Polyline3DElementOptions);
-    altitudeMode?: google.maps.maps3d.AltitudeMode | null;
-    coordinates?: Iterable<
-      | google.maps.LatLngAltitude
-      | google.maps.LatLngAltitudeLiteral
-      | google.maps.LatLngLiteral
-    > | null;
-    drawsOccludedSegments?: boolean | null;
-    extruded?: boolean | null;
-    geodesic?: boolean | null;
-    outerColor?: string | null;
-    outerWidth?: number | null;
-    strokeColor?: string | null;
-    strokeWidth?: number | null;
-    zIndex?: number | null;
-  }
-
-  export interface Polyline3DElementOptions {
-    altitudeMode?: google.maps.maps3d.AltitudeMode | null;
-    coordinates?: Iterable<
-      | google.maps.LatLngAltitude
-      | google.maps.LatLngAltitudeLiteral
-      | google.maps.LatLngLiteral
-    > | null;
-    drawsOccludedSegments?: boolean | null;
-    extruded?: boolean | null;
-    geodesic?: boolean | null;
-    outerColor?: string | null;
-    outerWidth?: number | null;
-    strokeColor?: string | null;
-    strokeWidth?: number | null;
-    zIndex?: number | null;
-  }
-
-  export class Polyline3DInteractiveElement
-    extends google.maps.maps3d.Polyline3DElement
-    implements google.maps.maps3d.Polyline3DInteractiveElementOptions
-  {
-    constructor(options?: google.maps.maps3d.Polyline3DElementOptions);
-  }
-
-  export interface Polyline3DInteractiveElementOptions
-    extends google.maps.maps3d.Polyline3DElementOptions {}
-
-  export class PopoverElement
-    extends HTMLElement
-    implements google.maps.maps3d.PopoverElementOptions
-  {
-    constructor(options?: google.maps.maps3d.PopoverElementOptions);
-    altitudeMode?: google.maps.maps3d.AltitudeMode | null;
-    lightDismissDisabled?: boolean | null;
-    open?: boolean | null;
-    positionAnchor?:
-      | google.maps.LatLngLiteral
-      | google.maps.LatLngAltitudeLiteral
-      | google.maps.maps3d.Marker3DInteractiveElement
-      | string
-      | null;
-  }
-
-  export interface PopoverElementOptions {
-    altitudeMode?: google.maps.maps3d.AltitudeMode | null;
-    lightDismissDisabled?: boolean | null;
-    open?: boolean | null;
-    positionAnchor?:
-      | google.maps.LatLngLiteral
-      | google.maps.LatLngAltitudeLiteral
-      | string
-      | google.maps.maps3d.Marker3DInteractiveElement
-      | null;
   }
 }
 

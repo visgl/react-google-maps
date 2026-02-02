@@ -60,16 +60,6 @@ export type GestureHandling =
   (typeof GestureHandling)[keyof typeof GestureHandling];
 
 /**
- * Extended Map3DElement type with animation methods that may not be in @types/google.maps yet.
- * These methods are part of the Maps JavaScript API but type definitions may lag behind.
- */
-interface Map3DElementWithAnimations extends google.maps.maps3d.Map3DElement {
-  flyCameraAround(options: google.maps.maps3d.FlyAroundAnimationOptions): void;
-  flyCameraTo(options: google.maps.maps3d.FlyToAnimationOptions): void;
-  stopCameraAnimation(): void;
-}
-
-/**
  * Context value for Map3D, providing access to the Map3DElement instance.
  */
 export interface GoogleMaps3DContextValue {
@@ -205,7 +195,6 @@ export const Map3D = forwardRef<Map3DRef, Map3DProps>((props, ref) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [map3d, id]);
 
-  const map3dWithAnimations = map3d as Map3DElementWithAnimations | null;
   useImperativeHandle(
     ref,
     () => ({
@@ -213,16 +202,16 @@ export const Map3D = forwardRef<Map3DRef, Map3DProps>((props, ref) => {
       flyCameraAround: (
         options: google.maps.maps3d.FlyAroundAnimationOptions
       ) => {
-        map3dWithAnimations?.flyCameraAround(options);
+        map3d?.flyCameraAround(options);
       },
       flyCameraTo: (options: google.maps.maps3d.FlyToAnimationOptions) => {
-        map3dWithAnimations?.flyCameraTo(options);
+        map3d?.flyCameraTo(options);
       },
       stopCameraAnimation: () => {
-        map3dWithAnimations?.stopCameraAnimation();
+        map3d?.stopCameraAnimation();
       }
     }),
-    [map3d, map3dWithAnimations]
+    [map3d]
   );
 
   const combinedStyle = useMemo(
