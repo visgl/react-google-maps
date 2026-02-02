@@ -15,13 +15,15 @@ jobs:
           node-version: 24
           cache: npm
 
-      - name: Install dependencies
+      - name: Install dependencies (main)
+        run: npm ci
+
+      - name: Install dependencies (website)
         working-directory: ./website
         run: npm ci
 
       - name: Build website
         working-directory: ./website
-        run: |
-          npm run build
+        run: npm run build
         env:
           GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
