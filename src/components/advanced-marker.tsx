@@ -6,7 +6,6 @@
 // immutable state in React, it is a necessary evil to integrate with the
 // Google Maps API. The mutations are carefully managed within the `useEffect`
 // hooks to ensure that they only happen when the props change.
-
 import type {PropsWithChildren, Ref} from 'react';
 import React, {
   Children,

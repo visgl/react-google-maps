@@ -1,7 +1,9 @@
 import 'google.maps';
 import type {CustomElement} from './utils';
 
-type Map3DProps = {
+// Internal types for JSX intrinsic elements - not exported
+// Component props are defined separately in the component files
+type Map3DElementProps = {
   bounds?:
     | google.maps.LatLngBounds
     | google.maps.LatLngBoundsLiteral
@@ -39,7 +41,7 @@ type Map3DProps = {
   'min-tilt'?: string;
 };
 
-type Marker3DProps = {
+type Marker3DElementProps = {
   extruded?: boolean | string | null;
   label?: string | null;
   position?:
@@ -163,15 +165,15 @@ type PopoverProps = {
 declare module 'react' {
   namespace JSX {
     interface IntrinsicElements {
-      'gmp-map-3d': CustomElement<Map3DProps, google.maps.Map3DElement>;
+      'gmp-map-3d': CustomElement<Map3DElementProps, google.maps.Map3DElement>;
 
       'gmp-marker-3d': CustomElement<
-        Marker3DProps,
+        Marker3DElementProps,
         google.maps.Marker3DElement
       >;
 
       'gmp-marker-3d-interactive': CustomElement<
-        Marker3DProps & {
+        Marker3DElementProps & {
           title?: string;
           gmpPopoverTargetElement?: google.maps.maps3d.PopoverElement | null;
           'gmp-popover-target-element'?: string;
