@@ -22,6 +22,7 @@ const sidebars = {
         'geometry',
         'heatmap',
         'drawing',
+        'terra-draw',
         'autocomplete',
         'directions',
         'routes-api',
