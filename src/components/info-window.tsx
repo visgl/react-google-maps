@@ -77,7 +77,7 @@ export const InfoWindow: FunctionComponent<
       contentContainerRef.current = document.createElement('div');
       headerContainerRef.current = document.createElement('div');
 
-      const opts: google.maps.InfoWindowOptions = infoWindowOptions;
+      const opts: google.maps.InfoWindowOptions = {...infoWindowOptions};
       if (pixelOffset) {
         opts.pixelOffset = new google.maps.Size(pixelOffset[0], pixelOffset[1]);
       }
@@ -92,7 +92,7 @@ export const InfoWindow: FunctionComponent<
       }
 
       // intentionally shadowing the state variables here
-      const infoWindow = new google.maps.InfoWindow(infoWindowOptions);
+      const infoWindow = new google.maps.InfoWindow(opts);
       infoWindow.setContent(contentContainerRef.current);
 
       setInfoWindow(infoWindow);
@@ -144,7 +144,7 @@ export const InfoWindow: FunctionComponent<
     () => {
       if (!infoWindow) return;
 
-      const opts: google.maps.InfoWindowOptions = infoWindowOptions;
+      const opts: google.maps.InfoWindowOptions = {...infoWindowOptions};
       if (!pixelOffset) {
         opts.pixelOffset = null;
       } else {
@@ -160,7 +160,7 @@ export const InfoWindow: FunctionComponent<
             : headerContainerRef.current;
       }
 
-      infoWindow.setOptions(infoWindowOptions);
+      infoWindow.setOptions(opts);
     },
 
     // dependency `infoWindow` isn't needed since options are also passed
@@ -209,7 +209,7 @@ export const InfoWindow: FunctionComponent<
 
           const anchorOffsetY = contentBcr.y - anchorBcr.y;
 
-          const opts: google.maps.InfoWindowOptions = infoWindowOptions;
+          const opts: google.maps.InfoWindowOptions = {...infoWindowOptions};
 
           opts.pixelOffset = new google.maps.Size(
             pixelOffset ? pixelOffset[0] + anchorOffsetX : anchorOffsetX,
