@@ -220,6 +220,30 @@ test('calls onError when loading the Google Maps JavaScript API fails', async ()
   await waitFor(() => expect(onErrorMock).toHaveBeenCalled());
 });
 
+test('sets fetchAppCheckToken on google.maps.Settings after API loads', async () => {
+  const mockFetchToken = jest
+    .fn()
+    .mockResolvedValue({token: 'test-token'});
+
+  // Set up the Settings mock
+  const settingsInstance = {fetchAppCheckToken: null as (() => Promise<google.maps.MapsAppCheckTokenResult>) | null};
+  google.maps.Settings = {
+    getInstance: () => settingsInstance
+  } as unknown as typeof google.maps.Settings;
+
+  render(
+    <APIProvider apiKey={'apikey'} fetchAppCheckToken={mockFetchToken}>
+      <ContextSpyComponent />
+    </APIProvider>
+  );
+
+  await act(async () => {
+    triggerMapsApiLoaded();
+  });
+
+  expect(settingsInstance.fetchAppCheckToken).toBe(mockFetchToken);
+});
+
 describe('internalUsageAttributionIds', () => {
   test('provides default attribution IDs in context', () => {
     render(
