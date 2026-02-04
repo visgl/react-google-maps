@@ -221,12 +221,14 @@ test('calls onError when loading the Google Maps JavaScript API fails', async ()
 });
 
 test('sets fetchAppCheckToken on google.maps.Settings after API loads', async () => {
-  const mockFetchToken = jest
-    .fn()
-    .mockResolvedValue({token: 'test-token'});
+  const mockFetchToken = jest.fn().mockResolvedValue({token: 'test-token'});
 
   // Set up the Settings mock
-  const settingsInstance = {fetchAppCheckToken: null as (() => Promise<google.maps.MapsAppCheckTokenResult>) | null};
+  const settingsInstance = {
+    fetchAppCheckToken: null as
+      | (() => Promise<google.maps.MapsAppCheckTokenResult>)
+      | null
+  };
   google.maps.Settings = {
     getInstance: () => settingsInstance
   } as unknown as typeof google.maps.Settings;
