@@ -1,13 +1,11 @@
 import React, {FunctionComponent, PropsWithChildren} from 'react';
-import {render, screen, waitFor} from '@testing-library/react';
+import {cleanup, render, screen, waitFor} from '@testing-library/react';
 import {initialize, mockInstances} from '@googlemaps/jest-mocks';
 import '@testing-library/jest-dom';
 
 import {Map as GoogleMap, MapProps} from '../map';
 import {APIProviderContext, APIProviderContextValue} from '../api-provider';
 import {APILoadingStatus} from '../../libraries/api-loading-status';
-
-jest.mock('../../libraries/google-maps-api-loader');
 
 let wrapper: FunctionComponent<PropsWithChildren>;
 let mockContextValue: jest.MockedObject<APIProviderContextValue>;
@@ -18,6 +16,7 @@ let createMapSpy: jest.Mock<
 
 beforeEach(() => {
   initialize();
+  jest.clearAllMocks();
 
   mockContextValue = {
     importLibrary: jest.fn(),
@@ -27,6 +26,10 @@ beforeEach(() => {
     addMapInstance: jest.fn(),
     removeMapInstance: jest.fn(),
     clearMapInstances: jest.fn(),
+    map3dInstances: {},
+    addMap3DInstance: jest.fn(),
+    removeMap3DInstance: jest.fn(),
+    clearMap3DInstances: jest.fn(),
     internalUsageAttributionIds: null
   };
 
@@ -50,8 +53,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  jest.resetAllMocks();
-  jest.restoreAllMocks();
+  cleanup();
 });
 
 test('map instance is created after api is loaded', async () => {

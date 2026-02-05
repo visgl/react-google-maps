@@ -1,7 +1,7 @@
 import React, {FunctionComponent, PropsWithChildren} from 'react';
-import '@testing-library/jest-dom';
-import {renderHook} from '@testing-library/react';
+import {cleanup, renderHook} from '@testing-library/react';
 import {initialize, mockInstances} from '@googlemaps/jest-mocks';
+import '@testing-library/jest-dom';
 
 import {useMap} from '../use-map';
 import {
@@ -11,7 +11,7 @@ import {
 import {Map as GoogleMap} from '../../components/map';
 import {APILoadingStatus} from '../../libraries/api-loading-status';
 
-let MockApiContextProvider: FunctionComponent<PropsWithChildren>;
+let MockContextProvider: FunctionComponent<PropsWithChildren>;
 let mockContextValue: jest.MockedObject<APIProviderContextValue>;
 let createMapSpy: jest.Mock<
   void,
@@ -19,8 +19,8 @@ let createMapSpy: jest.Mock<
 >;
 
 beforeEach(() => {
-  // initialize @googlemaps/jest-mocks
   initialize();
+  jest.clearAllMocks();
 
   mockContextValue = {
     importLibrary: jest.fn(),
@@ -30,16 +30,19 @@ beforeEach(() => {
     addMapInstance: jest.fn(),
     removeMapInstance: jest.fn(),
     clearMapInstances: jest.fn(),
+    map3dInstances: {},
+    addMap3DInstance: jest.fn(),
+    removeMap3DInstance: jest.fn(),
+    clearMap3DInstances: jest.fn(),
     internalUsageAttributionIds: null
   };
 
-  MockApiContextProvider = ({children}) => (
+  MockContextProvider = ({children}) => (
     <APIProviderContext.Provider value={mockContextValue}>
       {children}
     </APIProviderContext.Provider>
   );
 
-  // override the google.maps.Map constructor with a spied-on version
   createMapSpy = jest.fn();
   google.maps.Map = class extends google.maps.Map {
     constructor(...args: ConstructorParameters<typeof google.maps.Map>) {
@@ -49,14 +52,17 @@ beforeEach(() => {
   };
 });
 
-test('returns the parent map instance when called without id', async () => {
-  // Create wrapper component
+afterEach(() => {
+  cleanup();
+});
+
+test('returns the parent map instance when called without id', () => {
   const wrapper = ({children}: React.PropsWithChildren) => (
-    <MockApiContextProvider>
+    <MockContextProvider>
       <GoogleMap zoom={8} center={{lat: 53.55, lng: 10.05}}>
         {children}
       </GoogleMap>
-    </MockApiContextProvider>
+    </MockContextProvider>
   );
 
   const {result} = renderHook(() => useMap(), {wrapper});
@@ -69,9 +75,9 @@ test('returns the parent map instance when called without id', async () => {
   expect(result.current).toBe(map);
 });
 
-test('it should return a map instance by its id', () => {
+test('returns a map instance by its id', () => {
   const wrapper = ({children}: React.PropsWithChildren) => (
-    <MockApiContextProvider>{children}</MockApiContextProvider>
+    <MockContextProvider>{children}</MockContextProvider>
   );
 
   const map1 = new google.maps.Map(null as never);
@@ -92,7 +98,7 @@ test('it should return a map instance by its id', () => {
   expect(renderHookResult.result.current).toBe(null);
 });
 
-test('it should log an error when used outside the APIProvider', () => {
+test('logs an error when used outside the APIProvider', () => {
   const consoleErrorSpy = jest
     .spyOn(console, 'error')
     .mockImplementation(() => {});

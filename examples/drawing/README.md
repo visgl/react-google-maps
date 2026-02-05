@@ -1,6 +1,6 @@
 # Drawing Tools Example
 
-This example shows how to use the [google.maps.drawing.DrawingManager][drawing-manager] to draw shapes or markers on the map. In addition the example implements an undo/redo flow for the drawing tools. If you only want to add the the drawing tools to your map take a look at the `use-drawing-manager` hook.
+This example shows how to build custom drawing tools using Maps JavaScript API overlays to draw shapes or markers on the map. In addition the example implements an undo/redo flow for drawing interactions.
 
 ## Google Maps Platform API Key
 
@@ -33,4 +33,3 @@ npm run start-local
 The regular `npm start` task is only used for the standalone versions of the example (CodeSandbox for example)
 
 [get-api-key]: https://developers.google.com/maps/documentation/javascript/get-api-key
-[drawing-manager]: https://developers.google.com/maps/documentation/javascript/drawinglayer
