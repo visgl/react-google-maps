@@ -9,15 +9,15 @@ const noop = () => {};
  * @internal
  */
 export function useMapsEventListener<T extends (...args: any[]) => void>(
-  target: object | null,
-  name: string,
-  callback: T | null | undefined
+  target?: object | null,
+  name?: string,
+  callback?: T | null
 ) {
   const eventFn = useEffectEvent(callback ?? noop);
   const isCallbackDefined = Boolean(callback);
 
   useEffect(() => {
-    if (!target || !isCallbackDefined) return;
+    if (!target || !name || !isCallbackDefined) return;
 
     const listener = google.maps.event.addListener(target, name, eventFn);
 

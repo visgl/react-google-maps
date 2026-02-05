@@ -9,15 +9,15 @@ const noop = () => {};
  * @internal
  */
 export function useDomEventListener<T extends (...args: any[]) => void>(
-  target: Node | null | undefined,
-  name: string,
-  callback: T | null | undefined
+  target?: Node | null,
+  name?: string,
+  callback?: T | null
 ) {
   const eventFn = useEffectEvent(callback ?? noop);
   const isCallbackDefined = Boolean(callback);
 
   useEffect(() => {
-    if (!target || !isCallbackDefined) return;
+    if (!target || !name || !isCallbackDefined) return;
 
     // Note: eventFn is not guaranteed to be stable across renders, so we need
     // to use a local variable to be sure to remove the very same listener
