@@ -1,6 +1,7 @@
-/**
- * This file is based on https://github.com/sanity-io/use-effect-event/blob/main/src/useEffectEvent.ts
- */
+// Copyright (c) 2025 Sanity
+// This file is derived from sanity-io/use-effect-event (Licensed under the MIT License)
+//
+// https://github.com/sanity-io/use-effect-event
 
 import {useRef, useInsertionEffect} from 'react';
 
