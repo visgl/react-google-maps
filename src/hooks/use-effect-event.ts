@@ -1,29 +1,23 @@
 // Copyright (c) 2025 Sanity
-// This file is derived from sanity-io/use-effect-event (Licensed under the MIT License)
+// This file is derived from sanity-io/use-effect-event (MIT Licensed)
 //
 // https://github.com/sanity-io/use-effect-event
 
-import {useRef, useInsertionEffect} from 'react';
+import * as React from 'react';
+import {useInsertionEffect, useRef} from 'react';
 
 function forbiddenInRender() {
-  throw new Error(
-    "A function wrapped in useEffectEvent can't be called during rendering."
-  );
+  throw new Error('useEffectEvent: invalid call during rendering.');
 }
 
-/**
- * This is a ponyfill of the upcoming `useEffectEvent` hook that'll arrive in React 19.
- * https://19.react.dev/learn/separating-events-from-effects#declaring-an-effect-event
- * To learn more about the ponyfill itself, see: https://blog.bitsrc.io/a-look-inside-the-useevent-polyfill-from-the-new-react-docs-d1c4739e8072
- * @public
- */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function useEffectEvent<const T extends (...args: any[]) => void>(
+function useEffectEventPolyfill<const T extends (...args: any[]) => void>(
   fn: T
 ): T {
   /**
-   * For both React 18 and 19 we set the ref to the forbiddenInRender function, to catch illegal calls to the function during render.
-   * Once the insertion effect runs, we set the ref to the actual function.
+   * Initialize the ref with `forbiddenInRender`, to catch illegal calls during
+   * rendering. After the insertion effect ran, the ref will contain the actual
+   * function, so all effects can see the actual value.
    */
   const ref = useRef(forbiddenInRender as T);
 
@@ -32,7 +26,14 @@ export function useEffectEvent<const T extends (...args: any[]) => void>(
   }, [fn]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return ((...args: any[]) => {
-    return ref.current(...args);
-  }) as T;
+  return ((...args: any[]) => ref.current(...args)) as T;
 }
+
+/**
+ * Uses the native `useEffectEvent` hook from React 19 if available,
+ * otherwise falls back to a polyfill implementation.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const useEffectEvent: <const T extends (...args: any[]) => void>(
+  fn: T
+) => T = React.useEffectEvent || useEffectEventPolyfill;
