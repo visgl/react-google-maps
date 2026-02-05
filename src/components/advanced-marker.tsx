@@ -201,6 +201,14 @@ export type CustomMarkerContent = HTMLDivElement | null;
 export type AdvancedMarkerRef = google.maps.marker.AdvancedMarkerElement | null;
 
 function useAdvancedMarker(props: AdvancedMarkerProps) {
+  const [marker, setMarker] =
+    useState<google.maps.marker.AdvancedMarkerElement | null>(null);
+  const [contentContainer, setContentContainer] =
+    useState<HTMLDivElement | null>(null);
+
+  const map = useMap();
+  const markerLibrary = useMapsLibrary('marker');
+
   const {
     children,
     onClick,
@@ -220,14 +228,6 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
     anchorLeft,
     anchorTop
   } = props;
-
-  const [marker, setMarker] =
-    useState<google.maps.marker.AdvancedMarkerElement | null>(null);
-  const [contentContainer, setContentContainer] =
-    useState<HTMLDivElement | null>(null);
-
-  const map = useMap();
-  const markerLibrary = useMapsLibrary('marker');
 
   const positionLng = positionProp?.lng;
   const positionLat = positionProp?.lat;
