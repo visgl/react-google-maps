@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {useEffect} from 'react';
-import {useEffectEvent} from './useEffectEvent';
+import {useEffectEvent} from './use-effect-event';
 
 const noop = () => {};
 
@@ -13,15 +13,16 @@ export function useDomEventListener<T extends (...args: any[]) => void>(
   name: string,
   callback: T | null | undefined
 ) {
-  const callbackEvent = useEffectEvent(callback ?? noop);
-  const isCallbackDefined = !!callback;
+  const eventFn = useEffectEvent(callback ?? noop);
+  const isCallbackDefined = Boolean(callback);
+
   useEffect(() => {
     if (!target || !isCallbackDefined) return;
 
-    // According to react 19 useEffectEvent and our ponyfill, the callback returned by useEffectEvent is NOT stable
-    // Thus, we need to create a stable listener callback that we can then use to removeEventListener with.
-    const listenerCallback: EventListener = (...args) => callbackEvent(...args);
-
+    // Note: eventFn is not guaranteed to be stable across renders, so we need
+    // to use a local variable to be sure to remove the very same listener
+    // function that has been added
+    const listenerCallback = eventFn;
     target.addEventListener(name, listenerCallback);
 
     return () => target.removeEventListener(name, listenerCallback);

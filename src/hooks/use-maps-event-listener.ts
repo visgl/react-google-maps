@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {useEffect} from 'react';
-import {useEffectEvent} from './useEffectEvent';
+import {useEffectEvent} from './use-effect-event';
 
 const noop = () => {};
 
@@ -13,19 +13,13 @@ export function useMapsEventListener<T extends (...args: any[]) => void>(
   name: string,
   callback: T | null | undefined
 ) {
-  const callbackEvent = useEffectEvent(callback ?? noop);
-  const isCallbackDefined = !!callback;
+  const eventFn = useEffectEvent(callback ?? noop);
+  const isCallbackDefined = Boolean(callback);
+
   useEffect(() => {
     if (!target || !isCallbackDefined) return;
 
-    // According to react 19 useEffectEvent and our ponyfill, the callback returned by useEffectEvent is NOT stable
-    // Thus, it's best to create a stable listener callback to add to the event listener.
-    const listenerCallback = (...args: any[]) => callbackEvent(...args);
-    const listener = google.maps.event.addListener(
-      target,
-      name,
-      listenerCallback
-    );
+    const listener = google.maps.event.addListener(target, name, eventFn);
 
     return () => listener.remove();
   }, [target, name, isCallbackDefined]);
