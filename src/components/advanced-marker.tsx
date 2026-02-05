@@ -221,27 +221,13 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
     collisionBehavior,
     clickable,
     draggable,
-    position: positionProp,
+    position,
     title,
     zIndex,
     anchorPoint,
     anchorLeft,
     anchorTop
   } = props;
-
-  const positionLng = positionProp?.lng;
-  const positionLat = positionProp?.lat;
-  const position = useMemo(
-    (): google.maps.marker.AdvancedMarkerElement['position'] =>
-      positionLng !== undefined && positionLat !== undefined
-        ? {
-            lat:
-              typeof positionLat === 'function' ? positionLat() : positionLat,
-            lng: typeof positionLng === 'function' ? positionLng() : positionLng
-          }
-        : undefined,
-    [positionLat, positionLng]
-  );
 
   const numChildren = Children.count(children);
 
