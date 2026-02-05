@@ -274,24 +274,37 @@ describe('<InfoWindow> events', () => {
     const onCloseSpy = jest.fn();
     const onCloseClickSpy = jest.fn();
 
+    // stup the google.maps.event mock
+    const listeners: Record<string, () => void> = {};
     const gme = jest.mocked(google.maps.event);
-    gme.addListener.mockImplementation(() => ({remove: jest.fn()}));
+    gme.addListener.mockImplementation((_, name, handler) => {
+      listeners[name as string] = handler as () => void;
+      return {remove: jest.fn()};
+    });
 
     render(<InfoWindow onClose={onCloseSpy} onCloseClick={onCloseClickSpy} />);
 
     expect(createInfowindowSpy).toHaveBeenCalled();
     const [infoWindow] = jest.mocked(mockInstances.get(google.maps.InfoWindow));
 
+    // Verify addListener was called for both events
     expect(gme.addListener).toHaveBeenCalledWith(
       infoWindow,
       'close',
-      onCloseSpy
+      expect.any(Function)
     );
     expect(gme.addListener).toHaveBeenCalledWith(
       infoWindow,
       'closeclick',
-      onCloseClickSpy
+      expect.any(Function)
     );
+
+    // Verify that triggering the events calls the handlers
+    listeners['close']();
+    expect(onCloseSpy).toHaveBeenCalledTimes(1);
+
+    listeners['closeclick']();
+    expect(onCloseClickSpy).toHaveBeenCalledTimes(1);
   });
 
   test('removes handlers on unmount', () => {
