@@ -270,7 +270,7 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
     };
   }, []);
 
-  // effect:
+  // effect: set and store options
   useEffect(
     () => {
       (async () => {
@@ -367,12 +367,15 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
     [currentSerializedParams, onLoad, onError, importLibraryCallback, libraries]
   );
 
+  // set the fetchAppCheckToken if provided
   useEffect(() => {
     if (status !== APILoadingStatus.LOADED) return;
 
+    const settings = google.maps.Settings.getInstance();
     if (fetchAppCheckToken) {
-      google.maps.Settings.getInstance().fetchAppCheckToken =
-        fetchAppCheckToken;
+      settings.fetchAppCheckToken = fetchAppCheckToken;
+    } else if (settings.fetchAppCheckToken) {
+      settings.fetchAppCheckToken = null;
     }
   }, [status, fetchAppCheckToken]);
 
