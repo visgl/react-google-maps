@@ -1,0 +1,16 @@
+{
+  "type": "module",
+  "dependencies": {
+    "@vis.gl/react-google-maps": "latest",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "terra-draw": "^1.23.1",
+    "terra-draw-google-maps-adapter": "^1.2.1",
+    "vite": "^7.1.7"
+  },
+  "scripts": {
+    "start": "vite",
+    "start-local": "vite --config ../vite.config.local.js",
+    "build": "vite build"
+  }
+}
