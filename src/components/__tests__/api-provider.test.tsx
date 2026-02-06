@@ -25,6 +25,8 @@ let importLibraryPromise: Promise<ImportLibraryResult>;
 let resolveImportLibrary: (value: ImportLibraryResult) => void;
 let rejectImportLibrary: (reason?: unknown) => void;
 
+let settingsInstance: google.maps.Settings;
+
 const resetImportLibraryPromise = () => {
   ({
     promise: importLibraryPromise,
@@ -71,6 +73,12 @@ beforeEach(() => {
   window.google.maps.importLibrary = undefined;
   resetAPIProviderState();
   resetImportLibraryPromise();
+
+  // Mock google.maps.Settings (missing in @googlemaps/jest-mocks)
+  settingsInstance = {fetchAppCheckToken: null} as google.maps.Settings;
+  google.maps.Settings = {
+    getInstance: () => settingsInstance
+  } as unknown as typeof google.maps.Settings;
 });
 
 afterEach(() => {
@@ -222,16 +230,6 @@ test('calls onError when loading the Google Maps JavaScript API fails', async ()
 
 test('sets fetchAppCheckToken on google.maps.Settings after API loads', async () => {
   const mockFetchToken = jest.fn().mockResolvedValue({token: 'test-token'});
-
-  // Set up the Settings mock
-  const settingsInstance = {
-    fetchAppCheckToken: null as
-      | (() => Promise<google.maps.MapsAppCheckTokenResult>)
-      | null
-  };
-  google.maps.Settings = {
-    getInstance: () => settingsInstance
-  } as unknown as typeof google.maps.Settings;
 
   render(
     <APIProvider apiKey={'apikey'} fetchAppCheckToken={mockFetchToken}>
