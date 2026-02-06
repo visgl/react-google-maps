@@ -106,6 +106,12 @@ export type APIProviderProps = PropsWithChildren<{
    * A function that will be called if there was an error when loading the Google Maps JavaScript API.
    */
   onError?: (error: unknown) => void;
+  /**
+   * A function that returns a Promise resolving to an App Check token.
+   * When provided, it will be set on `google.maps.Settings.getInstance().fetchAppCheckToken`
+   * after the Google Maps JavaScript API has been loaded.
+   */
+  fetchAppCheckToken?: () => Promise<google.maps.MapsAppCheckTokenResult>;
 }>;
 
 // loading the Maps JavaScript API can only happen once in the runtime, so these
@@ -198,7 +204,8 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
     language,
     authReferrerPolicy,
     channel,
-    solutionChannel
+    solutionChannel,
+    fetchAppCheckToken
   } = props;
 
   const [status, setStatus] = useState<APILoadingStatus>(loadingStatus);
@@ -263,7 +270,7 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
     };
   }, []);
 
-  // effect:
+  // effect: set and store options
   useEffect(
     () => {
       (async () => {
@@ -359,6 +366,18 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentSerializedParams, onLoad, onError, importLibraryCallback, libraries]
   );
+
+  // set the fetchAppCheckToken if provided
+  useEffect(() => {
+    if (status !== APILoadingStatus.LOADED) return;
+
+    const settings = google.maps.Settings.getInstance();
+    if (fetchAppCheckToken) {
+      settings.fetchAppCheckToken = fetchAppCheckToken;
+    } else if (settings.fetchAppCheckToken) {
+      settings.fetchAppCheckToken = null;
+    }
+  }, [status, fetchAppCheckToken]);
 
   return {
     status,

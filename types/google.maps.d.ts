@@ -800,6 +800,16 @@ declare namespace google.maps {
     }
   }
 
+  interface MapsAppCheckTokenResult {
+    token: string;
+  }
+
+  interface Settings {
+    fetchAppCheckToken:
+      | (() => Promise<google.maps.MapsAppCheckTokenResult>)
+      | null;
+  }
+
   /**
    * Maps3D Library interface for use with importLibrary('maps3d').
    */
