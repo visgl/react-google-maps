@@ -1,4 +1,3 @@
-/* eslint-disable complexity */
 import React, {
   CSSProperties,
   FunctionComponent,
@@ -9,13 +8,14 @@ import React, {
   useState
 } from 'react';
 import {createPortal} from 'react-dom';
+import isDeepEqual from 'fast-deep-equal';
 
 import {useMap} from '../hooks/use-map';
 import {useMapsEventListener} from '../hooks/use-maps-event-listener';
-import {setValueForStyles} from '../libraries/set-value-for-styles';
 import {useMapsLibrary} from '../hooks/use-maps-library';
-import {useDeepCompareEffect} from '../libraries/use-deep-compare-effect';
-import {CustomMarkerContent, isAdvancedMarker} from './advanced-marker';
+import {useMemoized} from '../hooks/use-memoized';
+import {setValueForStyles} from '../libraries/set-value-for-styles';
+import {isAdvancedMarker} from './advanced-marker';
 
 export type InfoWindowProps = Omit<
   google.maps.InfoWindowOptions,
@@ -56,7 +56,7 @@ export const InfoWindow: FunctionComponent<
     onCloseClick,
 
     // other options
-    ...infoWindowOptions
+    ...volatileInfoWindowOptions
   } = props;
 
   // ## create infowindow instance once the mapsLibrary is available.
@@ -68,6 +68,8 @@ export const InfoWindow: FunctionComponent<
   const contentContainerRef = useRef<HTMLElement | null>(null);
   const headerContainerRef = useRef<HTMLElement | null>(null);
 
+  const infoWindowOptions = useMemoized(volatileInfoWindowOptions, isDeepEqual);
+
   useEffect(
     () => {
       if (!mapsLibrary) return;
@@ -75,7 +77,7 @@ export const InfoWindow: FunctionComponent<
       contentContainerRef.current = document.createElement('div');
       headerContainerRef.current = document.createElement('div');
 
-      const opts: google.maps.InfoWindowOptions = infoWindowOptions;
+      const opts: google.maps.InfoWindowOptions = {...infoWindowOptions};
       if (pixelOffset) {
         opts.pixelOffset = new google.maps.Size(pixelOffset[0], pixelOffset[1]);
       }
@@ -90,7 +92,7 @@ export const InfoWindow: FunctionComponent<
       }
 
       // intentionally shadowing the state variables here
-      const infoWindow = new google.maps.InfoWindow(infoWindowOptions);
+      const infoWindow = new google.maps.InfoWindow(opts);
       infoWindow.setContent(contentContainerRef.current);
 
       setInfoWindow(infoWindow);
@@ -118,8 +120,9 @@ export const InfoWindow: FunctionComponent<
     [mapsLibrary]
   );
 
-  // ## update className and styles for `contentContainer`
-  // stores previously applied style properties, so they can be removed when unset
+  // ---- update className and styles for `contentContainer`
+  // prevStyleRef stores previously applied style properties, so they can be
+  // removed when unset
   const prevStyleRef = useRef<CSSProperties | null>(null);
   useEffect(() => {
     if (!infoWindow || !contentContainerRef.current) return;
@@ -136,12 +139,12 @@ export const InfoWindow: FunctionComponent<
       contentContainerRef.current.className = className || '';
   }, [infoWindow, className, style]);
 
-  // ## update options
-  useDeepCompareEffect(
+  // ---- update options
+  useEffect(
     () => {
       if (!infoWindow) return;
 
-      const opts: google.maps.InfoWindowOptions = infoWindowOptions;
+      const opts: google.maps.InfoWindowOptions = {...infoWindowOptions};
       if (!pixelOffset) {
         opts.pixelOffset = null;
       } else {
@@ -157,7 +160,7 @@ export const InfoWindow: FunctionComponent<
             : headerContainerRef.current;
       }
 
-      infoWindow.setOptions(infoWindowOptions);
+      infoWindow.setOptions(opts);
     },
 
     // dependency `infoWindow` isn't needed since options are also passed
@@ -170,9 +173,9 @@ export const InfoWindow: FunctionComponent<
   useMapsEventListener(infoWindow, 'close', onClose);
   useMapsEventListener(infoWindow, 'closeclick', onCloseClick);
 
-  // ## open info window when content and map are available
+  // ---- open info window when content and map are available
   const map = useMap();
-  useDeepCompareEffect(() => {
+  useEffect(() => {
     // `anchor === null` means an anchor is defined but not ready yet.
     if (!map || !infoWindow || anchor === null) return;
 
@@ -183,14 +186,14 @@ export const InfoWindow: FunctionComponent<
 
       // Only do the infowindow adjusting when dealing with an AdvancedMarker
       if (isAdvancedMarker(anchor) && anchor.content instanceof Element) {
-        const wrapper = anchor.content as CustomMarkerContent;
-        const wrapperBcr = wrapper?.getBoundingClientRect();
+        const anchorBcr = anchor?.getBoundingClientRect();
 
         // This checks whether or not the anchor has custom content with our own
-        // div wrapper. If not, that means we have a regular AdvancedMarker without any children.
+        // div wrapper. If not, that means we have a regular AdvancedMarker without
+        // children, or an AdvancedMarker that uses the anchorLeft/anchorTop props.
         // In that case we do not want to adjust the infowindow since it is all handled correctly
         // by the Google Maps API.
-        if (wrapperBcr && wrapper?.isCustomMarker) {
+        if (anchorBcr && anchor.dataset.origin === 'rgm') {
           // We can safely typecast here since we control that element and we know that
           // it is a div
           const anchorDomContent = anchor.content.firstElementChild
@@ -201,11 +204,12 @@ export const InfoWindow: FunctionComponent<
           // center infowindow above marker
           const anchorOffsetX =
             contentBcr.x -
-            wrapperBcr.x +
-            (contentBcr.width - wrapperBcr.width) / 2;
-          const anchorOffsetY = contentBcr.y - wrapperBcr.y;
+            anchorBcr.x +
+            (contentBcr.width - anchorBcr.width) / 2;
 
-          const opts: google.maps.InfoWindowOptions = infoWindowOptions;
+          const anchorOffsetY = contentBcr.y - anchorBcr.y;
+
+          const opts: google.maps.InfoWindowOptions = {...infoWindowOptions};
 
           opts.pixelOffset = new google.maps.Size(
             pixelOffset ? pixelOffset[0] + anchorOffsetX : anchorOffsetX,

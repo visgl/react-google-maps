@@ -203,6 +203,35 @@ describe('createStaticMapsUrl', () => {
     expect(url).toContain(`path=${encodedPath2}`);
   });
 
+  test('handles multiple paths with same styles', () => {
+    const url = createStaticMapsUrl({
+      ...requiredParams,
+      paths: [
+        {
+          coordinates: [{lat: 40.737102, lng: -73.990318}, 'Hamburg, Germany'],
+          color: 'red',
+          weight: 5
+        },
+        {
+          coordinates: [
+            {lat: 40.737102, lng: -73.990318},
+            {lat: 40.736102, lng: -73.989318}
+          ],
+          color: 'red',
+          weight: 5
+        }
+      ]
+    });
+    const encodedPath1 = encodeURIComponent(
+      'color:red|weight:5|40.737102,-73.990318|Hamburg, Germany'
+    ).replace(/%20/g, '+');
+    const encodedPath2 = encodeURIComponent(
+      'color:red|weight:5|40.737102,-73.990318|40.736102,-73.989318'
+    );
+    expect(url).toContain(`path=${encodedPath1}`);
+    expect(url).toContain(`path=${encodedPath2}`);
+  });
+
   test('includes style parameters', () => {
     const url = createStaticMapsUrl({
       ...requiredParams,

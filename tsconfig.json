@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "typeRoots": ["./src/types", "./node_modules/@types"],
+    "typeRoots": ["./types", "./node_modules/@types"],
     "strict": true,
     "sourceMap": true,
     "noEmit": true,
@@ -9,7 +9,7 @@
     "moduleResolution": "bundler",
     "esModuleInterop": true,
     "target": "ES2015",
-    "lib": ["es2015", "dom"],
+    "lib": ["es2024", "dom"],
     "jsx": "react",
 
     "skipLibCheck": true,
@@ -17,6 +17,6 @@
       "@vis.gl/react-google-maps": ["./src"]
     }
   },
-  "include": ["src/**/*"],
+  "include": ["./src/**/*", "./examples/**/*"],
   "exclude": ["./dist", "./node_modules"]
 }

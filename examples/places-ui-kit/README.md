@@ -2,12 +2,11 @@
 
 ![image](https://user-images.githubusercontent.com/39244966/208682692-d5b23518-9e51-4a87-8121-29f71e41c777.png)
 
-This is an example to show how to setup the Google Places UI Kit (Preview) webcomponents
+This is an example to show how to setup the Google Places UI Kit webcomponents
 
-## Enable the APIs
+## Enable the API
 
 To use the Places UI Kit you need to enable the [API][places-ui-kit] in the Cloud Console.
-Additionally for the elevation component you need the [Elevation API][elevation-api]
 
 ## Google Maps Platform API Key
 

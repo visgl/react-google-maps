@@ -1,0 +1,206 @@
+on:
+  push:
+    branches: [main]
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+  id-token: write # Required for npm provenance
+
+name: Release
+
+jobs:
+  # Create or update the release PR and tag stable releases on main pushes.
+  release-please:
+    if: ${{ github.event_name == 'push' }}
+    runs-on: ubuntu-latest
+    outputs:
+      # Capture the PR object and release status
+      release_created: ${{ steps.release.outputs.release_created }}
+      pr: ${{ steps.release.outputs.pr }}
+    steps:
+      # Run release-please on main pushes to open/update the release PR or cut a release.
+      - name: Release Please
+        id: release
+        uses: googleapis/release-please-action@v4
+
+        with:
+          release-type: node
+
+  # Publish stable releases when the release-PR created by release-please was merged into main.
+  publish-release:
+    needs: release-please
+    if: >-
+      ${{ github.event_name == 'push'
+        && needs.release-please.outputs.release_created == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      # Publish the stable release when release-please created a GitHub release.
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build and Publish
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NODE_AUTH_TOKEN}}
+
+  # When a pr-comment is added, check if it's a '/prerelease' request from a maintainer.
+  check-prerelease:
+    if: ${{ github.event_name == 'issue_comment' }}
+    runs-on: ubuntu-latest
+    outputs:
+      should_publish: ${{ steps.gate.outputs.should_publish }}
+      pr_number: ${{ steps.gate.outputs.pr_number }}
+      pr_title: ${{ steps.gate.outputs.pr_title }}
+      head_sha: ${{ steps.gate.outputs.head_sha }}
+    steps:
+      - name: Validate prerelease request
+        id: gate
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const body = context.payload.comment?.body || '';
+            const isCommand = body
+              .split(/\r?\n/)
+              .some(line => line.trim() === '/prerelease');
+            if (!isCommand) {
+              core.setOutput('should_publish', 'false');
+              return;
+            }
+
+            if (!context.payload.issue?.pull_request) {
+              core.setOutput('should_publish', 'false');
+              return;
+            }
+
+            const prNumber = context.payload.issue.number;
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber,
+            });
+
+            const labels = (pr.labels || []).map(label =>
+              typeof label === 'string' ? label : label.name
+            );
+            const isReleasePlease =
+              labels.includes('autorelease: pending') ||
+              (pr.head?.ref || '').startsWith('release-please--');
+            if (!isReleasePlease) {
+              core.setOutput('should_publish', 'false');
+              return;
+            }
+
+            const commenter = context.payload.comment?.user?.login;
+            if (!commenter) {
+              core.setOutput('should_publish', 'false');
+              return;
+            }
+            const { data: permission } =
+              await github.rest.repos.getCollaboratorPermissionLevel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                username: commenter,
+              });
+            const allowed = ['admin', 'maintain'].includes(
+              permission.permission
+            );
+            if (!allowed) {
+              core.setOutput('should_publish', 'false');
+              return;
+            }
+
+            core.setOutput('should_publish', 'true');
+            core.setOutput('pr_number', String(prNumber));
+            core.setOutput('pr_title', pr.title || '');
+            core.setOutput('head_sha', pr.head?.sha || '');
+
+  publish-prerelease:
+    if: ${{ github.event_name == 'issue_comment' && needs.check-prerelease.outputs.should_publish == 'true' }}
+    runs-on: ubuntu-latest
+    needs: check-prerelease
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ needs.check-prerelease.outputs.head_sha }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Calculate prerelease Version
+        id: semver
+        run: |
+          # Extract the version from the PR title (e.g., "chore(main): release 1.8.0" -> "1.8.0")
+          PR_TITLE='${{ needs.check-prerelease.outputs.pr_title }}'
+          TARGET_VERSION=$(echo "$PR_TITLE" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
+
+          if [ -z "$TARGET_VERSION" ]; then
+            echo "Could not extract version from PR title: $PR_TITLE" >&2
+            exit 1
+          fi
+
+          # Get the current @next version from npm
+          CURRENT_NEXT=$(npm view @vis.gl/react-google-maps dist-tags.next 2>/dev/null || echo "")
+
+          # If current @next already targets this version, increment the RC; otherwise start at rc.1.
+          if [[ "$CURRENT_NEXT" == "$TARGET_VERSION-rc."* ]]; then
+            NEXT_VERSION=$(npx -y semver "$CURRENT_NEXT" -i prerelease --preid rc)
+          else
+            NEXT_VERSION="${TARGET_VERSION}-rc.1"
+          fi
+
+          echo "should_publish=true" >> $GITHUB_OUTPUT
+          echo "version=$NEXT_VERSION" >> $GITHUB_OUTPUT
+          echo "Target version detected: $TARGET_VERSION"
+          echo "Next RC version: $NEXT_VERSION"
+
+      - name: Build and Publish to @next
+        run: |
+          # Overwrite package.json version locally for publish
+          npm version ${{ steps.semver.outputs.version }} --no-git-tag-version
+          npm publish --tag next --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Extract PR Number
+        id: extract-pr
+        run: |
+          PR_NUMBER='${{ needs.check-prerelease.outputs.pr_number }}'
+          echo "prNumber=$PR_NUMBER" >> $GITHUB_OUTPUT
+
+      - name: Comment on PR
+        uses: actions/github-script@v7
+        env:
+          PR_NUMBER: ${{ steps.extract-pr.outputs.prNumber }}
+          VERSION: ${{ steps.semver.outputs.version }}
+        with:
+          script: |
+            const prNumber = process.env.PR_NUMBER;
+            const version = process.env.VERSION;
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              body: `🚀 **Pre-release published!**\n\nInstall this version for testing:\n\`\`\`bash\nnpm install @vis.gl/react-google-maps@${version}\n\`\`\`\nOr use the tag:\n\`\`\`bash\nnpm install @vis.gl/react-google-maps@next\n\`\`\``
+            })

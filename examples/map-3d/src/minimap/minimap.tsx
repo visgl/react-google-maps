@@ -6,7 +6,7 @@ import {estimateCameraPosition} from './estimate-camera-position';
 import {CameraPositionMarker} from './camera-position-marker';
 import {ViewCenterMarker} from './view-center-marker';
 
-import type {Map3DCameraProps} from '../map-3d';
+import type {Map3DCameraProps} from '../app';
 
 type MiniMapProps = {
   camera3dProps: Map3DCameraProps;

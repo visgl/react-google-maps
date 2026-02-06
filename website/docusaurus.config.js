@@ -14,9 +14,15 @@ const config = {
   url: 'https://visgl.github.io/',
   baseUrl: '/react-google-maps/',
   onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
   favicon: '/favicon.ico',
   trailingSlash: false,
+
+  markdown: {
+    hooks: {
+      onBrokenMarkdownLinks: 'warn',
+      onBrokenMarkdownImages: 'warn'
+    }
+  },
 
   presets: [
     [

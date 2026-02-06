@@ -78,12 +78,10 @@ Generally speaking, all PRs are open against the `main` branch, unless the featu
 ### PR Checklist
 
 - [ ] Tests
-
   - `npm run test` must be successful.
   - New code should be covered by unit tests whenever possible.
 
 - [ ] Documentation
-
   - If public APIs are added/modified, update component documentation in `docs/api-reference`.
   - Breaking changes and deprecations must be added to `docs/upgrade-guide.md`.
   - Noteworthy new features should be added to `docs/whats-new.md`.
@@ -100,7 +98,7 @@ Generally speaking, all PRs are open against the `main` branch, unless the featu
 
 ## Community Governance
 
-vis.gl is part of the [Urban Computing Foundation](https://uc.foundation/). See the organization's [Technical Charter](https://github.com/visgl/tsc/blob/master/Technical%20Charter.md).
+vis.gl is part of the [Urban Computing Foundation](https://uc.foundation/).
 
 ### Technical Steering Committee
 
@@ -112,7 +110,7 @@ react-google-maps development is governed by the vis.gl Technical Steering Commi
 
 Maintainers of react-google-maps have commit access to this GitHub repository, and take part in the decision making process.
 
-If you are interested in becoming a maintainer, read the [governance guidelines](https://github.com/visgl/tsc/blob/master/governance.md).
+If you are interested in becoming a maintainer, read the [governance guidelines](https://github.com/visgl/tsc/blob/master/GOVERNANCE.md).
 
 The vis.gl TSC meets monthly and publishes meeting notes via a [mailing list](https://lists.uc.foundation/g/visgl).
 This mailing list can also be utilized to reach out to the TSC.

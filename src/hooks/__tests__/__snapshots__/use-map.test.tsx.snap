@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`it should log an error when used outside the APIProvider 1`] = `
+exports[`logs an error when used outside the APIProvider 1`] = `
 [
   [
     "useMap(): failed to retrieve APIProviderContext. Make sure that the <APIProvider> component exists and that the component you are calling \`useMap()\` from is a sibling of the <APIProvider>.",

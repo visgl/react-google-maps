@@ -75,7 +75,7 @@ For example, if you just want to use the `google.maps.geocoding.Geocoder` class 
 a component and you don't even need a map, it can be implemented like this:
 
 ```tsx
-import {useMap, useMapsLibrary} from '@vis.gl/react-google-maps';
+import {useMapsLibrary} from '@vis.gl/react-google-maps';
 
 const MyComponent = () => {
   // useMapsLibrary loads the geocoding library, it might initially return `null`
@@ -101,6 +101,35 @@ const App = () => {
     <APIProvider apiKey={'YOUR API KEY HERE'}>
       <MyComponent />
     </APIProvider>
+  );
+};
+```
+
+### Using Custom Elements of the Maps JavaScript API
+
+The maps JavaScript API also provides a lot of custom elements like the
+[Places UI Kit][gmp-places-ui-kit] or the [Maps 3D][gmp-maps-3d] elements.
+This library provides the types needed to use these custom elements in a
+TypeScript / React application.
+
+```tsx
+import {useMapsLibrary} from '@vis.gl/react-google-maps';
+
+const My3DMap = (props: My3DMapProps) => {
+  useMapsLibrary('maps3d');
+
+  const {center, heading, tilt, range, roll} = props;
+
+  return (
+    <>
+      <gmp-map-3d
+        center={center}
+        range={range}
+        heading={heading}
+        tilt={tilt}
+        roll={roll}
+        mode="SATELLITE"></gmp-map-3d>
+    </>
   );
 };
 ```
@@ -137,6 +166,13 @@ Therefore, the Google Maps Platform Terms of Service (e.g., Technical
 Support Services, Service Level Agreements, and Deprecation Policy)
 do not apply to this library.
 
+### European Economic Area (EEA) developers
+
+If your billing address is in the European Economic Area, effective on
+8 July 2025, the [Google Maps Platform EEA Terms of Service][gmp-tos-eea]
+will apply to your use of the Services. Functionality varies by region.
+[Learn more][gmp-tos-eea-faq].
+
 ## Help and Support
 
 This library is offered via an open source license. It is not governed by the
@@ -167,6 +203,8 @@ You can also discuss this library on [our Discord server][gmp-discord].
 [gmp-libraries]: https://developers.google.com/maps/documentation/javascript/libraries
 [npm-package]: https://www.npmjs.com/package/@vis.gl/react-google-maps
 [gmp-tos]: https://cloud.google.com/maps-platform/terms
+[gmp-tos-eea]: https://cloud.google.com/terms/maps-platform/eea
+[gmp-tos-eea-faq]: https://developers.google.com/maps/comms/eea/faq
 [gmp-tssg]: https://cloud.google.com/maps-platform/terms/tssg
 [gmp-sla]: https://cloud.google.com/maps-platform/terms/sla
 [gmp-dp]: https://cloud.google.com/maps-platform/terms/other/deprecation-policy
@@ -176,3 +214,5 @@ You can also discuss this library on [our Discord server][gmp-discord].
 [gmp-community]: https://developers.google.com/maps/developer-community
 [gmp-discord]: https://discord.gg/f4hvx8Rp2q
 [gmp-browsersupport]: https://developers.google.com/maps/documentation/javascript/browsersupport
+[gmp-places-ui-kit]: https://developers.google.com/maps/documentation/javascript/places-ui-kit/overview
+[gmp-maps-3d]: https://developers.google.com/maps/documentation/javascript/3d/overview

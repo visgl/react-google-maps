@@ -8,7 +8,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "supercluster": "^8.0.1",
-    "vite": "^6.0.11"
+    "vite": "^7.1.7"
   },
   "scripts": {
     "start": "vite",

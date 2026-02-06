@@ -4,3 +4,6 @@ dist
 CHANGELOG.md
 examples/nextjs/.next
 examples/nextjs/next.lock
+examples/nextjs/next-env.d.ts
+examples/nextjs/tsconfig.json
+examples/remix/build

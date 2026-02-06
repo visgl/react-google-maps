@@ -3,7 +3,7 @@ import {Ref, useEffect, useRef, useState} from 'react';
 import {MapProps} from '../map';
 import {APIProviderContextValue} from '../api-provider';
 
-import {useCallbackRef} from '../../libraries/use-callback-ref';
+import {useCallbackRef} from '../../hooks/use-callback-ref';
 import {useApiIsLoaded} from '../../hooks/use-api-is-loaded';
 import {
   CameraState,
@@ -100,6 +100,21 @@ export function useMapInstance(
     mapOptions.heading = defaultHeading;
   if (!mapOptions.tilt && Number.isFinite(defaultTilt))
     mapOptions.tilt = defaultTilt;
+
+  // Handle internalUsageAttributionIds
+  const customIds = mapOptions.internalUsageAttributionIds;
+
+  if (customIds == null) {
+    // Not specified - use context default (which may be null if disabled)
+    mapOptions.internalUsageAttributionIds =
+      context.internalUsageAttributionIds;
+  } else {
+    // Merge context defaults with custom IDs
+    mapOptions.internalUsageAttributionIds = [
+      ...(context.internalUsageAttributionIds || []),
+      ...customIds
+    ];
+  }
 
   for (const key of Object.keys(mapOptions) as (keyof typeof mapOptions)[])
     if (mapOptions[key] === undefined) delete mapOptions[key];

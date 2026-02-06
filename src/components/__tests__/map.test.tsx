@@ -1,13 +1,11 @@
 import React, {FunctionComponent, PropsWithChildren} from 'react';
-import {render, screen, waitFor} from '@testing-library/react';
+import {cleanup, render, screen, waitFor} from '@testing-library/react';
 import {initialize, mockInstances} from '@googlemaps/jest-mocks';
 import '@testing-library/jest-dom';
 
 import {Map as GoogleMap, MapProps} from '../map';
 import {APIProviderContext, APIProviderContextValue} from '../api-provider';
 import {APILoadingStatus} from '../../libraries/api-loading-status';
-
-jest.mock('../../libraries/google-maps-api-loader');
 
 let wrapper: FunctionComponent<PropsWithChildren>;
 let mockContextValue: jest.MockedObject<APIProviderContextValue>;
@@ -18,6 +16,7 @@ let createMapSpy: jest.Mock<
 
 beforeEach(() => {
   initialize();
+  jest.clearAllMocks();
 
   mockContextValue = {
     importLibrary: jest.fn(),
@@ -26,7 +25,12 @@ beforeEach(() => {
     mapInstances: {},
     addMapInstance: jest.fn(),
     removeMapInstance: jest.fn(),
-    clearMapInstances: jest.fn()
+    clearMapInstances: jest.fn(),
+    map3dInstances: {},
+    addMap3DInstance: jest.fn(),
+    removeMap3DInstance: jest.fn(),
+    clearMap3DInstances: jest.fn(),
+    internalUsageAttributionIds: null
   };
 
   wrapper = ({children}) => (
@@ -49,8 +53,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  jest.resetAllMocks();
-  jest.restoreAllMocks();
+  cleanup();
 });
 
 test('map instance is created after api is loaded', async () => {
@@ -113,7 +116,8 @@ describe('creating and updating map instance', () => {
     expect(actualOptions).toStrictEqual({
       center: {lat: 53.55, lng: 10.05},
       zoom: 12,
-      mapId: 'mymapid'
+      mapId: 'mymapid',
+      internalUsageAttributionIds: null
     });
 
     // should register the map-instance in the context
@@ -276,4 +280,71 @@ describe('camera configuration', () => {
 
 describe('map events and event-props', () => {
   test.todo('events dispatched by the map are received via event-props');
+});
+
+describe('internalUsageAttributionIds', () => {
+  test('uses default attribution IDs from context', () => {
+    mockContextValue.internalUsageAttributionIds = [
+      'GMP_LIB_VISGL_REACT_GOOGLE_MAPS'
+    ];
+
+    render(<GoogleMap zoom={8} center={{lat: 53.55, lng: 10.05}} />, {wrapper});
+
+    const [, options] = createMapSpy.mock.lastCall!;
+    expect(options).toMatchObject({
+      internalUsageAttributionIds: ['GMP_LIB_VISGL_REACT_GOOGLE_MAPS']
+    });
+  });
+
+  test('uses null from context when disableUsageAttribution is set', () => {
+    mockContextValue.internalUsageAttributionIds = null;
+
+    render(<GoogleMap zoom={8} center={{lat: 53.55, lng: 10.05}} />, {wrapper});
+
+    const [, options] = createMapSpy.mock.lastCall!;
+    expect(options).toBeDefined();
+    expect(options?.internalUsageAttributionIds).toBeNull();
+  });
+
+  test('appends custom attribution IDs to default IDs', () => {
+    mockContextValue.internalUsageAttributionIds = [
+      'GMP_LIB_VISGL_REACT_GOOGLE_MAPS'
+    ];
+
+    render(
+      <GoogleMap
+        zoom={8}
+        center={{lat: 53.55, lng: 10.05}}
+        internalUsageAttributionIds={['CUSTOM_ID_1', 'CUSTOM_ID_2']}
+      />,
+      {wrapper}
+    );
+
+    const [, options] = createMapSpy.mock.lastCall!;
+    expect(options).toMatchObject({
+      internalUsageAttributionIds: [
+        'GMP_LIB_VISGL_REACT_GOOGLE_MAPS',
+        'CUSTOM_ID_1',
+        'CUSTOM_ID_2'
+      ]
+    });
+  });
+
+  test('uses only custom IDs when context is disabled', () => {
+    mockContextValue.internalUsageAttributionIds = null;
+
+    render(
+      <GoogleMap
+        zoom={8}
+        center={{lat: 53.55, lng: 10.05}}
+        internalUsageAttributionIds={['CUSTOM_ID_1', 'CUSTOM_ID_2']}
+      />,
+      {wrapper}
+    );
+
+    const [, options] = createMapSpy.mock.lastCall!;
+    expect(options).toMatchObject({
+      internalUsageAttributionIds: ['CUSTOM_ID_1', 'CUSTOM_ID_2']
+    });
+  });
 });
