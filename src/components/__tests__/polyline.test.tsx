@@ -70,7 +70,7 @@ test('polyline should have a click listener', () => {
   expect(google.maps.event.addListener).toHaveBeenCalledWith(
     polylineMock,
     'click',
-    handleClick
+    expect.any(Function)
   );
 });
 

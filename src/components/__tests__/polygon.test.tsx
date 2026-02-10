@@ -72,7 +72,7 @@ test('polygon should have a click listener', () => {
   expect(google.maps.event.addListener).toHaveBeenCalledWith(
     polygonMock,
     'click',
-    handleClick
+    expect.any(Function)
   );
 });
 

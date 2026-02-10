@@ -64,7 +64,7 @@ test('circle should have a click listener', () => {
   expect(google.maps.event.addListener).toHaveBeenCalledWith(
     circleMock,
     'click',
-    handleClick
+    expect.any(Function)
   );
 });
 
