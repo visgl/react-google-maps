@@ -11,20 +11,22 @@ function ControlPanel() {
     <div className="control-panel">
       <h3>3D Maps with Markers</h3>
       <p>
-        This example implements a new <code>Map3D</code> component that renders
-        a 3D Globe based on the new experimental{' '}
+        This example demonstrates the <code>Map3D</code>, <code>Marker3D</code>,
+        and <code>Pin</code> components for rendering 3D maps based on the{' '}
         <a href={GMP_3D_MAPS_OVERVIEW_URL} target={'_blank'}>
-          <code>Map3DElement</code>
+          Google Maps 3D
         </a>{' '}
-        web-component.
+        web components.
       </p>
 
       <p>
-        The map contains basic{' '}
+        The map showcases various marker types including basic markers, extruded
+        markers, markers with custom pins, SVG/image markers, and 3D models.
+        Learn more about{' '}
         <a href={GMP_3D_MAPS_MARKER_ADD_URL} target={'_blank'}>
-          <code>Marker3DElements</code>
-        </a>{' '}
-        as well as markers with a custom pin and a 3D model.
+          adding markers to 3D maps
+        </a>
+        .
       </p>
 
       <div className="links">
