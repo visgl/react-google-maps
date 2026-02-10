@@ -6,7 +6,6 @@
 // immutable state in React, it is a necessary evil to integrate with the
 // Google Maps API. The mutations are carefully managed within the `useEffect`
 // hooks to ensure that they only happen when the props change.
-
 import type {PropsWithChildren, Ref} from 'react';
 import React, {
   Children,
@@ -301,11 +300,12 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
   useEffect(() => {
     if (!marker) return;
 
+    // when clickable is defined, we will always use its value for gmpClickable.
+    // otherwise we auto-detect based on existing event-handlers.
     const gmpClickable =
-      clickable !== undefined ||
-      Boolean(onClick) ||
-      Boolean(onMouseEnter) ||
-      Boolean(onMouseLeave);
+      clickable !== undefined
+        ? clickable
+        : Boolean(onClick) || Boolean(onMouseEnter) || Boolean(onMouseLeave);
 
     // gmpClickable is only available in beta version of the
     // maps api (as of 2024-10-10)

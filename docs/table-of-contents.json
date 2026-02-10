@@ -44,7 +44,10 @@
           "api-reference/components/circle",
           "api-reference/components/polyline",
           "api-reference/components/polygon",
-          "api-reference/components/static-map"
+          "api-reference/components/static-map",
+          "api-reference/components/map-3d",
+          "api-reference/components/marker-3d",
+          "api-reference/components/popover-3d"
         ]
       },
       {
@@ -55,6 +58,7 @@
 
         "items": [
           "api-reference/hooks/use-map",
+          "api-reference/hooks/use-map-3d",
           "api-reference/hooks/use-maps-library",
           "api-reference/hooks/use-api-is-loaded",
           "api-reference/hooks/use-api-loading-status"

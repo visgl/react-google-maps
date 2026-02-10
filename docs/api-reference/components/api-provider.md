@@ -131,6 +131,57 @@ used even when this option is enabled.
 
 Read more in the [documentation][gmp-usage-attribution].
 
+#### `fetchAppCheckToken`: () => Promise\<google.maps.MapsAppCheckTokenResult\>
+
+A function that returns a Promise resolving to a Firebase App Check token.
+When provided, this function will be set on `google.maps.Settings.getInstance().fetchAppCheckToken`
+after the Google Maps JavaScript API has loaded.
+
+[Firebase App Check][firebase-app-check] helps protect your Google Maps Platform API key by
+blocking traffic from unauthorized sources, preventing malicious requests and
+unauthorized API calls that could incur charges. It works by validating that requests
+come from legitimate apps using attestation providers like [reCAPTCHA Enterprise][recaptcha-enterprise].
+
+**Example usage with Firebase:**
+
+A custom wrapper component that initializes Firebase App Check and passes 
+the token fetcher to `APIProvider`:
+
+```tsx
+import React, {PropsWithChildren, useCallback} from 'react';
+import {APIProvider, APIProviderProps} from '@vis.gl/react-google-maps';
+import {initializeApp} from 'firebase/app';
+import {
+  getToken,
+  initializeAppCheck,
+  ReCaptchaEnterpriseProvider
+} from 'firebase/app-check';
+
+// Firebase and App Check initialization
+const app = initializeApp({/* ... */});
+const appCheck = initializeAppCheck(firebaseApp, {
+  provider: new ReCaptchaEnterpriseProvider(RECAPTCHA_SITE_KEY),
+  isTokenAutoRefreshEnabled: true
+});
+
+// custom wrapper for the APIProvider
+export function CustomAPIProvider({children, ...props}) {
+  const fetchAppCheckToken = useCallback(() => getToken(appCheck, false), []);
+
+  return (
+    <APIProvider {...props} fetchAppCheckToken={fetchAppCheckToken}>
+      {children}
+    </APIProvider>
+  );
+}
+```
+
+For more information, see:
+
+- [Using App Check with Maps JavaScript API][gmp-app-check]
+- [Firebase App Check documentation][firebase-app-check]
+- [App Check codelab][gmp-app-check-codelab]
+
 ### Events
 
 #### `onLoad`: () => void {#onLoad}
@@ -179,6 +230,10 @@ The following hooks are built to work with the `APIProvider` Component:
 [gmp-lang]: https://developers.google.com/maps/documentation/javascript/localization
 [gmp-solutions-usage]: https://developers.google.com/maps/reporting-and-monitoring/reporting#solutions-usage
 [gmp-usage-attribution]: https://developers.google.com/maps/documentation/javascript/reference/map#MapOptions.internalUsageAttributionIds
+[gmp-app-check]: https://developers.google.com/maps/documentation/javascript/maps-app-check
+[gmp-app-check-codelab]: https://developers.google.com/codelabs/maps-platform/maps-platform-firebase-appcheck
+[firebase-app-check]: https://firebase.google.com/docs/app-check
+[recaptcha-enterprise]: https://cloud.google.com/security/products/recaptcha
 [api-provider-src]: https://github.com/visgl/react-google-maps/blob/main/src/components/api-provider.tsx
 [rgm-new-issue]: https://github.com/visgl/react-google-maps/issues/new/choose
 [gmp-channel-usage]: https://developers.google.com/maps/reporting-and-monitoring/reporting#usage-tracking-per-channel

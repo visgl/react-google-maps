@@ -25,6 +25,13 @@ export interface APIProviderContextValue {
   addMapInstance: (map: google.maps.Map, id?: string) => void;
   removeMapInstance: (id?: string) => void;
   clearMapInstances: () => void;
+  map3dInstances: Record<string, google.maps.maps3d.Map3DElement>;
+  addMap3DInstance: (
+    map3d: google.maps.maps3d.Map3DElement,
+    id?: string
+  ) => void;
+  removeMap3DInstance: (id?: string) => void;
+  clearMap3DInstances: () => void;
   internalUsageAttributionIds: string[] | null;
 }
 
@@ -99,6 +106,12 @@ export type APIProviderProps = PropsWithChildren<{
    * A function that will be called if there was an error when loading the Google Maps JavaScript API.
    */
   onError?: (error: unknown) => void;
+  /**
+   * A function that returns a Promise resolving to an App Check token.
+   * When provided, it will be set on `google.maps.Settings.getInstance().fetchAppCheckToken`
+   * after the Google Maps JavaScript API has been loaded.
+   */
+  fetchAppCheckToken?: () => Promise<google.maps.MapsAppCheckTokenResult>;
 }>;
 
 // loading the Maps JavaScript API can only happen once in the runtime, so these
@@ -146,6 +159,37 @@ function useMapInstances() {
 }
 
 /**
+ * local hook to set up the 3D map-instance management context.
+ */
+function useMap3DInstances() {
+  const [map3dInstances, setMap3DInstances] = useState<
+    Record<string, google.maps.maps3d.Map3DElement>
+  >({});
+
+  const addMap3DInstance = (
+    map3dInstance: google.maps.maps3d.Map3DElement,
+    id = 'default'
+  ) => {
+    setMap3DInstances(instances => ({...instances, [id]: map3dInstance}));
+  };
+
+  const removeMap3DInstance = (id = 'default') => {
+    setMap3DInstances(({[id]: _, ...remaining}) => remaining);
+  };
+
+  const clearMap3DInstances = () => {
+    setMap3DInstances({});
+  };
+
+  return {
+    map3dInstances,
+    addMap3DInstance,
+    removeMap3DInstance,
+    clearMap3DInstances
+  };
+}
+
+/**
  * Local hook to handle the loading of the maps API.
  * @internal
  */
@@ -160,7 +204,8 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
     language,
     authReferrerPolicy,
     channel,
-    solutionChannel
+    solutionChannel,
+    fetchAppCheckToken
   } = props;
 
   const [status, setStatus] = useState<APILoadingStatus>(loadingStatus);
@@ -225,7 +270,7 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
     };
   }, []);
 
-  // effect:
+  // effect: set and store options
   useEffect(
     () => {
       (async () => {
@@ -322,6 +367,18 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
     [currentSerializedParams, onLoad, onError, importLibraryCallback, libraries]
   );
 
+  // set the fetchAppCheckToken if provided
+  useEffect(() => {
+    if (status !== APILoadingStatus.LOADED) return;
+
+    const settings = google.maps.Settings.getInstance();
+    if (fetchAppCheckToken) {
+      settings.fetchAppCheckToken = fetchAppCheckToken;
+    } else if (settings.fetchAppCheckToken) {
+      settings.fetchAppCheckToken = null;
+    }
+  }, [status, fetchAppCheckToken]);
+
   return {
     status,
     loadedLibraries,
@@ -346,6 +403,12 @@ export const APIProvider: FunctionComponent<APIProviderProps> = props => {
   const {children, ...loaderProps} = props;
   const {mapInstances, addMapInstance, removeMapInstance, clearMapInstances} =
     useMapInstances();
+  const {
+    map3dInstances,
+    addMap3DInstance,
+    removeMap3DInstance,
+    clearMap3DInstances
+  } = useMap3DInstances();
 
   const {status, loadedLibraries, importLibrary} =
     useGoogleMapsApiLoader(loaderProps);
@@ -359,6 +422,10 @@ export const APIProvider: FunctionComponent<APIProviderProps> = props => {
       addMapInstance,
       removeMapInstance,
       clearMapInstances,
+      map3dInstances,
+      addMap3DInstance,
+      removeMap3DInstance,
+      clearMap3DInstances,
       status,
       loadedLibraries,
       importLibrary,
@@ -369,6 +436,10 @@ export const APIProvider: FunctionComponent<APIProviderProps> = props => {
       addMapInstance,
       removeMapInstance,
       clearMapInstances,
+      map3dInstances,
+      addMap3DInstance,
+      removeMap3DInstance,
+      clearMap3DInstances,
       status,
       loadedLibraries,
       importLibrary,
