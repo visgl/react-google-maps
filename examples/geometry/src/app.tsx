@@ -1,8 +1,14 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {createRoot} from 'react-dom/client';
 
-import {APIProvider, Map, Marker} from '@vis.gl/react-google-maps';
-import {Circle, Polygon, Polyline} from './components';
+import {
+  APIProvider,
+  Map,
+  Marker,
+  Circle,
+  Polygon,
+  Polyline
+} from '@vis.gl/react-google-maps';
 import ControlPanel from './control-panel';
 
 import {POLYGONS} from './encoded-polygon-data';
@@ -13,8 +19,8 @@ const API_KEY =
 const INITIAL_CENTER = {lat: 41.1897, lng: -96.0627};
 
 const App = () => {
-  const [center, setCenter] = React.useState(INITIAL_CENTER);
-  const [radius, setRadius] = React.useState(43000);
+  const [center, setCenter] = useState(INITIAL_CENTER);
+  const [radius, setRadius] = useState(43000);
 
   const changeCenter = (newCenter: google.maps.LatLng | null) => {
     if (!newCenter) return;
