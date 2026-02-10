@@ -59,10 +59,16 @@ function usePolyline(props: PolylineProps) {
       return;
     }
 
-    const newPolyline = new google.maps.Polyline({
-      ...polylineOptions,
-      path
-    });
+    const polylineOptionsWithPath: google.maps.PolylineOptions = {
+      ...polylineOptions
+    };
+
+    // Google Maps throws "not an Array" error if path is undefined
+    if (path && Array.isArray(path)) {
+      polylineOptionsWithPath.path = path;
+    }
+
+    const newPolyline = new google.maps.Polyline(polylineOptionsWithPath);
     newPolyline.setMap(map);
     setPolyline(newPolyline);
 
