@@ -18,9 +18,9 @@
     "@docusaurus/core": "^3.9.2",
     "@docusaurus/plugin-content-docs": "^3.9.2",
     "@docusaurus/preset-classic": "^3.9.2",
-    "@easyops-cn/docusaurus-search-local": "^0.54.0",
+    "@easyops-cn/docusaurus-search-local": "^0.55.0",
     "babel-plugin-styled-components": "^2.0.0",
     "babel-plugin-version-inline": "^1.0.0",
-    "glob": "^13.0.1"
+    "glob": "^13.0.3"
   }
 }
