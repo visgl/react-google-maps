@@ -19,8 +19,8 @@ import {
  * maps om the same page, while reusing as much as possible.
  *
  * FIXME: while it should in theory be possible to reuse maps solely
- *   based on the mapId (as all other parameters can be changed at
- *   runtime), we don't yet have good enough tracking of options to
+ *   based on mapId/renderingType/colorScheme (as all other parameters can be
+ *   changed at runtime), we don't yet have good enough tracking of options to
  *   reliably unset all the options that have been set.
  */
 class CachedMapStack {
@@ -145,9 +145,11 @@ export function useMapInstance(
         container.appendChild(mapDiv);
         map.setOptions(mapOptions);
 
-        // detaching the element from the DOM lets the map fall back to its default
-        // size, setting the center will trigger reloading the map.
-        setTimeout(() => map.setCenter(map.getCenter()!), 0);
+        // detaching the element from the DOM sometimes causes the map to collapse
+        // and no longer render tiles that should be in view after re-attaching it.
+        // Triggering moveCamera after remounting should trigger a re-layout of
+        // the map.
+        setTimeout(() => map.moveCamera({}), 0);
       } else {
         mapDiv = document.createElement('div');
         mapDiv.style.height = '100%';
@@ -182,7 +184,7 @@ export function useMapInstance(
         const {mapId: savedMapId, cameraState: savedCameraState} =
           savedMapStateRef.current;
         if (savedMapId !== mapId) {
-          map.setOptions(savedCameraState);
+          map.moveCamera(savedCameraState);
         }
       }
 
