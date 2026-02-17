@@ -246,13 +246,13 @@ export const Map3D = forwardRef<Map3DRef, Map3DProps>((props, ref) => {
       style={className ? undefined : combinedStyle}
       className={className}
       {...(id ? {id} : {})}>
-      <gmp-map-3d ref={map3dRef} style={{width: '100%', height: '100%'}} />
-
-      {map3d && (
-        <GoogleMaps3DContext.Provider value={contextValue}>
-          {children}
-        </GoogleMaps3DContext.Provider>
-      )}
+      <gmp-map-3d ref={map3dRef} style={{width: '100%', height: '100%'}}>
+        {map3d && (
+          <GoogleMaps3DContext.Provider value={contextValue}>
+            {children}
+          </GoogleMaps3DContext.Provider>
+        )}
+      </gmp-map-3d>
     </div>
   );
 });
