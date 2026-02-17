@@ -112,7 +112,7 @@ required to set either a `position` or an `anchor` to show the infowindow.
 
 ### General Props
 
-#### `position`: google.maps.LatLngLiteral
+#### `position`: `google.maps.LatLngLiteral`
 
 The LatLng at which to display this InfoWindow.
 
@@ -122,13 +122,13 @@ When an `anchor` is specified, the `position` prop will be ignored.
 
 :::
 
-#### `anchor`: google.maps.Marker | google.maps.marker.AdvancedMarkerElement
+#### `anchor`: `google.maps.Marker | google.maps.marker.AdvancedMarkerElement`
 
 A Marker or AdvancedMarker instance to be used as an anchor. If specified, the
 InfoWindow will be positioned at the top-center of the anchor. References to
-the Marker / AdvancedMarkerElement objects needed can be obtained using the 
-`ref` property of the `Marker` and `AdvancedMarker` components (see example 
-above). 
+the Marker / AdvancedMarkerElement objects needed can be obtained using the
+`ref` property of the `Marker` and `AdvancedMarker` components (see example
+above).
 
 #### `zIndex`: number
 
@@ -195,7 +195,6 @@ Maximum width of the InfoWindow, regardless of content's width.
 The `minWidth` can't be changed while the InfoWindow is open.
 
 :::
-
 
 #### `headerContent`: string | React.ReactNode
 
