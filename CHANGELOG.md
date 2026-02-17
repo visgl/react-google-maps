@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.8.0](https://github.com/visgl/react-google-maps/compare/v1.7.1...v1.8.0) (2026-02-17)
+
+
+### Features
+
+* add 3D map, marker and popover components ([#898](https://github.com/visgl/react-google-maps/issues/898)) ([2ba09a1](https://github.com/visgl/react-google-maps/commit/2ba09a1c2d4cd9fe3e6d0b6ad1d5047b4cda07f6))
+* add fetchAppCheckToken prop to APIProvider ([#913](https://github.com/visgl/react-google-maps/issues/913)) ([992994d](https://github.com/visgl/react-google-maps/commit/992994d7e16373bf74c2e407adc5d77e5a510080))
+* **api-loader:** migrate to @googlemaps/js-api-loader ([#885](https://github.com/visgl/react-google-maps/issues/885)) ([4af51dd](https://github.com/visgl/react-google-maps/commit/4af51ddf42953a7b0ca3050be712aed0e8efce32))
+
+
+### Bug Fixes
+
+* better handling for `clickable` prop in AdvancedMarker ([#906](https://github.com/visgl/react-google-maps/issues/906)) ([c8ff82f](https://github.com/visgl/react-google-maps/commit/c8ff82fd2fc251685782d300260d503f2d44e5a4))
+* introduce useEffectEvent to improve stability of event handlers ([#866](https://github.com/visgl/react-google-maps/issues/866)) ([e44933e](https://github.com/visgl/react-google-maps/commit/e44933e7d5f3d79e845081b2cf038f05a0b001f9))
+* **map:** improve reuseMaps reliability after remounting ([#920](https://github.com/visgl/react-google-maps/issues/920)) ([e9296de](https://github.com/visgl/react-google-maps/commit/e9296deeb21f127cb0b5cdc7aea7a77749824e74))
+* more efficient useMemoized hook and fixed infowindow issues ([#903](https://github.com/visgl/react-google-maps/issues/903)) ([8cb7151](https://github.com/visgl/react-google-maps/commit/8cb7151caf5da2e0b325fcad9ff434913f9f8a33))
+* trigger release-please action ([0eaabeb](https://github.com/visgl/react-google-maps/commit/0eaabeba45349fae98118e38929d8111134a5ba5))
+
 ## [1.7.1](https://github.com/visgl/react-google-maps/compare/v1.7.0...v1.7.1) (2025-11-03)
 
 
