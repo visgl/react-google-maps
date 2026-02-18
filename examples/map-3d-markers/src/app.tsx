@@ -9,7 +9,7 @@ import {
   MapMode,
   Marker3D,
   Pin,
-  Popover3D
+  Popover
 } from '@vis.gl/react-google-maps';
 
 import {Model3D, Model3DProps} from './model-3d';
@@ -101,7 +101,7 @@ const App = () => {
         </Marker3D>
 
         {openPopoverId === 'colored-pin' && (
-          <Popover3D
+          <Popover
             open
             anchor={interactiveMarker}
             onClose={() => {
@@ -117,7 +117,7 @@ const App = () => {
                 to toggle this popover.
               </p>
             </div>
-          </Popover3D>
+          </Popover>
         )}
 
         {/* Marker with custom logo pin */}

@@ -3,7 +3,7 @@ import {render, waitFor, screen} from '@testing-library/react';
 import '@testing-library/jest-dom';
 import React from 'react';
 
-import {Popover3D} from '../popover-3d';
+import {Popover} from '../popover';
 import {useMap3D} from '../../hooks/use-map-3d';
 import {useMapsLibrary} from '../../hooks/use-maps-library';
 
@@ -60,12 +60,12 @@ afterEach(() => {
   jest.clearAllMocks();
 });
 
-describe('Popover3D', () => {
+describe('Popover', () => {
   test('creates PopoverElement after map and library ready', async () => {
     render(
-      <Popover3D position={{lat: 37.7749, lng: -122.4194}} open>
+      <Popover position={{lat: 37.7749, lng: -122.4194}} open>
         <div>Content</div>
-      </Popover3D>
+      </Popover>
     );
 
     await waitFor(() => {
@@ -79,9 +79,9 @@ describe('Popover3D', () => {
     useMap3DMock.mockReturnValue(null);
 
     render(
-      <Popover3D position={{lat: 37.7749, lng: -122.4194}} open>
+      <Popover position={{lat: 37.7749, lng: -122.4194}} open>
         <div>Content</div>
-      </Popover3D>
+      </Popover>
     );
 
     expect(createPopoverSpy).not.toHaveBeenCalled();
@@ -91,9 +91,9 @@ describe('Popover3D', () => {
     useMapsLibraryMock.mockReturnValue(null);
 
     render(
-      <Popover3D position={{lat: 37.7749, lng: -122.4194}} open>
+      <Popover position={{lat: 37.7749, lng: -122.4194}} open>
         <div>Content</div>
-      </Popover3D>
+      </Popover>
     );
 
     expect(createPopoverSpy).not.toHaveBeenCalled();
@@ -101,9 +101,9 @@ describe('Popover3D', () => {
 
   test('syncs open prop', async () => {
     const {rerender} = render(
-      <Popover3D position={{lat: 37.7749, lng: -122.4194}} open={false}>
+      <Popover position={{lat: 37.7749, lng: -122.4194}} open={false}>
         <div>Content</div>
-      </Popover3D>
+      </Popover>
     );
 
     await waitFor(() => {
@@ -114,9 +114,9 @@ describe('Popover3D', () => {
     expect(popover.open).toBe(false);
 
     rerender(
-      <Popover3D position={{lat: 37.7749, lng: -122.4194}} open={true}>
+      <Popover position={{lat: 37.7749, lng: -122.4194}} open={true}>
         <div>Content</div>
-      </Popover3D>
+      </Popover>
     );
 
     await waitFor(() => {
@@ -126,9 +126,9 @@ describe('Popover3D', () => {
 
   test('syncs position as positionAnchor', async () => {
     render(
-      <Popover3D position={{lat: 37.7749, lng: -122.4194}} open>
+      <Popover position={{lat: 37.7749, lng: -122.4194}} open>
         <div>Content</div>
-      </Popover3D>
+      </Popover>
     );
 
     await waitFor(() => {
@@ -146,9 +146,9 @@ describe('Popover3D', () => {
     const mockMarker = {} as google.maps.maps3d.Marker3DInteractiveElement;
 
     render(
-      <Popover3D anchor={mockMarker} open>
+      <Popover anchor={mockMarker} open>
         <div>Content</div>
-      </Popover3D>
+      </Popover>
     );
 
     await waitFor(() => {
@@ -164,12 +164,12 @@ describe('Popover3D', () => {
 
   test('syncs lightDismissDisabled prop', async () => {
     const {rerender} = render(
-      <Popover3D
+      <Popover
         position={{lat: 37.7749, lng: -122.4194}}
         open
         lightDismissDisabled={false}>
         <div>Content</div>
-      </Popover3D>
+      </Popover>
     );
 
     await waitFor(() => {
@@ -179,12 +179,12 @@ describe('Popover3D', () => {
     const popover = createPopoverSpy.mock.calls[0][0];
 
     rerender(
-      <Popover3D
+      <Popover
         position={{lat: 37.7749, lng: -122.4194}}
         open
         lightDismissDisabled={true}>
         <div>Content</div>
-      </Popover3D>
+      </Popover>
     );
 
     await waitFor(() => {
@@ -201,9 +201,9 @@ describe('Popover3D', () => {
     });
 
     render(
-      <Popover3D position={{lat: 37.7749, lng: -122.4194}} open>
+      <Popover position={{lat: 37.7749, lng: -122.4194}} open>
         <div data-testid="popover-content">Hello World</div>
-      </Popover3D>
+      </Popover>
     );
 
     await waitFor(() => {
@@ -222,9 +222,9 @@ describe('Popover3D', () => {
 
   test('cleans up on unmount', async () => {
     const {unmount} = render(
-      <Popover3D position={{lat: 37.7749, lng: -122.4194}} open>
+      <Popover position={{lat: 37.7749, lng: -122.4194}} open>
         <div>Content</div>
-      </Popover3D>
+      </Popover>
     );
 
     await waitFor(() => {
@@ -242,12 +242,12 @@ describe('Popover3D', () => {
     const refCallback = jest.fn();
 
     render(
-      <Popover3D
+      <Popover
         position={{lat: 37.7749, lng: -122.4194}}
         open
         ref={refCallback}>
         <div>Content</div>
-      </Popover3D>
+      </Popover>
     );
 
     await waitFor(() => {
