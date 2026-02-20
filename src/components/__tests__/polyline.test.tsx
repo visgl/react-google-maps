@@ -108,3 +108,50 @@ test('polyline should be removed from map on unmount', () => {
 
   expect(polyline.setMap).toHaveBeenCalledWith(null);
 });
+
+test('polyline should use defaultPath for initial value', () => {
+  const defaultPath = [
+    {lat: 1, lng: 2},
+    {lat: 3, lng: 4}
+  ];
+  render(<Polyline defaultPath={defaultPath} />);
+
+  expect(createPolylineSpy).toHaveBeenCalledWith(
+    expect.objectContaining({path: defaultPath})
+  );
+});
+
+test('polyline path prop should take precedence over defaultPath', () => {
+  const path = [
+    {lat: 5, lng: 6},
+    {lat: 7, lng: 8}
+  ];
+  const defaultPath = [
+    {lat: 1, lng: 2},
+    {lat: 3, lng: 4}
+  ];
+  render(<Polyline path={path} defaultPath={defaultPath} />);
+
+  expect(createPolylineSpy).toHaveBeenCalledWith(
+    expect.objectContaining({path})
+  );
+});
+
+test('polyline should call onPathChanged on dragend', () => {
+  const handlePathChanged = jest.fn();
+  const path = [
+    {lat: 1, lng: 2},
+    {lat: 3, lng: 4}
+  ];
+
+  render(<Polyline path={path} draggable onPathChanged={handlePathChanged} />);
+
+  const polylineMocks = mockInstances.get(google.maps.Polyline);
+  const polylineMock = polylineMocks[0];
+
+  expect(google.maps.event.addListener).toHaveBeenCalledWith(
+    polylineMock,
+    'dragend',
+    expect.any(Function)
+  );
+});

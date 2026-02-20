@@ -33,11 +33,48 @@ export default App;
 
 The `PolygonProps` interface extends the [`google.maps.PolygonOptions` interface](https://developers.google.com/maps/documentation/javascript/reference/polygon#PolygonOptions) and includes all possible options available for a Polygon.
 
+### Controlled / Uncontrolled
+
+The Polygon component supports both controlled and uncontrolled usage patterns for `paths`:
+
+```tsx
+// Uncontrolled - initial value only
+<Polygon defaultPaths={[[{lat: 53.5, lng: 10}, {lat: 53.6, lng: 10.1}, {lat: 53.5, lng: 10.2}]]} />
+
+// Controlled - value always reflects props
+<Polygon paths={paths} />
+```
+
+When using controlled props with `editable` or `draggable`, use the `onPathsChanged` callback to sync state:
+
+```tsx
+const [paths, setPaths] = useState([
+  [
+    {lat: 53.5, lng: 10},
+    {lat: 53.6, lng: 10.1},
+    {lat: 53.5, lng: 10.2}
+  ]
+]);
+
+<Polygon
+  paths={paths}
+  editable
+  draggable
+  onPathsChanged={newPaths =>
+    setPaths(newPaths.map(p => p.map(pt => pt.toJSON())))
+  }
+/>;
+```
+
 ### Path Props
 
-#### `paths`: `google.maps.MVCArray<...> | google.maps.LatLng[] | google.maps.LatLngLiteral[] | google.maps.LatLng[][] | google.maps.LatLngLiteral[][]`
+#### `paths`: `Array<Array<google.maps.LatLng | google.maps.LatLngLiteral>>`
 
-The ordered sequence of coordinates that designates a closed loop. Polygons may contain multiple paths to define complex shapes with holes.
+The controlled paths of the polygon.
+
+#### `defaultPaths`: `Array<Array<google.maps.LatLng | google.maps.LatLngLiteral>>`
+
+The initial paths of the polygon (uncontrolled).
 
 ```tsx
 // Simple polygon
@@ -99,6 +136,10 @@ Called when the mouse enters the polygon.
 #### `onMouseOut`: `(e: google.maps.MapMouseEvent) => void`
 
 Called when the mouse leaves the polygon.
+
+#### `onPathsChanged`: `(paths: google.maps.LatLng[][]) => void`
+
+Called when the paths are changed (via dragging or editing vertices).
 
 ### Style Props
 

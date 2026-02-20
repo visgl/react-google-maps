@@ -42,6 +42,7 @@
           "api-reference/components/advanced-marker",
           "api-reference/components/pin",
           "api-reference/components/circle",
+          "api-reference/components/rectangle",
           "api-reference/components/polyline",
           "api-reference/components/polygon",
           "api-reference/components/static-map",

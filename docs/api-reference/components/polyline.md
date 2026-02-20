@@ -31,11 +31,43 @@ export default App;
 
 The `PolylineProps` interface extends the [`google.maps.PolylineOptions` interface](https://developers.google.com/maps/documentation/javascript/reference/polygon#PolylineOptions) and includes all possible options available for a Polyline.
 
+### Controlled / Uncontrolled
+
+The Polyline component supports both controlled and uncontrolled usage patterns for `path`:
+
+```tsx
+// Uncontrolled - initial value only
+<Polyline defaultPath={[{lat: 53.5, lng: 10}, {lat: 53.6, lng: 10.1}]} />
+
+// Controlled - value always reflects props
+<Polyline path={path} />
+```
+
+When using controlled props with `editable` or `draggable`, use the `onPathChanged` callback to sync state:
+
+```tsx
+const [path, setPath] = useState([
+  {lat: 53.5, lng: 10},
+  {lat: 53.6, lng: 10.1}
+]);
+
+<Polyline
+  path={path}
+  editable
+  draggable
+  onPathChanged={newPath => setPath(newPath.map(p => p.toJSON()))}
+/>;
+```
+
 ### Path Props
 
-#### `path`: `google.maps.MVCArray<google.maps.LatLng> | google.maps.LatLng[] | google.maps.LatLngLiteral[]`
+#### `path`: `Array<google.maps.LatLng | google.maps.LatLngLiteral>`
 
-The ordered sequence of coordinates of the polyline.
+The controlled path of the polyline.
+
+#### `defaultPath`: `Array<google.maps.LatLng | google.maps.LatLngLiteral>`
+
+The initial path of the polyline (uncontrolled).
 
 #### `encodedPath`: string
 
@@ -80,6 +112,10 @@ Called when the mouse enters the polyline.
 #### `onMouseOut`: `(e: google.maps.MapMouseEvent) => void`
 
 Called when the mouse leaves the polyline.
+
+#### `onPathChanged`: `(path: google.maps.LatLng[]) => void`
+
+Called when the path is changed (via dragging or editing vertices).
 
 ### Style Props
 

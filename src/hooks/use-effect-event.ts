@@ -3,7 +3,6 @@
 //
 // https://github.com/sanity-io/use-effect-event
 
-import * as React from 'react';
 import {useInsertionEffect, useRef} from 'react';
 
 function forbiddenInRender() {
@@ -30,10 +29,10 @@ function useEffectEventPolyfill<const T extends (...args: any[]) => void>(
 }
 
 /**
- * Uses the native `useEffectEvent` hook from React 19 if available,
- * otherwise falls back to a polyfill implementation.
+ * Uses a polyfill implementation of `useEffectEvent`. The native useEffectEvent
+ * implementation was causing issues that we do not fully understand yet.
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const useEffectEvent: <const T extends (...args: any[]) => void>(
   fn: T
-) => T = React.useEffectEvent || useEffectEventPolyfill;
+) => T = useEffectEventPolyfill;

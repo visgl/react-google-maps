@@ -112,3 +112,56 @@ test('polygon should be removed from map on unmount', () => {
 
   expect(polygon.setMap).toHaveBeenCalledWith(null);
 });
+
+test('polygon should use defaultPaths for initial value', () => {
+  const defaultPaths = [
+    {lat: 1, lng: 2},
+    {lat: 3, lng: 4},
+    {lat: 5, lng: 6}
+  ];
+  render(<Polygon defaultPaths={defaultPaths} />);
+
+  expect(createPolygonSpy).toHaveBeenCalledWith(
+    expect.objectContaining({paths: defaultPaths})
+  );
+});
+
+test('polygon paths prop should take precedence over defaultPaths', () => {
+  const paths = [
+    {lat: 7, lng: 8},
+    {lat: 9, lng: 10},
+    {lat: 11, lng: 12}
+  ];
+  const defaultPaths = [
+    {lat: 1, lng: 2},
+    {lat: 3, lng: 4},
+    {lat: 5, lng: 6}
+  ];
+  render(<Polygon paths={paths} defaultPaths={defaultPaths} />);
+
+  expect(createPolygonSpy).toHaveBeenCalledWith(
+    expect.objectContaining({paths})
+  );
+});
+
+test('polygon should call onPathsChanged on dragend', () => {
+  const handlePathsChanged = jest.fn();
+  const paths = [
+    {lat: 1, lng: 2},
+    {lat: 3, lng: 4},
+    {lat: 5, lng: 6}
+  ];
+
+  render(
+    <Polygon paths={paths} draggable onPathsChanged={handlePathsChanged} />
+  );
+
+  const polygonMocks = mockInstances.get(google.maps.Polygon);
+  const polygonMock = polygonMocks[0];
+
+  expect(google.maps.event.addListener).toHaveBeenCalledWith(
+    polygonMock,
+    'dragend',
+    expect.any(Function)
+  );
+});
