@@ -4,6 +4,7 @@ import React, {
   PropsWithChildren,
   ReactNode,
   useEffect,
+  useLayoutEffect,
   useRef,
   useState
 } from 'react';
@@ -70,6 +71,8 @@ export const InfoWindow: FunctionComponent<
 
   const infoWindowOptions = useMemoized(volatileInfoWindowOptions, isDeepEqual);
 
+  // ---- initial mount: create content- and header container, create and
+  // configure the InfoWindow instance
   useEffect(
     () => {
       if (!mapsLibrary) return;
@@ -124,7 +127,7 @@ export const InfoWindow: FunctionComponent<
   // prevStyleRef stores previously applied style properties, so they can be
   // removed when unset
   const prevStyleRef = useRef<CSSProperties | null>(null);
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!infoWindow || !contentContainerRef.current) return;
 
     setValueForStyles(
@@ -169,7 +172,7 @@ export const InfoWindow: FunctionComponent<
     [infoWindowOptions, pixelOffset, headerContent]
   );
 
-  // ## bind event handlers
+  // ---- bind event handlers
   useMapsEventListener(infoWindow, 'close', onClose);
   useMapsEventListener(infoWindow, 'closeclick', onCloseClick);
 

@@ -1,13 +1,18 @@
-import type {ForwardedRef, PropsWithChildren, ReactNode} from 'react';
 import React, {
+  CSSProperties,
+  ForwardedRef,
   forwardRef,
+  PropsWithChildren,
+  ReactNode,
   useEffect,
   useImperativeHandle,
+  useLayoutEffect,
   useRef,
   useState
 } from 'react';
 
 import {usePropBinding} from '../hooks/use-prop-binding';
+import {setValueForStyles} from '../libraries/set-value-for-styles';
 import {AltitudeMode} from './marker-3d';
 
 // Re-export AltitudeMode for convenience
@@ -57,6 +62,10 @@ export type PopoverProps = PropsWithChildren<
        * A string ID referencing a Marker3DInteractiveElement to anchor the popover to.
        */
       anchorId?: string;
+
+      style?: CSSProperties;
+
+      className?: string;
     }
 >;
 
@@ -99,17 +108,22 @@ export const Popover = forwardRef(function Popover(
   const {
     children,
     headerContent,
-    open,
+    style,
+    className,
+    open = true,
     position,
     anchor,
     anchorId,
     altitudeMode,
     lightDismissDisabled,
+    autoPanDisabled,
     onClose
   } = props;
 
   const [popover, setPopover] =
     useState<google.maps.maps3d.PopoverElement | null>(null);
+
+  const prevStyleRef = useRef<CSSProperties | null>(null);
 
   // Forward the ref to the parent
   useImperativeHandle(ref, () => popover!, [popover]);
@@ -126,13 +140,22 @@ export const Popover = forwardRef(function Popover(
     altitudeMode as google.maps.maps3d.AltitudeMode
   );
   usePropBinding(popover, 'lightDismissDisabled', lightDismissDisabled);
+  usePropBinding(popover, 'autoPanDisabled', autoPanDisabled);
 
   // positionAnchor accepts a position, marker element, or marker ID string
   const positionAnchor = anchor ?? anchorId ?? position;
   usePropBinding(popover, 'positionAnchor', positionAnchor);
 
+  // Set styles via ref for compatibility with older React versions
+  useLayoutEffect(() => {
+    if (!popover) return;
+
+    setValueForStyles(popover, style || null, prevStyleRef.current);
+    prevStyleRef.current = style || null;
+  }, [popover, style]);
+
   return (
-    <gmp-popover ref={setPopover}>
+    <gmp-popover ref={setPopover} className={className}>
       {headerContent && <div slot="header">{headerContent}</div>}
       {children}
     </gmp-popover>
