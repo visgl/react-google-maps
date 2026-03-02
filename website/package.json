@@ -12,7 +12,7 @@
   "dependencies": {
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
-    "styled-components": "^6.3.9"
+    "styled-components": "^6.3.11"
   },
   "devDependencies": {
     "@docusaurus/core": "^3.9.2",
@@ -21,6 +21,6 @@
     "@easyops-cn/docusaurus-search-local": "^0.55.0",
     "babel-plugin-styled-components": "^2.0.0",
     "babel-plugin-version-inline": "^1.0.0",
-    "glob": "^13.0.3"
+    "glob": "^13.0.6"
   }
 }
