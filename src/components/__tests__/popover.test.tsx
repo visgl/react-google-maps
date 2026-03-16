@@ -1,102 +1,106 @@
 import {initialize} from '@googlemaps/jest-mocks';
-import {render, waitFor, screen} from '@testing-library/react';
+import {render, screen, waitFor} from '@testing-library/react';
 import '@testing-library/jest-dom';
 import React from 'react';
 
 import {Popover} from '../popover';
 import {useMap3D} from '../../hooks/use-map-3d';
 import {useMapsLibrary} from '../../hooks/use-maps-library';
+import {PopoverElement} from './__utils__/map-3d-mocks';
 
 jest.mock('../../hooks/use-map-3d');
 jest.mock('../../hooks/use-maps-library');
+
+// ============================================================================
+// Type declarations for test-specific global factory functions
+// ============================================================================
+
+declare global {
+  var __popoverFactory: ((instance: PopoverElement) => void) | undefined;
+}
 
 let useMap3DMock: jest.MockedFn<typeof useMap3D>;
 let useMapsLibraryMock: jest.MockedFn<typeof useMapsLibrary>;
 let createPopoverSpy: jest.Mock;
 let mockMap3D: {appendChild: jest.Mock; removeChild: jest.Mock};
-let PopoverElement: unknown;
+
+// ============================================================================
+// Module-level: Register custom elements ONCE per test file
+// ============================================================================
+
+// Extend mock class to add spy functionality via factory pattern
+class SpyPopoverElement extends PopoverElement {
+  constructor(options?: google.maps.maps3d.PopoverElementOptions) {
+    super(options);
+    if (typeof globalThis.__popoverFactory === 'function') {
+      globalThis.__popoverFactory(this);
+    }
+  }
+}
+
+// Register spy-enabled version of the mock component
+if (!customElements.get('gmp-popover')) {
+  customElements.define('gmp-popover', SpyPopoverElement);
+}
+
+// ============================================================================
+// Test-level: Create fresh spies for each test
+// ============================================================================
 
 beforeEach(() => {
   initialize();
 
+  // Create fresh spy for this test
   createPopoverSpy = jest.fn();
 
+  // Attach spy to the custom element constructor via factory function
+  globalThis.__popoverFactory = (instance: PopoverElement) => {
+    createPopoverSpy(instance);
+  };
+
+  // Mock map3d element
   mockMap3D = {
     appendChild: jest.fn(),
     removeChild: jest.fn()
   };
 
-  // Create mock PopoverElement
-  PopoverElement = class extends HTMLElement {
-    open = false;
-    positionAnchor: unknown = null;
-    altitudeMode: string | null = null;
-    lightDismissDisabled = false;
-
-    constructor() {
-      super();
-      createPopoverSpy(this);
-    }
-  };
-
-  // Register with random name
-  customElements.define(
-    `gmp-popover-${Math.random().toString(36).slice(2)}`,
-    PopoverElement as CustomElementConstructor
-  );
-
+  // Setup hook mocks
   useMap3DMock = jest.mocked(useMap3D);
   useMapsLibraryMock = jest.mocked(useMapsLibrary);
 
+  // Return mock map3d (library is no longer used in web component approach)
   useMap3DMock.mockReturnValue(
     mockMap3D as unknown as google.maps.maps3d.Map3DElement
   );
-  useMapsLibraryMock.mockReturnValue({
-    PopoverElement
-  } as unknown as google.maps.Maps3DLibrary);
+  useMapsLibraryMock.mockReturnValue(
+    {} as unknown as google.maps.Maps3DLibrary
+  );
 });
 
 afterEach(() => {
   jest.clearAllMocks();
+
+  // Clean up factory function
+  delete globalThis.__popoverFactory;
 });
 
 describe('Popover', () => {
-  test('creates PopoverElement after map and library ready', async () => {
+  test('creates gmp-popover element when rendered', async () => {
     render(
       <Popover position={{lat: 37.7749, lng: -122.4194}} open>
         <div>Content</div>
       </Popover>
     );
 
+    // Wait for the custom element to be instantiated
     await waitFor(() => {
       expect(createPopoverSpy).toHaveBeenCalled();
     });
 
-    expect(mockMap3D.appendChild).toHaveBeenCalled();
-  });
-
-  test('does not render when map is not ready', () => {
-    useMap3DMock.mockReturnValue(null);
-
-    render(
-      <Popover position={{lat: 37.7749, lng: -122.4194}} open>
-        <div>Content</div>
-      </Popover>
-    );
-
-    expect(createPopoverSpy).not.toHaveBeenCalled();
-  });
-
-  test('does not render when library is not ready', () => {
-    useMapsLibraryMock.mockReturnValue(null);
-
-    render(
-      <Popover position={{lat: 37.7749, lng: -122.4194}} open>
-        <div>Content</div>
-      </Popover>
-    );
-
-    expect(createPopoverSpy).not.toHaveBeenCalled();
+    // Verify we got the popover instance
+    const popoverInstance = createPopoverSpy.mock.calls[0][0];
+    expect(popoverInstance).toBeInstanceOf(PopoverElement);
+    expect(popoverInstance.tagName.toLowerCase()).toBe('gmp-popover');
   });
 
   test('syncs open prop', async () => {
@@ -242,10 +246,7 @@ describe('Popover', () => {
     const refCallback = jest.fn();
 
     render(
-      <Popover
-        position={{lat: 37.7749, lng: -122.4194}}
-        open
-        ref={refCallback}>
+      <Popover position={{lat: 37.7749, lng: -122.4194}} open ref={refCallback}>
         <div>Content</div>
       </Popover>
     );
