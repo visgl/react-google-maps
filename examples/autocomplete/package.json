@@ -5,7 +5,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-widgets": "^5.8.4",
-    "vite": "^7.1.7"
+    "vite": "^8.0.0"
   },
   "scripts": {
     "start": "vite",
