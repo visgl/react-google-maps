@@ -145,7 +145,7 @@ type Polygon3DProps = {
   'z-index'?: string;
 };
 
-type PopoverProps = {
+type PopoverElementProps = {
   open?: boolean | string | null;
 
   altitudeMode?: google.maps.maps3d.AltitudeMode | null;
@@ -208,7 +208,10 @@ declare module 'react' {
         google.maps.Polygon3DInteractiveElement
       >;
 
-      'gmp-popover': CustomElement<PopoverProps, google.maps.PopoverElement>;
+      'gmp-popover': CustomElement<
+        PopoverElementProps,
+        google.maps.PopoverElement
+      >;
     }
   }
 }

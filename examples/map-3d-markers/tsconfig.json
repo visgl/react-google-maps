@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "typeRoots": ["./types", "../../types", "./node_modules/@types"],
+    "strict": true,
+    "sourceMap": true,
+    "noEmit": true,
+    "noImplicitAny": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "esModuleInterop": true,
+    "target": "ES2020",
+    "lib": ["es2020", "dom"],
+    "jsx": "react",
+    "skipLibCheck": true
+  },
+  "exclude": ["./dist", "./node_modules"],
+  "include": ["src/**/*.ts", "src/**/*.tsx", "types/**/*.ts"]
+}

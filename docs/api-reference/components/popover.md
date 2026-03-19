@@ -1,16 +1,16 @@
-# `<Popover3D>` Component
+# `<Popover>` Component
 
 A component to add a [`PopoverElement`][gmp-popover] to a 3D map.
 Popovers are overlay elements similar to InfoWindows for 2D maps,
 used to display contextual information at a specific location or
 anchored to a marker on a Map3D.
 
-Any JSX element added to the Popover3D component as children will get
+Any JSX element added to the Popover component as children will get
 rendered into the content area of the popover.
 
 ## Usage
 
-The `Popover3D` component must be used within an [`<APIProvider>`](./api-provider.md)
+The `Popover` component must be used within an [`<APIProvider>`](./api-provider.md)
 that also contains a [`<Map3D>`](./map-3d.md) component.
 
 ### Basic Example
@@ -18,7 +18,7 @@ that also contains a [`<Map3D>`](./map-3d.md) component.
 Display a popover at a specific position on the 3D map:
 
 ```tsx
-import {APIProvider, Map3D, Popover3D} from '@vis.gl/react-google-maps';
+import {APIProvider, Map3D, Popover} from '@vis.gl/react-google-maps';
 
 const App = () => {
   const [isOpen, setIsOpen] = useState(true);
@@ -29,7 +29,7 @@ const App = () => {
         defaultCenter={{lat: 37.7749, lng: -122.4194, altitude: 500}}
         defaultRange={2000}
         defaultTilt={60}>
-        <Popover3D
+        <Popover
           position={{lat: 37.7749, lng: -122.4194}}
           open={isOpen}
           onClose={() => setIsOpen(false)}>
@@ -37,7 +37,7 @@ const App = () => {
             <h3>San Francisco</h3>
             <p>Welcome to the city by the bay!</p>
           </div>
-        </Popover3D>
+        </Popover>
       </Map3D>
     </APIProvider>
   );
@@ -50,12 +50,7 @@ A more typical use-case is to have a popover shown when clicking on a marker.
 You can anchor the popover to a `Marker3DInteractiveElement` using the `anchor` prop:
 
 ```tsx
-import {
-  APIProvider,
-  Map3D,
-  Marker3D,
-  Popover3D
-} from '@vis.gl/react-google-maps';
+import {APIProvider, Map3D, Marker3D, Popover} from '@vis.gl/react-google-maps';
 
 const MarkerWithPopover = ({position}) => {
   const [markerElement, setMarkerElement] = useState(null);
@@ -71,7 +66,7 @@ const MarkerWithPopover = ({position}) => {
       />
 
       {markerElement && (
-        <Popover3D
+        <Popover
           anchor={markerElement}
           open={popoverOpen}
           onClose={() => setPopoverOpen(false)}>
@@ -79,12 +74,19 @@ const MarkerWithPopover = ({position}) => {
             <h3>Location Info</h3>
             <p>This popover is anchored to the marker.</p>
           </div>
-        </Popover3D>
+        </Popover>
       )}
     </>
   );
 };
 ```
+
+### Content and Header
+
+The content provided as children to the Popover component is rendered into
+the main content area of the popover.
+Additionally, the `headerContent` prop can be used to render DOM elements
+into the separate header slot of the `gmp-popover` web component.
 
 ### Light Dismiss Behavior
 
@@ -92,13 +94,17 @@ By default, popovers can be closed by clicking outside of them ("light dismiss")
 You can disable this behavior with the `lightDismissDisabled` prop:
 
 ```tsx
-<Popover3D
+<Popover
   position={{lat: 37.7749, lng: -122.4194}}
   open={isOpen}
   lightDismissDisabled>
   <div>This popover won't close when clicking outside</div>
-</Popover3D>
+</Popover>
 ```
+
+To track the current visibility of the popover, you also have to add an
+`onClose` callback. This will get called when the popover is automatically
+closed by the maps API.
 
 :::note
 
@@ -107,24 +113,42 @@ to close the popover, such as a close button inside the content.
 
 :::
 
+### Automatic Panning
+
+By default, the map pans to make sure the popover is fully visible when it
+opens. This can cause conflicts when you want to have a fully controlled map
+state. In this case, this can be disabled using the `autoPanDisabled` prop.
+
+```tsx
+import {Popover, AltitudeMode} from '@vis.gl/react-google-maps';
+
+<Popover
+  position={{lat: 37.7749, lng: -122.4194}}
+  altitudeMode={AltitudeMode.RELATIVE_TO_GROUND}
+  
+>
+  <div>Popover content!</div>
+</Popover>;
+```
+
 ### Popover with Altitude
 
 Position a popover at a specific altitude above the ground:
 
 ```tsx
-import {Popover3D, AltitudeMode} from '@vis.gl/react-google-maps';
+import {Popover, AltitudeMode} from '@vis.gl/react-google-maps';
 
-<Popover3D
+<Popover
   position={{lat: 37.7749, lng: -122.4194, altitude: 100}}
   altitudeMode={AltitudeMode.RELATIVE_TO_GROUND}
   open={isOpen}>
   <div>Floating 100m above ground!</div>
-</Popover3D>;
+</Popover>;
 ```
 
 ## Props
 
-The `Popover3DProps` type extends [`google.maps.maps3d.PopoverElementOptions`][gmp-popover-options]
+The `PopoverProps` type extends [`google.maps.maps3d.PopoverElementOptions`][gmp-popover-options]
 with additional React-specific props.
 
 ### Required
@@ -140,14 +164,14 @@ The position at which to display this popover. Can include an optional `altitude
 
 ```tsx
 // 2D position
-<Popover3D position={{lat: 37.7749, lng: -122.4194}} open={true}>
+<Popover position={{lat: 37.7749, lng: -122.4194}} open={true}>
   Content here
-</Popover3D>
+</Popover>
 
 // 3D position with altitude
-<Popover3D position={{lat: 37.7749, lng: -122.4194, altitude: 50}} open={true}>
+<Popover position={{lat: 37.7749, lng: -122.4194, altitude: 50}} open={true}>
   Content here
-</Popover3D>
+</Popover>
 ```
 
 :::note
@@ -168,9 +192,9 @@ the popover will be positioned relative to the marker.
   onClick={() => setOpen(true)}
 />
 
-<Popover3D anchor={markerElement} open={isOpen}>
+<Popover anchor={markerElement} open={isOpen}>
   Anchored content
-</Popover3D>
+</Popover>
 ```
 
 #### `anchorId`: string
@@ -183,14 +207,14 @@ This is an alternative to using the `anchor` prop when you have the marker's ID.
 Specifies how the altitude component of the position is interpreted.
 
 ```tsx
-import {Popover3D, AltitudeMode} from '@vis.gl/react-google-maps';
+import {Popover, AltitudeMode} from '@vis.gl/react-google-maps';
 
-<Popover3D
+<Popover
   position={{lat: 37.7749, lng: -122.4194, altitude: 100}}
   altitudeMode={AltitudeMode.RELATIVE_TO_GROUND}
   open={true}>
   Content here
-</Popover3D>;
+</Popover>;
 ```
 
 Available values:
@@ -209,9 +233,9 @@ Whether the popover is currently visible. Defaults to `false`.
 ```tsx
 const [isOpen, setIsOpen] = useState(false);
 
-<Popover3D position={position} open={isOpen}>
+<Popover position={position} open={isOpen}>
   Content here
-</Popover3D>;
+</Popover>;
 ```
 
 #### `lightDismissDisabled`: boolean
@@ -220,9 +244,9 @@ When `true`, prevents the popover from being closed when clicking outside of it.
 Defaults to `false`.
 
 ```tsx
-<Popover3D position={position} open={true} lightDismissDisabled>
+<Popover position={position} open={true} lightDismissDisabled>
   This popover won't close on outside click
-</Popover3D>
+</Popover>
 ```
 
 ### Events
@@ -235,9 +259,9 @@ Use this to keep your state in sync with the popover's visibility.
 ```tsx
 const [isOpen, setIsOpen] = useState(true);
 
-<Popover3D position={position} open={isOpen} onClose={() => setIsOpen(false)}>
+<Popover position={position} open={isOpen} onClose={() => setIsOpen(false)}>
   Content here
-</Popover3D>;
+</Popover>;
 ```
 
 :::note
@@ -249,12 +273,12 @@ It will not fire when you programmatically set `open={false}`.
 
 ## Ref
 
-The Popover3D component supports a ref that exposes the underlying
+The Popover component supports a ref that exposes the underlying
 `google.maps.maps3d.PopoverElement` instance:
 
 ```tsx
 import {useRef} from 'react';
-import {Popover3D} from '@vis.gl/react-google-maps';
+import {Popover} from '@vis.gl/react-google-maps';
 
 const MyComponent = () => {
   const popoverRef = useRef<google.maps.maps3d.PopoverElement>(null);
@@ -266,9 +290,9 @@ const MyComponent = () => {
   };
 
   return (
-    <Popover3D ref={popoverRef} position={position}>
+    <Popover ref={popoverRef} position={position}>
       Content here
-    </Popover3D>
+    </Popover>
   );
 };
 ```

@@ -11,7 +11,7 @@ export * from './components/polygon';
 export * from './components/polyline';
 export * from './components/map-3d';
 export * from './components/marker-3d';
-export * from './components/popover-3d';
+export * from './components/popover';
 export * from './components/static-map';
 export * from './components/map-control';
 export * from './components/marker';
