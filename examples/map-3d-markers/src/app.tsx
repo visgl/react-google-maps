@@ -120,14 +120,16 @@ const App = () => {
           </Popover>
         )}
 
-        {/* Marker with custom logo pin */}
+        {/* Marker with customized pin */}
         <Marker3D
           position={{lat: 40.706461, lng: -73.997409, altitude: 50}}
           altitudeMode={AltitudeMode.RELATIVE_TO_GROUND}>
           <Pin
-            borderColor="white"
-            background="white"
-            glyph="https://www.gstatic.com/images/branding/productlogos/maps/v7/192px.svg"
+            borderColor="#8811aa"
+            background="#cc22ff"
+            glyphColor={'white'}
+            scale={2}
+            glyph="A"
           />
         </Marker3D>
 
