@@ -686,6 +686,8 @@ declare namespace google.maps {
        */
       lightDismissDisabled?: boolean;
 
+      autoPanDisabled?: boolean;
+
       /**
        * Specifies whether this popover should be open or not.
        * @default false
@@ -720,6 +722,7 @@ declare namespace google.maps {
      */
     interface PopoverElementOptions {
       altitudeMode?: AltitudeMode;
+      autoPanDisabled?: boolean;
       lightDismissDisabled?: boolean;
       open?: boolean;
       positionAnchor?:

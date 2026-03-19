@@ -44,7 +44,7 @@
           "api-reference/components/static-map",
           "api-reference/components/map-3d",
           "api-reference/components/marker-3d",
-          "api-reference/components/popover-3d"
+          "api-reference/components/popover"
         ]
       },
       {

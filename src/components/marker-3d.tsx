@@ -1,20 +1,19 @@
-/* eslint-disable react-hooks/immutability -- Google Maps API objects are designed to be mutated */
-import type {PropsWithChildren, Ref} from 'react';
 import React, {
   createContext,
+  forwardRef,
+  PropsWithChildren,
+  Ref,
+  useCallback,
   useContext,
   useEffect,
-  useImperativeHandle,
   useLayoutEffect,
   useMemo,
-  useState,
-  forwardRef
+  useState
 } from 'react';
 import {createPortal} from 'react-dom';
 
-import {useMap3D} from '../hooks/use-map-3d';
-import {useMapsLibrary} from '../hooks/use-maps-library';
 import {useDomEventListener} from '../hooks/use-dom-event-listener';
+import {usePropBinding} from '../hooks/use-prop-binding';
 import {CollisionBehavior} from './advanced-marker';
 
 // Re-export CollisionBehavior for convenience
@@ -144,8 +143,7 @@ export const Marker3D = forwardRef(function Marker3D(
     title
   } = props;
 
-  const map3d = useMap3D();
-  const maps3dLibrary = useMapsLibrary('maps3d');
+  const isInteractive = Boolean(onClick);
 
   const [marker, setMarker] = useState<
     | google.maps.maps3d.Marker3DElement
@@ -157,103 +155,33 @@ export const Marker3D = forwardRef(function Marker3D(
   const [contentHandledExternally, setContentHandledExternally] =
     useState(false);
 
-  // Container for rendering React children before moving to marker
-  const [contentContainer, setContentContainer] =
-    useState<HTMLDivElement | null>(null);
-
-  const isInteractive = Boolean(onClick);
-
-  useImperativeHandle(
-    ref,
-    () =>
-      marker as
-        | google.maps.maps3d.Marker3DElement
-        | google.maps.maps3d.Marker3DInteractiveElement,
-    [marker]
-  );
-
-  useEffect(() => {
-    if (!map3d || !maps3dLibrary) return;
-
-    let newMarker:
-      | google.maps.maps3d.Marker3DElement
-      | google.maps.maps3d.Marker3DInteractiveElement;
-
-    if (isInteractive) {
-      newMarker = new maps3dLibrary.Marker3DInteractiveElement();
-    } else {
-      newMarker = new maps3dLibrary.Marker3DElement();
-    }
-
-    map3d.appendChild(newMarker);
-    setMarker(newMarker);
-
-    // Hidden container used as React portal target for custom marker content
+  // Create a container for rendering React children to be wrapped and relocated
+  // into the parent gmp-marker-3d element.
+  const contentContainer = useMemo(() => {
     const container = document.createElement('div');
     container.style.display = 'none';
     document.body.appendChild(container);
-    setContentContainer(container);
 
-    return () => {
-      if (newMarker.parentElement) {
-        newMarker.parentElement.removeChild(newMarker);
+    return container;
+  }, []);
+
+  // Remove the container on unmount
+  useEffect(() => {
+    return () => contentContainer.remove();
+  }, [contentContainer]);
+
+  // Callback ref that sets both internal state and forwards the ref
+  const markerRef = useCallback(
+    (node: google.maps.maps3d.Marker3DElement | null) => {
+      setMarker(node);
+      if (typeof ref === 'function') {
+        ref(node);
+      } else if (ref) {
+        (ref as React.RefObject<typeof node>).current = node;
       }
-      container.remove();
-      setMarker(null);
-      setContentContainer(null);
-    };
-  }, [map3d, maps3dLibrary, isInteractive]);
-
-  useEffect(() => {
-    if (!marker || position === undefined) return;
-    marker.position = position;
-  }, [marker, position]);
-
-  useEffect(() => {
-    if (!marker || altitudeMode === undefined) return;
-    marker.altitudeMode =
-      altitudeMode as unknown as google.maps.maps3d.AltitudeMode;
-  }, [marker, altitudeMode]);
-
-  useEffect(() => {
-    if (!marker || collisionBehavior === undefined) return;
-    marker.collisionBehavior =
-      collisionBehavior as google.maps.CollisionBehavior;
-  }, [marker, collisionBehavior]);
-
-  useEffect(() => {
-    if (!marker) return;
-    if (drawsWhenOccluded !== undefined)
-      marker.drawsWhenOccluded = drawsWhenOccluded;
-  }, [marker, drawsWhenOccluded]);
-
-  useEffect(() => {
-    if (!marker) return;
-    if (extruded !== undefined) marker.extruded = extruded;
-  }, [marker, extruded]);
-
-  useEffect(() => {
-    if (!marker) return;
-    if (label !== undefined) marker.label = label;
-  }, [marker, label]);
-
-  useEffect(() => {
-    if (!marker) return;
-    if (sizePreserved !== undefined) marker.sizePreserved = sizePreserved;
-  }, [marker, sizePreserved]);
-
-  useEffect(() => {
-    if (!marker) return;
-    if (zIndex !== undefined) marker.zIndex = zIndex;
-  }, [marker, zIndex]);
-
-  // title is only available on Marker3DInteractiveElement
-  useEffect(() => {
-    if (!marker || !isInteractive) return;
-    const interactiveMarker =
-      marker as google.maps.maps3d.Marker3DInteractiveElement;
-    if (title !== undefined) interactiveMarker.title = title;
-  }, [marker, title, isInteractive]);
+    },
+    [ref]
+  );
 
   useDomEventListener(marker, 'gmp-click', onClick);
 
@@ -289,10 +217,27 @@ export const Marker3D = forwardRef(function Marker3D(
     [marker]
   );
 
-  if (!contentContainer) return null;
+  usePropBinding(marker, 'position', position);
+  usePropBinding(
+    marker,
+    'altitudeMode',
+    altitudeMode as google.maps.maps3d.AltitudeMode
+  );
+  usePropBinding(marker, 'collisionBehavior', collisionBehavior);
+  usePropBinding(marker, 'drawsWhenOccluded', drawsWhenOccluded);
+  usePropBinding(marker, 'extruded', extruded);
+  usePropBinding(marker, 'label', label);
+  usePropBinding(marker, 'sizePreserved', sizePreserved);
+  usePropBinding(marker, 'zIndex', zIndex);
+  usePropBinding(marker, 'title', title ?? '');
 
   return (
     <Marker3DContext.Provider value={contextValue}>
+      {isInteractive ? (
+        <gmp-marker-3d-interactive ref={markerRef} />
+      ) : (
+        <gmp-marker-3d ref={markerRef} />
+      )}
       {createPortal(children, contentContainer)}
     </Marker3DContext.Provider>
   );
