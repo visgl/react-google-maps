@@ -1,10 +1,11 @@
 # 3D Maps with Markers Example
 
-This example implements a new `Map3D` component that renders
-a 3D Globe based on the new experimental [`Map3DElement`][gmp-map3d-overview]
-web-component.
+This example demonstrates the `Map3D`, `Marker3D`, and `Pin` components for
+rendering 3D maps based on the [Google Maps 3D][gmp-map3d-overview] web components.
 
-The map contains basic [`Marker3DElements`][gmp-map3d-marker-add] as well as markers with a custom pin and a 3D model.
+The map showcases various marker types including basic markers, extruded markers,
+markers with custom pins, SVG/image markers, and 3D models. Learn more about
+[adding markers to 3D maps][gmp-map3d-marker-add].
 
 [gmp-map3d-overview]: https://developers.google.com/maps/documentation/javascript/3d-maps-overview
 [gmp-map3d-marker-add]: https://developers.google.com/maps/documentation/javascript/3d/marker-add
