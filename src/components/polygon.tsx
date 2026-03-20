@@ -35,6 +35,11 @@ type PathsType =
 export type PolygonProps = Omit<google.maps.PolygonOptions, 'map' | 'paths'> &
   PolygonEventProps & {
     /**
+     * An existing Polygon instance to use instead of creating a new one.
+     * Other props will still be applied to this instance.
+     */
+    polygon?: google.maps.Polygon;
+    /**
      * An array of encoded polyline strings as created by the encoding algorithm.
      * (https://developers.google.com/maps/documentation/utilities/polylinealgorithm)
      * When provided, will be decoded and used as the paths.
@@ -70,6 +75,7 @@ function usePolygon(props: PolygonProps) {
     onMouseOver,
     onMouseOut,
     onPathsChanged,
+    polygon: externalPolygon,
     encodedPaths,
     paths,
     defaultPaths,
@@ -104,26 +110,40 @@ function usePolygon(props: PolygonProps) {
       return;
     }
 
-    const initialPaths = paths ?? defaultPaths;
-    const polygonOptionsWithPaths: google.maps.PolygonOptions = {
-      ...polygonOptions
-    };
+    // Use provided instance or create a new one
+    let instance: google.maps.Polygon;
 
-    // Google Maps throws "not an Array" error if paths is undefined
-    if (initialPaths && Array.isArray(initialPaths)) {
-      polygonOptionsWithPaths.paths = initialPaths;
+    if (externalPolygon) {
+      instance = externalPolygon;
+      // Apply initial paths and options to the existing instance
+      const initialPaths = paths ?? defaultPaths;
+      if (initialPaths && Array.isArray(initialPaths)) {
+        instance.setPaths(initialPaths);
+      }
+      instance.setOptions(polygonOptions);
+    } else {
+      const initialPaths = paths ?? defaultPaths;
+      const polygonOptionsWithPaths: google.maps.PolygonOptions = {
+        ...polygonOptions
+      };
+
+      // Google Maps throws "not an Array" error if paths is undefined
+      if (initialPaths && Array.isArray(initialPaths)) {
+        polygonOptionsWithPaths.paths = initialPaths;
+      }
+
+      instance = new google.maps.Polygon(polygonOptionsWithPaths);
     }
 
-    const newPolygon = new google.maps.Polygon(polygonOptionsWithPaths);
-    newPolygon.setMap(map);
-    setPolygon(newPolygon);
+    instance.setMap(map);
+    setPolygon(instance);
 
     return () => {
-      newPolygon.setMap(null);
+      instance.setMap(null);
       setPolygon(null);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps -- options are handled separately to avoid recreating the instance
-  }, [map]);
+  }, [map, externalPolygon]);
 
   useMapsEventListener(polygon, 'click', onClick);
   useMapsEventListener(polygon, 'drag', onDrag);

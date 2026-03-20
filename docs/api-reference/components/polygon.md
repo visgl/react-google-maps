@@ -68,6 +68,25 @@ const [paths, setPaths] = useState([
 
 ### Path Props
 
+#### `polygon`: `google.maps.Polygon`
+
+An existing `google.maps.Polygon` instance to use instead of creating a new one. When provided, all other props (paths, options, event handlers) will still be applied to this instance.
+
+```tsx
+const polygonInstance = new google.maps.Polygon();
+
+// Minimal usage - just add existing instance to the map
+<Polygon polygon={polygonInstance} />
+
+// Apply additional props to the existing instance
+<Polygon
+  polygon={polygonInstance}
+  fillColor={'#0088ff'}
+  fillOpacity={0.3}
+  onClick={(e) => console.log('clicked')}
+/>
+```
+
 #### `paths`: `Array<Array<google.maps.LatLng | google.maps.LatLngLiteral>>`
 
 The controlled paths of the polygon.

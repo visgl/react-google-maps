@@ -61,6 +61,25 @@ const [path, setPath] = useState([
 
 ### Path Props
 
+#### `polyline`: `google.maps.Polyline`
+
+An existing `google.maps.Polyline` instance to use instead of creating a new one. When provided, all other props (path, options, event handlers) will still be applied to this instance.
+
+```tsx
+const polylineInstance = new google.maps.Polyline();
+
+// Minimal usage - just add existing instance to the map
+<Polyline polyline={polylineInstance} />
+
+// Apply additional props to the existing instance
+<Polyline
+  polyline={polylineInstance}
+  strokeColor={'#ff0000'}
+  strokeWeight={3}
+  onClick={(e) => console.log('clicked')}
+/>
+```
+
 #### `path`: `Array<google.maps.LatLng | google.maps.LatLngLiteral>`
 
 The controlled path of the polyline.

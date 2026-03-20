@@ -33,6 +33,11 @@ type PathType =
 export type PolylineProps = Omit<google.maps.PolylineOptions, 'map' | 'path'> &
   PolylineEventProps & {
     /**
+     * An existing Polyline instance to use instead of creating a new one.
+     * Other props will still be applied to this instance.
+     */
+    polyline?: google.maps.Polyline;
+    /**
      * An encoded polyline string as created by the encoding algorithm.
      * (https://developers.google.com/maps/documentation/utilities/polylinealgorithm)
      * When provided, will be decoded and used as the path.
@@ -56,6 +61,7 @@ function usePolyline(props: PolylineProps) {
     onMouseOver,
     onMouseOut,
     onPathChanged,
+    polyline: externalPolyline,
     encodedPath,
     path,
     defaultPath,
@@ -90,26 +96,40 @@ function usePolyline(props: PolylineProps) {
       return;
     }
 
-    const initialPath = path ?? defaultPath;
-    const polylineOptionsWithPath: google.maps.PolylineOptions = {
-      ...polylineOptions
-    };
+    // Use provided instance or create a new one
+    let instance: google.maps.Polyline;
 
-    // Google Maps throws "not an Array" error if path is undefined
-    if (initialPath && Array.isArray(initialPath)) {
-      polylineOptionsWithPath.path = initialPath;
+    if (externalPolyline) {
+      instance = externalPolyline;
+      // Apply initial path and options to the existing instance
+      const initialPath = path ?? defaultPath;
+      if (initialPath && Array.isArray(initialPath)) {
+        instance.setPath(initialPath);
+      }
+      instance.setOptions(polylineOptions);
+    } else {
+      const initialPath = path ?? defaultPath;
+      const polylineOptionsWithPath: google.maps.PolylineOptions = {
+        ...polylineOptions
+      };
+
+      // Google Maps throws "not an Array" error if path is undefined
+      if (initialPath && Array.isArray(initialPath)) {
+        polylineOptionsWithPath.path = initialPath;
+      }
+
+      instance = new google.maps.Polyline(polylineOptionsWithPath);
     }
 
-    const newPolyline = new google.maps.Polyline(polylineOptionsWithPath);
-    newPolyline.setMap(map);
-    setPolyline(newPolyline);
+    instance.setMap(map);
+    setPolyline(instance);
 
     return () => {
-      newPolyline.setMap(null);
+      instance.setMap(null);
       setPolyline(null);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps -- options are handled separately to avoid recreating the instance
-  }, [map]);
+  }, [map, externalPolyline]);
 
   useMapsEventListener(polyline, 'click', onClick);
   useMapsEventListener(polyline, 'drag', onDrag);
