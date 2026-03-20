@@ -1,6 +1,8 @@
 # `<Polyline>` Component
 
-React component to display a [Polyline](https://developers.google.com/maps/documentation/javascript/reference/polygon#Polyline) on the map.
+React component to display
+a [Polyline](https://developers.google.com/maps/documentation/javascript/reference/polygon#Polyline)
+on the map.
 
 ## Usage
 
@@ -29,21 +31,32 @@ export default App;
 
 ## Props
 
-The `PolylineProps` interface extends the [`google.maps.PolylineOptions` interface](https://developers.google.com/maps/documentation/javascript/reference/polygon#PolylineOptions) and includes all possible options available for a Polyline.
+The `PolylineProps` interface extends the [
+`google.maps.PolylineOptions` interface](https://developers.google.com/maps/documentation/javascript/reference/polygon#PolylineOptions)
+and includes all possible options available for a Polyline.
 
-### Controlled / Uncontrolled
+### Editable Polylines and Controlled / Uncontrolled State
 
-The Polyline component supports both controlled and uncontrolled usage patterns for `path`:
+The distinction between controlled and uncontrolled usage patterns is only
+relevant when the polyline is `editable` or `draggable`. When a polyline is
+editable, the Google Maps API automatically adds handles to the vertices on the
+map and handles all mouse events for those handles internally, allowing users to
+modify the shape directly.
 
 ```tsx
-// Uncontrolled - initial value only
-<Polyline defaultPath={[{lat: 53.5, lng: 10}, {lat: 53.6, lng: 10.1}]} />
+// Uncontrolled - initial value only, users can edit freely
+<Polyline
+    defaultPath={[{lat: 53.5, lng: 10}, {lat: 53.6, lng: 10.1}]}
+    editable
+/>
 
 // Controlled - value always reflects props
-<Polyline path={path} />
+<Polyline path={path} editable/>
 ```
 
-When using controlled props with `editable` or `draggable`, use the `onPathChanged` callback to sync state:
+When using controlled props with `editable` or `draggable`, you must use the
+`onPathChanged` callback to sync state, otherwise the polyline will snap back to
+its original position:
 
 ```tsx
 const [path, setPath] = useState([
@@ -63,20 +76,22 @@ const [path, setPath] = useState([
 
 #### `polyline`: `google.maps.Polyline`
 
-An existing `google.maps.Polyline` instance to use instead of creating a new one. When provided, all other props (path, options, event handlers) will still be applied to this instance.
+An existing `google.maps.Polyline` instance to use instead of creating a new
+one. When provided, all other props (path, options, event handlers) will still
+be applied to this instance.
 
 ```tsx
 const polylineInstance = new google.maps.Polyline();
 
 // Minimal usage - just add existing instance to the map
-<Polyline polyline={polylineInstance} />
+<Polyline polyline={polylineInstance}/>
 
 // Apply additional props to the existing instance
 <Polyline
-  polyline={polylineInstance}
-  strokeColor={'#ff0000'}
-  strokeWeight={3}
-  onClick={(e) => console.log('clicked')}
+    polyline={polylineInstance}
+    strokeColor={'#ff0000'}
+    strokeWeight={3}
+    onClick={(e) => console.log('clicked')}
 />
 ```
 
@@ -90,7 +105,9 @@ The initial path of the polyline (uncontrolled).
 
 #### `encodedPath`: string
 
-An [encoded polyline](https://developers.google.com/maps/documentation/utilities/polylinealgorithm) string. When provided, will be decoded and used as the path. Takes precedence over the `path` prop if both are specified.
+An [encoded polyline](https://developers.google.com/maps/documentation/utilities/polylinealgorithm)
+string. When provided, will be decoded and used as the path. Takes precedence
+over the `path` prop if both are specified.
 
 ```tsx
 <Polyline
@@ -143,7 +160,8 @@ All styling options from `google.maps.PolylineOptions` are supported:
 - `strokeColor`: string
 - `strokeOpacity`: number
 - `strokeWeight`: number
-- `geodesic`: boolean - When true, edges of the polyline are interpreted as geodesic arcs
+- `geodesic`: boolean - When true, edges of the polyline are interpreted as
+  geodesic arcs
 - `icons`: `google.maps.IconSequence[]` - Icons to render along the polyline
 
 ### Behavior Props
@@ -156,13 +174,17 @@ All styling options from `google.maps.PolylineOptions` are supported:
 
 #### Automatic Property Inference
 
-The `clickable`, `draggable`, and `editable` properties are automatically inferred based on the presence of event handlers:
+The `clickable`, `draggable`, and `editable` properties are automatically
+inferred based on the presence of event handlers:
 
 - `clickable` is automatically set to `true` when `onClick` is provided
-- `draggable` is automatically set to `true` when `onDrag`, `onDragStart`, `onDragEnd`, or `onPathChanged` is provided
+- `draggable` is automatically set to `true` when `onDrag`, `onDragStart`,
+  `onDragEnd`, or `onPathChanged` is provided
 - `editable` is automatically set to `true` when `onPathChanged` is provided
 
-You can still explicitly set these properties to override the automatic inference, including setting them to `false` to disable the behavior even when handlers are present.
+You can still explicitly set these properties to override the automatic
+inference, including setting them to `false` to disable the behavior even when
+handlers are present.
 
 ## Extracting the Polyline Instance
 

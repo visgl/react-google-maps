@@ -1,6 +1,8 @@
 # `<Polygon>` Component
 
-React component to display a [Polygon](https://developers.google.com/maps/documentation/javascript/reference/polygon#Polygon) on the map.
+React component to display
+a [Polygon](https://developers.google.com/maps/documentation/javascript/reference/polygon#Polygon)
+on the map.
 
 ## Usage
 
@@ -31,21 +33,35 @@ export default App;
 
 ## Props
 
-The `PolygonProps` interface extends the [`google.maps.PolygonOptions` interface](https://developers.google.com/maps/documentation/javascript/reference/polygon#PolygonOptions) and includes all possible options available for a Polygon.
+The `PolygonProps` interface extends the [
+`google.maps.PolygonOptions` interface](https://developers.google.com/maps/documentation/javascript/reference/polygon#PolygonOptions)
+and includes all possible options available for a Polygon.
 
-### Controlled / Uncontrolled
+### Controlled / Uncontrolled (for Editable Polygons)
 
-The Polygon component supports both controlled and uncontrolled usage patterns for `paths`:
+The distinction between controlled and uncontrolled usage patterns is only
+relevant when the polygon is `editable` or `draggable`. When a polygon is
+editable, the Google Maps API automatically adds handles to the vertices on the
+map and handles all mouse events for those handles internally, allowing users to
+modify the shape directly.
 
 ```tsx
-// Uncontrolled - initial value only
-<Polygon defaultPaths={[[{lat: 53.5, lng: 10}, {lat: 53.6, lng: 10.1}, {lat: 53.5, lng: 10.2}]]} />
+// Uncontrolled - initial value only, users can edit freely
+<Polygon
+    defaultPaths={[[{lat: 53.5, lng: 10}, {lat: 53.6, lng: 10.1}, {
+        lat: 53.5,
+        lng: 10.2
+    }]]}
+    editable
+/>
 
 // Controlled - value always reflects props
-<Polygon paths={paths} />
+<Polygon paths={paths} editable/>
 ```
 
-When using controlled props with `editable` or `draggable`, use the `onPathsChanged` callback to sync state:
+When using controlled props with `editable` or `draggable`, you must use the
+`onPathsChanged` callback to sync state, otherwise the polygon will snap back to
+its original position:
 
 ```tsx
 const [paths, setPaths] = useState([
@@ -70,20 +86,22 @@ const [paths, setPaths] = useState([
 
 #### `polygon`: `google.maps.Polygon`
 
-An existing `google.maps.Polygon` instance to use instead of creating a new one. When provided, all other props (paths, options, event handlers) will still be applied to this instance.
+An existing `google.maps.Polygon` instance to use instead of creating a new one.
+When provided, all other props (paths, options, event handlers) will still be
+applied to this instance.
 
 ```tsx
 const polygonInstance = new google.maps.Polygon();
 
 // Minimal usage - just add existing instance to the map
-<Polygon polygon={polygonInstance} />
+<Polygon polygon={polygonInstance}/>
 
 // Apply additional props to the existing instance
 <Polygon
-  polygon={polygonInstance}
-  fillColor={'#0088ff'}
-  fillOpacity={0.3}
-  onClick={(e) => console.log('clicked')}
+    polygon={polygonInstance}
+    fillColor={'#0088ff'}
+    fillOpacity={0.3}
+    onClick={(e) => console.log('clicked')}
 />
 ```
 
@@ -91,30 +109,41 @@ const polygonInstance = new google.maps.Polygon();
 
 The controlled paths of the polygon.
 
-#### `defaultPaths`: `Array<Array<google.maps.LatLng | google.maps.LatLngLiteral>>`
+#### `defaultPaths`:
+
+`Array<Array<google.maps.LatLng | google.maps.LatLngLiteral>>`
 
 The initial paths of the polygon (uncontrolled).
 
 ```tsx
 // Simple polygon
 <Polygon paths={[
-  {lat: 53.54, lng: 10.0},
-  {lat: 53.55, lng: 10.02},
-  {lat: 53.56, lng: 10.01}
-]} />
+    {lat: 53.54, lng: 10.0},
+    {lat: 53.55, lng: 10.02},
+    {lat: 53.56, lng: 10.01}
+]}/>
 
 // Polygon with hole
 <Polygon paths={[
-  // Outer path
-  [{lat: 53.54, lng: 10.0}, {lat: 53.55, lng: 10.02}, {lat: 53.56, lng: 10.01}],
-  // Inner path (hole)
-  [{lat: 53.545, lng: 10.005}, {lat: 53.55, lng: 10.015}, {lat: 53.555, lng: 10.008}]
-]} />
+    // Outer path
+    [{lat: 53.54, lng: 10.0}, {lat: 53.55, lng: 10.02}, {
+        lat: 53.56,
+        lng: 10.01
+    }],
+    // Inner path (hole)
+    [{lat: 53.545, lng: 10.005}, {lat: 53.55, lng: 10.015}, {
+        lat: 53.555,
+        lng: 10.008
+    }]
+]}/>
 ```
 
 #### `encodedPaths`: string[]
 
-An array of [encoded polyline](https://developers.google.com/maps/documentation/utilities/polylinealgorithm) strings. When provided, will be decoded and used as the paths. Takes precedence over the `paths` prop if both are specified.
+An array
+of [encoded polyline](https://developers.google.com/maps/documentation/utilities/polylinealgorithm)
+strings. When provided, will be decoded and used as the paths. Takes precedence
+over the `paths` prop if both are specified.
 
 ```tsx
 <Polygon
@@ -169,7 +198,8 @@ All styling options from `google.maps.PolygonOptions` are supported:
 - `strokeColor`: string
 - `strokeOpacity`: number
 - `strokeWeight`: number
-- `geodesic`: boolean - When true, edges of the polygon are interpreted as geodesic arcs
+- `geodesic`: boolean - When true, edges of the polygon are interpreted as
+  geodesic arcs
 
 ### Behavior Props
 
@@ -181,14 +211,18 @@ All styling options from `google.maps.PolygonOptions` are supported:
 
 #### Automatic Property Inference
 
-The `clickable`, `draggable`, and `editable` properties are automatically inferred based on the presence of event handlers:
+The `clickable`, `draggable`, and `editable` properties are automatically
+inferred based on the presence of event handlers:
 
 - `clickable` is automatically set to `true` when `onClick` is provided
-- `draggable` is automatically set to `true` when `onDrag`, `onDragStart`, `onDragEnd`, or `onPathsChanged` is provided
+- `draggable` is automatically set to `true` when `onDrag`, `onDragStart`,
+  `onDragEnd`, or `onPathsChanged` is provided
 - `editable` is automatically set to `true` when `onPathsChanged` is provided
 
-This means you don't need to explicitly set these properties in most cases
-You can still explicitly set these properties to override the automatic inference, including setting them to `false` to disable the behavior even when handlers are present.
+This means you don't need to explicitly set these properties in most cases You
+can still explicitly set these properties to override the automatic inference,
+including setting them to `false` to disable the behavior even when handlers are
+present.
 
 ## Extracting the Polygon Instance
 
