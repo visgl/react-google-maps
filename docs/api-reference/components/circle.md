@@ -30,19 +30,24 @@ export default App;
 
 The `CircleProps` interface extends the [`google.maps.CircleOptions` interface](https://developers.google.com/maps/documentation/javascript/reference/polygon#CircleOptions) and includes all possible options available for a Circle.
 
-### Controlled / Uncontrolled
+### Controlled / Uncontrolled (for Editable Circles)
 
-The Circle component supports both controlled and uncontrolled usage patterns for `center` and `radius`:
+The distinction between controlled and uncontrolled usage patterns is only relevant when the circle is `editable` or `draggable`. When a circle is editable, the Google Maps API automatically adds handles to resize the circle on the map and handles all mouse events for those handles internally, allowing users to modify the shape directly.
 
 ```tsx
-// Uncontrolled - initial values only
-<Circle defaultCenter={{lat: 53.5, lng: 10}} defaultRadius={1000} />
+// Uncontrolled - initial values only, users can edit freely
+<Circle
+  defaultCenter={{lat: 53.5, lng: 10}}
+  defaultRadius={1000}
+  editable
+  draggable
+/>
 
 // Controlled - value always reflects props
-<Circle center={center} radius={radius} />
+<Circle center={center} radius={radius} editable draggable />
 ```
 
-When using controlled props with `editable` or `draggable`, use the `onCenterChanged` and `onRadiusChanged` callbacks to sync state:
+When using controlled props with `editable` or `draggable`, you must use the `onCenterChanged` and `onRadiusChanged` callbacks to sync state, otherwise the circle will snap back to its original position:
 
 ```tsx
 const [center, setCenter] = useState({lat: 53.5, lng: 10});

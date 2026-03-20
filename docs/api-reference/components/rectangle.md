@@ -34,21 +34,23 @@ export default App;
 
 The `RectangleProps` interface extends the [`google.maps.RectangleOptions` interface](https://developers.google.com/maps/documentation/javascript/reference/polygon#RectangleOptions) and includes all possible options available for a Rectangle.
 
-### Controlled / Uncontrolled
+### Controlled / Uncontrolled (for Editable Rectangles)
 
-The Rectangle component supports both controlled and uncontrolled usage patterns for `bounds`:
+The distinction between controlled and uncontrolled usage patterns is only relevant when the rectangle is `editable` or `draggable`. When a rectangle is editable, the Google Maps API automatically adds handles to resize the rectangle on the map and handles all mouse events for those handles internally, allowing users to modify the shape directly.
 
 ```tsx
-// Uncontrolled - initial value only
+// Uncontrolled - initial value only, users can edit freely
 <Rectangle
   defaultBounds={{north: 53.56, south: 53.54, east: 10.03, west: 9.99}}
+  editable
+  draggable
 />
 
 // Controlled - value always reflects props
-<Rectangle bounds={bounds} />
+<Rectangle bounds={bounds} editable draggable />
 ```
 
-When using controlled props with `editable` or `draggable`, use the `onBoundsChanged` callback to sync state:
+When using controlled props with `editable` or `draggable`, you must use the `onBoundsChanged` callback to sync state, otherwise the rectangle will snap back to its original position:
 
 ```tsx
 const [bounds, setBounds] = useState({
