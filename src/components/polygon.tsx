@@ -73,7 +73,7 @@ function usePolygon(props: PolygonProps) {
     encodedPaths,
     paths,
     defaultPaths,
-    ...polygonOptions
+    ...destructuredOptions
   } = props;
 
   const [polygon, setPolygon] = useState<google.maps.Polygon | null>(null);
@@ -82,6 +82,19 @@ function usePolygon(props: PolygonProps) {
 
   // Track if we're programmatically updating to avoid firing onPathsChanged
   const isUpdatingRef = useRef(false);
+
+  // Memoize options with automatic inference of clickable/draggable/editable
+  const polygonOptions = useMemoized(
+    {
+      ...destructuredOptions,
+      clickable: destructuredOptions.clickable ?? Boolean(onClick),
+      draggable:
+        destructuredOptions.draggable ??
+        Boolean(onDrag || onDragStart || onDragEnd || onPathsChanged),
+      editable: destructuredOptions.editable ?? Boolean(onPathsChanged)
+    },
+    isDeepEqual
+  );
 
   useEffect(() => {
     if (!map) {
@@ -196,14 +209,11 @@ function usePolygon(props: PolygonProps) {
     polygonOptions.draggable
   ]);
 
-  // Memoize options to prevent unnecessary setOptions calls
-  const memoizedOptions = useMemoized(polygonOptions, isDeepEqual);
-
   useEffect(() => {
     if (!polygon) return;
 
-    polygon.setOptions(memoizedOptions);
-  }, [polygon, memoizedOptions]);
+    polygon.setOptions(polygonOptions);
+  }, [polygon, polygonOptions]);
 
   // Sync controlled paths prop with the polygon instance
   useEffect(() => {

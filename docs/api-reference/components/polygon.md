@@ -160,6 +160,17 @@ All styling options from `google.maps.PolygonOptions` are supported:
 - `visible`: boolean - Whether the polygon is visible
 - `zIndex`: number - The z-index of the polygon
 
+#### Automatic Property Inference
+
+The `clickable`, `draggable`, and `editable` properties are automatically inferred based on the presence of event handlers:
+
+- `clickable` is automatically set to `true` when `onClick` is provided
+- `draggable` is automatically set to `true` when `onDrag`, `onDragStart`, `onDragEnd`, or `onPathsChanged` is provided
+- `editable` is automatically set to `true` when `onPathsChanged` is provided
+
+This means you don't need to explicitly set these properties in most cases
+You can still explicitly set these properties to override the automatic inference, including setting them to `false` to disable the behavior even when handlers are present.
+
 ## Extracting the Polygon Instance
 
 You can access the underlying `google.maps.Polygon` instance via a ref:

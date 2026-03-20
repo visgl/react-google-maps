@@ -56,11 +56,24 @@ function useCircle(props: CircleProps) {
     defaultCenter,
     radius,
     defaultRadius,
-    ...circleOptions
+    ...destructuredOptions
   } = props;
 
   const [circle, setCircle] = useState<google.maps.Circle | null>(null);
   const map = useMap();
+
+  // Memoize options with automatic inference of clickable/draggable/editable
+  const circleOptions = useMemoized(
+    {
+      ...destructuredOptions,
+      clickable: destructuredOptions.clickable ?? Boolean(onClick),
+      draggable:
+        destructuredOptions.draggable ??
+        Boolean(onDrag || onDragStart || onDragEnd || onCenterChanged),
+      editable: destructuredOptions.editable ?? Boolean(onRadiusChanged)
+    },
+    isDeepEqual
+  );
 
   useEffect(() => {
     if (!map) {
@@ -111,14 +124,11 @@ function useCircle(props: CircleProps) {
       : null
   );
 
-  // Memoize options to prevent unnecessary setOptions calls
-  const memoizedOptions = useMemoized(circleOptions, isDeepEqual);
-
   useEffect(() => {
     if (!circle) return;
 
-    circle.setOptions(memoizedOptions);
-  }, [circle, memoizedOptions]);
+    circle.setOptions(circleOptions);
+  }, [circle, circleOptions]);
 
   // Sync controlled center prop with the circle instance
   useEffect(() => {

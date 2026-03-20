@@ -135,6 +135,16 @@ All styling options from `google.maps.PolylineOptions` are supported:
 - `visible`: boolean - Whether the polyline is visible
 - `zIndex`: number - The z-index of the polyline
 
+#### Automatic Property Inference
+
+The `clickable`, `draggable`, and `editable` properties are automatically inferred based on the presence of event handlers:
+
+- `clickable` is automatically set to `true` when `onClick` is provided
+- `draggable` is automatically set to `true` when `onDrag`, `onDragStart`, `onDragEnd`, or `onPathChanged` is provided
+- `editable` is automatically set to `true` when `onPathChanged` is provided
+
+You can still explicitly set these properties to override the automatic inference, including setting them to `false` to disable the behavior even when handlers are present.
+
 ## Extracting the Polyline Instance
 
 You can access the underlying `google.maps.Polyline` instance via a ref:

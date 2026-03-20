@@ -59,7 +59,7 @@ function usePolyline(props: PolylineProps) {
     encodedPath,
     path,
     defaultPath,
-    ...polylineOptions
+    ...destructuredOptions
   } = props;
 
   const [polyline, setPolyline] = useState<google.maps.Polyline | null>(null);
@@ -68,6 +68,19 @@ function usePolyline(props: PolylineProps) {
 
   // Track if we're programmatically updating to avoid firing onPathChanged
   const isUpdatingRef = useRef(false);
+
+  // Memoize options with automatic inference of clickable/draggable/editable
+  const polylineOptions = useMemoized(
+    {
+      ...destructuredOptions,
+      clickable: destructuredOptions.clickable ?? Boolean(onClick),
+      draggable:
+        destructuredOptions.draggable ??
+        Boolean(onDrag || onDragStart || onDragEnd || onPathChanged),
+      editable: destructuredOptions.editable ?? Boolean(onPathChanged)
+    },
+    isDeepEqual
+  );
 
   useEffect(() => {
     if (!map) {
@@ -143,14 +156,11 @@ function usePolyline(props: PolylineProps) {
     polylineOptions.draggable
   ]);
 
-  // Memoize options to prevent unnecessary setOptions calls
-  const memoizedOptions = useMemoized(polylineOptions, isDeepEqual);
-
   useEffect(() => {
     if (!polyline) return;
 
-    polyline.setOptions(memoizedOptions);
-  }, [polyline, memoizedOptions]);
+    polyline.setOptions(polylineOptions);
+  }, [polyline, polylineOptions]);
 
   // Sync controlled path prop with the polyline instance
   useEffect(() => {

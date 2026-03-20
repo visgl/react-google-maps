@@ -50,13 +50,26 @@ function useRectangle(props: RectangleProps) {
     onBoundsChanged,
     bounds,
     defaultBounds,
-    ...rectangleOptions
+    ...destructuredOptions
   } = props;
 
   const [rectangle, setRectangle] = useState<google.maps.Rectangle | null>(
     null
   );
   const map = useMap();
+
+  // Memoize options with automatic inference of clickable/draggable/editable
+  const rectangleOptions = useMemoized(
+    {
+      ...destructuredOptions,
+      clickable: destructuredOptions.clickable ?? Boolean(onClick),
+      draggable:
+        destructuredOptions.draggable ??
+        Boolean(onDrag || onDragStart || onDragEnd || onBoundsChanged),
+      editable: destructuredOptions.editable ?? Boolean(onBoundsChanged)
+    },
+    isDeepEqual
+  );
 
   useEffect(() => {
     if (!map) {
@@ -96,14 +109,11 @@ function useRectangle(props: RectangleProps) {
       : null
   );
 
-  // Memoize options to prevent unnecessary setOptions calls
-  const memoizedOptions = useMemoized(rectangleOptions, isDeepEqual);
-
   useEffect(() => {
     if (!rectangle) return;
 
-    rectangle.setOptions(memoizedOptions);
-  }, [rectangle, memoizedOptions]);
+    rectangle.setOptions(rectangleOptions);
+  }, [rectangle, rectangleOptions]);
 
   // Sync controlled bounds prop with the rectangle instance
   useEffect(() => {
