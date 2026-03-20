@@ -5,8 +5,11 @@ import React, {
   useState
 } from 'react';
 
+import isDeepEqual from 'fast-deep-equal';
+
 import {useMap} from '../hooks/use-map';
 import {useMapsEventListener} from '../hooks/use-maps-event-listener';
+import {useMemoized} from '../hooks/use-memoized';
 import {latLngEquals} from '../libraries/lat-lng-utils';
 
 import type {Ref} from 'react';
@@ -108,11 +111,14 @@ function useCircle(props: CircleProps) {
       : null
   );
 
+  // Memoize options to prevent unnecessary setOptions calls
+  const memoizedOptions = useMemoized(circleOptions, isDeepEqual);
+
   useEffect(() => {
     if (!circle) return;
 
-    circle.setOptions(circleOptions);
-  }, [circle, circleOptions]);
+    circle.setOptions(memoizedOptions);
+  }, [circle, memoizedOptions]);
 
   // Sync controlled center prop with the circle instance
   useEffect(() => {

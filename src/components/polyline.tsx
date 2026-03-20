@@ -6,9 +6,12 @@ import React, {
   useState
 } from 'react';
 
+import isDeepEqual from 'fast-deep-equal';
+
 import {useMap} from '../hooks/use-map';
 import {useMapsLibrary} from '../hooks/use-maps-library';
 import {useMapsEventListener} from '../hooks/use-maps-event-listener';
+import {useMemoized} from '../hooks/use-memoized';
 import {pathEquals} from '../libraries/lat-lng-utils';
 
 import type {Ref} from 'react';
@@ -140,11 +143,14 @@ function usePolyline(props: PolylineProps) {
     polylineOptions.draggable
   ]);
 
+  // Memoize options to prevent unnecessary setOptions calls
+  const memoizedOptions = useMemoized(polylineOptions, isDeepEqual);
+
   useEffect(() => {
     if (!polyline) return;
 
-    polyline.setOptions(polylineOptions);
-  }, [polyline, polylineOptions]);
+    polyline.setOptions(memoizedOptions);
+  }, [polyline, memoizedOptions]);
 
   // Sync controlled path prop with the polyline instance
   useEffect(() => {

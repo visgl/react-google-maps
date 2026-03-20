@@ -6,9 +6,12 @@ import React, {
   useState
 } from 'react';
 
+import isDeepEqual from 'fast-deep-equal';
+
 import {useMap} from '../hooks/use-map';
 import {useMapsLibrary} from '../hooks/use-maps-library';
 import {useMapsEventListener} from '../hooks/use-maps-event-listener';
+import {useMemoized} from '../hooks/use-memoized';
 import {pathsEquals} from '../libraries/lat-lng-utils';
 
 import type {Ref} from 'react';
@@ -193,11 +196,14 @@ function usePolygon(props: PolygonProps) {
     polygonOptions.draggable
   ]);
 
+  // Memoize options to prevent unnecessary setOptions calls
+  const memoizedOptions = useMemoized(polygonOptions, isDeepEqual);
+
   useEffect(() => {
     if (!polygon) return;
 
-    polygon.setOptions(polygonOptions);
-  }, [polygon, polygonOptions]);
+    polygon.setOptions(memoizedOptions);
+  }, [polygon, memoizedOptions]);
 
   // Sync controlled paths prop with the polygon instance
   useEffect(() => {

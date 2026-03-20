@@ -5,8 +5,11 @@ import React, {
   useState
 } from 'react';
 
+import isDeepEqual from 'fast-deep-equal';
+
 import {useMap} from '../hooks/use-map';
 import {useMapsEventListener} from '../hooks/use-maps-event-listener';
+import {useMemoized} from '../hooks/use-memoized';
 import {boundsEquals} from '../libraries/lat-lng-utils';
 
 import type {Ref} from 'react';
@@ -93,11 +96,14 @@ function useRectangle(props: RectangleProps) {
       : null
   );
 
+  // Memoize options to prevent unnecessary setOptions calls
+  const memoizedOptions = useMemoized(rectangleOptions, isDeepEqual);
+
   useEffect(() => {
     if (!rectangle) return;
 
-    rectangle.setOptions(rectangleOptions);
-  }, [rectangle, rectangleOptions]);
+    rectangle.setOptions(memoizedOptions);
+  }, [rectangle, memoizedOptions]);
 
   // Sync controlled bounds prop with the rectangle instance
   useEffect(() => {
