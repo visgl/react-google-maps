@@ -126,9 +126,9 @@ When an `anchor` is specified, the `position` prop will be ignored.
 
 A Marker or AdvancedMarker instance to be used as an anchor. If specified, the
 InfoWindow will be positioned at the top-center of the anchor. References to
-the Marker / AdvancedMarkerElement objects needed can be obtained using the 
-`ref` property of the `Marker` and `AdvancedMarker` components (see example 
-above). 
+the Marker / AdvancedMarkerElement objects needed can be obtained using the
+`ref` property of the `Marker` and `AdvancedMarker` components (see example
+above).
 
 #### `zIndex`: number
 
@@ -196,8 +196,7 @@ The `minWidth` can't be changed while the InfoWindow is open.
 
 :::
 
-
-#### `headerContent`: string | React.ReactNode
+#### `headerContent`: string | ReactNode
 
 The content to display in the InfoWindow header row.
 This can be any JSX element, or a string that could also contain HTML. When
