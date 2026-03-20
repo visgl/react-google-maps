@@ -112,7 +112,7 @@ required to set either a `position` or an `anchor` to show the infowindow.
 
 ### General Props
 
-#### `position`: `google.maps.LatLngLiteral`
+#### `position`: google.maps.LatLngLiteral
 
 The LatLng at which to display this InfoWindow.
 
@@ -122,7 +122,7 @@ When an `anchor` is specified, the `position` prop will be ignored.
 
 :::
 
-#### `anchor`: `google.maps.Marker | google.maps.marker.AdvancedMarkerElement`
+#### `anchor`: google.maps.Marker | google.maps.marker.AdvancedMarkerElement
 
 A Marker or AdvancedMarker instance to be used as an anchor. If specified, the
 InfoWindow will be positioned at the top-center of the anchor. References to
@@ -196,7 +196,7 @@ The `minWidth` can't be changed while the InfoWindow is open.
 
 :::
 
-#### `headerContent`: string | React.ReactNode
+#### `headerContent`: string | ReactNode
 
 The content to display in the InfoWindow header row.
 This can be any JSX element, or a string that could also contain HTML. When
