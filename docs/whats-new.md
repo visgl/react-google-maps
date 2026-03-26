@@ -5,6 +5,86 @@ recent versions of the library. For a complete list of changes, including bug
 fixes, please refer to
 the [Changelog](https://github.com/visgl/react-google-maps/blob/main/CHANGELOG.md).
 
+## Version 1.8 (March 2026)
+
+### 2D Geometry Components: Circle, Polyline, and Polygon
+
+Three new components make it straightforward to draw geometric shapes directly
+on the map without managing the underlying Google Maps API objects manually.
+
+- **`<Circle>`** — renders a circle at a given center and radius
+- **`<Polyline>`** — draws a line through a series of coordinates (also accepts
+  encoded polyline strings)
+- **`<Polygon>`** — renders a closed shape, supporting multiple paths for
+  complex geometries
+
+All three components support controlled and uncontrolled usage, as well as the
+full set of event handlers (click, drag, mouse events) and change callbacks.
+
+```tsx
+<Circle
+  center={{lat: 53.55, lng: 10.0}}
+  radius={1000}
+  fillColor={'#0088ff'}
+  fillOpacity={0.3}
+  strokeColor={'#0088ff'}
+  strokeWeight={2}
+/>
+```
+
+See the API reference for
+[`<Circle>`](./api-reference/components/circle.md),
+[`<Polyline>`](./api-reference/components/polyline.md), and
+[`<Polygon>`](./api-reference/components/polygon.md) for the full prop
+documentation, and the [geometry example](https://visgl.github.io/react-google-maps/examples/geometry)
+for a live demo.
+
+### 3D Map Components: Map3D, Marker3D, and Popover
+
+The library now ships first-class React components for the Google Maps 3D API:
+
+- **`<Map3D>`** — renders a photorealistic 3D map (uses the `gmp-map-3d` custom
+  element internally) with props for camera position (`center`, `range`,
+  `heading`, `tilt`, `roll`) and a `useMap3D` hook to access the underlying
+  element
+- **`<Marker3D>`** — places a 3D marker on a `<Map3D>`
+- **`<Popover>`** — renders an HTML popover attached to a position on a `<Map3D>`
+
+```tsx
+<Map3D
+  defaultCenter={{lat: 37.7749, lng: -122.4194, altitude: 1000}}
+  defaultRange={5000}
+  defaultTilt={45}>
+  <Marker3D position={{lat: 37.7749, lng: -122.4194, altitude: 0}} />
+</Map3D>
+```
+
+See the API reference for
+[`<Map3D>`](./api-reference/components/map-3d.md),
+[`<Marker3D>`](./api-reference/components/marker-3d.md), and
+[`<Popover>`](./api-reference/components/popover.md), and the
+[map-3d example](https://visgl.github.io/react-google-maps/examples/map-3d) for
+a live demo.
+
+### Firebase App Check Support
+
+The `<APIProvider>` component now accepts a `fetchAppCheckToken` prop. When
+provided, the token returned by this function is sent along with every Maps
+JavaScript API request, enabling
+[Firebase App Check](https://firebase.google.com/docs/app-check) protection for
+your Maps usage.
+
+```tsx
+<APIProvider
+  apiKey={YOUR_API_KEY}
+  fetchAppCheckToken={() => getToken(appCheck).then(r => r.token)}>
+  {/* ... */}
+</APIProvider>
+```
+
+See the [`<APIProvider>` API reference](./api-reference/components/api-provider.md)
+for details.
+
 ## Version 1.7 (October 2025)
 
 ### Add support for Custom Elements
