@@ -4,9 +4,11 @@
 
 This is a TypeScript / JavaScript library to integrate the Maps JavaScript API
 into your React application.
-It comes with a collection of React components to create maps, markers and
-infowindows, and a set of hooks to use some of the Maps JavaScript API
-[Services][gmp-services] and [Libraries][gmp-libraries].
+It comes with a collection of React components to create maps, markers,
+infowindows, geometry overlays (circles, polylines, polygons), and
+photorealistic [3D maps][gmp-maps-3d], as well as a set of hooks to use some
+of the Maps JavaScript API [Services][gmp-services] and
+[Libraries][gmp-libraries].
 
 ## Installation
 
@@ -34,8 +36,11 @@ components provided by this library.
 
 To render a simple map, add a [`Map`][api-map] component inside the `APIProvider`.
 Within the `Map` component, you can then add further components like
-[`Marker`][api-marker], [`AdvancedMarker`][api-adv-marker], or
-[`InfoWindow`][api-infowindow] to render content on the map.
+[`Marker`][api-marker], [`AdvancedMarker`][api-adv-marker],
+[`InfoWindow`][api-infowindow], or geometry components such as
+[`Circle`][api-circle], [`Polyline`][api-polyline], and
+[`Polygon`][api-polygon] to render content on the map.
+For photorealistic 3D maps, use the [`Map3D`][api-map-3d] component instead.
 
 For more advanced use-cases you can even add your own components to the map
 that make use of `google.maps.OverlayView` or `google.maps.WebGlOverlayView`.
@@ -196,6 +201,10 @@ You can also discuss this library on [our Discord server][gmp-discord].
 [api-marker]: https://visgl.github.io/react-google-maps/docs/api-reference/components/marker
 [api-adv-marker]: https://visgl.github.io/react-google-maps/docs/api-reference/components/advanced-marker
 [api-infowindow]: https://visgl.github.io/react-google-maps/docs/api-reference/components/info-window
+[api-circle]: https://visgl.github.io/react-google-maps/docs/api-reference/components/circle
+[api-polyline]: https://visgl.github.io/react-google-maps/docs/api-reference/components/polyline
+[api-polygon]: https://visgl.github.io/react-google-maps/docs/api-reference/components/polygon
+[api-map-3d]: https://visgl.github.io/react-google-maps/docs/api-reference/components/map-3d
 [api-use-lib]: https://visgl.github.io/react-google-maps/docs/api-reference/hooks/use-maps-library
 [docs]: https://visgl.github.io/react-google-maps/docs/
 [examples]: https://visgl.github.io/react-google-maps/examples
