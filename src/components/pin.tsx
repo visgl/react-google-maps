@@ -57,11 +57,20 @@ export const Pin: FunctionComponent<PinProps> = props => {
   if (isModern) {
     // Modern: map old glyph prop to new glyphSrc/glyphText
     const {glyph, glyphSrc, glyphText, ...restProps} = props;
-    const isUrl = glyph instanceof URL || (typeof glyph === 'string' && glyph.startsWith('http'));
-    const finalGlyphText = glyphText ?? (typeof glyph === 'string' && !isUrl ? glyph : undefined);
+    const isUrl =
+      glyph instanceof URL ||
+      (typeof glyph === 'string' && glyph.startsWith('http'));
+    const finalGlyphText =
+      glyphText ?? (typeof glyph === 'string' && !isUrl ? glyph : undefined);
     const finalGlyphSrc = glyphSrc ?? (isUrl ? String(glyph) : undefined);
 
-    return <PinModern {...restProps} glyphText={finalGlyphText} glyphSrc={finalGlyphSrc} />;
+    return (
+      <PinModern
+        {...restProps}
+        glyphText={finalGlyphText}
+        glyphSrc={finalGlyphSrc}
+      />
+    );
   } else {
     // Legacy: map new glyphSrc/glyphText to old glyph prop
     const {glyph, glyphSrc, glyphText, ...restProps} = props;
