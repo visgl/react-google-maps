@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.1](https://github.com/visgl/react-google-maps/compare/v1.8.0...v1.8.1) (2026-03-27)
+
+
+### Bug Fixes
+
+* **hooks:** add fallback to useLayoutEffect for React 16/17 compatibility ([#950](https://github.com/visgl/react-google-maps/issues/950)) ([86ad8ee](https://github.com/visgl/react-google-maps/commit/86ad8ee87c4ffc53084a8da525398c2e0e851f84))
+
 ## [1.8.0](https://github.com/visgl/react-google-maps/compare/v1.7.1...v1.8.0) (2026-03-26)
 
 
