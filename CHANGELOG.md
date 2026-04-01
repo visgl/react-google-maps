@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.2](https://github.com/visgl/react-google-maps/compare/v1.8.1...v1.8.2) (2026-04-01)
+
+
+### Bug Fixes
+
+* move vite back to devDependencies ([#955](https://github.com/visgl/react-google-maps/issues/955)) ([d3535ac](https://github.com/visgl/react-google-maps/commit/d3535ac787ba6e2b8360044813d171cd3a876f26))
+
 ## [1.8.1](https://github.com/visgl/react-google-maps/compare/v1.8.0...v1.8.1) (2026-03-27)
 
 
