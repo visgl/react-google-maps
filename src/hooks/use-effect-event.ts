@@ -3,12 +3,14 @@
 //
 // https://github.com/sanity-io/use-effect-event
 
-import {useInsertionEffect, useLayoutEffect, useRef} from 'react';
+import * as React from 'react';
+
+const {useLayoutEffect, useRef} = React;
 
 // useInsertionEffect was added in React 18; fall back to useLayoutEffect for
 // React 16/17. Both run before useEffect, so ref.current is always up-to-date
 // by the time any passive effect (or real event) reads it.
-const useBeforeEffect = useInsertionEffect ?? useLayoutEffect;
+const useBeforeEffect = React.useInsertionEffect ?? useLayoutEffect;
 
 function forbiddenInRender() {
   throw new Error('useEffectEvent: invalid call during rendering.');
