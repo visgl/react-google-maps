@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.3](https://github.com/visgl/react-google-maps/compare/v1.8.2...v1.8.3) (2026-04-09)
+
+
+### Bug Fixes
+
+* **hooks:** avoid static useInsertionEffect imports ([#960](https://github.com/visgl/react-google-maps/issues/960)) ([f2870c1](https://github.com/visgl/react-google-maps/commit/f2870c1a9e0cdfdce1a5f8efe4a7f756683bb447))
+
 ## [1.8.2](https://github.com/visgl/react-google-maps/compare/v1.8.1...v1.8.2) (2026-04-01)
 
 
