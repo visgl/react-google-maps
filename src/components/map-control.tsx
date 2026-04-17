@@ -6,6 +6,7 @@ import type {PropsWithChildren} from 'react';
 
 type MapControlProps = PropsWithChildren<{
   position: ControlPosition;
+  className?: string;
 }>;
 
 /**
@@ -48,10 +49,16 @@ export type ControlPosition =
 
 export const MapControl: FunctionComponent<MapControlProps> = ({
   children,
-  position
+  position,
+  className
 }) => {
   const controlContainer = useMemo(() => document.createElement('div'), []);
   const map = useMap();
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/immutability -- the control container DOM node is intentionally mutated from effects
+    controlContainer.className = className ?? '';
+  }, [controlContainer, className]);
 
   useEffect(() => {
     if (!map) return;

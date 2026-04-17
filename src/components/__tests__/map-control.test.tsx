@@ -39,3 +39,53 @@ test('control is added to the map', () => {
   const [controlEl] = (controlsArray.push as jest.Mock).mock.calls[0];
   expect(controlEl).toHaveTextContent('control button');
 });
+
+test('className prop is applied to the control container', () => {
+  render(
+    <MapControl
+      position={ControlPosition.BOTTOM_CENTER}
+      className="custom-control">
+      <button>control button</button>
+    </MapControl>
+  );
+
+  const controlsArray = mapInstance.controls[ControlPosition.BOTTOM_CENTER];
+  const [controlEl] = (controlsArray.push as jest.Mock).mock.calls[0];
+
+  expect(controlEl).toHaveClass('custom-control');
+});
+
+test('className prop updates are reflected on the control container', () => {
+  const {rerender} = render(
+    <MapControl
+      position={ControlPosition.BOTTOM_CENTER}
+      className="initial-class">
+      <button>control button</button>
+    </MapControl>
+  );
+
+  const controlsArray = mapInstance.controls[ControlPosition.BOTTOM_CENTER];
+  const [controlEl] = (controlsArray.push as jest.Mock).mock.calls[0];
+
+  expect(controlEl).toHaveClass('initial-class');
+
+  rerender(
+    <MapControl
+      position={ControlPosition.BOTTOM_CENTER}
+      className="updated-class">
+      <button>control button</button>
+    </MapControl>
+  );
+
+  expect(controlEl).toHaveClass('updated-class');
+  expect(controlEl).not.toHaveClass('initial-class');
+
+  rerender(
+    <MapControl position={ControlPosition.BOTTOM_CENTER}>
+      <button>control button</button>
+    </MapControl>
+  );
+
+  expect(controlEl).not.toHaveClass('updated-class');
+  expect(controlEl).not.toHaveClass('initial-class');
+});
