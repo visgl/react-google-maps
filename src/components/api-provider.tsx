@@ -374,8 +374,6 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
     const settings = google.maps.Settings.getInstance();
     if (fetchAppCheckToken) {
       settings.fetchAppCheckToken = fetchAppCheckToken;
-    } else if (settings.fetchAppCheckToken) {
-      settings.fetchAppCheckToken = null;
     }
   }, [status, fetchAppCheckToken]);
 
