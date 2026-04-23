@@ -263,6 +263,7 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
     listeners.add(setStatus);
 
     // sync component state on mount (shouldn't be different from the initial state)
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional synchronization of status from singleton
     setStatus(loadingStatus);
 
     return () => {
