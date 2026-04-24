@@ -45,5 +45,14 @@ const App = () => (
 The position is specified as one of the values of the `ControlPosition` enum, which
 is an exact copy of the [`google.maps.ControlPosition`][gmp-ctrl-pos] type.
 
+### Optional
+
+#### `className`: string
+
+A CSS class name applied to the container element that wraps the control content
+on the map. This is useful for styling or targeting the control from outside,
+since the children are rendered into a container that is managed by the Maps
+JavaScript API rather than directly into the React tree.
+
 [gmp-custom-ctrl]: https://developers.google.com/maps/documentation/javascript/controls#CustomControls
 [gmp-ctrl-pos]: https://developers.google.com/maps/documentation/javascript/controls#ControlPositioning
