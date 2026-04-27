@@ -4,8 +4,8 @@
     "@vis.gl/react-google-maps": "^1.8.0-rc.8",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "typescript": "^5.4.5",
-    "vite": "^6.0.11"
+    "typescript": "^6.0.3",
+    "vite": "^8.0.8"
   },
   "scripts": {
     "start": "vite",

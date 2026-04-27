@@ -75,7 +75,11 @@ beforeEach(() => {
   resetImportLibraryPromise();
 
   // Mock google.maps.Settings (missing in @googlemaps/jest-mocks)
-  settingsInstance = {fetchAppCheckToken: null} as google.maps.Settings;
+  settingsInstance = {
+    fetchAppCheckToken: async () => ({token: ''}),
+    experienceIds: []
+  } as google.maps.Settings;
+
   google.maps.Settings = {
     getInstance: () => settingsInstance
   } as unknown as typeof google.maps.Settings;

@@ -166,7 +166,7 @@ describe('map and marker-library loaded', () => {
 
   describe('anchoring with modern API', () => {
     beforeEach(() => {
-      google.maps.version = '3.62.9';
+      (google.maps as any).version = '3.62.9';
     });
 
     test('anchorLeft/anchorTop should have precedence over anchorPoint', async () => {
@@ -213,7 +213,7 @@ describe('map and marker-library loaded', () => {
 
   describe('anchoring with legacy API', () => {
     beforeEach(() => {
-      google.maps.version = '3.61.0';
+      (google.maps as any).version = '3.61.0';
     });
 
     test('anchorPoint is applied as css transform', async () => {
