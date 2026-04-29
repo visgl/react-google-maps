@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "typeRoots": [
-      "./types",
       "../../types",
       "../../node_modules/@types",
       "./node_modules/@types"
@@ -22,5 +21,5 @@
     }
   },
   "exclude": ["./dist", "./node_modules"],
-  "include": ["src/**/*.ts", "src/**/*.tsx", "types/**/*.ts"]
+  "include": ["src/**/*.ts", "src/**/*.tsx"]
 }

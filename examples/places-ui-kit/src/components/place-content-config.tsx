@@ -30,8 +30,7 @@ type AttributionProps = {
 
 type MediaProps = {
   lightboxPreferred?: boolean;
-  // FIXME: update to google.maps.places.MediaSize
-  preferredSize?: 'SMALL' | 'MEDIUM' | 'LARGE';
+  preferredSize?: google.maps.places.MediaSize | null;
 };
 
 type AttributionContentItem = {

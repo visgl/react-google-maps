@@ -102,11 +102,10 @@ export const BasicPlaceAutocomplete: FunctionComponent<
   const [templateElement, setTemplateElement] =
     useState<HTMLTemplateElement | null>(null);
 
-  const ref = useRef<google.maps.places.PlaceAutocompleteElement | null>(null);
-
-  // types have not yet been officially updated so we need to typecast here
-  // to avoid TS errors
-  const autocomplete = ref.current as any;
+  const ref = useRef<google.maps.places.BasicPlaceAutocompleteElement | null>(
+    null
+  );
+  const autocomplete = ref.current;
 
   // bind props to the autocomplete element
   usePropBinding(autocomplete, 'includedPrimaryTypes', includedPrimaryTypes);

@@ -1,5 +1,5 @@
 import {useEffect, useRef, useState} from 'react';
-import {useMapsLibrary} from '../../../../src';
+import {useMapsLibrary} from '@vis.gl/react-google-maps';
 
 export type UseAutocompleteSuggestionsReturn = {
   suggestions: google.maps.places.AutocompleteSuggestion[];

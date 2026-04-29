@@ -1,17 +1,8 @@
 import {useMapsLibrary} from '@vis.gl/react-google-maps';
 import React, {FunctionComponent, useEffect, useState} from 'react';
 import {ContentItem, PlaceContentConfig} from './place-content-config';
-import {Orientation} from './place-details';
 import {useDomEventListener, usePropBinding} from '../utility-hooks';
 import {CSSWithCustomProperties} from '../places';
-
-export const AttributionPosition = {
-  TOP: 'TOP',
-  BOTTOM: 'BOTTOM'
-} as const;
-
-export type AttributionPosition =
-  (typeof AttributionPosition)[keyof typeof AttributionPosition];
 
 export type TextSearchOptions = {
   textQuery: string;
@@ -56,11 +47,11 @@ export type PlaceSearchProps = {
   /**
    * Position of attribution, defaults to TOP
    */
-  attributionPosition?: AttributionPosition;
+  attributionPosition?: google.maps.places.PlaceSearchAttributionPosition;
   /**
    * Orientation of the list, defaults to vertical
    */
-  orientation?: Orientation;
+  orientation?: google.maps.places.PlaceSearchOrientation;
   /**
    * Whether or not text should be truncated
    */
@@ -118,8 +109,8 @@ export const PlaceSearch: FunctionComponent<PlaceSearchProps> = props => {
     textSearch,
     allContent,
     contentItems,
-    attributionPosition,
-    orientation = Orientation.VERTICAL,
+    attributionPosition = google.maps.places.PlaceSearchAttributionPosition.TOP,
+    orientation = google.maps.places.PlaceSearchOrientation.VERTICAL,
     truncationPreferred,
     selectable,
     onLoad,
@@ -131,13 +122,16 @@ export const PlaceSearch: FunctionComponent<PlaceSearchProps> = props => {
   const placesLibrary = useMapsLibrary('places');
 
   const [placeSearch, setPlaceSearch] =
-    // @ts-ignore
     useState<google.maps.places.PlaceSearchElement | null>(null);
 
   usePropBinding(placeSearch, 'attributionPosition', attributionPosition);
   usePropBinding(placeSearch, 'orientation', orientation);
-  usePropBinding(placeSearch, 'truncationPreferred', truncationPreferred);
-  usePropBinding(placeSearch, 'selectable', selectable);
+  usePropBinding(
+    placeSearch,
+    'truncationPreferred',
+    Boolean(truncationPreferred)
+  );
+  usePropBinding(placeSearch, 'selectable', Boolean(selectable));
 
   useDomEventListener(placeSearch, 'gmp-load', onLoad);
   useDomEventListener(placeSearch, 'gmp-select', onSelect);
@@ -147,8 +141,7 @@ export const PlaceSearch: FunctionComponent<PlaceSearchProps> = props => {
     if (!placesLibrary || !textSearch || !placeSearch) return;
 
     const textSearchRequest =
-      // @ts-ignore types are not up to date here
-      new placesLibrary.PlaceTextSearchRequestElement();
+      new google.maps.places.PlaceTextSearchRequestElement();
 
     textSearchRequest.textQuery = textSearch.textQuery;
     textSearchRequest.evConnectorTypes = textSearch.evConnectorTypes;
@@ -187,8 +180,7 @@ export const PlaceSearch: FunctionComponent<PlaceSearchProps> = props => {
     } = nearbySearch;
 
     const nearbySearchRequest =
-      // @ts-ignore
-      new placesLibrary.PlaceNearbySearchRequestElement();
+      new google.maps.places.PlaceNearbySearchRequestElement();
     nearbySearchRequest.locationRestriction = locationRestriction;
     nearbySearchRequest.excludedPrimaryTypes = excludedPrimaryTypes;
     nearbySearchRequest.excludedTypes = excludedTypes;

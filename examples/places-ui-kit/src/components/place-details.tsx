@@ -4,13 +4,6 @@ import {ContentItem, PlaceContentConfig} from './place-content-config';
 import {useDomEventListener, usePropBinding} from '../utility-hooks';
 import {CSSWithCustomProperties} from '../places';
 
-export const Orientation = {
-  HORIZONTAL: 'HORIZONTAL',
-  VERTICAL: 'VERTICAL'
-} as const;
-
-export type Orientation = (typeof Orientation)[keyof typeof Orientation];
-
 export type PlaceDetailsProps = {
   /**
    * Classname to pass on to gmp-place-details (compact and non-compact)
@@ -57,7 +50,7 @@ export type PlaceDetailsProps = {
   /**
    * Orientation of the displayed information. Defaults to vertical.
    */
-  orientation?: google.maps.places.PlaceDetailsOrientation;
+  orientation?: google.maps.places.PlaceDetailsOrientation | null;
   /**
    * Whether or not text should be truncated.
    */

@@ -1,9 +1,13 @@
 import React from 'react';
-import {useMapsLibrary} from '../../../../src';
+import {useMapsLibrary} from '@vis.gl/react-google-maps';
 
 interface Props {
   onPlaceSelect: (place: google.maps.places.Place | null) => void;
 }
+
+type DeprecatedPlaceSelectEvent = Event & {
+  place: google.maps.places.Place;
+};
 
 export const AutocompleteWebComponent = ({onPlaceSelect}: Props) => {
   // make sure the `<gmp-place-autocomplete>` component gets loaded
@@ -25,22 +29,13 @@ export const AutocompleteWebComponent = ({onPlaceSelect}: Props) => {
       {/* the `gmp-select` event is used in the alpha and future stable version,
             `gmp-placeselect` is deprecated but still used in the beta channel */}
       <gmp-place-autocomplete
-        ongmp-select={(ev: any) =>
-          void handlePlaceSelect(ev.placePrediction.toPlace())
+        ongmp-select={(event: google.maps.places.PlacePredictionSelectEvent) =>
+          void handlePlaceSelect(event.placePrediction.toPlace())
         }
-        ongmp-placeselect={(ev: any) => void handlePlaceSelect(ev.place)}
+        ongmp-placeselect={(event: DeprecatedPlaceSelectEvent) =>
+          void handlePlaceSelect(event.place)
+        }
       />
     </div>
   );
 };
-
-declare module 'react' {
-  namespace JSX {
-    interface IntrinsicElements {
-      'gmp-place-autocomplete': React.DetailedHTMLProps<
-        React.HTMLAttributes<google.maps.places.PlaceAutocompleteElement>,
-        google.maps.places.PlaceAutocompleteElement
-      >;
-    }
-  }
-}

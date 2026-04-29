@@ -1,6 +1,11 @@
 {
   "compilerOptions": {
-    "typeRoots": ["./types", "../../types", "./node_modules/@types"],
+    "typeRoots": [
+      "./types",
+      "../../types",
+      "../../node_modules/@types",
+      "./node_modules/@types"
+    ],
     "strict": true,
     "sourceMap": true,
     "noEmit": true,
@@ -11,7 +16,10 @@
     "target": "ES2020",
     "lib": ["es2020", "dom"],
     "jsx": "react",
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "paths": {
+      "@vis.gl/react-google-maps": ["../../src"]
+    }
   },
   "exclude": ["./dist", "./node_modules"],
   "include": ["src/**/*.ts", "src/**/*.tsx", "types/**/*.ts"]

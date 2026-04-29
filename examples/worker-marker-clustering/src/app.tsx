@@ -19,7 +19,8 @@ import {
   Map,
   useMap,
   AdvancedMarker,
-  InfoWindow
+  InfoWindow,
+  useAdvancedMarkerRef
 } from '@vis.gl/react-google-maps';
 
 import {useMapViewport} from './hooks/use-map-viewport';
@@ -176,27 +177,50 @@ const ClusteredMarkers = ({geojson, onFeatureClick}: ClusteredMarkersProps) => {
 
       {clusters.map(feature => {
         const [lng, lat] = feature.geometry.coordinates;
-        const props = feature.properties;
-        const isCluster = 'cluster' in props && props.cluster;
 
         return (
-          <AdvancedMarker
+          <ClusteredFeatureMarker
             key={feature.id ?? `${lat}-${lng}`}
-            position={{lat, lng}}
-            onClick={e => {
-              const marker =
-                e.target as unknown as google.maps.marker.AdvancedMarkerElement;
-              handleMarkerClick(feature, marker);
-            }}>
-            {isCluster ? (
-              <ClusterMarker count={(props as ClusterProperties).point_count} />
-            ) : (
-              <PointMarker />
-            )}
-          </AdvancedMarker>
+            feature={feature}
+            onMarkerClick={handleMarkerClick}
+          />
         );
       })}
     </>
+  );
+};
+
+type ClusteredFeatureMarkerProps = {
+  feature: ClusterFeature<PointProperties>;
+  onMarkerClick: (
+    feature: ClusterFeature<PointProperties>,
+    marker: google.maps.marker.AdvancedMarkerElement
+  ) => void;
+};
+
+const ClusteredFeatureMarker = ({
+  feature,
+  onMarkerClick
+}: ClusteredFeatureMarkerProps) => {
+  const [lng, lat] = feature.geometry.coordinates;
+  const props = feature.properties;
+  const isCluster = 'cluster' in props && props.cluster;
+  const [markerRef, marker] = useAdvancedMarkerRef();
+
+  return (
+    <AdvancedMarker
+      ref={markerRef}
+      position={{lat, lng}}
+      onClick={() => {
+        if (!marker) return;
+        onMarkerClick(feature, marker);
+      }}>
+      {isCluster ? (
+        <ClusterMarker count={(props as ClusterProperties).point_count} />
+      ) : (
+        <PointMarker />
+      )}
+    </AdvancedMarker>
   );
 };
 

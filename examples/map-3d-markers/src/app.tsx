@@ -151,9 +151,7 @@ const App = () => {
             lng: -74.000229,
             altitude: 150
           }}
-          altitudeMode={
-            AltitudeMode.RELATIVE_TO_GROUND as google.maps.maps3d.AltitudeMode
-          }
+          altitudeMode={AltitudeMode.RELATIVE_TO_GROUND}
           src={new URL('../data/balloon-red.glb', import.meta.url)}
           scale={10}
         />

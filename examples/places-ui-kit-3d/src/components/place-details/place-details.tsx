@@ -1,4 +1,3 @@
-import {useMap, useMapsLibrary} from '@vis.gl/react-google-maps';
 import React, {useEffect, useState} from 'react';
 import {memo} from 'react';
 
@@ -7,13 +6,6 @@ type PlaceDetailsProps = {
   useStandardContent?: boolean;
   useCustomStyling: boolean;
 };
-
-export const PlaceDetailsOrientation = {
-  VERTICAL: 'VERTICAL',
-  HORIZONTAL: 'HORIZONTAL'
-} as const;
-export type PlaceDetailsOrientation =
-  (typeof PlaceDetailsOrientation)[keyof typeof PlaceDetailsOrientation];
 
 const PlaceDetailsComponent = (props: PlaceDetailsProps) => {
   const [customElementsReady, setCustomElementsReady] = useState(false);
@@ -28,7 +20,7 @@ const PlaceDetailsComponent = (props: PlaceDetailsProps) => {
   return (
     <gmp-place-details-compact
       className={props.useCustomStyling ? 'custom' : undefined}
-      orientation={'HORIZONTAL'}
+      orientation={google.maps.places.PlaceDetailsOrientation.HORIZONTAL}
       truncation-preferred>
       <gmp-place-details-place-request
         place={props.place}></gmp-place-details-place-request>
