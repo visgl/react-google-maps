@@ -248,6 +248,45 @@ test('sets fetchAppCheckToken on google.maps.Settings after API loads', async ()
   expect(settingsInstance.fetchAppCheckToken).toBe(mockFetchToken);
 });
 
+test('waits for externally installed importLibrary before marking API as loaded', async () => {
+  const mockFetchToken = jest.fn().mockResolvedValue({token: 'test-token'});
+  const getInstanceMock = jest.fn(() => settingsInstance);
+
+  google.maps.importLibrary = jest.fn(async () => {
+    await importLibraryPromise;
+
+    return {} as google.maps.MapsLibrary;
+  }) as typeof google.maps.importLibrary;
+  google.maps.Settings = undefined as unknown as typeof google.maps.Settings;
+
+  render(
+    <APIProvider apiKey={'apikey'} fetchAppCheckToken={mockFetchToken}>
+      <ContextSpyComponent />
+    </APIProvider>
+  );
+
+  await waitFor(() =>
+    expect(ContextSpyComponent.spy.mock.lastCall[0].status).toBe(
+      APILoadingStatus.NOT_LOADED
+    )
+  );
+
+  await act(async () => {
+    google.maps.Settings = {
+      getInstance: getInstanceMock
+    } as unknown as typeof google.maps.Settings;
+    triggerMapsApiLoaded();
+  });
+
+  await waitFor(() =>
+    expect(ContextSpyComponent.spy.mock.lastCall[0].status).toBe(
+      APILoadingStatus.LOADED
+    )
+  );
+  expect(getInstanceMock).toHaveBeenCalled();
+  expect(settingsInstance.fetchAppCheckToken).toBe(mockFetchToken);
+});
+
 describe('internalUsageAttributionIds', () => {
   test('provides default attribution IDs in context', () => {
     render(

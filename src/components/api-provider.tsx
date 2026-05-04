@@ -293,12 +293,12 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
 
           // If the google.maps namespace is already available, the API has been loaded externally.
           if (window.google?.maps?.importLibrary as unknown) {
-            if (!serializedApiParams) {
-              updateLoadingStatus(APILoadingStatus.LOADED);
-            }
             await Promise.all(
               librariesToLoad.map(name => importLibraryCallback(name))
             );
+            if (!serializedApiParams) {
+              updateLoadingStatus(APILoadingStatus.LOADED);
+            }
             if (onLoad) onLoad();
             return;
           }
