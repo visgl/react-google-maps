@@ -21,20 +21,6 @@ const App = () => {
   const [selectedImplementation, setSelectedImplementation] =
     useState<AutocompleteMode>(implementations[0]);
 
-  // const incompatibleVersionLoaded = Boolean(
-  //   globalThis &&
-  //   globalThis.google?.maps?.version &&
-  //   !(
-  //     globalThis.google?.maps?.version.endsWith('-alpha') ||
-  //     globalThis.google?.maps?.version.endsWith('-beta')
-  //   )
-  // );
-
-  // if (incompatibleVersionLoaded) {
-  //   location.reload();
-  //   return;
-  // }
-
   const [selectedPlace, setSelectedPlace] =
     useState<google.maps.places.Place | null>(null);
 

@@ -109,8 +109,8 @@ export const PlaceSearch: FunctionComponent<PlaceSearchProps> = props => {
     textSearch,
     allContent,
     contentItems,
-    attributionPosition = google.maps.places.PlaceSearchAttributionPosition.TOP,
-    orientation = google.maps.places.PlaceSearchOrientation.VERTICAL,
+    attributionPosition,
+    orientation,
     truncationPreferred,
     selectable,
     onLoad,
@@ -118,14 +118,25 @@ export const PlaceSearch: FunctionComponent<PlaceSearchProps> = props => {
     onError
   } = props;
 
+  const resolvedAttributionPosition =
+    attributionPosition ??
+    globalThis.google?.maps?.places?.PlaceSearchAttributionPosition.TOP;
+  const resolvedOrientation =
+    orientation ??
+    globalThis.google?.maps?.places?.PlaceSearchOrientation.VERTICAL;
+
   // Load required Google Maps library for places
   const placesLibrary = useMapsLibrary('places');
 
   const [placeSearch, setPlaceSearch] =
     useState<google.maps.places.PlaceSearchElement | null>(null);
 
-  usePropBinding(placeSearch, 'attributionPosition', attributionPosition);
-  usePropBinding(placeSearch, 'orientation', orientation);
+  usePropBinding(
+    placeSearch,
+    'attributionPosition',
+    resolvedAttributionPosition
+  );
+  usePropBinding(placeSearch, 'orientation', resolvedOrientation);
   usePropBinding(
     placeSearch,
     'truncationPreferred',
