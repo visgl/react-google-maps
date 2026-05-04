@@ -1,25 +1,5 @@
 {
-  "compilerOptions": {
-    "typeRoots": [
-      "../../types",
-      "../../node_modules/@types",
-      "./node_modules/@types"
-    ],
-    "strict": true,
-    "sourceMap": true,
-    "noEmit": true,
-    "noImplicitAny": true,
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "esModuleInterop": true,
-    "target": "ES2020",
-    "lib": ["es2020", "dom"],
-    "jsx": "react",
-    "skipLibCheck": true,
-    "paths": {
-      "@vis.gl/react-google-maps": ["../../src"]
-    }
-  },
-  "exclude": ["./dist", "./node_modules"],
-  "include": ["src/**/*.ts", "src/**/*.tsx"]
+  "extends": "../tsconfig.base.json",
+  "include": ["src/**/*", "types/**/*"],
+  "exclude": ["dist", "node_modules"]
 }

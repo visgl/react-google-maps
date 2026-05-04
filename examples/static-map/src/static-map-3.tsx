@@ -10,7 +10,7 @@ export default function StaticMap3() {
     scale: 2,
     width: 600,
     height: 600,
-    mapType: 'hybrid',
+    mapType: google.maps.MapTypeId.HYBRID,
     format: 'jpg',
     paths: [
       {

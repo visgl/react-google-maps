@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {createRoot} from 'react-dom/client';
 
 import {
@@ -68,6 +68,22 @@ const App = () => {
   const [interactiveMarker, setInteractiveMarker] =
     useState<google.maps.maps3d.Marker3DInteractiveElement | null>(null);
 
+  const handleInteractiveMarkerRef = useCallback(
+    (
+      marker:
+        | google.maps.maps3d.Marker3DElement
+        | google.maps.maps3d.Marker3DInteractiveElement
+        | null
+    ) => {
+      setInteractiveMarker(
+        marker instanceof google.maps.maps3d.Marker3DInteractiveElement
+          ? marker
+          : null
+      );
+    },
+    []
+  );
+
   return (
     <APIProvider apiKey={API_KEY} libraries={['maps3d', 'marker']}>
       <Map3D
@@ -89,7 +105,7 @@ const App = () => {
 
         {/* Interactive marker with colored pin and popover */}
         <Marker3D
-          ref={setInteractiveMarker}
+          ref={handleInteractiveMarkerRef}
           position={{lat: 40.705666, lng: -73.996382, altitude: 50}}
           altitudeMode={AltitudeMode.RELATIVE_TO_GROUND}
           onClick={() => {

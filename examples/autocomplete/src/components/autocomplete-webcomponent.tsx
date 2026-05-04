@@ -5,10 +5,6 @@ interface Props {
   onPlaceSelect: (place: google.maps.places.Place | null) => void;
 }
 
-type DeprecatedPlaceSelectEvent = Event & {
-  place: google.maps.places.Place;
-};
-
 export const AutocompleteWebComponent = ({onPlaceSelect}: Props) => {
   // make sure the `<gmp-place-autocomplete>` component gets loaded
   useMapsLibrary('places');
@@ -26,14 +22,9 @@ export const AutocompleteWebComponent = ({onPlaceSelect}: Props) => {
   //   constructor instead.
   return (
     <div className="autocomplete-container">
-      {/* the `gmp-select` event is used in the alpha and future stable version,
-            `gmp-placeselect` is deprecated but still used in the beta channel */}
       <gmp-place-autocomplete
         ongmp-select={(event: google.maps.places.PlacePredictionSelectEvent) =>
           void handlePlaceSelect(event.placePrediction.toPlace())
-        }
-        ongmp-placeselect={(event: DeprecatedPlaceSelectEvent) =>
-          void handlePlaceSelect(event.place)
         }
       />
     </div>

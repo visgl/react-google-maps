@@ -6,7 +6,6 @@ import ControlPanel from './control-panel';
 import AutocompleteControl from './autocomplete-control';
 import AutocompleteResult from './autocomplete-result';
 
-// @ts-ignore
 const API_KEY: string = (globalThis.GOOGLE_MAPS_API_KEY ??
   process.env.GOOGLE_MAPS_API_KEY) as string;
 
@@ -22,26 +21,26 @@ const App = () => {
   const [selectedImplementation, setSelectedImplementation] =
     useState<AutocompleteMode>(implementations[0]);
 
-  const incompatibleVersionLoaded = Boolean(
-    globalThis &&
-    globalThis.google?.maps?.version &&
-    !(
-      globalThis.google?.maps?.version.endsWith('-alpha') ||
-      globalThis.google?.maps?.version.endsWith('-beta')
-    )
-  );
+  // const incompatibleVersionLoaded = Boolean(
+  //   globalThis &&
+  //   globalThis.google?.maps?.version &&
+  //   !(
+  //     globalThis.google?.maps?.version.endsWith('-alpha') ||
+  //     globalThis.google?.maps?.version.endsWith('-beta')
+  //   )
+  // );
 
-  if (incompatibleVersionLoaded) {
-    location.reload();
-    return;
-  }
+  // if (incompatibleVersionLoaded) {
+  //   location.reload();
+  //   return;
+  // }
 
   const [selectedPlace, setSelectedPlace] =
     useState<google.maps.places.Place | null>(null);
 
   return (
     <>
-      <APIProvider apiKey={API_KEY} version={'beta'}>
+      <APIProvider apiKey={API_KEY}>
         <Map
           mapId={'49ae42fed52588c3'}
           defaultZoom={3}

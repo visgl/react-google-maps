@@ -9,6 +9,7 @@ import {PlaceMarker} from '../place-marker/place-marker';
 
 export type Map3DProps = google.maps.maps3d.Map3DElementOptions & {
   onCameraChange?: (cameraProps: Map3DCameraProps) => void;
+  defaultLabelsDisabled?: boolean;
   handleClick: (place: PlaceLocationWithId) => void;
   selectedPlace: PlaceLocationWithId | null;
   useCustomStyling: boolean;

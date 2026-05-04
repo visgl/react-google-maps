@@ -14,8 +14,11 @@
  */
 
 import Supercluster from 'supercluster';
-import type {Feature, Point, GeoJsonProperties} from 'geojson';
 import type {ClusterProperties} from 'supercluster';
+import type {GeoFeature} from './hooks/use-supercluster-worker';
+
+type GeoJsonProperties = Record<string, unknown>;
+type Feature = GeoFeature<GeoJsonProperties>;
 
 // Type definitions for messages
 type SuperclusterOptions = {
@@ -29,7 +32,7 @@ type SuperclusterOptions = {
 
 type WorkerMessage =
   | {type: 'init'; options: SuperclusterOptions}
-  | {type: 'load'; features: Feature<Point, GeoJsonProperties>[]}
+  | {type: 'load'; features: Feature[]}
   | {
       type: 'getClusters';
       bbox: [number, number, number, number];
