@@ -7,11 +7,13 @@ import React, {
 import {APIProvider, useApiLoadingStatus} from '../../../src';
 import {APILoadingStatus, APIProviderProps} from '@vis.gl/react-google-maps';
 
-const statusMap = {
+const statusMap: Record<APILoadingStatus, 'LOADING' | 'SUCCESS' | 'FAILURE'> = {
+  [APILoadingStatus.NOT_LOADED]: 'LOADING',
   [APILoadingStatus.LOADING]: 'LOADING',
   [APILoadingStatus.LOADED]: 'SUCCESS',
-  [APILoadingStatus.FAILED]: 'FAILURE'
-} as const;
+  [APILoadingStatus.FAILED]: 'FAILURE',
+  [APILoadingStatus.AUTH_FAILURE]: 'FAILURE'
+};
 
 type WrapperProps = PropsWithChildren<
   {
@@ -41,7 +43,7 @@ const InnerWrapper = ({
   children
 }: PropsWithChildren<Omit<WrapperProps, 'apiKey'>>) => {
   const status = useApiLoadingStatus();
-  const mappedStatus = statusMap[status] ?? 'LOADING';
+  const mappedStatus = statusMap[status];
 
   useEffect(() => {
     if (callback) callback(mappedStatus);

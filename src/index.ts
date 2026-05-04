@@ -1,5 +1,6 @@
 /// <reference types="google.maps" preserve="true" />
-export type * from './custom-elements-types';
+import type {} from '../types/react-custom-element-bridge/index';
+export type * from '../types/react-custom-element-bridge/index';
 
 export * from './version';
 export * from './components/advanced-marker';

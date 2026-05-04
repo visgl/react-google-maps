@@ -3,6 +3,7 @@
   "include": ["./src/**/*", "./types/**/*"],
   "exclude": ["./examples/**/*"],
   "compilerOptions": {
-    "noEmit": false
+    "noEmit": false,
+    "types": ["jest", "node", "google.maps"]
   }
 }

@@ -237,6 +237,7 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
     const newMarker = new markerLibrary.AdvancedMarkerElement();
     newMarker.map = map;
 
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional to sync the imperative instance with state
     setMarker(newMarker);
 
     // create the container for marker content if there are children

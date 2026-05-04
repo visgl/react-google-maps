@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "remix vite:build",
+    "build-local": "remix vite:build --config ./vite.config.local.js",
     "start": "remix vite:dev",
     "start-local": "remix vite:dev --config ./vite.config.local.js",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",

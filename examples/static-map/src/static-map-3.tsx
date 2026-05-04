@@ -10,7 +10,6 @@ export default function StaticMap3() {
     scale: 2,
     width: 600,
     height: 600,
-    mapType: 'hybrid',
     format: 'jpg',
     paths: [
       {

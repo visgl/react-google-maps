@@ -1,5 +1,5 @@
 import React, {FormEvent, useCallback, useState} from 'react';
-import {useMapsLibrary} from '../../../../src';
+import {useMapsLibrary} from '@vis.gl/react-google-maps';
 import {useAutocompleteSuggestions} from '../hooks/use-autocomplete-suggestions';
 
 interface Props {

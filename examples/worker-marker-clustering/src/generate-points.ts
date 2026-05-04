@@ -1,4 +1,4 @@
-import type {FeatureCollection, Point} from 'geojson';
+import type {GeoFeatureCollection} from './hooks/use-supercluster-worker';
 
 type PointProperties = {
   id: string;
@@ -12,7 +12,7 @@ export function generateRandomPoints(
   count: number,
   center: {lat: number; lng: number},
   spread: number = 1
-): FeatureCollection<Point, PointProperties> {
+): GeoFeatureCollection<PointProperties> {
   const features = [];
 
   for (let i = 0; i < count; i++) {

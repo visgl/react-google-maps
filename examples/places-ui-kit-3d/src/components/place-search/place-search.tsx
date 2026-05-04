@@ -1,4 +1,4 @@
-import React, {memo} from 'react';
+import React, {memo, useRef} from 'react';
 import {PlaceLocationWithId} from '../../app';
 
 type PlaceSearchProps = {
@@ -11,15 +11,18 @@ type PlaceSearchProps = {
 };
 
 const PlaceSearchComponent = (props: PlaceSearchProps) => {
+  const searchRef = useRef<google.maps.places.PlaceSearchElement | null>(null);
+
   return (
     <gmp-place-search
+      ref={searchRef}
       className={props.useCustomStyling ? 'custom' : undefined}
       selectable
       truncation-preferred
-      ongmp-load={({target}: {target: {places: google.maps.places.Place[]}}) =>
-        props.setPlaces(target.places)
-      }
-      ongmp-select={({place}: {place: google.maps.places.Place}) => {
+      ongmp-load={() => props.setPlaces(searchRef.current?.places ?? [])}
+      ongmp-select={(event: google.maps.places.PlaceSelectEvent) => {
+        const place = event.place;
+
         props.onPlaceSelect({
           id: place.id,
           location: {...place.location!.toJSON(), altitude: 0}

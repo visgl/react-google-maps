@@ -223,6 +223,7 @@ export const Marker3D = forwardRef(function Marker3D(
     'altitudeMode',
     altitudeMode as google.maps.maps3d.AltitudeMode
   );
+
   usePropBinding(marker, 'collisionBehavior', collisionBehavior);
   usePropBinding(marker, 'drawsWhenOccluded', drawsWhenOccluded);
   usePropBinding(marker, 'extruded', extruded);

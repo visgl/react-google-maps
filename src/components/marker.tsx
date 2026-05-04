@@ -51,6 +51,7 @@ function useMarker(props: MarkerProps) {
 
     const newMarker = new google.maps.Marker(markerOptions);
     newMarker.setMap(map);
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional to sync the imperative instance with state
     setMarker(newMarker);
 
     return () => {
