@@ -8,6 +8,16 @@ interface Props {
   onPlaceSelect: (place: google.maps.places.Place | null) => void;
 }
 
+const NoPopupTransition: React.ComponentType<{
+  children?: React.ReactNode;
+  className?: string;
+  in?: boolean;
+}> = ({children, className, in: isOpen}) => {
+  if (!isOpen) return null;
+
+  return <div className={className}>{children}</div>;
+};
+
 // This uses the Combobox from "react-widgets" (https://jquense.github.io/react-widgets/docs/Combobox)
 export const AutocompleteCustomHybrid = ({onPlaceSelect}: Props) => {
   const [inputValue, setInputValue] = useState<string>('');
@@ -72,6 +82,7 @@ export const AutocompleteCustomHybrid = ({onPlaceSelect}: Props) => {
         focusFirstItem={true}
         hideEmptyPopup
         hideCaret
+        popupTransition={NoPopupTransition}
       />
     </div>
   );

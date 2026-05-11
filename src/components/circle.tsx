@@ -89,6 +89,7 @@ function useCircle(props: CircleProps) {
       radius: radius ?? defaultRadius
     });
     newCircle.setMap(map);
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional to sync the imperative instance with state
     setCircle(newCircle);
 
     return () => {

@@ -1,0 +1,17 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "ignoreDeprecations": "6.0",
+    "target": "ES2020",
+    "lib": ["es2020", "dom"],
+    "jsx": "react",
+    "types": ["node", "google.maps", "global"],
+    "baseUrl": ".",
+    "paths": {
+      "@vis.gl/react-google-maps": ["../src"],
+      "react": ["../node_modules/@types/react/index.d.ts"],
+      "react-dom": ["../node_modules/@types/react-dom/index.d.ts"],
+      "react-dom/client": ["../node_modules/@types/react-dom/client.d.ts"]
+    }
+  }
+}

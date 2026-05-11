@@ -11,7 +11,7 @@
  * - Performance metrics display
  */
 
-import React, {useEffect, useState, useCallback} from 'react';
+import React, {useMemo, useState, useCallback} from 'react';
 import {createRoot} from 'react-dom/client';
 
 import {
@@ -19,19 +19,20 @@ import {
   Map,
   useMap,
   AdvancedMarker,
-  InfoWindow
+  InfoWindow,
+  useAdvancedMarkerRef
 } from '@vis.gl/react-google-maps';
 
 import {useMapViewport} from './hooks/use-map-viewport';
 import {
   useSuperclusterWorker,
   type ClusterFeature,
-  type ClusterProperties
+  type ClusterProperties,
+  type GeoFeatureCollection
 } from './hooks/use-supercluster-worker';
 
 import {ControlPanel} from './control-panel';
 import {generateRandomPoints} from './generate-points';
-import type {FeatureCollection, Point} from 'geojson';
 
 // Worker URL - Vite will handle bundling this
 const workerUrl = new URL('./clustering.worker.ts', import.meta.url);
@@ -58,21 +59,15 @@ type PointProperties = {
 
 const App = () => {
   const [pointCount, setPointCount] = useState(10000);
-  const [geojson, setGeojson] = useState<FeatureCollection<
-    Point,
-    PointProperties
-  > | null>(null);
   const [selectedFeature, setSelectedFeature] =
     useState<ClusterFeature<PointProperties> | null>(null);
   const [selectedMarker, setSelectedMarker] =
     useState<google.maps.marker.AdvancedMarkerElement | null>(null);
 
-  // Generate random points
-  useEffect(() => {
-    console.log(`Generating ${pointCount.toLocaleString()} random points...`);
-    const data = generateRandomPoints(pointCount, INITIAL_CENTER, 0.5);
-    setGeojson(data);
-  }, [pointCount]);
+  const geojson = useMemo(
+    () => generateRandomPoints(pointCount, INITIAL_CENTER, 0.5),
+    [pointCount]
+  );
 
   return (
     <APIProvider apiKey={API_KEY!}>
@@ -113,7 +108,7 @@ const App = () => {
 };
 
 type ClusteredMarkersProps = {
-  geojson: FeatureCollection<Point, PointProperties>;
+  geojson: GeoFeatureCollection<PointProperties>;
   onFeatureClick: (
     feature: ClusterFeature<PointProperties>,
     marker: google.maps.marker.AdvancedMarkerElement
@@ -130,13 +125,6 @@ const ClusteredMarkers = ({geojson, onFeatureClick}: ClusteredMarkersProps) => {
     viewport,
     workerUrl
   );
-
-  // Log performance info
-  useEffect(() => {
-    if (!isLoading && clusters.length > 0) {
-      console.log(`Rendered ${clusters.length} clusters/markers`);
-    }
-  }, [isLoading, clusters.length]);
 
   const handleMarkerClick = useCallback(
     (
@@ -176,27 +164,50 @@ const ClusteredMarkers = ({geojson, onFeatureClick}: ClusteredMarkersProps) => {
 
       {clusters.map(feature => {
         const [lng, lat] = feature.geometry.coordinates;
-        const props = feature.properties;
-        const isCluster = 'cluster' in props && props.cluster;
 
         return (
-          <AdvancedMarker
+          <ClusteredFeatureMarker
             key={feature.id ?? `${lat}-${lng}`}
-            position={{lat, lng}}
-            onClick={e => {
-              const marker =
-                e.target as unknown as google.maps.marker.AdvancedMarkerElement;
-              handleMarkerClick(feature, marker);
-            }}>
-            {isCluster ? (
-              <ClusterMarker count={(props as ClusterProperties).point_count} />
-            ) : (
-              <PointMarker />
-            )}
-          </AdvancedMarker>
+            feature={feature}
+            onMarkerClick={handleMarkerClick}
+          />
         );
       })}
     </>
+  );
+};
+
+type ClusteredFeatureMarkerProps = {
+  feature: ClusterFeature<PointProperties>;
+  onMarkerClick: (
+    feature: ClusterFeature<PointProperties>,
+    marker: google.maps.marker.AdvancedMarkerElement
+  ) => void;
+};
+
+const ClusteredFeatureMarker = ({
+  feature,
+  onMarkerClick
+}: ClusteredFeatureMarkerProps) => {
+  const [lng, lat] = feature.geometry.coordinates;
+  const props = feature.properties;
+  const isCluster = 'cluster' in props && props.cluster;
+  const [markerRef, marker] = useAdvancedMarkerRef();
+
+  return (
+    <AdvancedMarker
+      ref={markerRef}
+      position={{lat, lng}}
+      onClick={() => {
+        if (!marker) return;
+        onMarkerClick(feature, marker);
+      }}>
+      {isCluster ? (
+        <ClusterMarker count={(props as ClusterProperties).point_count} />
+      ) : (
+        <PointMarker />
+      )}
+    </AdvancedMarker>
   );
 };
 

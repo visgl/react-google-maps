@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {useEffect} from 'react';
+import type {GmpWritableElementProp} from '../../../types/writable';
 
 /**
  * Copies of two custom hooks the library uses
@@ -36,12 +37,12 @@ export function useDomEventListener<T extends (...args: any[]) => void>(
 export function usePropBinding<T extends object, K extends keyof T>(
   object: T | null,
   prop: K,
-  value: T[K]
+  value: GmpWritableElementProp<T[K]>
 ) {
   useEffect(() => {
     if (!object) return;
 
     // eslint-disable-next-line react-hooks/immutability
-    object[prop] = value;
+    object[prop] = value as T[K];
   }, [object, prop, value]);
 }

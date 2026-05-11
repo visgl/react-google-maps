@@ -122,6 +122,7 @@ function usePolyline(props: PolylineProps) {
     }
 
     instance.setMap(map);
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional to sync the imperative instance with state
     setPolyline(instance);
 
     return () => {

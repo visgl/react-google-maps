@@ -1,4 +1,4 @@
-import {Map3DCameraProps} from '../map-3d';
+import {Map3DCameraProps} from '../app';
 import {destination, getCoords, point} from '@turf/turf';
 
 export function estimateCameraPosition(
@@ -19,6 +19,6 @@ export function estimateCameraPosition(
   return {
     lat: lat as number,
     lng: lng as number,
-    altitude: center.altitude + height
+    altitude: (center.altitude ?? 0) + height
   };
 }

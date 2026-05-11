@@ -131,6 +131,7 @@ export type Map3DProps = PropsWithChildren<
       gestureHandling?: GestureHandling;
 
       // Default values for uncontrolled usage
+      defaultLabelsDisabled?: boolean;
       defaultCenter?: google.maps.LatLngAltitudeLiteral;
       defaultHeading?: number;
       defaultTilt?: number;

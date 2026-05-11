@@ -98,6 +98,7 @@ export const InfoWindow: FunctionComponent<
       const infoWindow = new google.maps.InfoWindow(opts);
       infoWindow.setContent(contentContainerRef.current);
 
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional to sync the imperative instance with state
       setInfoWindow(infoWindow);
 
       // unmount: remove infoWindow and content elements (note: close is called in a different effect-cleanup)
@@ -241,6 +242,7 @@ export const InfoWindow: FunctionComponent<
     };
   }, [infoWindow, anchor, map, shouldFocus, infoWindowOptions, pixelOffset]);
 
+  /* eslint-disable react-hooks/refs -- intentional access to refs during render to avoid cascading renders when creating portals */
   return (
     <>
       {contentContainerRef.current &&
@@ -250,4 +252,5 @@ export const InfoWindow: FunctionComponent<
         createPortal(headerContent, headerContainerRef.current)}
     </>
   );
+  /* eslint-enable react-hooks/refs */
 };

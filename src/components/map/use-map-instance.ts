@@ -166,6 +166,7 @@ export function useMapInstance(
         });
       }
 
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional to sync the imperative instance with state
       setMap(map);
       addMapInstance(map, id);
 

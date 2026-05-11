@@ -58,7 +58,10 @@ const PlaceDetailsMarkerComponent = ({
               'website',
               {
                 type: 'media',
-                options: {preferredSize: 'MEDIUM', lightboxPreferred: true}
+                options: {
+                  preferredSize: google.maps.places.MediaSize.MEDIUM,
+                  lightboxPreferred: true
+                }
               },
               {
                 type: 'attribution',

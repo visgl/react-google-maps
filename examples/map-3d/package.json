@@ -5,12 +5,13 @@
     "@vis.gl/react-google-maps": "latest",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "typescript": "^5.4.5",
+    "typescript": "^6.0.3",
     "vite": "^8.0.0"
   },
   "scripts": {
     "start": "vite",
     "start-local": "vite --config ../vite.config.local.js",
+    "build-local": "vite build --config ../vite.config.local.js",
     "build": "vite build"
   }
 }

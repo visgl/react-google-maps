@@ -21,6 +21,10 @@ type ImportLibraryResult = Awaited<
   ReturnType<typeof google.maps.importLibrary>
 >;
 
+const asGoogleMapsImportLibrary = (
+  fn: (libraryName: string) => Promise<ImportLibraryResult>
+) => fn as unknown as typeof google.maps.importLibrary;
+
 let importLibraryPromise: Promise<ImportLibraryResult>;
 let resolveImportLibrary: (value: ImportLibraryResult) => void;
 let rejectImportLibrary: (reason?: unknown) => void;
@@ -75,7 +79,11 @@ beforeEach(() => {
   resetImportLibraryPromise();
 
   // Mock google.maps.Settings (missing in @googlemaps/jest-mocks)
-  settingsInstance = {fetchAppCheckToken: null} as google.maps.Settings;
+  settingsInstance = {
+    fetchAppCheckToken: async () => ({token: ''}),
+    experienceIds: []
+  } as google.maps.Settings;
+
   google.maps.Settings = {
     getInstance: () => settingsInstance
   } as unknown as typeof google.maps.Settings;
@@ -248,11 +256,15 @@ test('waits for externally installed importLibrary before marking API as loaded'
   const mockFetchToken = jest.fn().mockResolvedValue({token: 'test-token'});
   const getInstanceMock = jest.fn(() => settingsInstance);
 
-  google.maps.importLibrary = jest.fn(async () => {
+  google.maps.importLibrary = asGoogleMapsImportLibrary(async libraryName => {
     await importLibraryPromise;
 
+    if (libraryName === 'core') {
+      return {} as google.maps.CoreLibrary;
+    }
+
     return {} as google.maps.MapsLibrary;
-  }) as typeof google.maps.importLibrary;
+  });
   google.maps.Settings = undefined as unknown as typeof google.maps.Settings;
 
   render(

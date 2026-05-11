@@ -5,7 +5,7 @@ import {waitFor} from '@testing-library/react';
  * arguments passed to the last call.
  * @param spy
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 export async function waitForSpy<T extends (...args: any[]) => any>(
   spy:
     | jest.Mock<ReturnType<T>, Parameters<T>>

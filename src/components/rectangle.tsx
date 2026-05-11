@@ -84,6 +84,7 @@ function useRectangle(props: RectangleProps) {
       bounds: bounds ?? defaultBounds
     });
     newRectangle.setMap(map);
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional to sync the imperative instance with state
     setRectangle(newRectangle);
 
     return () => {

@@ -2,6 +2,7 @@
   "type": "module",
   "dependencies": {
     "@deck.gl/google-maps": "^9.1.0",
+    "@types/geojson": "^7946.0.14",
     "@vis.gl/react-google-maps": "latest",
     "deck.gl": "^9.1.0",
     "react": "^19.0.0",
@@ -11,6 +12,7 @@
   "scripts": {
     "start": "vite",
     "start-local": "vite --config ../vite.config.local.js",
+    "build-local": "vite build --config ../vite.config.local.js",
     "build": "vite build"
   }
 }

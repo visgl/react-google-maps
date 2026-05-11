@@ -23,7 +23,7 @@ beforeEach(() => {
   // overwrite marker mock so we can spy on the constructor
   createMarkerSpy = jest.fn();
   google.maps.Marker = class extends google.maps.Marker {
-    constructor(opts?: google.maps.MarkerOptions | null) {
+    constructor(opts?: google.maps.MarkerOptions) {
       createMarkerSpy(opts);
       super(opts);
     }

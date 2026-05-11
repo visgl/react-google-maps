@@ -19,10 +19,10 @@ import {AltitudeMode} from './marker-3d';
 export {AltitudeMode};
 
 /**
- * Event props for Popover component.
+ * Event props for the Popover component.
  */
 type PopoverEventProps = {
-  /** Called when the popover is closed via light dismiss (click outside). */
+  /** Called when the popover is closed via 'light dismiss' (click outside). */
   onClose?: () => void;
 
   /**
@@ -171,7 +171,7 @@ Popover.displayName = 'Popover';
  */
 function usePopoverCloseObserver(
   popover: google.maps.maps3d.PopoverElement | null,
-  open: boolean | undefined,
+  open: boolean | null | undefined,
   onClose?: () => void
 ) {
   const previousOpenState = useRef<boolean | undefined>(undefined);

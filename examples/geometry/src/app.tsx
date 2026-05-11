@@ -22,7 +22,7 @@ const App = () => {
   const [center, setCenter] = useState(INITIAL_CENTER);
   const [radius, setRadius] = useState(43000);
 
-  const changeCenter = (newCenter: google.maps.LatLng | null) => {
+  const changeCenter = (newCenter: google.maps.LatLng | null | undefined) => {
     if (!newCenter) return;
     setCenter({lng: newCenter.lng(), lat: newCenter.lat()});
   };

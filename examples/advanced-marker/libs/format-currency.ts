@@ -1,4 +1,4 @@
-export const getFormattedCurrency = priceString => {
+export const getFormattedCurrency = (priceString: string) => {
   const price = parseFloat(priceString.replace('$', ''));
   return formatCurrency(price);
 };

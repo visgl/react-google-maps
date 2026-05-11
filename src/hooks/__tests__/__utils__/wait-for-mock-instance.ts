@@ -2,7 +2,6 @@ import {waitFor} from '@testing-library/react';
 import {mockInstances} from '@googlemaps/jest-mocks';
 
 type Constructable = {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   new (...args: any[]): unknown;
 };
 

@@ -5,6 +5,7 @@ import {
   DrawResult,
   DrawingActionKind,
   Overlay,
+  OverlayGeometry,
   Snapshot,
   State,
   getMarkerPosition,

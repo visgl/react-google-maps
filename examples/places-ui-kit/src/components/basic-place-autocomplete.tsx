@@ -68,7 +68,7 @@ export type BasicPlaceAutocompleteElementProps = PropsWithChildren<{
   /**
    * Fired when an error occurs.
    */
-  onError?: (e: google.maps.places.PlaceAutocompleteRequestErrorEvent) => void;
+  onError?: (e: Event) => void;
 }>;
 
 /**
@@ -102,22 +102,33 @@ export const BasicPlaceAutocomplete: FunctionComponent<
   const [templateElement, setTemplateElement] =
     useState<HTMLTemplateElement | null>(null);
 
-  const ref = useRef<google.maps.places.PlaceAutocompleteElement | null>(null);
-
-  // types have not yet been officially updated so we need to typecast here
-  // to avoid TS errors
-  const autocomplete = ref.current as any;
+  const ref = useRef<google.maps.places.BasicPlaceAutocompleteElement | null>(
+    null
+  );
+  const autocomplete = ref.current;
 
   // bind props to the autocomplete element
-  usePropBinding(autocomplete, 'includedPrimaryTypes', includedPrimaryTypes);
-  usePropBinding(autocomplete, 'includedRegionCodes', includedRegionCodes);
-  usePropBinding(autocomplete, 'locationBias', locationBias);
-  usePropBinding(autocomplete, 'locationRestriction', locationRestriction);
-  usePropBinding(autocomplete, 'name', name);
-  usePropBinding(autocomplete, 'origin', origin);
-  usePropBinding(autocomplete, 'requestedLanguage', requestedLanguage);
-  usePropBinding(autocomplete, 'requestedRegion', requestedRegion);
-  usePropBinding(autocomplete, 'unitSystem', unitSystem);
+  usePropBinding(
+    autocomplete,
+    'includedPrimaryTypes',
+    includedPrimaryTypes ?? null
+  );
+  usePropBinding(
+    autocomplete,
+    'includedRegionCodes',
+    includedRegionCodes ?? null
+  );
+  usePropBinding(autocomplete, 'locationBias', locationBias ?? null);
+  usePropBinding(
+    autocomplete,
+    'locationRestriction',
+    locationRestriction ?? null
+  );
+  usePropBinding(autocomplete, 'name', name ?? null);
+  usePropBinding(autocomplete, 'origin', origin ?? null);
+  usePropBinding(autocomplete, 'requestedLanguage', requestedLanguage ?? null);
+  usePropBinding(autocomplete, 'requestedRegion', requestedRegion ?? null);
+  usePropBinding(autocomplete, 'unitSystem', unitSystem ?? null);
 
   // bind events to the autocomplete element
   useDomEventListener(autocomplete, 'gmp-select', onSelect);
