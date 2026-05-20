@@ -138,9 +138,21 @@ export function useMapInstance(
       let mapDiv: HTMLElement;
       let map: google.maps.Map;
 
-      if (reuseMaps && CachedMapStack.has(cacheKey)) {
-        map = CachedMapStack.pop(cacheKey) as google.maps.Map;
-        mapDiv = map.getDiv();
+      // a cached map can end up in a broken state (e.g. when the initial
+      // map-creation failed because the Maps JavaScript API didn't load
+      // correctly). In that case `getDiv()` doesn't return a usable DOM node,
+      // so we have to discard the cached instance instead of trying to reuse it.
+      const cachedMap =
+        reuseMaps && CachedMapStack.has(cacheKey)
+          ? (CachedMapStack.pop(cacheKey) as google.maps.Map)
+          : null;
+      const cachedMapDiv = cachedMap?.getDiv();
+      const reusedMap =
+        cachedMap && cachedMapDiv instanceof Node ? cachedMap : null;
+
+      if (reusedMap) {
+        map = reusedMap;
+        mapDiv = cachedMapDiv as HTMLElement;
 
         container.appendChild(mapDiv);
         map.setOptions(mapOptions);
@@ -151,6 +163,9 @@ export function useMapInstance(
         // the map.
         setTimeout(() => map.moveCamera({}), 0);
       } else {
+        // discard a broken cached instance so it doesn't get pushed back
+        if (cachedMap) google.maps.event.clearInstanceListeners(cachedMap);
+
         mapDiv = document.createElement('div');
         mapDiv.style.height = '100%';
         container.appendChild(mapDiv);
