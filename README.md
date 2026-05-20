@@ -66,6 +66,26 @@ export default App;
 Please see our [documentation][docs] or [examples][] for more in-depth information
 about this library.
 
+### Available Components
+
+| Component | Description |
+| :--- | :--- |
+| [`<APIProvider>`](https://visgl.github.io/react-google-maps/docs/api-reference/components/api-provider) | Loads the Google Maps JavaScript API and provides context. |
+| [`<Map>`](https://visgl.github.io/react-google-maps/docs/api-reference/components/map) | Renders a Google Map container and manages the map instance. |
+| [`<MapControl>`](https://visgl.github.io/react-google-maps/docs/api-reference/components/map-control) | Renders custom React components in one of the map's control containers. |
+| [`<InfoWindow>`](https://visgl.github.io/react-google-maps/docs/api-reference/components/info-window) | Displays a standard Google Maps Info Window overlay. |
+| [`<Marker>`](https://visgl.github.io/react-google-maps/docs/api-reference/components/marker) | Displays a legacy Google Maps marker on the map. |
+| [`<AdvancedMarker>`](https://visgl.github.io/react-google-maps/docs/api-reference/components/advanced-marker) | Renders a highly customizable modern Advanced Marker. |
+| [`<Pin>`](https://visgl.github.io/react-google-maps/docs/api-reference/components/pin) | Customizes the background, border, and glyph colors of an `AdvancedMarker`. |
+| [`<Circle>`](https://visgl.github.io/react-google-maps/docs/api-reference/components/circle) | Draws a circle at a given center and radius on the map. |
+| [`<Rectangle>`](https://visgl.github.io/react-google-maps/docs/api-reference/components/rectangle) | Draws a rectangular vector boundary on the map. |
+| [`<Polyline>`](https://visgl.github.io/react-google-maps/docs/api-reference/components/polyline) | Draws a linear path on the map. |
+| [`<Polygon>`](https://visgl.github.io/react-google-maps/docs/api-reference/components/polygon) | Draws a closed polygon boundary on the map. |
+| [`<StaticMap>`](https://visgl.github.io/react-google-maps/docs/api-reference/components/static-map) | Renders a lightweight Google Static Maps API image. |
+| [`<Map3D>`](https://visgl.github.io/react-google-maps/docs/api-reference/components/map-3d) | Renders a Next-Generation Photorealistic 3D Google Map. |
+| [`<Marker3D>`](https://visgl.github.io/react-google-maps/docs/api-reference/components/marker-3d) | Places a 3D object or icon within a `Map3D` view. |
+| [`<Popover>`](https://visgl.github.io/react-google-maps/docs/api-reference/components/popover) | Renders an overlay/popup relative to a 3D element or coordinates. |
+
 ### Using other libraries of the Maps JavaScript API
 
 Besides rendering maps, the Maps JavaScript API has a lot of
@@ -138,6 +158,40 @@ const My3DMap = (props: My3DMapProps) => {
   );
 };
 ```
+### Available Custom Elements
+
+| Custom Element | Description |
+| :--- | :--- |
+| [`<gmp-map>`](https://developers.google.com/maps/documentation/javascript/reference/map#MapElement) | The native, web-component-based core 2D vector or raster map element. |
+| [`<gmp-map-3d>`](https://developers.google.com/maps/documentation/javascript/reference/3d-map#Map3DElement) | The foundational web component initializing Google's photorealistic 3D globe view. |
+| [`<gmp-flattener>`](https://developers.google.com/maps/documentation/javascript/reference/3d-map#FlattenerElement) | Flattens a designated region of the 3D terrain mesh for clean placement of shapes or markers. |
+| [`<gmp-popover>`](https://developers.google.com/maps/documentation/javascript/reference/3d-map#PopoverElement) | An info-window style popup interface container optimized for positioning inside 3D viewports. |
+| [`<gmp-advanced-marker>`](https://developers.google.com/maps/documentation/javascript/reference/marker#AdvancedMarkerElement) | A highly performance-optimized 2D map marker backing custom HTML, asset styling, and pin configurations. |
+| [`<gmp-marker>`](https://developers.google.com/maps/documentation/javascript/reference/3d-map#MarkerElement) | A standard billboard/sprite point asset mapped specifically within a 3D globe environment. |
+| [`<gmp-marker-interactive>`](https://developers.google.com/maps/documentation/javascript/reference/3d-map#MarkerInteractiveElement) | An interactive variation of the standard 3D map marker designed to handle user click events and trigger popovers. |
+| [`<gmp-marker-3d>`](https://developers.google.com/maps/documentation/javascript/reference/3d-map#Marker3DElement) | A volumetric, structural 3D point graphic supporting model scaling, extrusion, and altitude configurations. |
+| [`<gmp-marker-3d-interactive>`](https://developers.google.com/maps/documentation/javascript/reference/3d-map#Marker3DInteractiveElement) | An interactive version of the 3D volumetric point graphic that responds to pointer inputs. |
+| [`<gmp-model-3d>`](https://developers.google.com/maps/documentation/javascript/reference/3d-map#Model3DElement) | Renders and animates photorealistic native 3D mesh assets (such as glTF models) directly onto map coordinates. |
+| [`<gmp-model-3d-interactive>`](https://developers.google.com/maps/documentation/javascript/reference/3d-map#Model3DInteractiveElement) | An interactive version of the native 3D mesh wrapper enabling pointer events directly on the object surface. |
+| [`<gmp-polyline-3d>`](https://developers.google.com/maps/documentation/javascript/reference/3d-map#Polyline3DElement) | Draws continuous multi-segment line paths across 3D spaces, complete with altitude properties and occlusion toggles. |
+| [`<gmp-polyline-3d-interactive>`](https://developers.google.com/maps/documentation/javascript/reference/3d-map#Polyline3DInteractiveElement) | An interactive line-string path that listens for clicks and user interactions within the 3D view. |
+| [`<gmp-polygon-3d>`](https://developers.google.com/maps/documentation/javascript/reference/3d-map#Polygon3DElement) | Defines multi-coordinate geometric shapes and boundaries supporting geometric fills and extrusion on the 3D globe. |
+| [`<gmp-polygon-3d-interactive>`](https://developers.google.com/maps/documentation/javascript/reference/3d-map#Polygon3DInteractiveElement) | An interactive geometric area overlay allowing users to trigger events by interacting with the 3D polygon. |
+| [`<gmp-circle-path>`](https://developers.google.com/maps/documentation/javascript/reference/3d-map#CirclePathElement) | Generates and draws procedural circular spline layout paths mapped cleanly within 3D environments. |
+| [`<gmp-route-3d>`](https://developers.google.com/maps/documentation/javascript/reference/routes-elements#Route3DElement) | Overlays and visualizes complex directional pathways, multi-modal steps, and routing telemetry on 3D viewports. |
+| [`<gmp-air-quality-meter>`](https://developers.google.com/maps/documentation/javascript/reference/air-quality#AirQualityMeterElement) | An environmental monitoring panel displaying localized real-time air safety indices and language-localized parameters. |
+| [`<gmp-place-autocomplete>`](https://developers.google.com/maps/documentation/javascript/reference/places-widget#PlaceAutocompleteElement) | A rich UI text input component packing fully automated address lookups and drop-down prediction items. |
+| [`<gmp-basic-place-autocomplete>`](https://developers.google.com/maps/documentation/javascript/reference/places-widget#BasicPlaceAutocompleteElement) | A streamlined, lightweight variant of the predictive place autocomplete input widget. |
+| [`<gmp-place-search>`](https://developers.google.com/maps/documentation/javascript/reference/places-widget#PlaceSearchElement) | A dynamic local directory UI component that outputs and arranges keyword and vicinity query listings. |
+| [`<gmp-place-details>`](https://developers.google.com/maps/documentation/javascript/reference/places-widget#PlaceDetailsElement) | A dense, modular location profile card showing media, business stats, scheduling charts, and contact datasets. Layout block styling and structure can be fine-tuned internally using individual child components. |
+| [`<gmp-place-details-compact>`](https://developers.google.com/maps/documentation/javascript/reference/places-widget#PlaceDetailsCompactElement) | A responsive, space-conscious version of the comprehensive details card tailored for mobile viewports and tooltips. |
+| [`<gmp-place-details-place-request>`](https://developers.google.com/maps/documentation/javascript/reference/places-widget#PlaceDetailsPlaceRequestElement) | An API context bridge element used inside a details panel to tie lookups to an explicit programmatic Google Place ID. |
+| [`<gmp-place-details-location-request>`](https://developers.google.com/maps/documentation/javascript/reference/places-widget#PlaceDetailsLocationRequestElement) | An API context bridge element used inside a details panel to tie lookups to explicit latitude/longitude coordinates. |
+| [`<gmp-place-contextual>`](https://developers.google.com/maps/documentation/javascript/reference/places-widget#PlaceContextualElement) | Handles the presentation of embedded context layers and metadata driven by localized contextual token validation. |
+| [`<gmp-place-contextual-list-config>`](https://developers.google.com/maps/documentation/javascript/reference/places-widget#PlaceContextualListConfigElement) | Exposes layout configuration rules to change styling distributions and list configurations of local context sheets. |
+| [`<gmp-place-nearby-search-request>`](https://developers.google.com/maps/documentation/javascript/reference/places-widget#PlaceNearbySearchRequestElement) | A declarative widget component used to trigger and configure vicinity-focused radial place queries. |
+| [`<gmp-place-text-search-request>`](https://developers.google.com/maps/documentation/javascript/reference/places-widget#PlaceTextSearchRequestElement) | A declarative widget component used to structure and trigger string/text-based global search parameters. |
+
 
 ## Examples
 
