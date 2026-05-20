@@ -11,7 +11,7 @@ const MyComponent = () => {
   useEffect(() => {
     if (!placesLib || !map) return;
 
-    const svc = new placesLib.PlacesService(map);
+    const place = new placesLib.Place({ id: 'ChIJC8HakaIRkFQRiOgkgdHmqkk' }); // PLACE_ID
     // ...
   }, [placesLib, map]);
 
