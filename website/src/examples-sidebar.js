@@ -26,10 +26,11 @@ const sidebars = {
         'autocomplete',
         'directions',
         'routes-api',
-        'deckgl-overlay',
         'map-3d',
         'map-3d-markers',
-        'map-3d-route',
+        'map-3d-routes',
+        'map-3d-routes-widget',
+        'deckgl-overlay',
         'extended-component-library',
         'static-map',
         'places-ui-kit'
