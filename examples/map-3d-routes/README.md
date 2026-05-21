@@ -20,11 +20,12 @@ GOOGLE_MAPS_API_KEY="<YOUR API KEY HERE>"
 
 Photorealistic 3D Maps require WebGL2 support and hardware graphics acceleration. Please refer to the official **[Google Maps 3D Maps Browser Support Guide](https://developers.google.com/maps/documentation/javascript/3d-maps-support)** for detailed browser requirements and system compatibility guidelines.
 
-*(Note: Virtual machine or remote desktop environments like Cloudtop do not support direct WebGL2 hardware rendering overlays by default. Please run the example locally on your physical host machine).*
+_(Note: Virtual machine or remote desktop environments like Cloudtop do not support direct WebGL2 hardware rendering overlays by default. Please run the example locally on your physical host machine)._
 
 ## Development & How to Run
 
 Go into the example directory:
+
 ```shell
 cd examples/map-3d-routes
 ```

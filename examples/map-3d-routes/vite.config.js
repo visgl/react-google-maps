@@ -18,9 +18,11 @@ export default defineConfig(({mode}) => {
           '../../examples/examples.css'
         ),
         '@vis.gl/react-google-maps': resolve('../../src/index.ts'),
-        '@googlemaps/js-api-loader': resolve('./node_modules/@googlemaps/js-api-loader'),
+        '@googlemaps/js-api-loader': resolve(
+          './node_modules/@googlemaps/js-api-loader'
+        ),
         'fast-deep-equal': resolve('./node_modules/fast-deep-equal'),
-        'react': resolve('./node_modules/react'),
+        react: resolve('./node_modules/react'),
         'react-dom': resolve('./node_modules/react-dom')
       }
     }

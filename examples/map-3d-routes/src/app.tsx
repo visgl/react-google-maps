@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {createRoot} from 'react-dom/client';
 
 import {
@@ -20,12 +20,15 @@ const Programmatic3DRoute = () => {
   const maps3dLibrary = useMapsLibrary('maps3d') as any;
 
   useEffect(() => {
-    console.log("=== 3D Routes Diagnostics ===");
-    console.log("Map3D instance resolved:", map);
-    console.log("routesLibrary state:", routesLibrary);
-    console.log("maps3dLibrary state:", maps3dLibrary);
+    console.log('=== 3D Routes Diagnostics ===');
+    console.log('Map3D instance resolved:', map);
+    console.log('routesLibrary state:', routesLibrary);
+    console.log('maps3dLibrary state:', maps3dLibrary);
     if (window.google && window.google.maps) {
-      console.log("Global window.google.maps keys:", Object.keys(window.google.maps));
+      console.log(
+        'Global window.google.maps keys:',
+        Object.keys(window.google.maps)
+      );
     }
   }, [map, routesLibrary, maps3dLibrary]);
 
@@ -36,8 +39,8 @@ const Programmatic3DRoute = () => {
 
     // Fetch the route programmatically using SDK computeRoutes
     routesLibrary.Route.computeRoutes({
-      origin: { lat: 43.65, lng: -79.38 },
-      destination: { lat: 43.69, lng: -79.42 },
+      origin: {lat: 43.65, lng: -79.38},
+      destination: {lat: 43.69, lng: -79.42},
       travelMode: 'DRIVING',
       fields: ['*']
     }).then((response: any) => {
@@ -69,14 +72,15 @@ const Map3DRoutesExample = () => {
   return (
     <>
       <Map3D
-        defaultCenter={{ lat: 43.67, lng: -79.40, altitude: 100 }}
+        defaultCenter={{lat: 43.67, lng: -79.4, altitude: 100}}
         defaultRange={12000}
         defaultHeading={0}
         defaultTilt={60}
         defaultRoll={0}
         defaultLabelsDisabled
+        mode="ROADMAP"
         mapId="49ae42fed52588c3"
-        style={{ width: '100%', height: '100%' }}>
+        style={{width: '100%', height: '100%'}}>
         <Programmatic3DRoute />
       </Map3D>
     </>
