@@ -161,6 +161,40 @@ describe('map and marker-library loaded', () => {
     ).toBeTruthy();
   });
 
+  test('disables custom content pointer targeting when clickable toggles off', async () => {
+    const handleClick = jest.fn();
+
+    const {rerender} = render(
+      <AdvancedMarker
+        position={{lat: 1, lng: 2}}
+        clickable={true}
+        onClick={handleClick}>
+        <div data-testid={'marker-content'}>Marker Content!</div>
+      </AdvancedMarker>
+    );
+
+    const marker = await waitForMockInstance(
+      google.maps.marker.AdvancedMarkerElement
+    );
+
+    expect(marker.gmpClickable).toBe(true);
+    expect((marker.content as HTMLElement).style.pointerEvents).toBe('all');
+    expect((marker.content as HTMLElement).style.cursor).toBe('pointer');
+
+    rerender(
+      <AdvancedMarker
+        position={{lat: 1, lng: 2}}
+        clickable={false}
+        onClick={handleClick}>
+        <div data-testid={'marker-content'}>Marker Content!</div>
+      </AdvancedMarker>
+    );
+
+    expect(marker.gmpClickable).toBe(false);
+    expect((marker.content as HTMLElement).style.pointerEvents).toBe('none');
+    expect((marker.content as HTMLElement).style.cursor).toBe('');
+  });
+
   test.todo('marker should work with options');
   test.todo('marker should have a click listener');
 

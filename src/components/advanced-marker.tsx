@@ -312,23 +312,22 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
     // maps api (as of 2024-10-10)
     marker.gmpClickable = gmpClickable;
 
-    // enable pointer events for the markers with custom content
-    if (gmpClickable && marker?.content && isElementNode(marker.content)) {
-      marker.content.style.pointerEvents = 'all';
-
-      if (onClick) {
-        marker.content.style.cursor = 'pointer';
-      }
+    // keep pointer/cursor styles in sync for markers with custom content.
+    // Non-clickable custom HTML must disable pointer targeting explicitly so
+    // interactions fall through to the map underneath.
+    if (marker?.content && isElementNode(marker.content)) {
+      marker.content.style.pointerEvents = gmpClickable ? 'all' : 'none';
+      marker.content.style.cursor = gmpClickable && onClick ? 'pointer' : '';
     }
   }, [marker, clickable, onClick, onMouseEnter, onMouseLeave]);
 
-  useMapsEventListener(marker, 'click', onClick);
   useMapsEventListener(marker, 'drag', onDrag);
   useMapsEventListener(marker, 'dragstart', onDragStart);
   useMapsEventListener(marker, 'dragend', onDragEnd);
 
-  useDomEventListener(marker?.element, 'mouseenter', onMouseEnter);
-  useDomEventListener(marker?.element, 'mouseleave', onMouseLeave);
+  useDomEventListener(marker, 'gmp-click', onClick);
+  useDomEventListener(marker, 'mouseenter', onMouseEnter);
+  useDomEventListener(marker, 'mouseleave', onMouseLeave);
 
   return [marker, contentContainer] as const;
 }
