@@ -15,11 +15,11 @@ function ControlPanel({
 }: Props) {
   return (
     <div className="control-panel">
-      <h3>Heatmap</h3>
+      <h3>deck.gl Heatmap</h3>
       <p>
-        This uses the <code>useMapsLibrary()</code> hook and the{' '}
-        <code>google.maps.visualization</code> library to show earthquake
-        magnitude data in a heatmap.
+        This uses deck.gl&apos;s <code>HeatmapLayer</code> with a{' '}
+        <code>GoogleMapsOverlay</code> to show earthquake magnitude data on top
+        of the map.
       </p>
 
       {/* Circle Controls */}
@@ -60,13 +60,13 @@ function ControlPanel({
 
       <div className="links">
         <a
-          href="https://codesandbox.io/s/github/visgl/react-google-maps/tree/main/examples/heatmap"
+          href="https://codesandbox.io/s/github/visgl/react-google-maps/tree/main/examples/deckgl-heatmap"
           target="_new">
           Try on CodeSandbox ↗
         </a>
 
         <a
-          href="https://github.com/visgl/react-google-maps/tree/main/examples/heatmap"
+          href="https://github.com/visgl/react-google-maps/tree/main/examples/deckgl-heatmap"
           target="_new">
           View Code ↗
         </a>
