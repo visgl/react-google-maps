@@ -1,7 +1,12 @@
 import React from 'react';
 
 import {initialize, mockInstances} from '@googlemaps/jest-mocks';
-import {cleanup, queryByTestId, render} from '@testing-library/react';
+import {
+  cleanup,
+  fireEvent,
+  queryByTestId,
+  render
+} from '@testing-library/react';
 import '@testing-library/jest-dom';
 
 import {AdvancedMarker, AdvancedMarkerAnchorPoint} from '../advanced-marker';
@@ -195,8 +200,53 @@ describe('map and marker-library loaded', () => {
     expect((marker.content as HTMLElement).style.cursor).toBe('');
   });
 
+  test('binds gmp-click events to onClick', async () => {
+    const handleClick = jest.fn();
+
+    render(
+      <AdvancedMarker position={{lat: 1, lng: 2}} onClick={handleClick} />
+    );
+
+    const marker = await waitForMockInstance(
+      google.maps.marker.AdvancedMarkerElement
+    );
+
+    const clickEvent = new Event('gmp-click');
+    fireEvent(marker, clickEvent);
+
+    expect(handleClick).toHaveBeenCalledWith(clickEvent);
+    expect(marker.gmpClickable).toBe(true);
+  });
+
+  test('binds keyboard events and infers clickability from them', async () => {
+    const handleKeyDown = jest.fn();
+    const handleKeyUp = jest.fn();
+
+    render(
+      <AdvancedMarker
+        position={{lat: 1, lng: 2}}
+        onKeyDown={handleKeyDown}
+        onKeyUp={handleKeyUp}
+      />
+    );
+
+    const marker = await waitForMockInstance(
+      google.maps.marker.AdvancedMarkerElement
+    );
+
+    expect(marker.gmpClickable).toBe(true);
+
+    const keyDownEvent = new KeyboardEvent('keydown', {key: 'Enter'});
+    const keyUpEvent = new KeyboardEvent('keyup', {key: ' '});
+
+    fireEvent(marker, keyDownEvent);
+    fireEvent(marker, keyUpEvent);
+
+    expect(handleKeyDown).toHaveBeenCalledWith(keyDownEvent);
+    expect(handleKeyUp).toHaveBeenCalledWith(keyUpEvent);
+  });
+
   test.todo('marker should work with options');
-  test.todo('marker should have a click listener');
 
   describe('anchoring with modern API', () => {
     beforeEach(() => {

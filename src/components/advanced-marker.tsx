@@ -75,7 +75,9 @@ export type AdvancedMarkerAnchorPoint =
   (typeof AdvancedMarkerAnchorPoint)[keyof typeof AdvancedMarkerAnchorPoint];
 
 type AdvancedMarkerEventProps = {
-  onClick?: (e: google.maps.MapMouseEvent) => void;
+  onClick?: (e: google.maps.marker.AdvancedMarkerClickEvent) => void;
+  onKeyDown?: (e: KeyboardEvent) => void;
+  onKeyUp?: (e: KeyboardEvent) => void;
   onMouseEnter?: (e: google.maps.MapMouseEvent['domEvent']) => void;
   onMouseLeave?: (e: google.maps.MapMouseEvent['domEvent']) => void;
   onDrag?: (e: google.maps.MapMouseEvent) => void;
@@ -211,6 +213,8 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
   const {
     children,
     onClick,
+    onKeyDown,
+    onKeyUp,
     className,
     onMouseEnter,
     onMouseLeave,
@@ -296,8 +300,8 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
     else marker.gmpDraggable = false;
   }, [marker, draggable, onDrag, onDragEnd, onDragStart]);
 
-  // set gmpClickable from props (when unspecified, it's true if the onClick or one of
-  // the hover events callbacks are specified)
+  // set gmpClickable from props (when unspecified, it's true if any interactive
+  // event callbacks are specified)
   useEffect(() => {
     if (!marker) return;
 
@@ -306,7 +310,11 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
     const gmpClickable =
       clickable !== undefined
         ? clickable
-        : Boolean(onClick) || Boolean(onMouseEnter) || Boolean(onMouseLeave);
+        : Boolean(onClick) ||
+          Boolean(onKeyDown) ||
+          Boolean(onKeyUp) ||
+          Boolean(onMouseEnter) ||
+          Boolean(onMouseLeave);
 
     // gmpClickable is only available in beta version of the
     // maps api (as of 2024-10-10)
@@ -319,13 +327,23 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
       marker.content.style.pointerEvents = gmpClickable ? 'all' : 'none';
       marker.content.style.cursor = gmpClickable && onClick ? 'pointer' : '';
     }
-  }, [marker, clickable, onClick, onMouseEnter, onMouseLeave]);
+  }, [
+    marker,
+    clickable,
+    onClick,
+    onKeyDown,
+    onKeyUp,
+    onMouseEnter,
+    onMouseLeave
+  ]);
 
   useMapsEventListener(marker, 'drag', onDrag);
   useMapsEventListener(marker, 'dragstart', onDragStart);
   useMapsEventListener(marker, 'dragend', onDragEnd);
 
   useDomEventListener(marker, 'gmp-click', onClick);
+  useDomEventListener(marker, 'keydown', onKeyDown);
+  useDomEventListener(marker, 'keyup', onKeyUp);
   useDomEventListener(marker, 'mouseenter', onMouseEnter);
   useDomEventListener(marker, 'mouseleave', onMouseLeave);
 
