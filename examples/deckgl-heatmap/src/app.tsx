@@ -4,7 +4,7 @@ import {createRoot} from 'react-dom/client';
 import {APIProvider, Map} from '@vis.gl/react-google-maps';
 
 import ControlPanel from './control-panel';
-import Heatmap from './heatmap';
+import DeckGlHeatmap from './deckgl-heatmap';
 import {EarthquakesGeojson, loadEarthquakeGeojson} from './earthquakes';
 
 const API_KEY =
@@ -28,16 +28,15 @@ const App = () => {
         defaultCenter={{lat: 40.7749, lng: -130.4194}}
         defaultZoom={3}
         gestureHandling={'greedy'}
-        disableDefaultUI={true}
-      />
-
-      {earthquakesGeojson && (
-        <Heatmap
-          geojson={earthquakesGeojson}
-          radius={radius}
-          opacity={opacity}
-        />
-      )}
+        disableDefaultUI={true}>
+        {earthquakesGeojson && (
+          <DeckGlHeatmap
+            geojson={earthquakesGeojson}
+            radius={radius}
+            opacity={opacity}
+          />
+        )}
+      </Map>
 
       <ControlPanel
         radius={radius}
