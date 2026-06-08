@@ -291,30 +291,6 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
 
           const librariesToLoad = ['core', 'maps', ...libraries];
 
-          // If the google.maps namespace is already available, the API has been loaded externally.
-          if (window.google?.maps?.importLibrary as unknown) {
-            await Promise.all(
-              librariesToLoad.map(name => importLibraryCallback(name))
-            );
-            if (!serializedApiParams) {
-              updateLoadingStatus(APILoadingStatus.LOADED);
-            }
-            if (onLoad) onLoad();
-            return;
-          }
-
-          // Abort if the API is already loading or has been loaded.
-          if (
-            loadingStatus === APILoadingStatus.LOADING ||
-            loadingStatus === APILoadingStatus.LOADED
-          ) {
-            if (loadingStatus === APILoadingStatus.LOADED && onLoad) onLoad();
-            return;
-          }
-
-          serializedApiParams = currentSerializedParams;
-          updateLoadingStatus(APILoadingStatus.LOADING);
-
           const options: APIOptions = Object.fromEntries(
             Object.entries({
               key: apiKey,
@@ -337,6 +313,37 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
           } else if (solutionChannel !== '') {
             options.solutionChannel = solutionChannel;
           }
+
+          // If the google.maps namespace is already available, the API has been loaded externally.
+          if (window.google?.maps?.importLibrary as unknown) {
+            const shouldUpdateLoadingStatus = !serializedApiParams;
+
+            if (shouldUpdateLoadingStatus) {
+              serializedApiParams = currentSerializedParams;
+              setOptions(options);
+            }
+
+            await Promise.all(
+              librariesToLoad.map(name => importLibraryCallback(name))
+            );
+            if (shouldUpdateLoadingStatus) {
+              updateLoadingStatus(APILoadingStatus.LOADED);
+            }
+            if (onLoad) onLoad();
+            return;
+          }
+
+          // Abort if the API is already loading or has been loaded.
+          if (
+            loadingStatus === APILoadingStatus.LOADING ||
+            loadingStatus === APILoadingStatus.LOADED
+          ) {
+            if (loadingStatus === APILoadingStatus.LOADED && onLoad) onLoad();
+            return;
+          }
+
+          serializedApiParams = currentSerializedParams;
+          updateLoadingStatus(APILoadingStatus.LOADING);
 
           // this will actually trigger loading the maps API
           setOptions(options);
