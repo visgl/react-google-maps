@@ -29,6 +29,8 @@ const sidebars = {
         'deckgl-heatmap',
         'map-3d',
         'map-3d-markers',
+        'map-3d-routes',
+        'map-3d-routes-widget',
         'extended-component-library',
         'static-map',
         'places-ui-kit'
