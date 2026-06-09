@@ -31,7 +31,6 @@ const sidebars = {
         'map-3d-markers',
         'map-3d-routes',
         'map-3d-routes-widget',
-        'deckgl-overlay',
         'extended-component-library',
         'static-map',
         'places-ui-kit'
