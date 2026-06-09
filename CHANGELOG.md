@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.9.0](https://github.com/visgl/react-google-maps/compare/v1.8.3...v1.9.0) (2026-06-09)
+
+
+### Features
+
+* add basic keyboard events for advanced marker ([#1001](https://github.com/visgl/react-google-maps/issues/1001)) ([af5ab1c](https://github.com/visgl/react-google-maps/commit/af5ab1c1743d027dcf3b38f9755fd93714c8b359))
+* **map-control:** add className prop ([#967](https://github.com/visgl/react-google-maps/issues/967)) ([37bfe46](https://github.com/visgl/react-google-maps/commit/37bfe46ab0430db30b8a27cbdc2f43912314085c))
+
+
+### Bug Fixes
+
+* **map:** don't crash when remounting with a broken cached map instance ([#984](https://github.com/visgl/react-google-maps/issues/984)) ([31a5261](https://github.com/visgl/react-google-maps/commit/31a5261e9907efe8739c5d5cc1d347316ea26241)), closes [#982](https://github.com/visgl/react-google-maps/issues/982)
+* prevent api provider race condition, defer loading state update ([#970](https://github.com/visgl/react-google-maps/issues/970)) ([7fd6efe](https://github.com/visgl/react-google-maps/commit/7fd6efe57db823297a3cbca2404a5599d56e1843))
+* update gmp types ([#973](https://github.com/visgl/react-google-maps/issues/973)) ([2f5c29c](https://github.com/visgl/react-google-maps/commit/2f5c29cd32f404ecde23b4ee8b33f2b268d8c7b1))
+* use correct pointer events behaviour ([#997](https://github.com/visgl/react-google-maps/issues/997)) ([538e918](https://github.com/visgl/react-google-maps/commit/538e918353379e3b5f2b1abb34b0af733a4d747a))
+
 ## [1.8.3](https://github.com/visgl/react-google-maps/compare/v1.8.2...v1.8.3) (2026-04-09)
 
 
