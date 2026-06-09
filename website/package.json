@@ -10,16 +10,16 @@
     "postinstall": "bash ../scripts/install-examples.sh"
   },
   "dependencies": {
-    "react": "^19.2.6",
-    "react-dom": "^19.2.6",
-    "styled-components": "^6.4.1"
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "styled-components": "^6.4.2"
   },
   "devDependencies": {
     "@docusaurus/core": "^3.10.1",
     "@docusaurus/plugin-content-docs": "^3.10.1",
     "@docusaurus/preset-classic": "^3.10.1",
-    "@easyops-cn/docusaurus-search-local": "^0.55.1",
-    "babel-plugin-styled-components": "^2.0.0",
+    "@easyops-cn/docusaurus-search-local": "^0.55.2",
+    "babel-plugin-styled-components": "^2.3.0",
     "babel-plugin-version-inline": "^1.0.0",
     "glob": "^13.0.6"
   }

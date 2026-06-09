@@ -1,7 +1,7 @@
-# Heatmap
+# Deck.gl Heatmap
 
-This uses the `useMapsLibrary` hook showing earthquake magnitude data in a
-heatmap.
+This uses deck.gl's `HeatmapLayer` and `GoogleMapsOverlay` to show earthquake
+magnitude data in a heatmap.
 
 ## Google Maps Platform API key
 

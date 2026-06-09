@@ -209,6 +209,42 @@ describe('map instance caching', () => {
     "map isn't recreated when unmounting and remounting with regular changed options"
   );
   test.todo('removed options are handled correctly');
+
+  test("doesn't crash when remounting with a broken cached map instance", async () => {
+    // simulates the case where the initial map-creation failed (e.g. the Maps
+    // JavaScript API didn't load correctly), leaving a cached map whose
+    // getDiv() doesn't return a usable DOM node. Remounting must not throw.
+    const center = {lat: 53.55, lng: 10.05};
+
+    const {unmount} = render(
+      <GoogleMap mapId={'broken-cache'} reuseMaps center={center} zoom={12} />,
+      {wrapper}
+    );
+    await waitFor(() => expect(screen.getByTestId('map')).toBeInTheDocument());
+
+    // make the cached instance return a non-Node from getDiv()
+    const cachedMap = mockInstances.get(google.maps.Map).at(-1)!;
+    jest.mocked(cachedMap.getDiv).mockReturnValue(undefined as never);
+
+    unmount();
+    createMapSpy.mockReset();
+
+    expect(() =>
+      render(
+        <GoogleMap
+          mapId={'broken-cache'}
+          reuseMaps
+          center={center}
+          zoom={12}
+        />,
+        {wrapper}
+      )
+    ).not.toThrow();
+
+    await waitFor(() => expect(screen.getByTestId('map')).toBeInTheDocument());
+    // a fresh map instance should have been created instead of reusing the broken one
+    expect(createMapSpy).toHaveBeenCalled();
+  });
 });
 
 describe('camera configuration', () => {
