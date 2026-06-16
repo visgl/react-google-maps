@@ -2,15 +2,8 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {createRoot} from 'react-dom/client';
 
-import {
-  AltitudeMode,
-  APIProvider,
-  Map3D,
-  MapMode,
-  Marker3D,
-  Pin,
-  Popover
-} from '@vis.gl/react-google-maps';
+import {AltitudeMode, APIProvider, Pin} from '@vis.gl/react-google-maps';
+import {Map3D, MapMode, Marker3D, Popover} from '@vis.gl/react-google-maps/3d';
 
 import {Model3D, Model3DProps} from './model-3d';
 import ControlPanel from './control-panel';
