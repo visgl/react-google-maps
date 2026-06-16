@@ -16,6 +16,11 @@
       "types": "./dist/server/index.d.ts",
       "default": "./dist/server/index.modern.mjs"
     },
+    "./3d": {
+      "require": "./dist/3d/index.umd.js",
+      "types": "./dist/3d/index.d.ts",
+      "default": "./dist/3d/index.modern.mjs"
+    },
     "./examples.css": "./dist/examples.css"
   },
   "types": "dist/index.d.ts",

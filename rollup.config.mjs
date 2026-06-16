@@ -66,5 +66,6 @@ const createConfig = (input, outputBase) => [
 
 export default [
   ...createConfig('./src/index.ts', './dist/index'),
-  ...createConfig('./src/server/index.ts', './dist/server/index')
+  ...createConfig('./src/server/index.ts', './dist/server/index'),
+  ...createConfig('./src/3d/index.ts', './dist/3d/index')
 ];

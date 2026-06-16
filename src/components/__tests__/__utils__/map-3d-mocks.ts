@@ -91,6 +91,178 @@ export class PopoverElement extends HTMLElement {
   }
 }
 
+class BaseMockMarkerElement extends HTMLElement {
+  position?:
+    | google.maps.LatLngLiteral
+    | google.maps.LatLngAltitude
+    | google.maps.LatLngAltitudeLiteral
+    | null;
+  altitudeMode?: string | null;
+  anchorLeft?: string | null;
+  anchorTop?: string | null;
+  autofitsCamera?: boolean | null;
+  collisionBehavior?: string | null;
+  collisionPriority?: number | null;
+  private _title = '';
+
+  get title(): string {
+    return this._title;
+  }
+
+  set title(value: string) {
+    this._title = value;
+  }
+}
+
+export class MarkerElement extends BaseMockMarkerElement {
+  constructor(options?: google.maps.maps3d.MarkerElementOptions) {
+    super();
+
+    if (options) {
+      Object.assign(this, options);
+    }
+  }
+}
+
+export class MarkerInteractiveElement extends BaseMockMarkerElement {
+  gmpPopoverTargetElement?: google.maps.maps3d.PopoverElement | null;
+
+  constructor(options?: google.maps.maps3d.MarkerInteractiveElementOptions) {
+    super();
+
+    if (options) {
+      Object.assign(this, options);
+    }
+  }
+}
+
+export class Model3DElement extends HTMLElement {
+  altitudeMode?: string | null;
+  orientation?:
+    | google.maps.Orientation3D
+    | google.maps.Orientation3DLiteral
+    | null;
+  position?:
+    | google.maps.LatLngLiteral
+    | google.maps.LatLngAltitude
+    | google.maps.LatLngAltitudeLiteral
+    | null;
+  scale?: number | google.maps.Vector3D | google.maps.Vector3DLiteral | null;
+  src?: string | URL | null;
+
+  constructor(options?: google.maps.maps3d.Model3DElementOptions) {
+    super();
+
+    if (options) {
+      Object.assign(this, options);
+    }
+  }
+}
+
+export class Model3DInteractiveElement extends Model3DElement {}
+
+class BaseMockPoly3DElement extends HTMLElement {
+  altitudeMode?: string | null;
+  autofitsCamera?: boolean | null;
+  drawsOccludedSegments?: boolean | null;
+  extruded?: boolean | null;
+  fillColor?: string | null;
+  geodesic?: boolean | null;
+  innerCoordinates?: Iterable<
+    | Iterable<google.maps.LatLngAltitude | google.maps.LatLngAltitudeLiteral>
+    | Iterable<google.maps.LatLngLiteral>
+  > | null;
+  innerPaths?: Iterable<
+    | Iterable<google.maps.LatLngAltitude | google.maps.LatLngAltitudeLiteral>
+    | Iterable<google.maps.LatLngLiteral>
+  > | null;
+  outerColor?: string | null;
+  outerCoordinates?: Iterable<
+    | google.maps.LatLngAltitude
+    | google.maps.LatLngAltitudeLiteral
+    | google.maps.LatLngLiteral
+  > | null;
+  outerWidth?: number | null;
+  path?: Iterable<
+    | google.maps.LatLngAltitude
+    | google.maps.LatLngAltitudeLiteral
+    | google.maps.LatLngLiteral
+  > | null;
+  strokeColor?: string | null;
+  strokeWidth?: number | null;
+  zIndex?: number | null;
+}
+
+export class Polyline3DElement extends BaseMockPoly3DElement {
+  coordinates?: Iterable<
+    | google.maps.LatLngAltitude
+    | google.maps.LatLngAltitudeLiteral
+    | google.maps.LatLngLiteral
+  > | null;
+
+  constructor(options?: google.maps.maps3d.Polyline3DElementOptions) {
+    super();
+
+    if (options) {
+      Object.assign(this, options);
+    }
+  }
+}
+
+export class Polyline3DInteractiveElement extends Polyline3DElement {}
+
+export class Polygon3DElement extends BaseMockPoly3DElement {
+  constructor(options?: google.maps.maps3d.Polygon3DElementOptions) {
+    super();
+
+    if (options) {
+      Object.assign(this, options);
+    }
+  }
+}
+
+export class Polygon3DInteractiveElement extends Polygon3DElement {}
+
+export class FlattenerElement extends HTMLElement {
+  innerPaths?: Iterable<
+    Iterable<
+      | google.maps.LatLngAltitude
+      | google.maps.LatLngAltitudeLiteral
+      | google.maps.LatLngLiteral
+    >
+  > | null;
+  path?: Iterable<
+    | google.maps.LatLngAltitude
+    | google.maps.LatLngAltitudeLiteral
+    | google.maps.LatLngLiteral
+  > | null;
+
+  constructor(options?: google.maps.maps3d.FlattenerElementOptions) {
+    super();
+
+    if (options) {
+      Object.assign(this, options);
+    }
+  }
+}
+
+export class CirclePathElement extends HTMLElement {
+  center?:
+    | google.maps.LatLngAltitude
+    | google.maps.LatLngAltitudeLiteral
+    | google.maps.LatLngLiteral
+    | null;
+  radius?: number | null;
+
+  constructor(options?: google.maps.maps3d.CirclePathElementOptions) {
+    super();
+
+    if (options) {
+      Object.assign(this, options);
+    }
+  }
+}
+
 /**
  * Mock implementation of google.maps.maps3d.Map3DElement
  * @see https://developers.google.com/maps/documentation/javascript/reference/3d-map#Map3DElement
@@ -156,6 +328,55 @@ export function register3DWebComponentMocks(): void {
 
   if (!customElements.get('gmp-popover')) {
     customElements.define('gmp-popover', PopoverElement);
+  }
+
+  if (!customElements.get('gmp-marker')) {
+    customElements.define('gmp-marker', MarkerElement);
+  }
+
+  if (!customElements.get('gmp-marker-interactive')) {
+    customElements.define('gmp-marker-interactive', MarkerInteractiveElement);
+  }
+
+  if (!customElements.get('gmp-model-3d')) {
+    customElements.define('gmp-model-3d', Model3DElement);
+  }
+
+  if (!customElements.get('gmp-model-3d-interactive')) {
+    customElements.define(
+      'gmp-model-3d-interactive',
+      Model3DInteractiveElement
+    );
+  }
+
+  if (!customElements.get('gmp-polyline-3d')) {
+    customElements.define('gmp-polyline-3d', Polyline3DElement);
+  }
+
+  if (!customElements.get('gmp-polyline-3d-interactive')) {
+    customElements.define(
+      'gmp-polyline-3d-interactive',
+      Polyline3DInteractiveElement
+    );
+  }
+
+  if (!customElements.get('gmp-polygon-3d')) {
+    customElements.define('gmp-polygon-3d', Polygon3DElement);
+  }
+
+  if (!customElements.get('gmp-polygon-3d-interactive')) {
+    customElements.define(
+      'gmp-polygon-3d-interactive',
+      Polygon3DInteractiveElement
+    );
+  }
+
+  if (!customElements.get('gmp-flattener')) {
+    customElements.define('gmp-flattener', FlattenerElement);
+  }
+
+  if (!customElements.get('gmp-circle-path')) {
+    customElements.define('gmp-circle-path', CirclePathElement);
   }
 
   if (!customElements.get('gmp-map-3d')) {

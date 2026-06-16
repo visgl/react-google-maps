@@ -24,24 +24,13 @@ import {useMapsLibrary} from '../hooks/use-maps-library';
 import {useMapsEventListener} from '../hooks/use-maps-event-listener';
 import {usePropBinding} from '../hooks/use-prop-binding';
 import {useDomEventListener} from '../hooks/use-dom-event-listener';
+import {CollisionBehavior} from '../constants';
 import {globalStyleManager} from '../libraries/global-style-manager';
 import {isVersionGreaterEqual} from '../libraries/version-utils';
 
 export interface AdvancedMarkerContextValue {
   marker: google.maps.marker.AdvancedMarkerElement;
 }
-
-/**
- * Copy of the `google.maps.CollisionBehavior` constants.
- * They have to be duplicated here since we can't wait for the maps API to load to be able to use them.
- */
-export const CollisionBehavior = {
-  REQUIRED: 'REQUIRED',
-  REQUIRED_AND_HIDES_OPTIONAL: 'REQUIRED_AND_HIDES_OPTIONAL',
-  OPTIONAL_AND_HIDES_LOWER_PRIORITY: 'OPTIONAL_AND_HIDES_LOWER_PRIORITY'
-} as const;
-export type CollisionBehavior =
-  (typeof CollisionBehavior)[keyof typeof CollisionBehavior];
 
 export const AdvancedMarkerContext =
   React.createContext<AdvancedMarkerContextValue | null>(null);

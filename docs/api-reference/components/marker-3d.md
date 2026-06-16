@@ -193,6 +193,19 @@ like buildings.
 When `true`, the marker maintains a consistent size regardless of distance
 from the camera.
 
+#### `autofitsCamera`: boolean
+
+When `true`, the marker opts into camera fitting behavior alongside other
+3D elements that also opted in.
+
+::::info[Alpha]
+
+This property is currently only available in the alpha channel of the Maps
+JavaScript API. Set the `version` prop of your `APIProvider` to `alpha` to
+enable it.
+
+::::
+
 #### `collisionBehavior`: CollisionBehavior
 
 Defines how the marker behaves when it collides with another marker or with
