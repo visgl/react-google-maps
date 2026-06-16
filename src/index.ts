@@ -3,6 +3,7 @@ import type {} from '../types/react-custom-element-bridge/index';
 export type * from '../types/react-custom-element-bridge/index';
 
 export * from './version';
+export * from './constants';
 export * from './components/advanced-marker';
 export * from './components/api-provider';
 export * from './components/circle';

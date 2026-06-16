@@ -11,12 +11,9 @@ import React, {
   useState
 } from 'react';
 
+import {AltitudeMode} from '../constants';
 import {usePropBinding} from '../hooks/use-prop-binding';
 import {setValueForStyles} from '../libraries/set-value-for-styles';
-import {AltitudeMode} from './marker-3d';
-
-// Re-export AltitudeMode for convenience
-export {AltitudeMode};
 
 /**
  * Event props for the Popover component.

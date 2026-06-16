@@ -12,12 +12,9 @@ import React, {
 } from 'react';
 import {createPortal} from 'react-dom';
 
+import {AltitudeMode, CollisionBehavior} from '../constants';
 import {useDomEventListener} from '../hooks/use-dom-event-listener';
 import {usePropBinding} from '../hooks/use-prop-binding';
-import {CollisionBehavior} from './advanced-marker';
-
-// Re-export CollisionBehavior for convenience
-export {CollisionBehavior};
 
 /**
  * Context for Marker3D component, providing access to the marker element.
@@ -39,22 +36,6 @@ export const Marker3DContext = createContext<Marker3DContextValue | null>(null);
 export function useMarker3D() {
   return useContext(Marker3DContext);
 }
-
-/**
- * AltitudeMode for specifying how altitude is interpreted for 3D elements.
- * This mirrors google.maps.maps3d.AltitudeMode but is available without waiting for the API to load.
- */
-export const AltitudeMode = {
-  /** Allows to express objects relative to the average mean sea level. */
-  ABSOLUTE: 'ABSOLUTE',
-  /** Allows to express objects placed on the ground. */
-  CLAMP_TO_GROUND: 'CLAMP_TO_GROUND',
-  /** Allows to express objects relative to the ground surface. */
-  RELATIVE_TO_GROUND: 'RELATIVE_TO_GROUND',
-  /** Allows to express objects relative to the highest of ground+building+water surface. */
-  RELATIVE_TO_MESH: 'RELATIVE_TO_MESH'
-} as const;
-export type AltitudeMode = (typeof AltitudeMode)[keyof typeof AltitudeMode];
 
 /**
  * Event props for Marker3D component.
