@@ -295,6 +295,26 @@ test('waits for externally installed importLibrary before marking API as loaded'
   expect(settingsInstance.fetchAppCheckToken).toBe(mockFetchToken);
 });
 
+test('primes js-api-loader when importLibrary is installed externally', async () => {
+  google.maps.importLibrary = asGoogleMapsImportLibrary(async libraryName => {
+    await importLibraryPromise;
+
+    if (libraryName === 'core') {
+      return {} as google.maps.CoreLibrary;
+    }
+
+    return {} as google.maps.MapsLibrary;
+  });
+
+  render(<APIProvider apiKey={'apikey'}></APIProvider>);
+
+  await act(async () => {
+    triggerMapsApiLoaded();
+  });
+
+  await waitFor(() => expect(setOptionsSpy).toHaveBeenCalled());
+});
+
 describe('internalUsageAttributionIds', () => {
   test('provides default attribution IDs in context', () => {
     render(
