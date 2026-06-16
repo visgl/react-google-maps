@@ -9,7 +9,7 @@ import {
   Model3D,
   Polygon3D,
   Polyline3D
-} from '../index';
+} from '../../../3d';
 
 import {
   CirclePathElement,
