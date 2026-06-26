@@ -30,10 +30,10 @@
   "license": "MIT",
   "scripts": {
     "clean": "rm -rf ./dist && mkdir ./dist",
-    "build": "npm-run-all clean -p build:**",
+    "build": "npm-run-all clean -p build:examples build:rollup",
     "start": "run-p start:*",
     "build:examples": "cp ./examples/examples.css dist",
-    "build:examples:local": "bash ./scripts/build-examples-local.sh",
+    "build:examples:local": "bash ./scripts/install-examples.sh && bash ./scripts/build-examples-local.sh",
     "build:rollup": "rollup -c",
     "start:rollup": "rollup -c -w",
     "test:linter:examples": "eslint 'examples/**/*.{ts,tsx}'",
