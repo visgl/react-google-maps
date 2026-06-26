@@ -8,6 +8,7 @@
     "types": ["node", "google.maps", "global"],
     "baseUrl": ".",
     "paths": {
+      "@vis.gl/react-google-maps/3d": ["../src/3d"],
       "@vis.gl/react-google-maps": ["../src"],
       "react": ["../node_modules/@types/react/index.d.ts"],
       "react-dom": ["../node_modules/@types/react-dom/index.d.ts"],
