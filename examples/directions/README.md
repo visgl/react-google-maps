@@ -1,19 +1,14 @@
-# Google Maps Directions API Example
+# Google Maps Routes API Example
 
 ![image](https://raw.githubusercontent.com/visgl/react-google-maps/main/website/static/images/examples/directions.jpg)
 
-This is an example which shows how to use `useMapsLibrary` to load the `routes` library, and then use `DirectionsService` and `DirectionsRenderer` to find and display a route on a map.
+This is an example which shows how to use `useMapsLibrary` to load the `routes` library, and then use the modern `Route` class to compute and render routes on a map.
 
-It allows the user to choose alternative routes, updating the route being rendered on the map.
-
-Users can also drag the markers around the map to change the route. The route is updated in real-time.
+It utilizes the modern client-side `Route.computeRoutes()` method combined with custom-styled React `<Polyline>` rendering, completely avoiding legacy services and CORS restrictions.
 
 > [!IMPORTANT]
 >
-> This example is only compatible with the
-> Directions API Legacy Service. Using this Services requires enabling the
-> API on your Google Cloud project by following the direct links:
-> [Directions API (Legacy)][gcp-directions-api]
+> This example uses the new [Routes API (Recommended)][gcp-routes-api] which is the modern and current way to calculate directions. If you are using the [Directions API (Legacy)][gcp-directions-api] Service, consider switching to this implementation of Routes API.
 
 ## Google Maps Platform API Key
 
@@ -47,3 +42,4 @@ The regular `npm start` task is only used for the standalone versions of the exa
 
 [get-api-key]: https://developers.google.com/maps/documentation/javascript/get-api-key
 [gcp-directions-api]: https://console.cloud.google.com/apis/library/directions-backend.googleapis.com
+[gcp-routes-api]: https://console.cloud.google.com/apis/library/routes.googleapis.com
