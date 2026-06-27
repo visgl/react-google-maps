@@ -3,26 +3,11 @@ import {useContext, useEffect} from 'react';
 import {APIProviderContext} from '../components/api-provider';
 import {useApiIsLoaded} from './use-api-is-loaded';
 
-interface ApiLibraries {
-  core: google.maps.CoreLibrary;
-  maps: google.maps.MapsLibrary;
-  places: google.maps.PlacesLibrary;
-  geocoding: google.maps.GeocodingLibrary;
-  routes: google.maps.RoutesLibrary;
-  marker: google.maps.MarkerLibrary;
-  geometry: google.maps.GeometryLibrary;
-  elevation: google.maps.ElevationLibrary;
-  streetView: google.maps.StreetViewLibrary;
-  journeySharing: google.maps.JourneySharingLibrary;
-  drawing: google.maps.DrawingLibrary;
-  visualization: google.maps.VisualizationLibrary;
-  maps3d: google.maps.Maps3DLibrary;
-}
+type LibraryName = keyof google.maps.ImportLibraryMap;
 
-export function useMapsLibrary<
-  K extends keyof ApiLibraries,
-  V extends ApiLibraries[K]
->(name: K): V | null;
+export function useMapsLibrary<K extends LibraryName>(
+  name: K
+): google.maps.ImportLibraryMap[K] | null;
 
 export function useMapsLibrary(name: string) {
   const apiIsLoaded = useApiIsLoaded();
@@ -34,8 +19,12 @@ export function useMapsLibrary(name: string) {
     // Trigger loading the libraries via our proxy-method.
     // The returned promise is ignored, since importLibrary will update loadedLibraries
     // list in the context, triggering a re-render.
-    void ctx.importLibrary(name);
+    void ctx.importLibrary(name as LibraryName);
   }, [apiIsLoaded, ctx, name]);
 
-  return ctx?.loadedLibraries[name] || null;
+  return (
+    (ctx?.loadedLibraries[name as LibraryName] as
+      | google.maps.ImportLibraryMap[LibraryName]
+      | undefined) ?? null
+  );
 }
