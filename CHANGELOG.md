@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.9.0](https://github.com/visgl/react-google-maps/compare/v1.8.3...v1.9.0) (2026-06-27)
+
+
+### Features
+
+* add basic keyboard events for advanced marker ([#1001](https://github.com/visgl/react-google-maps/issues/1001)) ([af5ab1c](https://github.com/visgl/react-google-maps/commit/af5ab1c1743d027dcf3b38f9755fd93714c8b359))
+* add map-3d-route example with 3D Map and custom route element (v=alpha) ([#989](https://github.com/visgl/react-google-maps/issues/989)) ([4adb9e1](https://github.com/visgl/react-google-maps/commit/4adb9e11f70323b7d339f8ddbb2d686ba23690a2))
+* **map-control:** add className prop ([#967](https://github.com/visgl/react-google-maps/issues/967)) ([37bfe46](https://github.com/visgl/react-google-maps/commit/37bfe46ab0430db30b8a27cbdc2f43912314085c))
+
+
+### Bug Fixes
+
+* **build:** don't build examples with library build ([1b43288](https://github.com/visgl/react-google-maps/commit/1b43288b2f4e5525717ffe7cb6feb5e262e984b3))
+* handle externally-loaded importLibrary in loader ([#1002](https://github.com/visgl/react-google-maps/issues/1002)) ([f76ed12](https://github.com/visgl/react-google-maps/commit/f76ed12f2b2a7cd0f4865c726537a01424d79cf5))
+* **hooks:** add SafeReact and fallback for useInsertionEffect to ensure compatibility with React 16/17 ([#1017](https://github.com/visgl/react-google-maps/issues/1017)) ([1a503a8](https://github.com/visgl/react-google-maps/commit/1a503a83efa20aa20b1d9a35ae9bd351401c6296)), closes [#957](https://github.com/visgl/react-google-maps/issues/957)
+* **map:** don't crash when remounting with a broken cached map instance ([#984](https://github.com/visgl/react-google-maps/issues/984)) ([31a5261](https://github.com/visgl/react-google-maps/commit/31a5261e9907efe8739c5d5cc1d347316ea26241)), closes [#982](https://github.com/visgl/react-google-maps/issues/982)
+* prevent api provider race condition, defer loading state update ([#970](https://github.com/visgl/react-google-maps/issues/970)) ([7fd6efe](https://github.com/visgl/react-google-maps/commit/7fd6efe57db823297a3cbca2404a5599d56e1843))
+* update dependencies and update importLibrary typings ([#1019](https://github.com/visgl/react-google-maps/issues/1019)) ([ef951c4](https://github.com/visgl/react-google-maps/commit/ef951c49a7b4d9967b86d40aacc81b850c9b9313))
+* update gmp types ([#973](https://github.com/visgl/react-google-maps/issues/973)) ([2f5c29c](https://github.com/visgl/react-google-maps/commit/2f5c29cd32f404ecde23b4ee8b33f2b268d8c7b1))
+* use correct pointer events behaviour ([#997](https://github.com/visgl/react-google-maps/issues/997)) ([538e918](https://github.com/visgl/react-google-maps/commit/538e918353379e3b5f2b1abb34b0af733a4d747a))
+
 ## [1.8.3](https://github.com/visgl/react-google-maps/compare/v1.8.2...v1.8.3) (2026-04-09)
 
 
