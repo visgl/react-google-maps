@@ -61,7 +61,7 @@
   "dependencies": {
     "@googlemaps/js-api-loader": "^2.0.2",
     "@types/google.maps": "^3.64.0",
-    "fast-equals": "^5.0.0"
+    "fast-equals": "^6.0.0"
   },
   "peerDependencies": {
     "react": ">=16.8.0 || ^19.0 || ^19.0.0-rc",

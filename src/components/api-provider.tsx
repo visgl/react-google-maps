@@ -14,7 +14,8 @@ import {VERSION} from '../version';
 
 type ImportLibraryFunction = typeof importLibrary;
 type GoogleMapsLibrary = Awaited<ReturnType<ImportLibraryFunction>>;
-type LoadedLibraries = {[name: string]: GoogleMapsLibrary};
+type GoogleMapsLibraryName = keyof google.maps.ImportLibraryMap;
+type LoadedLibraries = Partial<google.maps.ImportLibraryMap>;
 type LoadingStatusCallback = (status: APILoadingStatus) => void;
 
 export interface APIProviderContextValue {
@@ -212,7 +213,7 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
   const [loadedLibraries, addLoadedLibrary] = useReducer(
     (
       loadedLibraries: LoadedLibraries,
-      action: {name: keyof LoadedLibraries; value: LoadedLibraries[string]}
+      action: {name: GoogleMapsLibraryName; value: GoogleMapsLibrary}
     ) => {
       return loadedLibraries[action.name]
         ? loadedLibraries
@@ -245,9 +246,11 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
   ]);
 
   const importLibraryCallback: typeof importLibrary = useCallback(
-    async (name: string) => {
+    async <TLibraryName extends GoogleMapsLibraryName>(name: TLibraryName) => {
       if (loadedLibraries[name]) {
-        return loadedLibraries[name];
+        return loadedLibraries[
+          name
+        ] as google.maps.ImportLibraryMap[TLibraryName];
       }
 
       const res = await importLibrary(name);
@@ -289,7 +292,11 @@ function useGoogleMapsApiLoader(props: APIProviderProps) {
             );
           }
 
-          const librariesToLoad = ['core', 'maps', ...libraries];
+          const librariesToLoad: GoogleMapsLibraryName[] = [
+            'core',
+            'maps',
+            ...(libraries as GoogleMapsLibraryName[])
+          ];
 
           const options: APIOptions = Object.fromEntries(
             Object.entries({
