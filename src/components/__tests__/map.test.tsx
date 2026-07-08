@@ -350,6 +350,39 @@ describe('camera configuration', () => {
 
     expect(mapInstance.moveCamera).not.toHaveBeenCalled();
   });
+
+  test('tracked camera state accepts valid camera values while bounds are unavailable', async () => {
+    const listeners: Record<string, Array<() => void>> = {};
+    google.maps.event.addListener = jest.fn((_, eventName, handler) => {
+      listeners[eventName] ??= [];
+      listeners[eventName].push(handler as () => void);
+      return {remove: jest.fn()};
+    });
+
+    const view = render(
+      <GoogleMap zoom={8} center={{lat: 53.55, lng: 10.05}} />,
+      {wrapper}
+    );
+
+    await waitFor(() => expect(screen.getByTestId('map')).toBeInTheDocument());
+
+    const mapInstance = jest.mocked(mockInstances.get(google.maps.Map).at(-1)!);
+    jest.mocked(mapInstance.getCenter).mockReturnValue({
+      toJSON: () => ({lat: 53.55, lng: 10.05})
+    } as google.maps.LatLng);
+    jest.mocked(mapInstance.getBounds).mockReturnValue(undefined);
+    jest.mocked(mapInstance.getZoom).mockReturnValue(8);
+
+    act(() => {
+      listeners.bounds_changed.forEach(listener => listener());
+    });
+
+    jest.mocked(mapInstance.moveCamera).mockClear();
+
+    view.rerender(<GoogleMap zoom={8} center={{lat: 53.55, lng: 10.05}} />);
+
+    expect(mapInstance.moveCamera).not.toHaveBeenCalled();
+  });
 });
 
 describe('map events and event-props', () => {

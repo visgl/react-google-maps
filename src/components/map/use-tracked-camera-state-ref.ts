@@ -15,9 +15,8 @@ function handleBoundsChange(map: google.maps.Map, ref: CameraStateRef) {
   const zoom = map.getZoom();
   const heading = map.getHeading() || 0;
   const tilt = map.getTilt() || 0;
-  const bounds = map.getBounds();
 
-  if (!center || !bounds || !Number.isFinite(zoom)) {
+  if (!center || !Number.isFinite(zoom)) {
     console.warn(
       '[useTrackedCameraState] at least one of the values from the map ' +
         'returned undefined. This is not expected to happen. Please ' +
