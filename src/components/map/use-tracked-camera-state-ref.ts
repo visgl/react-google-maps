@@ -23,12 +23,13 @@ function handleBoundsChange(map: google.maps.Map, ref: CameraStateRef) {
         'returned undefined. This is not expected to happen. Please ' +
         'report an issue at https://github.com/visgl/react-google-maps/issues/new'
     );
+
+    return;
   }
 
-  // fixme: do we need the `undefined` cases for the camera-params? When are they used in the maps API?
   Object.assign(ref.current, {
-    center: center?.toJSON() || {lat: 0, lng: 0},
-    zoom: (zoom as number) || 0,
+    center: center.toJSON(),
+    zoom: zoom as number,
     heading: heading as number,
     tilt: tilt as number
   });
