@@ -15,9 +15,9 @@
     "styled-components": "^6.4.3"
   },
   "devDependencies": {
-    "@docusaurus/core": "^3.10.1",
-    "@docusaurus/plugin-content-docs": "^3.10.1",
-    "@docusaurus/preset-classic": "^3.10.1",
+    "@docusaurus/core": "^3.10.2",
+    "@docusaurus/plugin-content-docs": "^3.10.2",
+    "@docusaurus/preset-classic": "^3.10.2",
     "@easyops-cn/docusaurus-search-local": "^0.55.2",
     "babel-plugin-styled-components": "^2.3.0",
     "babel-plugin-version-inline": "^1.0.0",
