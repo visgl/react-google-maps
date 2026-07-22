@@ -139,9 +139,7 @@ export class MarkerInteractiveElement extends BaseMockMarkerElement {
 export class Model3DElement extends HTMLElement {
   altitudeMode?: string | null;
   orientation?:
-    | google.maps.Orientation3D
-    | google.maps.Orientation3DLiteral
-    | null;
+    google.maps.Orientation3D | google.maps.Orientation3DLiteral | null;
   position?:
     | google.maps.LatLngLiteral
     | google.maps.LatLngAltitude

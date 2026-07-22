@@ -24,7 +24,6 @@ export function useMapsLibrary(name: string) {
 
   return (
     (ctx?.loadedLibraries[name as LibraryName] as
-      | google.maps.ImportLibraryMap[LibraryName]
-      | undefined) ?? null
+      google.maps.ImportLibraryMap[LibraryName] | undefined) ?? null
   );
 }

@@ -117,8 +117,7 @@ function createCameraEvent(
 function createClickEvent(
   map3d: google.maps.maps3d.Map3DElement,
   srcEvent:
-    | google.maps.maps3d.LocationClickEvent
-    | google.maps.maps3d.PlaceClickEvent
+    google.maps.maps3d.LocationClickEvent | google.maps.maps3d.PlaceClickEvent
 ): Map3DClickEvent {
   const placeClickEvent = srcEvent as google.maps.maps3d.PlaceClickEvent;
 

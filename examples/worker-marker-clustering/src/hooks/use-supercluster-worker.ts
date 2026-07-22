@@ -82,8 +82,7 @@ export interface ClusterProperties {
 
 /** A cluster or point feature returned by Supercluster */
 export type ClusterFeature<P = Record<string, unknown>> =
-  | GeoFeature<P>
-  | GeoFeature<ClusterProperties>;
+  GeoFeature<P> | GeoFeature<ClusterProperties>;
 
 // ============================================================================
 // Worker Message Types

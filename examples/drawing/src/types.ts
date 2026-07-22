@@ -7,12 +7,7 @@ export type OverlayGeometry =
   | google.maps.Circle;
 
 export type DrawingMode =
-  | 'marker'
-  | 'circle'
-  | 'polygon'
-  | 'polyline'
-  | 'rectangle'
-  | null;
+  'marker' | 'circle' | 'polygon' | 'polyline' | 'rectangle' | null;
 
 export type OverlayType = Exclude<DrawingMode, null>;
 
@@ -67,9 +62,7 @@ export interface DeleteOverlayAction {
 }
 
 export type Action =
-  | ActionWithTypeOnly
-  | SetOverlayAction
-  | DeleteOverlayAction;
+  ActionWithTypeOnly | SetOverlayAction | DeleteOverlayAction;
 
 export function isCircle(
   overlay: OverlayGeometry
