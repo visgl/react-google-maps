@@ -44,9 +44,7 @@ type MediaContentItem = {
 };
 
 export type ContentItem =
-  | BasicContentItem
-  | AttributionContentItem
-  | MediaContentItem;
+  BasicContentItem | AttributionContentItem | MediaContentItem;
 
 export type PlaceContentConfigProps = {
   /**

@@ -3,6 +3,7 @@ import type {} from '../types/react-custom-element-bridge/index';
 export type * from '../types/react-custom-element-bridge/index';
 
 export * from './version';
+export * from './constants';
 export * from './components/advanced-marker';
 export * from './components/api-provider';
 export * from './components/circle';
@@ -10,9 +11,7 @@ export * from './components/info-window';
 export * from './components/map';
 export * from './components/polygon';
 export * from './components/polyline';
-export * from './components/map-3d';
-export * from './components/marker-3d';
-export * from './components/popover';
+export * from './deprecated-3d-exports';
 export * from './components/static-map';
 export * from './components/map-control';
 export * from './components/marker';

@@ -15,10 +15,7 @@ if (!API_KEY) {
 }
 
 export type PlaceType =
-  | 'restaurant'
-  | 'coffee_shop'
-  | 'tourist_attraction'
-  | 'park';
+  'restaurant' | 'coffee_shop' | 'tourist_attraction' | 'park';
 
 export type PlaceLocationWithId = {
   location: google.maps.LatLngAltitudeLiteral | google.maps.LatLngLiteral;
