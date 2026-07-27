@@ -10,8 +10,8 @@
     "postinstall": "bash ../scripts/install-examples.sh"
   },
   "dependencies": {
-    "react": "^19.2.7",
-    "react-dom": "^19.2.7",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
     "styled-components": "^6.4.4"
   },
   "devDependencies": {
