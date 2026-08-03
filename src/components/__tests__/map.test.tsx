@@ -245,6 +245,44 @@ describe('map instance caching', () => {
     // a fresh map instance should have been created instead of reusing the broken one
     expect(createMapSpy).toHaveBeenCalled();
   });
+
+  test('respects reuseMaps being turned off before unmount, even without other prop changes', async () => {
+    // mapId/renderingType/colorScheme stay constant, so the effect that reads
+    // reuseMaps is intentionally not re-run when only reuseMaps changes. The
+    // cleanup must still see the latest reuseMaps value instead of the one
+    // captured when the map was created: with reuseMaps now false, unmounting
+    // must clear the instance's listeners instead of pushing it onto the
+    // internal (unbounded, never-reused) cache stack.
+    const center = {lat: 53.55, lng: 10.05};
+
+    const {rerender, unmount} = render(
+      <GoogleMap
+        mapId={'toggle-reuse'}
+        reuseMaps
+        center={center}
+        zoom={12}
+      />,
+      {wrapper}
+    );
+    await waitFor(() => expect(screen.getByTestId('map')).toBeInTheDocument());
+    const mapInstance = mockInstances.get(google.maps.Map).at(-1)!;
+
+    rerender(
+      <GoogleMap
+        mapId={'toggle-reuse'}
+        reuseMaps={false}
+        center={center}
+        zoom={12}
+      />
+    );
+
+    jest.mocked(google.maps.event.clearInstanceListeners).mockClear();
+    unmount();
+
+    expect(google.maps.event.clearInstanceListeners).toHaveBeenCalledWith(
+      mapInstance
+    );
+  });
 });
 
 describe('camera configuration', () => {
