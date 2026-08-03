@@ -124,6 +124,14 @@ export function useMapInstance(
     cameraState: CameraState;
   }>(undefined);
 
+  // kept up to date on every render so the effect below (which intentionally
+  // doesn't list reuseMaps as a dependency) always sees the latest value,
+  // both when creating a map and in its cleanup function on unmount.
+  const reuseMapsRef = useRef(reuseMaps);
+  useEffect(() => {
+    reuseMapsRef.current = reuseMaps;
+  }, [reuseMaps]);
+
   // create the map instance and register it in the context
   useEffect(
     () => {
@@ -143,7 +151,7 @@ export function useMapInstance(
       // correctly). In that case `getDiv()` doesn't return a usable DOM node,
       // so we have to discard the cached instance instead of trying to reuse it.
       const cachedMap =
-        reuseMaps && CachedMapStack.has(cacheKey)
+        reuseMapsRef.current && CachedMapStack.has(cacheKey)
           ? (CachedMapStack.pop(cacheKey) as google.maps.Map)
           : null;
       const cachedMapDiv = cachedMap?.getDiv();
@@ -181,7 +189,6 @@ export function useMapInstance(
         });
       }
 
-      // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional to sync the imperative instance with state
       setMap(map);
       addMapInstance(map, id);
 
@@ -214,7 +221,7 @@ export function useMapInstance(
         // detach the map-div from the dom
         mapDiv.remove();
 
-        if (reuseMaps) {
+        if (reuseMapsRef.current) {
           // push back on the stack
           CachedMapStack.push(cacheKey, map);
         } else {
