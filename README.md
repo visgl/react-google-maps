@@ -1,6 +1,7 @@
 # React Components for the Google Maps JavaScript API
 
 [![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/visgl/react-google-maps/tree/main/LICENSE)
+[![Plumber Score](https://score.getplumber.io/github.com/visgl/react-google-maps.svg)](https://score.getplumber.io/github.com/visgl/react-google-maps)
 
 This is a TypeScript / JavaScript library to integrate the Maps JavaScript API
 into your React application.
