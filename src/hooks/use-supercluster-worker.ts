@@ -178,10 +178,52 @@ export function useSuperclusterWorker<P = Record<string, unknown>>(
   const dataLoadedRef = useRef(false);
   const optionsRef = useRef(options);
   const loadingDataRef = useRef(false);
+  const isInitialOptionsRef = useRef(true);
 
-  // Update options ref in effect to avoid accessing during render
+  // Update options ref in effect to avoid accessing during render, and push
+  // changed options to an already-running worker: the worker-init effect
+  // below only sends the initial options once (keyed on workerUrl), so
+  // without this, changing radius/maxZoom/minPoints etc. after mount would
+  // silently have no effect on an already-running worker.
   useEffect(() => {
     optionsRef.current = options;
+
+    if (isInitialOptionsRef.current) {
+      isInitialOptionsRef.current = false;
+      return;
+    }
+
+    const worker = workerRef.current;
+    if (!worker) return;
+
+    isReadyRef.current = false;
+
+    const initMessage: WorkerMessage = {type: 'init', options};
+    worker.postMessage(initMessage);
+
+    // re-initializing the worker's clusterer discards any previously
+    // loaded data, so it needs to be reloaded before clusters can be
+    // recomputed for the current viewport.
+    if (geojson) {
+      dataLoadedRef.current = false;
+      loadingDataRef.current = true;
+
+      const loadMessage: WorkerMessage = {
+        type: 'load',
+        features: geojson.features as GeoFeature[]
+      };
+      worker.postMessage(loadMessage);
+    }
+
+    const requestId = ++requestIdRef.current;
+    const clustersMessage: WorkerMessage = {
+      type: 'getClusters',
+      bbox: viewport.bbox,
+      zoom: Math.floor(viewport.zoom),
+      requestId
+    };
+    worker.postMessage(clustersMessage);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- geojson/viewport are read for their current value when options change; changes to them are handled by the effects below and shouldn't retrigger this one
   }, [options]);
 
   // Initialize worker
