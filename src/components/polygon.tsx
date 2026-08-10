@@ -12,9 +12,11 @@ import {useMap} from '../hooks/use-map';
 import {useMapsLibrary} from '../hooks/use-maps-library';
 import {useMapsEventListener} from '../hooks/use-maps-event-listener';
 import {useMemoized} from '../hooks/use-memoized';
+import {useAppliedOptions} from '../hooks/use-applied-options';
 import {pathsEquals} from '../libraries/lat-lng-utils';
 
 import type {Ref} from 'react';
+import type {AppliedOptions} from '../hooks/use-applied-options';
 
 type PolygonEventProps = {
   onClick?: (e: google.maps.MapMouseEvent) => void;
@@ -102,6 +104,11 @@ function usePolygon(props: PolygonProps) {
     isDeepEqual
   );
 
+  // options the instance was constructed with, so they are not applied twice
+  const appliedOnCreateRef = useRef<AppliedOptions<
+    typeof polygonOptions
+  > | null>(null);
+
   useEffect(() => {
     if (!map) {
       if (map === undefined)
@@ -134,6 +141,9 @@ function usePolygon(props: PolygonProps) {
 
       instance = new google.maps.Polygon(polygonOptionsWithPaths);
     }
+
+    // both branches above already applied the full option set
+    appliedOnCreateRef.current = {instance, options: polygonOptions};
 
     instance.setMap(map);
     // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional to sync the imperative instance with state
@@ -230,11 +240,7 @@ function usePolygon(props: PolygonProps) {
     polygonOptions.draggable
   ]);
 
-  useEffect(() => {
-    if (!polygon) return;
-
-    polygon.setOptions(polygonOptions);
-  }, [polygon, polygonOptions]);
+  useAppliedOptions(polygon, polygonOptions, appliedOnCreateRef);
 
   // Sync controlled paths prop with the polygon instance
   useEffect(() => {

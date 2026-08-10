@@ -68,6 +68,24 @@ test('circle should have a click listener', () => {
   );
 });
 
+test('circle should only send the options that changed', () => {
+  const {rerender} = render(
+    <Circle center={{lat: 1, lng: 2}} radius={1000} fillOpacity={0.2} />
+  );
+
+  const circles = mockInstances.get(google.maps.Circle);
+  const circle = circles[0];
+
+  (circle.setOptions as jest.Mock).mockClear();
+
+  rerender(
+    <Circle center={{lat: 1, lng: 2}} radius={1000} fillOpacity={0.5} />
+  );
+
+  expect(circle.setOptions).toHaveBeenCalledTimes(1);
+  expect(circle.setOptions).toHaveBeenCalledWith({fillOpacity: 0.5});
+});
+
 test('circle should update options on rerender', () => {
   const {rerender} = render(
     <Circle center={{lat: 1, lng: 2}} radius={1000} fillColor="#ff0000" />

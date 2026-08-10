@@ -12,9 +12,11 @@ import {useMap} from '../hooks/use-map';
 import {useMapsLibrary} from '../hooks/use-maps-library';
 import {useMapsEventListener} from '../hooks/use-maps-event-listener';
 import {useMemoized} from '../hooks/use-memoized';
+import {useAppliedOptions} from '../hooks/use-applied-options';
 import {pathEquals} from '../libraries/lat-lng-utils';
 
 import type {Ref} from 'react';
+import type {AppliedOptions} from '../hooks/use-applied-options';
 
 type PolylineEventProps = {
   onClick?: (e: google.maps.MapMouseEvent) => void;
@@ -88,6 +90,11 @@ function usePolyline(props: PolylineProps) {
     isDeepEqual
   );
 
+  // options the instance was constructed with, so they are not applied twice
+  const appliedOnCreateRef = useRef<AppliedOptions<
+    typeof polylineOptions
+  > | null>(null);
+
   useEffect(() => {
     if (!map) {
       if (map === undefined)
@@ -120,6 +127,9 @@ function usePolyline(props: PolylineProps) {
 
       instance = new google.maps.Polyline(polylineOptionsWithPath);
     }
+
+    // both branches above already applied the full option set
+    appliedOnCreateRef.current = {instance, options: polylineOptions};
 
     instance.setMap(map);
     // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional to sync the imperative instance with state
@@ -177,11 +187,7 @@ function usePolyline(props: PolylineProps) {
     polylineOptions.draggable
   ]);
 
-  useEffect(() => {
-    if (!polyline) return;
-
-    polyline.setOptions(polylineOptions);
-  }, [polyline, polylineOptions]);
+  useAppliedOptions(polyline, polylineOptions, appliedOnCreateRef);
 
   // Sync controlled path prop with the polyline instance
   useEffect(() => {

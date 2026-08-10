@@ -72,6 +72,22 @@ test('rectangle should have a click listener', () => {
   );
 });
 
+test('rectangle should only send the options that changed', () => {
+  const bounds = {north: 2, south: 1, east: 3, west: 0};
+
+  const {rerender} = render(<Rectangle bounds={bounds} fillOpacity={0.2} />);
+
+  const rectangles = mockInstances.get(google.maps.Rectangle);
+  const rectangle = rectangles[0];
+
+  (rectangle.setOptions as jest.Mock).mockClear();
+
+  rerender(<Rectangle bounds={bounds} fillOpacity={0.5} />);
+
+  expect(rectangle.setOptions).toHaveBeenCalledTimes(1);
+  expect(rectangle.setOptions).toHaveBeenCalledWith({fillOpacity: 0.5});
+});
+
 test('rectangle should update options on rerender', () => {
   const {rerender} = render(
     <Rectangle

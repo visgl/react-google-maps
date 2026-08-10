@@ -2,6 +2,7 @@ import React, {
   forwardRef,
   useEffect,
   useImperativeHandle,
+  useRef,
   useState
 } from 'react';
 
@@ -10,9 +11,12 @@ import {deepEqual as isDeepEqual} from 'fast-equals';
 import {useMap} from '../hooks/use-map';
 import {useMapsEventListener} from '../hooks/use-maps-event-listener';
 import {useMemoized} from '../hooks/use-memoized';
+import {useAppliedOptions} from '../hooks/use-applied-options';
+
 import {latLngEquals} from '../libraries/lat-lng-utils';
 
 import type {Ref} from 'react';
+import type {AppliedOptions} from '../hooks/use-applied-options';
 
 type CircleEventProps = {
   onClick?: (e: google.maps.MapMouseEvent) => void;
@@ -75,6 +79,11 @@ function useCircle(props: CircleProps) {
     isDeepEqual
   );
 
+  // options the instance was constructed with, so they are not applied twice
+  const appliedOnCreateRef = useRef<AppliedOptions<
+    typeof circleOptions
+  > | null>(null);
+
   useEffect(() => {
     if (!map) {
       if (map === undefined)
@@ -88,6 +97,10 @@ function useCircle(props: CircleProps) {
       center: center ?? defaultCenter,
       radius: radius ?? defaultRadius
     });
+    appliedOnCreateRef.current = {
+      instance: newCircle,
+      options: circleOptions
+    };
     newCircle.setMap(map);
     // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional to sync the imperative instance with state
     setCircle(newCircle);
@@ -125,11 +138,7 @@ function useCircle(props: CircleProps) {
       : null
   );
 
-  useEffect(() => {
-    if (!circle) return;
-
-    circle.setOptions(circleOptions);
-  }, [circle, circleOptions]);
+  useAppliedOptions(circle, circleOptions, appliedOnCreateRef);
 
   // Sync controlled center prop with the circle instance
   useEffect(() => {

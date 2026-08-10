@@ -74,6 +74,25 @@ test('polyline should have a click listener', () => {
   );
 });
 
+test('polyline should only send the options that changed', () => {
+  const path = [
+    {lat: 1, lng: 2},
+    {lat: 3, lng: 4}
+  ];
+
+  const {rerender} = render(<Polyline path={path} strokeOpacity={0.2} />);
+
+  const polylines = mockInstances.get(google.maps.Polyline);
+  const polyline = polylines[0];
+
+  (polyline.setOptions as jest.Mock).mockClear();
+
+  rerender(<Polyline path={path} strokeOpacity={0.5} />);
+
+  expect(polyline.setOptions).toHaveBeenCalledTimes(1);
+  expect(polyline.setOptions).toHaveBeenCalledWith({strokeOpacity: 0.5});
+});
+
 test('polyline should update options on rerender', () => {
   const path = [
     {lat: 1, lng: 2},

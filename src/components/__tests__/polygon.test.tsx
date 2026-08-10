@@ -97,6 +97,77 @@ test('polygon should update options on rerender', () => {
   );
 });
 
+test('polygon should not re-apply the options it was constructed with', () => {
+  const paths = [
+    {lat: 1, lng: 2},
+    {lat: 3, lng: 4}
+  ];
+
+  render(<Polygon paths={paths} fillOpacity={0.2} />);
+
+  const polygons = mockInstances.get(google.maps.Polygon);
+  const polygon = polygons[0];
+
+  // the constructor already received the full option set, so writing it again
+  // would rebuild the vertex handles for nothing
+  expect(polygon.setOptions).not.toHaveBeenCalled();
+});
+
+test('polygon should not re-apply options to an external instance', () => {
+  const paths = [
+    {lat: 1, lng: 2},
+    {lat: 3, lng: 4}
+  ];
+
+  const external = new google.maps.Polygon();
+
+  render(<Polygon polygon={external} paths={paths} fillOpacity={0.2} />);
+
+  // the creation effect applies them once; the hook must not repeat it
+  expect(external.setOptions).toHaveBeenCalledTimes(1);
+});
+
+test('polygon should only send the options that changed', () => {
+  const paths = [
+    {lat: 1, lng: 2},
+    {lat: 3, lng: 4},
+    {lat: 5, lng: 6}
+  ];
+
+  const {rerender} = render(<Polygon paths={paths} fillOpacity={0.2} />);
+
+  const polygons = mockInstances.get(google.maps.Polygon);
+  const polygon = polygons[0];
+
+  (polygon.setOptions as jest.Mock).mockClear();
+
+  rerender(<Polygon paths={paths} fillOpacity={0.5} />);
+
+  // re-applying `editable` or `draggable` makes the maps api rebuild the
+  // vertex handles, so unchanged values must not be sent again
+  expect(polygon.setOptions).toHaveBeenCalledTimes(1);
+  expect(polygon.setOptions).toHaveBeenCalledWith({fillOpacity: 0.5});
+});
+
+test('polygon should not touch options when nothing changed', () => {
+  const paths = [
+    {lat: 1, lng: 2},
+    {lat: 3, lng: 4},
+    {lat: 5, lng: 6}
+  ];
+
+  const {rerender} = render(<Polygon paths={paths} fillOpacity={0.2} />);
+
+  const polygons = mockInstances.get(google.maps.Polygon);
+  const polygon = polygons[0];
+
+  (polygon.setOptions as jest.Mock).mockClear();
+
+  rerender(<Polygon paths={paths} fillOpacity={0.2} />);
+
+  expect(polygon.setOptions).not.toHaveBeenCalled();
+});
+
 test('polygon should be removed from map on unmount', () => {
   const paths = [
     {lat: 1, lng: 2},
