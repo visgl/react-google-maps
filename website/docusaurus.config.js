@@ -59,8 +59,8 @@ const config = {
           alias: {
             '@vis.gl/react-google-maps': resolve('../src'),
             'website-examples': resolve('../examples'),
-            react: resolve('node_modules/react'),
-            'react-dom': resolve('node_modules/react-dom')
+            react: resolve('../node_modules/react'),
+            'react-dom': resolve('../node_modules/react-dom')
           }
         },
         plugins: [new webpack.EnvironmentPlugin(['GOOGLE_MAPS_API_KEY'])],

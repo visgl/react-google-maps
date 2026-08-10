@@ -1,14 +1,14 @@
 {
   "type": "module",
   "dependencies": {
-    "@googlemaps/markerclusterer": "^2.5.1",
-    "@types/geojson": "^7946.0.14",
+    "@googlemaps/markerclusterer": "^2.6.2",
+    "@types/geojson": "^7946.0.16",
     "@types/supercluster": "^7.1.3",
-    "@vis.gl/react-google-maps": "latest",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "supercluster": "^8.0.1",
-    "vite": "^8.0.0"
+    "@vis.gl/react-google-maps": "*",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "supercluster": "^9.0.0",
+    "vite": "^8.2.1"
   },
   "scripts": {
     "start": "vite",

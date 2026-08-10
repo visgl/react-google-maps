@@ -1,15 +1,6 @@
 #!/usr/bin/env bash
 
-examplesRoot="$(cd -P "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"/examples
+rootDir="$(cd -P "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-for d in $examplesRoot/*/; do
-  # Skip the template directory
-  if [ "$(basename $d)" = "_template" ]; then
-    continue
-  fi
-
-  echo ">>> installing example '$(basename $d)'"
-  cd $d
-  npm i --silent
-done
-
+echo ">>> installing all workspace dependencies"
+npm --prefix "$rootDir" install --silent
