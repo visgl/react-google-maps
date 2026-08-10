@@ -54,5 +54,16 @@ on the map. This is useful for styling or targeting the control from outside,
 since the children are rendered into a container that is managed by the Maps
 JavaScript API rather than directly into the React tree.
 
+#### `style`: CSSProperties
+
+Inline styles applied to the same container element. Useful when the control has
+to break out of the default layout, for example `{inset: '0px 0px auto 0px'}` to
+make it span the full width of the map.
+
+Note that the container is positioned by the Maps JavaScript API, which lays out
+all controls registered for the same `position`. Styles that change the size or
+placement of the container can therefore affect how neighbouring controls are
+arranged.
+
 [gmp-custom-ctrl]: https://developers.google.com/maps/documentation/javascript/controls#CustomControls
 [gmp-ctrl-pos]: https://developers.google.com/maps/documentation/javascript/controls#ControlPositioning
