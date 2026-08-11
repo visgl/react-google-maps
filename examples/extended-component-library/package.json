@@ -9,8 +9,8 @@
   },
   "scripts": {
     "start": "vite",
-    "start-local": "vite --config ../vite.config.local.js",
-    "build-local": "vite build --config ../vite.config.local.js",
+    "start-local": "vite --config ../vite.config.local.mjs",
+    "build-local": "vite build --config ../vite.config.local.mjs",
     "build": "vite build"
   },
   "devDependencies": {
