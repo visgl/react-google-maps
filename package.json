@@ -109,5 +109,11 @@
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.66.0",
     "vite": "^8.2.1"
+  },
+  "allowScripts": {
+    "unrs-resolver": true,
+    "core-js": false,
+    "@vaadin/vaadin-usage-statistics": false,
+    "fsevents@2.3.3": true
   }
 }

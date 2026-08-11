@@ -52,7 +52,7 @@ const config = {
         debug: true,
         resolve: {
           modules: [
-            resolve('node_modules'),
+            'node_modules',
             resolve('../node_modules'),
             ...globSync('../examples/*/node_modules')
           ],

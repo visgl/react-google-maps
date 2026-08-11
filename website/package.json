@@ -19,7 +19,6 @@
     "@docusaurus/plugin-content-docs": "^3.10.2",
     "@docusaurus/preset-classic": "^3.10.2",
     "@easyops-cn/docusaurus-search-local": "^0.55.3",
-    "ajv": "^8.17.1",
     "babel-plugin-styled-components": "^2.3.0",
     "babel-plugin-version-inline": "^1.0.0",
     "glob": "^13.0.6"
