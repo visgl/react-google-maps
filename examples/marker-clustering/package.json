@@ -1,4 +1,5 @@
 {
+  "private": true,
   "type": "module",
   "dependencies": {
     "@googlemaps/markerclusterer": "^2.6.2",

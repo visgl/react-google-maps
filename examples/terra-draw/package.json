@@ -1,4 +1,5 @@
 {
+  "private": true,
   "type": "module",
   "dependencies": {
     "@vis.gl/react-google-maps": "*",

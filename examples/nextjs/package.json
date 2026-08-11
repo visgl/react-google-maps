@@ -1,4 +1,5 @@
 {
+  "private": true,
   "scripts": {
     "start": "cp tsconfig.sandbox.json tsconfig.json && next dev",
     "start-local": "cp tsconfig.local.json tsconfig.json && next dev",

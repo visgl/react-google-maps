@@ -1,4 +1,5 @@
 {
+  "private": true,
   "type": "module",
   "dependencies": {
     "@googlemaps/react-wrapper": "^1.2.0",

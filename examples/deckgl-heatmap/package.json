@@ -1,4 +1,5 @@
 {
+  "private": true,
   "type": "module",
   "dependencies": {
     "@deck.gl/aggregation-layers": "9.3.9",
