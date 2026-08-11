@@ -6,7 +6,7 @@
     "@vis.gl/react-google-maps": "*",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "typescript": "^6.0.3",
+    "typescript": "^7.0.2",
     "vite": "^8.2.1"
   },
   "scripts": {
