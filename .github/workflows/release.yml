@@ -40,10 +40,10 @@ jobs:
     steps:
       # Publish the stable release when release-please created a GitHub release.
       - name: Checkout
-        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        uses: actions/checkout@v5
 
       - name: Setup Node
-        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
+        uses: actions/setup-node@v6
         with:
           node-version: 24
           cache: npm
@@ -69,7 +69,7 @@ jobs:
     steps:
       - name: Validate prerelease request
         id: gate
-        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
+        uses: actions/github-script@v7
         with:
           script: |
             const body = context.payload.comment?.body || '';
@@ -134,12 +134,12 @@ jobs:
     needs: check-prerelease
     steps:
       - name: Checkout
-        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        uses: actions/checkout@v5
         with:
           ref: ${{ needs.check-prerelease.outputs.head_sha }}
 
       - name: Setup Node
-        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
+        uses: actions/setup-node@v6
         with:
           node-version: 24
           cache: npm
@@ -190,7 +190,7 @@ jobs:
           echo "prNumber=$PR_NUMBER" >> $GITHUB_OUTPUT
 
       - name: Comment on PR
-        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
+        uses: actions/github-script@v7
         env:
           PR_NUMBER: ${{ steps.extract-pr.outputs.prNumber }}
           VERSION: ${{ steps.semver.outputs.version }}
