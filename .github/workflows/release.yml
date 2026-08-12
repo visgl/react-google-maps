@@ -69,7 +69,7 @@ jobs:
     steps:
       - name: Validate prerelease request
         id: gate
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             const body = context.payload.comment?.body || '';
@@ -190,7 +190,7 @@ jobs:
           echo "prNumber=$PR_NUMBER" >> $GITHUB_OUTPUT
 
       - name: Comment on PR
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         env:
           PR_NUMBER: ${{ steps.extract-pr.outputs.prNumber }}
           VERSION: ${{ steps.semver.outputs.version }}
