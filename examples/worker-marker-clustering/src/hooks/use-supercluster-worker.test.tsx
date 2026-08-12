@@ -71,12 +71,7 @@ test('sends the initial options to the worker on mount', () => {
 test('propagates changed options to an already-running worker', () => {
   const {rerender} = renderHook(
     ({options}) =>
-      useSuperclusterWorker(
-        geojson,
-        options,
-        viewport,
-        'clustering.worker.js'
-      ),
+      useSuperclusterWorker(geojson, options, viewport, 'clustering.worker.js'),
     {initialProps: {options: {radius: 60} as SuperclusterOptions}}
   );
 
@@ -94,12 +89,7 @@ test('propagates changed options to an already-running worker', () => {
 test('reloads previously loaded data after an options change, since re-init discards it', () => {
   const {rerender} = renderHook(
     ({options}) =>
-      useSuperclusterWorker(
-        geojson,
-        options,
-        viewport,
-        'clustering.worker.js'
-      ),
+      useSuperclusterWorker(geojson, options, viewport, 'clustering.worker.js'),
     {initialProps: {options: {radius: 60} as SuperclusterOptions}}
   );
 
@@ -117,12 +107,7 @@ test('reloads previously loaded data after an options change, since re-init disc
 test('requests fresh clusters for the current viewport after an options change', () => {
   const {rerender} = renderHook(
     ({options}) =>
-      useSuperclusterWorker(
-        geojson,
-        options,
-        viewport,
-        'clustering.worker.js'
-      ),
+      useSuperclusterWorker(geojson, options, viewport, 'clustering.worker.js'),
     {initialProps: {options: {radius: 60} as SuperclusterOptions}}
   );
 
