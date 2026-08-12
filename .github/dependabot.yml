@@ -11,3 +11,9 @@ updates:
         update-types:
           - 'minor'
           - 'patch'
+
+  - package-ecosystem: 'github-actions'
+    labels: ['dependencies']
+    directory: '/'
+    schedule:
+      interval: 'weekly'

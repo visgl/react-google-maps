@@ -1,6 +1,9 @@
 name: Website Test
 on: [push, pull_request]
 
+permissions:
+  contents: read
+
 jobs:
   build:
     name: Build Website
