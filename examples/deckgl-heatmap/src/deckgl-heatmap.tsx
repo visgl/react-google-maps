@@ -22,7 +22,8 @@ const DeckGlHeatmap = ({geojson, radius, opacity}: HeatmapProps) => {
         radiusPixels: radius,
         opacity,
         getPosition: (feature: EarthquakeFeature) =>
-          feature.geometry.coordinates,
+          feature.geometry.coordinates as [number, number],
+
         getWeight: (feature: EarthquakeFeature) => feature.properties?.mag ?? 0
       })
     ],

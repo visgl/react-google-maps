@@ -1,4 +1,5 @@
-import React, {FormEvent, useCallback, useState} from 'react';
+import type {InputEvent} from 'react';
+import React, {useCallback, useState} from 'react';
 import {useMapsLibrary} from '@vis.gl/react-google-maps';
 import {useAutocompleteSuggestions} from '../hooks/use-autocomplete-suggestions';
 
@@ -12,7 +13,7 @@ export const AutocompleteCustom = ({onPlaceSelect}: Props) => {
   const [inputValue, setInputValue] = useState<string>('');
   const {suggestions, resetSession} = useAutocompleteSuggestions(inputValue);
 
-  const handleInput = useCallback((event: FormEvent<HTMLInputElement>) => {
+  const handleInput = useCallback((event: InputEvent) => {
     setInputValue((event.target as HTMLInputElement).value);
   }, []);
 
@@ -40,7 +41,7 @@ export const AutocompleteCustom = ({onPlaceSelect}: Props) => {
 
       onPlaceSelect(place);
     },
-    [places, onPlaceSelect]
+    [places, onPlaceSelect, resetSession]
   );
 
   return (
