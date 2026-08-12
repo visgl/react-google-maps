@@ -174,7 +174,6 @@ export function useSuperclusterWorker<P = Record<string, unknown>>(
       {resolve: (value: unknown) => void; reject: (error: Error) => void}
     >
   >(new Map());
-  const isReadyRef = useRef(false);
   const dataLoadedRef = useRef(false);
   const optionsRef = useRef(options);
   const loadingDataRef = useRef(false);
@@ -195,8 +194,6 @@ export function useSuperclusterWorker<P = Record<string, unknown>>(
 
     const worker = workerRef.current;
     if (!worker) return;
-
-    isReadyRef.current = false;
 
     const initMessage: WorkerMessage = {type: 'init', options};
     worker.postMessage(initMessage);
@@ -223,8 +220,15 @@ export function useSuperclusterWorker<P = Record<string, unknown>>(
       requestId
     };
     worker.postMessage(clustersMessage);
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- geojson/viewport are read for their current value when options change; changes to them are handled by the effects below and shouldn't retrigger this one
-  }, [options]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- options is a flat object of primitive values; listing its fields avoids rerunning for a new object with unchanged values. geojson/viewport are read for their current value when options change; changes to them are handled by the effects below and shouldn't retrigger this one
+  }, [
+    options.minZoom,
+    options.maxZoom,
+    options.minPoints,
+    options.radius,
+    options.extent,
+    options.generateId
+  ]);
 
   // Initialize worker
   useEffect(() => {
@@ -253,7 +257,6 @@ export function useSuperclusterWorker<P = Record<string, unknown>>(
 
       switch (response.type) {
         case 'ready':
-          isReadyRef.current = true;
           break;
 
         case 'loaded':
@@ -312,7 +315,6 @@ export function useSuperclusterWorker<P = Record<string, unknown>>(
     return () => {
       worker.terminate();
       workerRef.current = null;
-      isReadyRef.current = false;
       dataLoadedRef.current = false;
       pendingRequests.clear();
     };
