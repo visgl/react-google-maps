@@ -4,7 +4,7 @@ import type {
   GeoFeatureCollection,
   SuperclusterOptions,
   SuperclusterViewport
-} from '../use-supercluster-worker';
+} from './use-supercluster-worker';
 
 class MockWorker {
   static instances: MockWorker[] = [];
@@ -22,13 +22,13 @@ class MockWorker {
   }
 }
 
-let useSuperclusterWorker: typeof import('../use-supercluster-worker').useSuperclusterWorker;
+let useSuperclusterWorker: typeof import('./use-supercluster-worker').useSuperclusterWorker;
 
 beforeAll(async () => {
   // the hook checks `typeof Worker !== 'undefined'` at module load time, so
   // the global has to be in place before the module is first imported.
   (global as unknown as {Worker: unknown}).Worker = MockWorker;
-  ({useSuperclusterWorker} = await import('../use-supercluster-worker'));
+  ({useSuperclusterWorker} = await import('./use-supercluster-worker'));
 });
 
 beforeEach(() => {
