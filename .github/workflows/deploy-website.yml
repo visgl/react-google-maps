@@ -50,7 +50,7 @@ jobs:
           GOOGLE_MAPS_API_KEY_EXAMPLES: ${{ secrets.GOOGLE_MAPS_API_KEY_EXAMPLES }}
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: ./website/build
 
