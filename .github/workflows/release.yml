@@ -40,7 +40,7 @@ jobs:
     steps:
       # Publish the stable release when release-please created a GitHub release.
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
 
       - name: Setup Node
         uses: actions/setup-node@v7
@@ -134,7 +134,7 @@ jobs:
     needs: check-prerelease
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           ref: ${{ needs.check-prerelease.outputs.head_sha }}
 
