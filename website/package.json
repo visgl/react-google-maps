@@ -12,7 +12,7 @@
   "dependencies": {
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "styled-components": "^6.5.1"
+    "styled-components": "^6.5.3"
   },
   "devDependencies": {
     "@docusaurus/core": "^3.10.2",
