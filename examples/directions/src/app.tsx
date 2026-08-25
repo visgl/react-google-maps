@@ -1,11 +1,12 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {createRoot} from 'react-dom/client';
 
 import {
   APIProvider,
   Map,
   useMapsLibrary,
-  useMap
+  useMap,
+  AdvancedMarker
 } from '@vis.gl/react-google-maps';
 import ControlPanel from './control-panel';
 
@@ -15,104 +16,122 @@ const API_KEY =
 const App = () => (
   <APIProvider apiKey={API_KEY}>
     <Map
-      defaultCenter={{lat: 43.65, lng: -79.38}}
-      defaultZoom={9}
+      defaultCenter={{ lat: -23.588363, lng: -46.658475 }}
+      defaultZoom={15}
       gestureHandling={'greedy'}
       fullscreenControl={false}>
-      <Directions />
+      <RouteDisplay
+        origin="R. Dr. Diogo de Faria, 946, São Paulo"
+        destination="R. Domingos Fernandes, 588, São Paulo"
+        travelMode="DRIVING"
+      />
     </Map>
     <ControlPanel />
   </APIProvider>
 );
 
-function Directions() {
+interface RouteDisplayProps {
+  origin: string;
+  destination: string;
+  travelMode: 'DRIVING' | 'WALKING' | 'BICYCLING' | 'TWO_WHEELER' | 'TRANSIT';
+}
+
+interface RouteDetails {
+  distanceMeters: number;
+  durationMillis: number;
+  startCoords?: google.maps.LatLngLiteral;
+  endCoords?: google.maps.LatLngLiteral;
+  steps: Array<{
+    instructions: string;
+    distanceMeters: number;
+    durationMillis: number;
+    maneuver?: string;
+  }>;
+}
+
+export function RouteDisplay({
+  origin,
+  destination,
+  travelMode,
+}: RouteDisplayProps) {
   const map = useMap();
-  const routesLibrary = useMapsLibrary('routes');
-  const [directionsService, setDirectionsService] =
-    useState<google.maps.DirectionsService>();
-  const [directionsRenderer, setDirectionsRenderer] =
-    useState<google.maps.DirectionsRenderer>();
-  const [routes, setRoutes] = useState<google.maps.DirectionsRoute[]>([]);
-  const [routeIndex, setRouteIndex] = useState(0);
-  const selected = routes[routeIndex];
-  const leg = selected?.legs[0];
+  const routesLib = useMapsLibrary('routes');
+  const polylinesRef = useRef<google.maps.Polyline[]>([]);
+  const [routeDetails, setRouteDetails] = useState<RouteDetails | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  // Initialize directions service and renderer
   useEffect(() => {
-    if (!routesLibrary || !map) return;
-    setDirectionsService(new routesLibrary.DirectionsService());
-    setDirectionsRenderer(
-      new routesLibrary.DirectionsRenderer({
-        draggable: true, // Only necessary for draggable markers
-        map
-      })
-    );
-  }, [routesLibrary, map]);
+    if (!routesLib || !map || !origin || !destination) return;
 
-  // Add the following useEffect to make markers draggable
-  useEffect(() => {
-    if (!directionsRenderer) return;
+    // Clean up previous route lines
+    polylinesRef.current.forEach(p => p.setMap(null));
+    polylinesRef.current = [];
+    setError(null);
+    setLoading(true);
 
-    // Add the listener to update routes when directions change
-    const listener = directionsRenderer.addListener(
-      'directions_changed',
-      () => {
-        const result = directionsRenderer.getDirections();
-        if (result) {
-          setRoutes(result.routes);
+    const request = {
+      origin: origin,
+      destination: destination,
+      travelMode: travelMode,
+      fields: ['path', 'distanceMeters', 'durationMillis', 'viewport', 'legs'],
+    };
+
+    // Access the modern client-side Route.computeRoutes class service
+    (routesLib.Route as any).computeRoutes(request)
+      .then(({ routes }: { routes: any[] }) => {
+        setLoading(false);
+        if (!routes || routes.length === 0) {
+          setError('No route found.');
+          return;
         }
-      }
-    );
 
-    return () => google.maps.event.removeListener(listener);
-  }, [directionsRenderer]);
+        const primaryRoute = routes[0];
 
-  // Use directions service
-  useEffect(() => {
-    if (!directionsService || !directionsRenderer) return;
+        // Render polylines dynamically using modern Route.createPolylines()
+        const newPolylines = primaryRoute.createPolylines();
+        newPolylines.forEach((polyline: google.maps.Polyline) => {
+          polyline.setOptions({
+            strokeColor: '#3b82f6', // Stunning visual Tailwind Blue 500
+            strokeOpacity: 0.85,
+            strokeWeight: 6,
+          });
+          polyline.setMap(map);
+        });
+        polylinesRef.current = newPolylines;
 
-    directionsService
-      .route({
-        origin: '100 Front St, Toronto ON',
-        destination: '500 College St, Toronto ON',
-        travelMode: google.maps.TravelMode.DRIVING,
-        provideRouteAlternatives: true
+        if (primaryRoute.viewport) {
+          map.fitBounds(primaryRoute.viewport);
+        }
+
+        const details: RouteDetails = {
+          distanceMeters: primaryRoute.distanceMeters ?? 0,
+          durationMillis: primaryRoute.durationMillis ?? 0,
+          steps: [],
+        };
+        setRouteDetails(details);
       })
-      .then(response => {
-        directionsRenderer.setDirections(response);
-        setRoutes(response.routes);
+      .catch((err: any) => {
+        setLoading(false);
+        console.error('Error computing routes:', err);
+        setError(err.message || 'Failed to compute route.');
       });
 
-    return () => directionsRenderer.setMap(null);
-  }, [directionsService, directionsRenderer]);
+    return () => {
+      polylinesRef.current.forEach(p => p.setMap(null));
+      polylinesRef.current = [];
+    };
+  }, [routesLib, map, origin, destination, travelMode]);
 
-  // Update direction route
-  useEffect(() => {
-    if (!directionsRenderer) return;
-    directionsRenderer.setRouteIndex(routeIndex);
-  }, [routeIndex, directionsRenderer]);
-
-  if (!leg) return null;
+  if (loading) return <div className="route-panel">Calculating route...</div>;
+  if (error) return <div className="route-panel error">{error}</div>;
+  if (!routeDetails) return null;
 
   return (
-    <div className="directions">
-      <h2>{selected.summary}</h2>
-      <p>
-        {leg.start_address.split(',')[0]} to {leg.end_address.split(',')[0]}
-      </p>
-      <p>Distance: {leg.distance?.text}</p>
-      <p>Duration: {leg.duration?.text}</p>
-
-      <h2>Other Routes</h2>
-      <ul>
-        {routes.map((route, index) => (
-          <li key={route.summary}>
-            <button onClick={() => setRouteIndex(index)}>
-              {route.summary}
-            </button>
-          </li>
-        ))}
-      </ul>
+    <div className="route-panel">
+      <h2>Toronto Route Summary</h2>
+      <p>Distance: {(routeDetails.distanceMeters / 1000).toFixed(2)} km</p>
+      <p>Duration: {(routeDetails.durationMillis / 60000).toFixed(0)} mins</p>
     </div>
   );
 }

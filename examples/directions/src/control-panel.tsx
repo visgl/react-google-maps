@@ -4,23 +4,28 @@ import './control-panel.css';
 const GCP_DIRECTIONS_API =
   'https://console.cloud.google.com/apis/library/directions-backend.googleapis.com';
 
+const GCP_ROUTES_API =
+  'https://console.cloud.google.com/apis/library/routes.googleapis.com';
+
 function ControlPanel() {
   return (
     <div className="control-panel">
-      <h3>Directions</h3>
+      <h3>Routes API</h3>
       <p>
-        Loading the routes library to render directions on the map using
-        <code>DirectionsService</code> and <code>DirectionsRenderer</code>.
+        Loading the routes library to compute and render routes on the map using
+        the modern <code>Route.computeRoutes</code> service.
       </p>
 
       <p className={'note'}>
-        <strong>Important:</strong> This example is only compatible with the
-        Directions API Legacy Service. Using this Services requires enabling the
-        API on your Google Cloud project by following the direct links:{' '}
+        <strong>Important:</strong> This example uses the new {' '}
+        <a target={'_new'} href={GCP_ROUTES_API}>
+          Routes API (Recommended)
+        </a>{' '},
+        the modern and current way to calculate directions. If you are using the{' '}
         <a target={'_new'} href={GCP_DIRECTIONS_API}>
           Directions API (Legacy)
-        </a>
-        .
+        </a>{' '}
+        Service, switch to this implementation of Routes API.
       </p>
 
       <div className="links">
