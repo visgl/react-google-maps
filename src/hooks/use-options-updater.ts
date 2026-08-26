@@ -17,6 +17,25 @@ type OptionsInstance<TOptions extends object> = {
 const trackedOptionsByInstance = new WeakMap<object, object>();
 
 /**
+ * Records the options an instance was just created with, so the first update
+ * does not re-send them.
+ *
+ * Call this where the options are actually applied, which is the constructor
+ * for an internally created instance and the explicit `setOptions` for an
+ * externally supplied one. The hook cannot infer it: parent effects run after
+ * child effects, so an option can change in the same commit that stores the
+ * instance, and assuming it was applied would drop that change permanently.
+ *
+ * @internal
+ */
+export function markOptionsApplied<TOptions extends object>(
+  instance: OptionsInstance<TOptions>,
+  options: TOptions
+): void {
+  trackedOptionsByInstance.set(instance, snapshotOptions(options));
+}
+
+/**
  * Writes `options` to a maps API instance, sending only the values that changed
  * since the last update.
  *
@@ -25,11 +44,9 @@ const trackedOptionsByInstance = new WeakMap<object, object>();
  * values is noticeable on shapes with many vertices. Sending only the changed
  * subset is equivalent, since the API leaves unspecified options untouched.
  *
- * Callers must apply the initial options before the instance reaches this hook.
- * The geometry components already do: internally created instances receive them
- * through the constructor, and externally supplied ones are written to in the
- * creation effect before the instance is stored. The first time an instance is
- * seen its options are therefore recorded without being applied again.
+ * An instance with no recorded options is assumed to have none applied, so the
+ * full set is written. Callers that already applied them should say so with
+ * `markOptionsApplied`, which is what the geometry components do.
  *
  * @internal
  */
@@ -40,15 +57,8 @@ export function useOptionsUpdater<TOptions extends object>(
   useEffect(() => {
     if (!instance) return;
 
-    const trackedOptions = trackedOptionsByInstance.get(instance) as
-      Partial<TOptions> | undefined;
-
-    // first time we see this instance: the caller already applied these
-    if (!trackedOptions) {
-      trackedOptionsByInstance.set(instance, snapshotOptions(options));
-
-      return;
-    }
+    const trackedOptions = (trackedOptionsByInstance.get(instance) ??
+      {}) as Partial<TOptions>;
 
     const changedOptions = getChangedOptions(options, trackedOptions);
 

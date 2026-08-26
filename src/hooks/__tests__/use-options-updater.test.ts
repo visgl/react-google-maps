@@ -1,25 +1,61 @@
 import {renderHook} from '@testing-library/react';
 
 import {UNSET} from '../../libraries/get-changed-options';
-import {useOptionsUpdater} from '../use-options-updater';
+import {markOptionsApplied, useOptionsUpdater} from '../use-options-updater';
 
 // every test needs its own instance: tracking is keyed per object and lives in
 // a module-level WeakMap, so a shared instance would leak state between tests
 const createInstance = () => ({setOptions: jest.fn()});
 
-test('records the first options it sees without applying them', () => {
+test('applies everything when nothing is known to have been applied', () => {
   const instance = createInstance();
 
   renderHook(() => {
     useOptionsUpdater(instance, {strokeColor: '#f00', editable: true});
   });
 
-  // the caller already applied these, via the constructor or the creation effect
+  // failing safe: a caller that did not record a baseline gets the full set
+  // rather than silently losing options
+  expect(instance.setOptions).toHaveBeenCalledWith({
+    strokeColor: '#f00',
+    editable: true
+  });
+});
+
+test('does not re-apply options recorded as already applied', () => {
+  const instance = createInstance();
+
+  markOptionsApplied(instance, {strokeColor: '#f00', editable: true});
+
+  renderHook(() => {
+    useOptionsUpdater(instance, {strokeColor: '#f00', editable: true});
+  });
+
   expect(instance.setOptions).not.toHaveBeenCalled();
+});
+
+test('applies an option that changed after it was recorded', () => {
+  const instance = createInstance();
+
+  // the constructor got the old value, and the props changed in the commit that
+  // stored the instance. assuming the new value was applied would drop it
+  markOptionsApplied(instance, {strokeColor: '#f00', editable: true});
+
+  renderHook(() => {
+    useOptionsUpdater(instance, {strokeColor: '#0f0', editable: true});
+  });
+
+  expect(instance.setOptions).toHaveBeenCalledTimes(1);
+
+  const [sent] = instance.setOptions.mock.calls[0];
+  expect(Object.keys(sent)).toEqual(['strokeColor']);
+  expect(sent.strokeColor).toBe('#0f0');
 });
 
 test('does not re-apply when the effect re-runs with an equal options object', () => {
   const instance = createInstance();
+
+  markOptionsApplied(instance, {strokeColor: '#f00', editable: true});
 
   // a fresh object each render, so the effect deps change and the body really
   // runs. this is the StrictMode-safety case
@@ -38,6 +74,12 @@ test('does not re-apply when the effect re-runs with an equal options object', (
 
 test('sends only the changed option on an update', () => {
   const instance = createInstance();
+
+  markOptionsApplied(instance, {
+    strokeColor: '#f00',
+    editable: true,
+    fillOpacity: 0.2
+  });
 
   const {rerender} = renderHook(
     ({fillOpacity}) => {
@@ -65,6 +107,8 @@ test('sends only the changed option on an update', () => {
 test('unsets an option that is no longer present', () => {
   const instance = createInstance();
 
+  markOptionsApplied(instance, {strokeColor: '#f00'});
+
   const {rerender} = renderHook(
     ({options}) => {
       useOptionsUpdater(instance, options);
@@ -83,6 +127,8 @@ test('unsets an option that is no longer present', () => {
 
 test('does not unset the same option twice', () => {
   const instance = createInstance();
+
+  markOptionsApplied(instance, {strokeColor: '#f00'});
 
   const {rerender} = renderHook(
     ({options}) => {
@@ -111,9 +157,8 @@ test('tracks each instance separately', () => {
 
   rerender({instance: second});
 
-  // the replacement is seen for the first time, so its options are recorded
-  // rather than applied: its caller already applied them
-  expect(second.setOptions).not.toHaveBeenCalled();
+  // the replacement has no recorded baseline, so it gets the full set
+  expect(second.setOptions).toHaveBeenCalledWith({strokeColor: '#f00'});
 });
 
 test('does nothing while the instance is null', () => {
@@ -128,5 +173,7 @@ test('does nothing while the instance is null', () => {
 
   rerender({current: instance});
 
-  expect(instance.setOptions).not.toHaveBeenCalled();
+  // the null render did nothing; the instance arriving is what triggers the
+  // first write, and it must not be skipped
+  expect(instance.setOptions).toHaveBeenCalledWith({strokeColor: '#f00'});
 });

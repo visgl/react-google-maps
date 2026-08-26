@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {initialize, mockInstances} from '@googlemaps/jest-mocks';
 import {cleanup, render} from '@testing-library/react';
 
@@ -65,6 +65,29 @@ test('circle should have a click listener', () => {
     circleMock,
     'click',
     expect.any(Function)
+  );
+});
+
+test('circle should apply an option changed in the commit that creates it', () => {
+  // parent effects run after child effects, so this setState batches with the
+  // creation effect's setCircle: the constructor gets the old value and the
+  // hook first sees the new one. assuming the new one was applied loses it
+  const Parent = () => {
+    const [fillColor, setFillColor] = useState('#ff0000');
+    useEffect(() => setFillColor('#00ff00'), []);
+
+    return (
+      <Circle center={{lat: 1, lng: 2}} radius={1000} fillColor={fillColor} />
+    );
+  };
+
+  render(<Parent />);
+
+  const circles = mockInstances.get(google.maps.Circle);
+  const circle = circles[0];
+
+  expect(circle.setOptions).toHaveBeenCalledWith(
+    expect.objectContaining({fillColor: '#00ff00'})
   );
 });
 

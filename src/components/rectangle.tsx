@@ -10,7 +10,10 @@ import {deepEqual as isDeepEqual} from 'fast-equals';
 import {useMap} from '../hooks/use-map';
 import {useMapsEventListener} from '../hooks/use-maps-event-listener';
 import {useMemoized} from '../hooks/use-memoized';
-import {useOptionsUpdater} from '../hooks/use-options-updater';
+import {
+  markOptionsApplied,
+  useOptionsUpdater
+} from '../hooks/use-options-updater';
 
 import {boundsEquals} from '../libraries/lat-lng-utils';
 
@@ -85,6 +88,9 @@ function useRectangle(props: RectangleProps) {
       ...rectangleOptions,
       bounds: bounds ?? defaultBounds
     });
+    // the options above are applied by now, so record them as the baseline
+    markOptionsApplied(newRectangle, rectangleOptions);
+
     newRectangle.setMap(map);
     // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional to sync the imperative instance with state
     setRectangle(newRectangle);
