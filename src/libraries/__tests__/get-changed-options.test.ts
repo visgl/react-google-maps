@@ -1,74 +1,91 @@
-import {getChangedOptions} from '../get-changed-options';
+import {
+  applyOptionsUpdate,
+  getChangedOptions,
+  UNSET
+} from '../get-changed-options';
 
-test('returns everything when there are no previous options', () => {
-  const options = {strokeColor: '#f00', editable: true};
-  const changed = getChangedOptions(options, null);
+describe('getChangedOptions', () => {
+  test('returns everything when nothing has been applied yet', () => {
+    const options = {strokeColor: '#f00', editable: true};
+    const changed = getChangedOptions(options, {});
 
-  expect(changed).toEqual(options);
-  // the caller's object is the value the memoization compares against, so it
-  // must not be handed on to the maps api
-  expect(changed).not.toBe(options);
-});
+    expect(changed).toEqual(options);
+    // the tracked object must not be handed on to the maps api
+    expect(changed).not.toBe(options);
+  });
 
-test('returns null for an empty options object', () => {
-  expect(getChangedOptions({}, null)).toBeNull();
-});
+  test('returns null when nothing changed', () => {
+    expect(
+      getChangedOptions(
+        {strokeColor: '#f00', editable: true},
+        {strokeColor: '#f00', editable: true}
+      )
+    ).toBeNull();
+  });
 
-test('returns null when nothing changed', () => {
-  expect(
-    getChangedOptions(
-      {strokeColor: '#f00', editable: true},
-      {strokeColor: '#f00', editable: true}
-    )
-  ).toBeNull();
-});
+  test('returns only the values that changed', () => {
+    expect(
+      getChangedOptions(
+        {strokeColor: '#f00', fillOpacity: 0.5, editable: true},
+        {strokeColor: '#f00', fillOpacity: 0.2, editable: true}
+      )
+    ).toEqual({fillOpacity: 0.5});
+  });
 
-test('returns only the values that changed', () => {
-  expect(
-    getChangedOptions(
-      {strokeColor: '#f00', fillOpacity: 0.5, editable: true},
-      {strokeColor: '#f00', fillOpacity: 0.2, editable: true}
-    )
-  ).toEqual({fillOpacity: 0.5});
-});
+  test('compares nested values by content', () => {
+    expect(
+      getChangedOptions({icons: [{offset: '50%'}]}, {icons: [{offset: '50%'}]})
+    ).toBeNull();
+  });
 
-test('compares nested values by content', () => {
-  expect(
-    getChangedOptions({icons: [{offset: '50%'}]}, {icons: [{offset: '50%'}]})
-  ).toBeNull();
-
-  expect(
-    getChangedOptions({icons: [{offset: '50%'}]}, {icons: [{offset: '25%'}]})
-  ).toEqual({icons: [{offset: '50%'}]});
-});
-
-test('reports a value that became undefined', () => {
-  const changed = getChangedOptions(
-    {strokeColor: undefined},
-    {strokeColor: '#f00'}
-  );
-
-  // key presence is what makes setOptions reset a value, and `toEqual` ignores
-  // undefined-valued keys, so assert the keys directly
-  expect(Object.keys(changed ?? {})).toEqual(['strokeColor']);
-});
-
-test('reports a key the previous options never carried', () => {
-  // the prop was omitted for a render, so the snapshot lost the key. setting it
-  // back to undefined must still reach the instance, otherwise the old value
-  // stays applied forever
-  const changed = getChangedOptions({strokeColor: undefined}, {});
-
-  expect(Object.keys(changed ?? {})).toEqual(['strokeColor']);
-});
-
-test('ignores keys that are no longer present', () => {
-  // the maps api leaves unspecified options untouched, so a dropped prop has
-  // never reset the option on the instance
-  expect(
-    getChangedOptions({strokeColor: '#f00'}, {
+  test('unsets a key that is no longer present', () => {
+    const changed = getChangedOptions({strokeColor: '#f00'}, {
       strokeColor: '#f00',
       fillOpacity: 0.5
-    } as {strokeColor: string})
-  ).toBeNull();
+    } as {strokeColor: string});
+
+    // key presence is what carries the reset, and toEqual ignores
+    // undefined-valued keys, so assert the keys directly
+    expect(Object.keys(changed ?? {})).toEqual(['fillOpacity']);
+    expect(Object.values(changed ?? {})).toEqual([UNSET]);
+  });
+
+  test('applies a key that appeared with an explicit undefined value', () => {
+    const changed = getChangedOptions({strokeColor: undefined}, {});
+
+    expect(Object.keys(changed ?? {})).toEqual(['strokeColor']);
+  });
+
+  test('does not re-send a key already tracked as undefined', () => {
+    expect(
+      getChangedOptions({strokeColor: undefined}, {strokeColor: undefined})
+    ).toBeNull();
+  });
+});
+
+describe('applyOptionsUpdate', () => {
+  test('folds the next options into the tracked state', () => {
+    expect(
+      applyOptionsUpdate(
+        {strokeColor: '#f00', fillOpacity: 0.2},
+        {
+          strokeColor: '#0f0',
+          fillOpacity: 0.2
+        }
+      )
+    ).toEqual({strokeColor: '#0f0', fillOpacity: 0.2});
+  });
+
+  test('drops keys that are no longer present, so they are not unset twice', () => {
+    const updated = applyOptionsUpdate(
+      {strokeColor: '#f00', fillOpacity: 0.5} as {
+        strokeColor: string;
+      },
+      {strokeColor: '#f00'}
+    );
+
+    expect(Object.keys(updated)).toEqual(['strokeColor']);
+    // the next diff against these tracked options must be a no-op
+    expect(getChangedOptions({strokeColor: '#f00'}, updated)).toBeNull();
+  });
 });

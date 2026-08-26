@@ -2,7 +2,6 @@ import React, {
   forwardRef,
   useEffect,
   useImperativeHandle,
-  useRef,
   useState
 } from 'react';
 
@@ -11,12 +10,11 @@ import {deepEqual as isDeepEqual} from 'fast-equals';
 import {useMap} from '../hooks/use-map';
 import {useMapsEventListener} from '../hooks/use-maps-event-listener';
 import {useMemoized} from '../hooks/use-memoized';
-import {useAppliedOptions} from '../hooks/use-applied-options';
+import {useOptionsUpdater} from '../hooks/use-options-updater';
 
 import {boundsEquals} from '../libraries/lat-lng-utils';
 
 import type {Ref} from 'react';
-import type {AppliedOptions} from '../hooks/use-applied-options';
 
 type RectangleEventProps = {
   onClick?: (e: google.maps.MapMouseEvent) => void;
@@ -75,11 +73,6 @@ function useRectangle(props: RectangleProps) {
     isDeepEqual
   );
 
-  // options the instance was constructed with, so they are not applied twice
-  const appliedOnCreateRef = useRef<AppliedOptions<
-    typeof rectangleOptions
-  > | null>(null);
-
   useEffect(() => {
     if (!map) {
       if (map === undefined)
@@ -92,10 +85,6 @@ function useRectangle(props: RectangleProps) {
       ...rectangleOptions,
       bounds: bounds ?? defaultBounds
     });
-    appliedOnCreateRef.current = {
-      instance: newRectangle,
-      options: rectangleOptions
-    };
     newRectangle.setMap(map);
     // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional to sync the imperative instance with state
     setRectangle(newRectangle);
@@ -123,7 +112,7 @@ function useRectangle(props: RectangleProps) {
       : null
   );
 
-  useAppliedOptions(rectangle, rectangleOptions, appliedOnCreateRef);
+  useOptionsUpdater(rectangle, rectangleOptions);
 
   // Sync controlled bounds prop with the rectangle instance
   useEffect(() => {
