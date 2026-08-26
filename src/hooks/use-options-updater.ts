@@ -1,7 +1,7 @@
 import {useEffect} from 'react';
 import {
-  applyOptionsUpdate,
-  getChangedOptions
+  getChangedOptions,
+  snapshotOptions
 } from '../libraries/get-changed-options';
 
 type OptionsInstance<TOptions extends object> = {
@@ -45,7 +45,7 @@ export function useOptionsUpdater<TOptions extends object>(
 
     // first time we see this instance: the caller already applied these
     if (!trackedOptions) {
-      trackedOptionsByInstance.set(instance, {...options});
+      trackedOptionsByInstance.set(instance, snapshotOptions(options));
 
       return;
     }
@@ -55,9 +55,6 @@ export function useOptionsUpdater<TOptions extends object>(
     if (!changedOptions) return;
 
     instance.setOptions(changedOptions);
-    trackedOptionsByInstance.set(
-      instance,
-      applyOptionsUpdate(trackedOptions, options)
-    );
+    trackedOptionsByInstance.set(instance, snapshotOptions(options));
   }, [instance, options]);
 }

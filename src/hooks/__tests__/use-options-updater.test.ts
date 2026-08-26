@@ -18,16 +18,20 @@ test('records the first options it sees without applying them', () => {
   expect(instance.setOptions).not.toHaveBeenCalled();
 });
 
-test('does not re-apply when the effect runs again with the same options', () => {
+test('does not re-apply when the effect re-runs with an equal options object', () => {
   const instance = createInstance();
-  const options = {strokeColor: '#f00', editable: true};
 
-  const {rerender} = renderHook(() => {
-    useOptionsUpdater(instance, options);
-  });
+  // a fresh object each render, so the effect deps change and the body really
+  // runs. this is the StrictMode-safety case
+  const {rerender} = renderHook(
+    ({color}) => {
+      useOptionsUpdater(instance, {strokeColor: color, editable: true});
+    },
+    {initialProps: {color: '#f00'}}
+  );
 
-  rerender();
-  rerender();
+  rerender({color: '#f00'});
+  rerender({color: '#f00'});
 
   expect(instance.setOptions).not.toHaveBeenCalled();
 });
@@ -48,9 +52,14 @@ test('sends only the changed option on an update', () => {
 
   rerender({fillOpacity: 0.5});
 
-  // `editable` is expensive to re-apply, so it must not be sent again
+  // `editable` is expensive to re-apply, so it must not be sent again. assert
+  // the keys, since toHaveBeenCalledWith ignores undefined-valued ones and
+  // would accept `{fillOpacity: 0.5, editable: undefined}`
   expect(instance.setOptions).toHaveBeenCalledTimes(1);
-  expect(instance.setOptions).toHaveBeenCalledWith({fillOpacity: 0.5});
+
+  const [sent] = instance.setOptions.mock.calls[0];
+  expect(Object.keys(sent)).toEqual(['fillOpacity']);
+  expect(sent.fillOpacity).toBe(0.5);
 });
 
 test('unsets an option that is no longer present', () => {

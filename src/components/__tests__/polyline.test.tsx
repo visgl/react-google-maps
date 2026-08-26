@@ -90,7 +90,11 @@ test('polyline should only send the options that changed', () => {
   rerender(<Polyline path={path} strokeOpacity={0.5} />);
 
   expect(polyline.setOptions).toHaveBeenCalledTimes(1);
-  expect(polyline.setOptions).toHaveBeenCalledWith({strokeOpacity: 0.5});
+  // assert the keys: toHaveBeenCalledWith ignores undefined-valued ones,
+  // so it would also accept an extra `editable: undefined`
+  const [sent] = (polyline.setOptions as jest.Mock).mock.calls[0];
+  expect(Object.keys(sent)).toEqual(['strokeOpacity']);
+  expect(sent.strokeOpacity).toBe(0.5);
 });
 
 test('polyline should update options on rerender', () => {

@@ -40,7 +40,7 @@ export function getChangedOptions<T extends object>(
     // a key that disappeared has to be written back to the default, and a key
     // that is present counts as changed even when both values read as
     // undefined, since it may never have been applied
-    if (!(key in nextOptions)) {
+    if (!Object.hasOwn(nextOptions, key)) {
       changedOptions ??= {};
       // null is not assignable to an unconstrained T[keyof T]; see UNSET above
       changedOptions[key] = UNSET as unknown as T[keyof T];
@@ -48,7 +48,7 @@ export function getChangedOptions<T extends object>(
     }
 
     if (
-      key in trackedOptions &&
+      Object.hasOwn(trackedOptions, key) &&
       isDeepEqual(trackedOptions[key], nextOptions[key])
     )
       continue;
@@ -61,24 +61,29 @@ export function getChangedOptions<T extends object>(
 }
 
 /**
- * Folds `nextOptions` into the tracked state, dropping keys that are no longer
- * present so the next diff does not try to unset them twice.
+ * Copies an options object deeply enough that a later comparison sees changes
+ * made in place.
+ *
+ * A shallow copy aliases nested values, so mutating something like a polyline's
+ * `icons` array and re-rendering compares the array against itself and reports
+ * no change. Plain objects and arrays are copied; anything else, including maps
+ * API instances, is kept by reference.
  *
  * @internal
  */
-export function applyOptionsUpdate<T extends object>(
-  trackedOptions: Partial<T>,
-  nextOptions: T
-): Partial<T> {
-  const updatedOptions: Partial<T> = {...trackedOptions};
+export function snapshotOptions<T>(value: T): T {
+  if (Array.isArray(value))
+    return value.map(entry => snapshotOptions(entry)) as T;
 
-  for (const key of Object.keys(trackedOptions) as Array<keyof T>) {
-    if (!(key in nextOptions)) delete updatedOptions[key];
-  }
+  if (value === null || typeof value !== 'object') return value;
 
-  for (const key of Object.keys(nextOptions) as Array<keyof T>) {
-    updatedOptions[key] = nextOptions[key];
-  }
+  // only plain objects, so class instances are not mangled by copying
+  const prototype = Object.getPrototypeOf(value) as unknown;
+  if (prototype !== Object.prototype && prototype !== null) return value;
 
-  return updatedOptions;
+  const copy: Record<string, unknown> = {};
+  for (const key of Object.keys(value as object))
+    copy[key] = snapshotOptions((value as Record<string, unknown>)[key]);
+
+  return copy as T;
 }

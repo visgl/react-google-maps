@@ -83,7 +83,11 @@ test('circle should only send the options that changed', () => {
   );
 
   expect(circle.setOptions).toHaveBeenCalledTimes(1);
-  expect(circle.setOptions).toHaveBeenCalledWith({fillOpacity: 0.5});
+  // assert the keys: toHaveBeenCalledWith ignores undefined-valued ones,
+  // so it would also accept an extra `editable: undefined`
+  const [sent] = (circle.setOptions as jest.Mock).mock.calls[0];
+  expect(Object.keys(sent)).toEqual(['fillOpacity']);
+  expect(sent.fillOpacity).toBe(0.5);
 });
 
 test('circle should update options on rerender', () => {

@@ -1,6 +1,6 @@
 import {
-  applyOptionsUpdate,
   getChangedOptions,
+  snapshotOptions,
   UNSET
 } from '../get-changed-options';
 
@@ -36,6 +36,19 @@ describe('getChangedOptions', () => {
     expect(
       getChangedOptions({icons: [{offset: '50%'}]}, {icons: [{offset: '50%'}]})
     ).toBeNull();
+
+    expect(
+      getChangedOptions({icons: [{offset: '75%'}]}, {icons: [{offset: '50%'}]})
+    ).toEqual({icons: [{offset: '75%'}]});
+  });
+
+  test('ignores keys inherited from the prototype chain', () => {
+    // `key in obj` walks the prototype, so an unguarded check would skip the
+    // unset branch for `toString` and then copy the native function through
+    const changed = getChangedOptions({}, {toString: 'x'} as object);
+
+    expect(Object.keys(changed ?? {})).toEqual(['toString']);
+    expect(Object.values(changed ?? {})).toEqual([UNSET]);
   });
 
   test('unsets a key that is no longer present', () => {
@@ -63,29 +76,21 @@ describe('getChangedOptions', () => {
   });
 });
 
-describe('applyOptionsUpdate', () => {
-  test('folds the next options into the tracked state', () => {
-    expect(
-      applyOptionsUpdate(
-        {strokeColor: '#f00', fillOpacity: 0.2},
-        {
-          strokeColor: '#0f0',
-          fillOpacity: 0.2
-        }
-      )
-    ).toEqual({strokeColor: '#0f0', fillOpacity: 0.2});
+describe('snapshotOptions', () => {
+  test('copies nested values so later mutation is visible', () => {
+    const icons = [{offset: '50%'}];
+    const tracked = snapshotOptions({icons});
+
+    icons[0].offset = '75%';
+
+    // a shallow copy would compare the array against itself and report no change
+    expect(getChangedOptions({icons}, tracked)).toEqual({icons});
   });
 
-  test('drops keys that are no longer present, so they are not unset twice', () => {
-    const updated = applyOptionsUpdate(
-      {strokeColor: '#f00', fillOpacity: 0.5} as {
-        strokeColor: string;
-      },
-      {strokeColor: '#f00'}
-    );
+  test('keeps non-plain objects by reference', () => {
+    class Instance {}
+    const instance = new Instance();
 
-    expect(Object.keys(updated)).toEqual(['strokeColor']);
-    // the next diff against these tracked options must be a no-op
-    expect(getChangedOptions({strokeColor: '#f00'}, updated)).toBeNull();
+    expect(snapshotOptions({instance}).instance).toBe(instance);
   });
 });

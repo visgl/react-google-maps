@@ -146,7 +146,11 @@ test('polygon should only send the options that changed', () => {
   // re-applying `editable` or `draggable` makes the maps api rebuild the
   // vertex handles, so unchanged values must not be sent again
   expect(polygon.setOptions).toHaveBeenCalledTimes(1);
-  expect(polygon.setOptions).toHaveBeenCalledWith({fillOpacity: 0.5});
+  // assert the keys: toHaveBeenCalledWith ignores undefined-valued ones,
+  // so it would also accept an extra `editable: undefined`
+  const [sent] = (polygon.setOptions as jest.Mock).mock.calls[0];
+  expect(Object.keys(sent)).toEqual(['fillOpacity']);
+  expect(sent.fillOpacity).toBe(0.5);
 });
 
 test('polygon should not touch options when nothing changed', () => {
