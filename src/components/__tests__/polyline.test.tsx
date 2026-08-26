@@ -74,6 +74,33 @@ test('polyline should have a click listener', () => {
   );
 });
 
+test('polyline should send a nested option mutated in place', () => {
+  const path = [
+    {lat: 1, lng: 2},
+    {lat: 3, lng: 4}
+  ];
+  const icons = [{offset: '50%'}];
+
+  const {rerender} = render(
+    <Polyline path={path} icons={icons as never} strokeColor="#ff0000" />
+  );
+
+  const polyline = mockInstances.get(google.maps.Polyline)[0];
+  (polyline.setOptions as jest.Mock).mockClear();
+
+  // mutating in place keeps the same reference, so a shallow copy of the
+  // tracked options would compare the array against itself and drop the change
+  icons[0].offset = '75%';
+
+  rerender(
+    <Polyline path={path} icons={icons as never} strokeColor="#00ff00" />
+  );
+
+  const [sent] = (polyline.setOptions as jest.Mock).mock.calls[0];
+  expect(Object.keys(sent).sort()).toEqual(['icons', 'strokeColor']);
+  expect(sent.icons).toEqual([{offset: '75%'}]);
+});
+
 test('polyline should only send the options that changed', () => {
   const path = [
     {lat: 1, lng: 2},

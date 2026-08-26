@@ -61,13 +61,16 @@ export function getChangedOptions<T extends object>(
 }
 
 /**
- * Copies an options object deeply enough that a later comparison sees changes
- * made in place.
+ * Copies an options object deeply enough that nested values are not aliased by
+ * the caller's.
  *
- * A shallow copy aliases nested values, so mutating something like a polyline's
- * `icons` array and re-rendering compares the array against itself and reports
- * no change. Plain objects and arrays are copied; anything else, including maps
- * API instances, is kept by reference.
+ * A shallow copy shares nested values with the props, so an `icons` array
+ * mutated in place is compared against itself and reported unchanged. That only
+ * matters once some other option also changes, since `useMemoized` otherwise
+ * masks an in-place mutation before the hook runs at all.
+ *
+ * Plain objects and arrays are copied; anything else, including maps API
+ * instances, is kept by reference.
  *
  * @internal
  */

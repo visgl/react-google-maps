@@ -77,7 +77,7 @@ describe('getChangedOptions', () => {
 });
 
 describe('snapshotOptions', () => {
-  test('copies nested values so later mutation is visible', () => {
+  test('does not alias nested values from the source object', () => {
     const icons = [{offset: '50%'}];
     const tracked = snapshotOptions({icons});
 
