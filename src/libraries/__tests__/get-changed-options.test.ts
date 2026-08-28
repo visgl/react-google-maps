@@ -94,3 +94,25 @@ describe('snapshotOptions', () => {
     expect(snapshotOptions({instance}).instance).toBe(instance);
   });
 });
+
+describe('hostile keys', () => {
+  test('an own __proto__ key does not poison the result', () => {
+    const next = JSON.parse(
+      '{"strokeColor":"#f00","__proto__":{"polluted":1}}'
+    );
+    const changed = getChangedOptions(next, {strokeColor: '#f00'});
+
+    // assigning to __proto__ on a plain object hits the inherited setter, so
+    // the diff would come back truthy with no own keys and re-fire forever
+    expect(changed && Object.keys(changed)).toEqual(['__proto__']);
+    expect((changed as Record<string, unknown>).polluted).toBeUndefined();
+  });
+
+  test('a null-prototype value is not copied into a plain object', () => {
+    const bare = Object.create(null) as Record<string, unknown>;
+    bare.a = 1;
+
+    // copying it into {} would make fast-equals report it changed every render
+    expect(snapshotOptions({bare}).bare).toBe(bare);
+  });
+});

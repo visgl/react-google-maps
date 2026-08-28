@@ -82,7 +82,7 @@ test('polyline should send a nested option mutated in place', () => {
   const icons = [{offset: '50%'}];
 
   const {rerender} = render(
-    <Polyline path={path} icons={icons as never} strokeColor="#ff0000" />
+    <Polyline path={path} icons={icons} strokeColor="#ff0000" />
   );
 
   const polyline = mockInstances.get(google.maps.Polyline)[0];
@@ -92,9 +92,7 @@ test('polyline should send a nested option mutated in place', () => {
   // tracked options would compare the array against itself and drop the change
   icons[0].offset = '75%';
 
-  rerender(
-    <Polyline path={path} icons={icons as never} strokeColor="#00ff00" />
-  );
+  rerender(<Polyline path={path} icons={icons} strokeColor="#00ff00" />);
 
   const [sent] = (polyline.setOptions as jest.Mock).mock.calls[0];
   expect(Object.keys(sent).sort()).toEqual(['icons', 'strokeColor']);

@@ -1,5 +1,10 @@
 import {deepEqual as isDeepEqual} from 'fast-equals';
 
+// `Object.hasOwn` is ES2022 and tsc does not downlevel built-ins, so it would
+// break the ES2015 target. set-value-for-styles.ts uses the same call.
+const hasOwn = (object: object, key: PropertyKey): boolean =>
+  Object.prototype.hasOwnProperty.call(object, key);
+
 /**
  * The value written to unset an option that is no longer present.
  *
@@ -40,20 +45,20 @@ export function getChangedOptions<T extends object>(
     // a key that disappeared has to be written back to the default, and a key
     // that is present counts as changed even when both values read as
     // undefined, since it may never have been applied
-    if (!Object.hasOwn(nextOptions, key)) {
-      changedOptions ??= {};
+    if (!hasOwn(nextOptions, key)) {
+      changedOptions ??= Object.create(null) as Partial<T>;
       // null is not assignable to an unconstrained T[keyof T]; see UNSET above
       changedOptions[key] = UNSET as unknown as T[keyof T];
       continue;
     }
 
     if (
-      Object.hasOwn(trackedOptions, key) &&
+      hasOwn(trackedOptions, key) &&
       isDeepEqual(trackedOptions[key], nextOptions[key])
     )
       continue;
 
-    changedOptions ??= {};
+    changedOptions ??= Object.create(null) as Partial<T>;
     changedOptions[key] = nextOptions[key];
   }
 
@@ -82,7 +87,7 @@ export function snapshotOptions<T>(value: T): T {
 
   // only plain objects, so class instances are not mangled by copying
   const prototype = Object.getPrototypeOf(value) as unknown;
-  if (prototype !== Object.prototype && prototype !== null) return value;
+  if (prototype !== Object.prototype) return value;
 
   const copy: Record<string, unknown> = {};
   for (const key of Object.keys(value as object))
