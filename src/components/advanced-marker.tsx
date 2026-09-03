@@ -365,8 +365,14 @@ function useAdvancedMarkerAnchoring(
         );
       }
 
-      marker.anchorLeft = anchorLeft;
-      marker.anchorTop = anchorTop;
+      // Only assign properties that were actually provided by the consumer.
+      // Assigning `undefined` to `anchorLeft`/`anchorTop` would clobber the
+      // element's default value, and the Google Maps JS API can subsequently
+      // fail with a `TypeError: Failed to execute 'appendChild' on 'Node'`
+      // when it later reads these properties while setting up drag handles
+      // (see issue #867).
+      if (anchorLeft !== undefined) marker.anchorLeft = anchorLeft;
+      if (anchorTop !== undefined) marker.anchorTop = anchorTop;
 
       // when anchorLeft and/or anchorTop are set, we'll ignore the anchorPoint
       if (anchorPoint !== undefined) {
