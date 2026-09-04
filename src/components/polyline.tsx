@@ -13,6 +13,7 @@ import {useMapsLibrary} from '../hooks/use-maps-library';
 import {useMapsEventListener} from '../hooks/use-maps-event-listener';
 import {useMemoized} from '../hooks/use-memoized';
 import {pathEquals} from '../libraries/lat-lng-utils';
+import {setMapObjectOptions} from '../libraries/set-map-object-options';
 
 import type {Ref} from 'react';
 
@@ -121,6 +122,9 @@ function usePolyline(props: PolylineProps) {
       instance = new google.maps.Polyline(polylineOptionsWithPath);
     }
 
+    // the options above are applied by now, so record them without writing
+    setMapObjectOptions(instance, polylineOptions, {alreadyApplied: true});
+
     instance.setMap(map);
     // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional to sync the imperative instance with state
     setPolyline(instance);
@@ -180,7 +184,7 @@ function usePolyline(props: PolylineProps) {
   useEffect(() => {
     if (!polyline) return;
 
-    polyline.setOptions(polylineOptions);
+    setMapObjectOptions(polyline, polylineOptions);
   }, [polyline, polylineOptions]);
 
   // Sync controlled path prop with the polyline instance

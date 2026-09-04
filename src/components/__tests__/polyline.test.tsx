@@ -74,6 +74,54 @@ test('polyline should have a click listener', () => {
   );
 });
 
+test('polyline should send a nested option mutated in place', () => {
+  const path = [
+    {lat: 1, lng: 2},
+    {lat: 3, lng: 4}
+  ];
+  const icons = [{offset: '50%'}];
+
+  const {rerender} = render(
+    <Polyline path={path} icons={icons} strokeColor="#ff0000" />
+  );
+
+  const polyline = mockInstances.get(google.maps.Polyline)[0];
+  (polyline.setOptions as jest.Mock).mockClear();
+
+  // mutating in place keeps the same reference, so a shallow copy of the
+  // tracked options would compare the array against itself and drop the change
+  icons[0].offset = '75%';
+
+  rerender(<Polyline path={path} icons={icons} strokeColor="#00ff00" />);
+
+  const [sent] = (polyline.setOptions as jest.Mock).mock.calls[0];
+  expect(Object.keys(sent).sort()).toEqual(['icons', 'strokeColor']);
+  expect(sent.icons).toEqual([{offset: '75%'}]);
+});
+
+test('polyline should only send the options that changed', () => {
+  const path = [
+    {lat: 1, lng: 2},
+    {lat: 3, lng: 4}
+  ];
+
+  const {rerender} = render(<Polyline path={path} strokeOpacity={0.2} />);
+
+  const polylines = mockInstances.get(google.maps.Polyline);
+  const polyline = polylines[0];
+
+  (polyline.setOptions as jest.Mock).mockClear();
+
+  rerender(<Polyline path={path} strokeOpacity={0.5} />);
+
+  expect(polyline.setOptions).toHaveBeenCalledTimes(1);
+  // assert the keys: toHaveBeenCalledWith ignores undefined-valued ones,
+  // so it would also accept an extra `editable: undefined`
+  const [sent] = (polyline.setOptions as jest.Mock).mock.calls[0];
+  expect(Object.keys(sent)).toEqual(['strokeOpacity']);
+  expect(sent.strokeOpacity).toBe(0.5);
+});
+
 test('polyline should update options on rerender', () => {
   const path = [
     {lat: 1, lng: 2},
