@@ -3,7 +3,7 @@
   "compilerOptions": {
     "ignoreDeprecations": "6.0",
     "target": "ES2020",
-    "lib": ["es2020", "dom"],
+    "lib": ["es2024", "dom"],
     "jsx": "react",
     "types": ["node", "google.maps", "global"],
     "baseUrl": ".",

@@ -10,7 +10,9 @@ import {deepEqual as isDeepEqual} from 'fast-equals';
 import {useMap} from '../hooks/use-map';
 import {useMapsEventListener} from '../hooks/use-maps-event-listener';
 import {useMemoized} from '../hooks/use-memoized';
+
 import {latLngEquals} from '../libraries/lat-lng-utils';
+import {setMapObjectOptions} from '../libraries/set-map-object-options';
 
 import type {Ref} from 'react';
 
@@ -88,6 +90,9 @@ function useCircle(props: CircleProps) {
       center: center ?? defaultCenter,
       radius: radius ?? defaultRadius
     });
+    // the options above are applied by now, so record them without writing
+    setMapObjectOptions(newCircle, circleOptions, {alreadyApplied: true});
+
     newCircle.setMap(map);
     // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional to sync the imperative instance with state
     setCircle(newCircle);
@@ -128,7 +133,7 @@ function useCircle(props: CircleProps) {
   useEffect(() => {
     if (!circle) return;
 
-    circle.setOptions(circleOptions);
+    setMapObjectOptions(circle, circleOptions);
   }, [circle, circleOptions]);
 
   // Sync controlled center prop with the circle instance

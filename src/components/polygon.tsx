@@ -13,6 +13,7 @@ import {useMapsLibrary} from '../hooks/use-maps-library';
 import {useMapsEventListener} from '../hooks/use-maps-event-listener';
 import {useMemoized} from '../hooks/use-memoized';
 import {pathsEquals} from '../libraries/lat-lng-utils';
+import {setMapObjectOptions} from '../libraries/set-map-object-options';
 
 import type {Ref} from 'react';
 
@@ -135,6 +136,9 @@ function usePolygon(props: PolygonProps) {
       instance = new google.maps.Polygon(polygonOptionsWithPaths);
     }
 
+    // the options above are applied by now, so record them without writing
+    setMapObjectOptions(instance, polygonOptions, {alreadyApplied: true});
+
     instance.setMap(map);
     // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional to sync the imperative instance with state
     setPolygon(instance);
@@ -233,7 +237,7 @@ function usePolygon(props: PolygonProps) {
   useEffect(() => {
     if (!polygon) return;
 
-    polygon.setOptions(polygonOptions);
+    setMapObjectOptions(polygon, polygonOptions);
   }, [polygon, polygonOptions]);
 
   // Sync controlled paths prop with the polygon instance

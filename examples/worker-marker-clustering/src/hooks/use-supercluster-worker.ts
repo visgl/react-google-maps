@@ -10,6 +10,8 @@
  * 2. Create a worker file in your app (see worker-marker-clustering example)
  * 3. Pass the worker URL to this hook
  *
+ * @see {@link https://github.com/visgl/react-google-maps/tree/main/examples/worker-marker-clustering}
+ *
  * @example
  * ```tsx
  * const workerUrl = new URL('./clustering.worker.ts', import.meta.url);
@@ -172,15 +174,61 @@ export function useSuperclusterWorker<P = Record<string, unknown>>(
       {resolve: (value: unknown) => void; reject: (error: Error) => void}
     >
   >(new Map());
-  const isReadyRef = useRef(false);
   const dataLoadedRef = useRef(false);
   const optionsRef = useRef(options);
   const loadingDataRef = useRef(false);
+  const isInitialOptionsRef = useRef(true);
 
-  // Update options ref in effect to avoid accessing during render
+  // Update options ref in effect to avoid accessing during render, and push
+  // changed options to an already-running worker: the worker-init effect
+  // below only sends the initial options once (keyed on workerUrl), so
+  // without this, changing radius/maxZoom/minPoints etc. after mount would
+  // silently have no effect on an already-running worker.
   useEffect(() => {
     optionsRef.current = options;
-  }, [options]);
+
+    if (isInitialOptionsRef.current) {
+      isInitialOptionsRef.current = false;
+      return;
+    }
+
+    const worker = workerRef.current;
+    if (!worker) return;
+
+    const initMessage: WorkerMessage = {type: 'init', options};
+    worker.postMessage(initMessage);
+
+    // re-initializing the worker's clusterer discards any previously
+    // loaded data, so it needs to be reloaded before clusters can be
+    // recomputed for the current viewport.
+    if (geojson) {
+      dataLoadedRef.current = false;
+      loadingDataRef.current = true;
+
+      const loadMessage: WorkerMessage = {
+        type: 'load',
+        features: geojson.features as GeoFeature[]
+      };
+      worker.postMessage(loadMessage);
+    }
+
+    const requestId = ++requestIdRef.current;
+    const clustersMessage: WorkerMessage = {
+      type: 'getClusters',
+      bbox: viewport.bbox,
+      zoom: Math.floor(viewport.zoom),
+      requestId
+    };
+    worker.postMessage(clustersMessage);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- options is a flat object of primitive values; listing its fields avoids rerunning for a new object with unchanged values. geojson/viewport are read for their current value when options change; changes to them are handled by the effects below and shouldn't retrigger this one
+  }, [
+    options.minZoom,
+    options.maxZoom,
+    options.minPoints,
+    options.radius,
+    options.extent,
+    options.generateId
+  ]);
 
   // Initialize worker
   useEffect(() => {
@@ -209,7 +257,6 @@ export function useSuperclusterWorker<P = Record<string, unknown>>(
 
       switch (response.type) {
         case 'ready':
-          isReadyRef.current = true;
           break;
 
         case 'loaded':
@@ -268,7 +315,6 @@ export function useSuperclusterWorker<P = Record<string, unknown>>(
     return () => {
       worker.terminate();
       workerRef.current = null;
-      isReadyRef.current = false;
       dataLoadedRef.current = false;
       pendingRequests.clear();
     };
