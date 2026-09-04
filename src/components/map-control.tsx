@@ -1,12 +1,20 @@
-import {FunctionComponent, useEffect, useMemo} from 'react';
+import {
+  FunctionComponent,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef
+} from 'react';
 import {createPortal} from 'react-dom';
 import {useMap} from '../hooks/use-map';
+import {setValueForStyles} from '../libraries/set-value-for-styles';
 
-import type {PropsWithChildren} from 'react';
+import type {CSSProperties, PropsWithChildren} from 'react';
 
 type MapControlProps = PropsWithChildren<{
   position: ControlPosition;
   className?: string;
+  style?: CSSProperties;
 }>;
 
 /**
@@ -50,15 +58,25 @@ export type ControlPosition =
 export const MapControl: FunctionComponent<MapControlProps> = ({
   children,
   position,
-  className
+  className,
+  style
 }) => {
   const controlContainer = useMemo(() => document.createElement('div'), []);
   const map = useMap();
 
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/immutability -- the control container DOM node is intentionally mutated from effects
+  // ---- update className and styles for `controlContainer`
+  // prevStyleRef stores previously applied style properties, so they can be
+  // removed when unset
+  const prevStyleRef = useRef<CSSProperties | null>(null);
+  // eslint-disable-next-line react-hooks/immutability -- the control container DOM node is intentionally mutated from effects
+  useLayoutEffect(() => {
+    setValueForStyles(controlContainer, style || null, prevStyleRef.current);
+
+    prevStyleRef.current = style || null;
+
+    // eslint-disable-next-line react-hooks/immutability -- see above
     controlContainer.className = className ?? '';
-  }, [controlContainer, className]);
+  }, [controlContainer, className, style]);
 
   useEffect(() => {
     if (!map) return;
