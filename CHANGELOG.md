@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.10.0](https://github.com/visgl/react-google-maps/compare/v1.9.0...v1.10.0) (2026-09-05)
+
+
+### Features
+
+* **map-control:** add style prop ([#1052](https://github.com/visgl/react-google-maps/issues/1052)) ([5f88daa](https://github.com/visgl/react-google-maps/commit/5f88daaf5b3c72dd8d75040adfb91a7c0101899a)), closes [#379](https://github.com/visgl/react-google-maps/issues/379)
+* new 3d components ([#1009](https://github.com/visgl/react-google-maps/issues/1009)) ([69bf2f7](https://github.com/visgl/react-google-maps/commit/69bf2f7dd75eefdf6118d0741c2c287b67956eac))
+
+
+### Bug Fixes
+
+* **geometry:** only send changed options to the maps api ([#1061](https://github.com/visgl/react-google-maps/issues/1061)) ([bbfc6e9](https://github.com/visgl/react-google-maps/commit/bbfc6e94ef9f3ed4562d80951c1a20e093fe1d22)), closes [#524](https://github.com/visgl/react-google-maps/issues/524)
+* guard against invalid camera values in map events ([#1023](https://github.com/visgl/react-google-maps/issues/1023)) ([b487463](https://github.com/visgl/react-google-maps/commit/b487463255adc74edcff0da155e8b0c4935980bc))
+* use latest reuseMaps value in map instance cleanup ([#1042](https://github.com/visgl/react-google-maps/issues/1042)) ([20a535f](https://github.com/visgl/react-google-maps/commit/20a535f442ecab27c7fd0913008fc26a6cdaff25))
+
 ## [1.9.0](https://github.com/visgl/react-google-maps/compare/v1.8.3...v1.9.0) (2026-06-27)
 
 
