@@ -44,6 +44,7 @@ beforeEach(() => {
     constructor(...args: ConstructorParameters<typeof google.maps.Map>) {
       createMapSpy(...args);
       super(...args);
+      this.getDiv = jest.fn().mockImplementation(() => args[0]);
     }
   };
 
@@ -271,12 +272,70 @@ describe('map instance caching', () => {
       />
     );
 
+    // note: checking for clearInstanceListeners being called is an implementation
+    // detail that shouldn't be in this test, but it's the only way we can tell
+    // if the map instance was discarded or kept around.
     jest.mocked(google.maps.event.clearInstanceListeners).mockClear();
     unmount();
 
     expect(google.maps.event.clearInstanceListeners).toHaveBeenCalledWith(
       mapInstance
     );
+  });
+
+  test('respects reuseMaps being turned on before unmount, even without other prop changes', async () => {
+    // mapId/renderingType/colorScheme stay constant, so the effect that reads
+    // reuseMaps is intentionally not re-run when only reuseMaps changes. The
+    // cleanup must still see the latest reuseMaps value instead of the one
+    // captured when the map was created: with reuseMaps now true, unmounting
+    // must push the instance onto the cache stack so it can be reused on remount.
+    const center = {lat: 53.55, lng: 10.05};
+
+    const {rerender, unmount} = render(
+      <GoogleMap
+        mapId={'toggle-reuse-on'}
+        reuseMaps={false}
+        center={center}
+        zoom={12}
+      />,
+      {wrapper}
+    );
+    await waitFor(() => expect(screen.getByTestId('map')).toBeInTheDocument());
+    const mapInstance = mockInstances.get(google.maps.Map).at(-1)!;
+
+    rerender(
+      <GoogleMap
+        mapId={'toggle-reuse-on'}
+        reuseMaps
+        center={center}
+        zoom={12}
+      />
+    );
+
+    // note: checking for clearInstanceListeners being called is an implementation
+    // detail that shouldn't be in this test, but it's the only way we can tell
+    // if the map instance was discarded or kept around.
+    jest.mocked(google.maps.event.clearInstanceListeners).mockClear();
+    unmount();
+
+    expect(google.maps.event.clearInstanceListeners).not.toHaveBeenCalledWith(
+      mapInstance
+    );
+
+    createMapSpy.mockClear();
+    render(
+      <GoogleMap
+        mapId={'toggle-reuse-on'}
+        reuseMaps
+        center={center}
+        zoom={12}
+      />,
+      {wrapper}
+    );
+    await waitFor(() => expect(screen.getByTestId('map')).toBeInTheDocument());
+
+    expect(createMapSpy).not.toHaveBeenCalled();
+    expect(mockInstances.get(google.maps.Map).at(-1)).toBe(mapInstance);
   });
 });
 
