@@ -2,11 +2,11 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@deck.gl/aggregation-layers": "9.3.10",
-    "@deck.gl/google-maps": "9.3.10",
+    "@deck.gl/aggregation-layers": "9.3.11",
+    "@deck.gl/google-maps": "9.3.11",
     "@types/geojson": "^7946.0.16",
     "@vis.gl/react-google-maps": "*",
-    "deck.gl": "9.3.10",
+    "deck.gl": "9.3.11",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "vite": "^8.2.1"
