@@ -256,12 +256,7 @@ describe('map instance caching', () => {
     const center = {lat: 53.55, lng: 10.05};
 
     const {rerender, unmount} = render(
-      <GoogleMap
-        mapId={'toggle-reuse'}
-        reuseMaps
-        center={center}
-        zoom={12}
-      />,
+      <GoogleMap mapId={'toggle-reuse'} reuseMaps center={center} zoom={12} />,
       {wrapper}
     );
     await waitFor(() => expect(screen.getByTestId('map')).toBeInTheDocument());
