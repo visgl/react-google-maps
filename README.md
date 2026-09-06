@@ -1,6 +1,6 @@
 # React Components for the Google Maps JavaScript API
 
-[![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/visgl/react-google-maps/tree/main/LICENSE)
+[![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/visgl/react-google-maps/blob/main/LICENSE.md)
 
 This is a TypeScript / JavaScript library to integrate the Maps JavaScript API
 into your React application.
@@ -260,7 +260,7 @@ You can also discuss this library on [our Discord server][gmp-discord].
 [api-polygon]: https://visgl.github.io/react-google-maps/docs/api-reference/components/polygon
 [api-map-3d]: https://visgl.github.io/react-google-maps/docs/api-reference/components/map-3d
 [api-use-lib]: https://visgl.github.io/react-google-maps/docs/api-reference/hooks/use-maps-library
-[docs]: https://visgl.github.io/react-google-maps/docs/
+[docs]: https://visgl.github.io/react-google-maps/docs
 [examples]: https://visgl.github.io/react-google-maps/examples
 [gmp-services]: https://developers.google.com/maps/documentation/javascript#services
 [gmp-libraries]: https://developers.google.com/maps/documentation/javascript/libraries
