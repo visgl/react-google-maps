@@ -2,7 +2,7 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@googlemaps/extended-component-library": "^0.6.15",
+    "@googlemaps/extended-component-library": "^0.7.0",
     "@vis.gl/react-google-maps": "*",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
@@ -15,7 +15,7 @@
     "build": "vite build"
   },
   "devDependencies": {
-    "@types/node": "^26.4.0",
+    "@types/node": "^26.5.0",
     "@types/react-dom": "^19.2.4"
   }
 }
