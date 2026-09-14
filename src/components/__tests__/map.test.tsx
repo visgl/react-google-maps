@@ -1,5 +1,5 @@
 import React, {FunctionComponent, PropsWithChildren} from 'react';
-import {cleanup, render, screen, waitFor} from '@testing-library/react';
+import {act, cleanup, render, screen, waitFor} from '@testing-library/react';
 import {initialize, mockInstances} from '@googlemaps/jest-mocks';
 import '@testing-library/jest-dom';
 
@@ -44,6 +44,7 @@ beforeEach(() => {
     constructor(...args: ConstructorParameters<typeof google.maps.Map>) {
       createMapSpy(...args);
       super(...args);
+      this.getDiv = jest.fn().mockImplementation(() => args[0]);
     }
   };
 
@@ -209,6 +210,133 @@ describe('map instance caching', () => {
     "map isn't recreated when unmounting and remounting with regular changed options"
   );
   test.todo('removed options are handled correctly');
+
+  test("doesn't crash when remounting with a broken cached map instance", async () => {
+    // simulates the case where the initial map-creation failed (e.g. the Maps
+    // JavaScript API didn't load correctly), leaving a cached map whose
+    // getDiv() doesn't return a usable DOM node. Remounting must not throw.
+    const center = {lat: 53.55, lng: 10.05};
+
+    const {unmount} = render(
+      <GoogleMap mapId={'broken-cache'} reuseMaps center={center} zoom={12} />,
+      {wrapper}
+    );
+    await waitFor(() => expect(screen.getByTestId('map')).toBeInTheDocument());
+
+    // make the cached instance return a non-Node from getDiv()
+    const cachedMap = mockInstances.get(google.maps.Map).at(-1)!;
+    jest.mocked(cachedMap.getDiv).mockReturnValue(undefined as never);
+
+    unmount();
+    createMapSpy.mockReset();
+
+    expect(() =>
+      render(
+        <GoogleMap
+          mapId={'broken-cache'}
+          reuseMaps
+          center={center}
+          zoom={12}
+        />,
+        {wrapper}
+      )
+    ).not.toThrow();
+
+    await waitFor(() => expect(screen.getByTestId('map')).toBeInTheDocument());
+    // a fresh map instance should have been created instead of reusing the broken one
+    expect(createMapSpy).toHaveBeenCalled();
+  });
+
+  test('respects reuseMaps being turned off before unmount, even without other prop changes', async () => {
+    // mapId/renderingType/colorScheme stay constant, so the effect that reads
+    // reuseMaps is intentionally not re-run when only reuseMaps changes. The
+    // cleanup must still see the latest reuseMaps value instead of the one
+    // captured when the map was created: with reuseMaps now false, unmounting
+    // must clear the instance's listeners instead of pushing it onto the
+    // internal (unbounded, never-reused) cache stack.
+    const center = {lat: 53.55, lng: 10.05};
+
+    const {rerender, unmount} = render(
+      <GoogleMap mapId={'toggle-reuse'} reuseMaps center={center} zoom={12} />,
+      {wrapper}
+    );
+    await waitFor(() => expect(screen.getByTestId('map')).toBeInTheDocument());
+    const mapInstance = mockInstances.get(google.maps.Map).at(-1)!;
+
+    rerender(
+      <GoogleMap
+        mapId={'toggle-reuse'}
+        reuseMaps={false}
+        center={center}
+        zoom={12}
+      />
+    );
+
+    // note: checking for clearInstanceListeners being called is an implementation
+    // detail that shouldn't be in this test, but it's the only way we can tell
+    // if the map instance was discarded or kept around.
+    jest.mocked(google.maps.event.clearInstanceListeners).mockClear();
+    unmount();
+
+    expect(google.maps.event.clearInstanceListeners).toHaveBeenCalledWith(
+      mapInstance
+    );
+  });
+
+  test('respects reuseMaps being turned on before unmount, even without other prop changes', async () => {
+    // mapId/renderingType/colorScheme stay constant, so the effect that reads
+    // reuseMaps is intentionally not re-run when only reuseMaps changes. The
+    // cleanup must still see the latest reuseMaps value instead of the one
+    // captured when the map was created: with reuseMaps now true, unmounting
+    // must push the instance onto the cache stack so it can be reused on remount.
+    const center = {lat: 53.55, lng: 10.05};
+
+    const {rerender, unmount} = render(
+      <GoogleMap
+        mapId={'toggle-reuse-on'}
+        reuseMaps={false}
+        center={center}
+        zoom={12}
+      />,
+      {wrapper}
+    );
+    await waitFor(() => expect(screen.getByTestId('map')).toBeInTheDocument());
+    const mapInstance = mockInstances.get(google.maps.Map).at(-1)!;
+
+    rerender(
+      <GoogleMap
+        mapId={'toggle-reuse-on'}
+        reuseMaps
+        center={center}
+        zoom={12}
+      />
+    );
+
+    // note: checking for clearInstanceListeners being called is an implementation
+    // detail that shouldn't be in this test, but it's the only way we can tell
+    // if the map instance was discarded or kept around.
+    jest.mocked(google.maps.event.clearInstanceListeners).mockClear();
+    unmount();
+
+    expect(google.maps.event.clearInstanceListeners).not.toHaveBeenCalledWith(
+      mapInstance
+    );
+
+    createMapSpy.mockClear();
+    render(
+      <GoogleMap
+        mapId={'toggle-reuse-on'}
+        reuseMaps
+        center={center}
+        zoom={12}
+      />,
+      {wrapper}
+    );
+    await waitFor(() => expect(screen.getByTestId('map')).toBeInTheDocument());
+
+    expect(createMapSpy).not.toHaveBeenCalled();
+    expect(mockInstances.get(google.maps.Map).at(-1)).toBe(mapInstance);
+  });
 });
 
 describe('camera configuration', () => {
@@ -273,13 +401,168 @@ describe('camera configuration', () => {
   test.todo('initial camera state is passed via mapOptions, not moveCamera');
   test.todo('updated camera state is passed to moveCamera');
   test.todo("re-renders with unchanged camera state don't trigger moveCamera");
-  test.todo(
-    "re-renders with props received via events don't trigger moveCamera"
-  );
+
+  test("invalid camera events don't overwrite the last known camera state", async () => {
+    const listeners: Record<string, Array<() => void>> = {};
+    google.maps.event.addListener = jest.fn((_, eventName, handler) => {
+      listeners[eventName] ??= [];
+      listeners[eventName].push(handler as () => void);
+      return {remove: jest.fn()};
+    });
+    jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+    const view = render(
+      <GoogleMap zoom={8} center={{lat: 53.55, lng: 10.05}} />,
+      {wrapper}
+    );
+
+    await waitFor(() => expect(screen.getByTestId('map')).toBeInTheDocument());
+
+    const mapInstance = jest.mocked(mockInstances.get(google.maps.Map).at(-1)!);
+    jest.mocked(mapInstance.getCenter).mockReturnValue({
+      toJSON: () => ({lat: 53.55, lng: 10.05})
+    } as google.maps.LatLng);
+    jest.mocked(mapInstance.getBounds).mockReturnValue({
+      toJSON: () => ({north: 54, east: 11, south: 53, west: 10})
+    } as google.maps.LatLngBounds);
+    jest.mocked(mapInstance.getZoom).mockReturnValue(8);
+
+    act(() => {
+      listeners.bounds_changed.forEach(listener => listener());
+    });
+
+    jest.mocked(mapInstance.moveCamera).mockClear();
+    jest.mocked(mapInstance.getZoom).mockReturnValue(NaN);
+
+    act(() => {
+      listeners.bounds_changed.forEach(listener => listener());
+    });
+
+    view.rerender(<GoogleMap zoom={8} center={{lat: 53.55, lng: 10.05}} />);
+
+    expect(mapInstance.moveCamera).not.toHaveBeenCalled();
+  });
+
+  test('tracked camera state accepts valid camera values while bounds are unavailable', async () => {
+    const listeners: Record<string, Array<() => void>> = {};
+    google.maps.event.addListener = jest.fn((_, eventName, handler) => {
+      listeners[eventName] ??= [];
+      listeners[eventName].push(handler as () => void);
+      return {remove: jest.fn()};
+    });
+
+    const view = render(
+      <GoogleMap zoom={8} center={{lat: 53.55, lng: 10.05}} />,
+      {wrapper}
+    );
+
+    await waitFor(() => expect(screen.getByTestId('map')).toBeInTheDocument());
+
+    const mapInstance = jest.mocked(mockInstances.get(google.maps.Map).at(-1)!);
+    jest.mocked(mapInstance.getCenter).mockReturnValue({
+      toJSON: () => ({lat: 53.55, lng: 10.05})
+    } as google.maps.LatLng);
+    jest.mocked(mapInstance.getBounds).mockReturnValue(undefined);
+    jest.mocked(mapInstance.getZoom).mockReturnValue(8);
+
+    act(() => {
+      listeners.bounds_changed.forEach(listener => listener());
+    });
+
+    jest.mocked(mapInstance.moveCamera).mockClear();
+
+    view.rerender(<GoogleMap zoom={8} center={{lat: 53.55, lng: 10.05}} />);
+
+    expect(mapInstance.moveCamera).not.toHaveBeenCalled();
+  });
 });
 
 describe('map events and event-props', () => {
-  test.todo('events dispatched by the map are received via event-props');
+  test('events dispatched by the map are received via event-props', async () => {
+    const listeners: Record<string, Array<() => void>> = {};
+    google.maps.event.addListener = jest.fn((_, eventName, handler) => {
+      listeners[eventName] ??= [];
+      listeners[eventName].push(handler as () => void);
+      return {remove: jest.fn()};
+    });
+
+    const handleCameraChanged = jest.fn();
+
+    render(
+      <GoogleMap
+        zoom={8}
+        center={{lat: 53.55, lng: 10.05}}
+        onCameraChanged={handleCameraChanged}
+      />,
+      {wrapper}
+    );
+
+    await waitFor(() => expect(screen.getByTestId('map')).toBeInTheDocument());
+
+    const mapInstance = jest.mocked(mockInstances.get(google.maps.Map).at(-1)!);
+    jest.mocked(mapInstance.getCenter).mockReturnValue({
+      toJSON: () => ({lat: 53.55, lng: 10.05})
+    } as google.maps.LatLng);
+    jest.mocked(mapInstance.getBounds).mockReturnValue({
+      toJSON: () => ({north: 54, east: 11, south: 53, west: 10})
+    } as google.maps.LatLngBounds);
+    jest.mocked(mapInstance.getZoom).mockReturnValue(8);
+
+    act(() => {
+      listeners.bounds_changed.forEach(listener => listener());
+    });
+
+    expect(handleCameraChanged).toHaveBeenCalledWith(
+      expect.objectContaining({
+        type: 'bounds_changed',
+        detail: {
+          center: {lat: 53.55, lng: 10.05},
+          zoom: 8,
+          heading: 0,
+          tilt: 0,
+          bounds: {north: 54, east: 11, south: 53, west: 10}
+        }
+      })
+    );
+  });
+
+  test('does not emit camera events with invalid map camera values', async () => {
+    const listeners: Record<string, Array<() => void>> = {};
+    google.maps.event.addListener = jest.fn((_, eventName, handler) => {
+      listeners[eventName] ??= [];
+      listeners[eventName].push(handler as () => void);
+      return {remove: jest.fn()};
+    });
+    jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+    const handleCameraChanged = jest.fn();
+
+    render(
+      <GoogleMap
+        zoom={8}
+        center={{lat: 53.55, lng: 10.05}}
+        onCameraChanged={handleCameraChanged}
+      />,
+      {wrapper}
+    );
+
+    await waitFor(() => expect(screen.getByTestId('map')).toBeInTheDocument());
+
+    const mapInstance = jest.mocked(mockInstances.get(google.maps.Map).at(-1)!);
+    jest.mocked(mapInstance.getCenter).mockReturnValue({
+      toJSON: () => ({lat: 53.55, lng: 10.05})
+    } as google.maps.LatLng);
+    jest.mocked(mapInstance.getBounds).mockReturnValue({
+      toJSON: () => ({north: 54, east: 11, south: 53, west: 10})
+    } as google.maps.LatLngBounds);
+    jest.mocked(mapInstance.getZoom).mockReturnValue(NaN);
+
+    act(() => {
+      listeners.bounds_changed.forEach(listener => listener());
+    });
+
+    expect(handleCameraChanged).not.toHaveBeenCalled();
+  });
 });
 
 describe('internalUsageAttributionIds', () => {

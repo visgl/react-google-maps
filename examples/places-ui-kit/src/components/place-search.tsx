@@ -13,8 +13,7 @@ export type TextSearchOptions = {
   isOpenNow?: boolean;
   locationBias?: google.maps.places.LocationBias;
   locationRestriction?:
-    | google.maps.LatLngBounds
-    | google.maps.LatLngBoundsLiteral;
+    google.maps.LatLngBounds | google.maps.LatLngBoundsLiteral;
   maxResultCount?: number;
   minRating?: number;
   priceLevels?: Array<google.maps.places.PriceLevel>;

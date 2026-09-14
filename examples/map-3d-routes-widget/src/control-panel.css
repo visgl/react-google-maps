@@ -1,0 +1,42 @@
+.control-panel {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 300px;
+  z-index: 10;
+  font-family: sans-serif;
+}
+
+.control-panel h3 {
+  margin-top: 0;
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+
+.control-panel p {
+  font-size: 12px;
+  margin: 0 0 10px 0;
+  color: #4a5568;
+}
+
+.control-panel p.note {
+  font-size: 11px;
+  background: #edf2f7;
+  padding: 6px;
+  border-radius: 4px;
+}
+
+.control-panel .links a {
+  font-size: 12px;
+  color: #3182ce;
+  text-decoration: none;
+}
+
+.control-panel p.note a {
+  color: #3182ce;
+  text-decoration: underline;
+}

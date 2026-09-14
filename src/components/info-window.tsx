@@ -9,7 +9,7 @@ import React, {
   useState
 } from 'react';
 import {createPortal} from 'react-dom';
-import isDeepEqual from 'fast-deep-equal';
+import {deepEqual as isDeepEqual} from 'fast-equals';
 
 import {useMap} from '../hooks/use-map';
 import {useMapsEventListener} from '../hooks/use-maps-event-listener';

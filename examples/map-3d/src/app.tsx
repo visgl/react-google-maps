@@ -1,12 +1,8 @@
 import React, {useCallback, useState} from 'react';
 import {createRoot} from 'react-dom/client';
 
-import {
-  APIProvider,
-  Map3D,
-  Map3DCameraChangedEvent,
-  MapMouseEvent
-} from '@vis.gl/react-google-maps';
+import {APIProvider, MapMouseEvent} from '@vis.gl/react-google-maps';
+import {Map3D, Map3DCameraChangedEvent} from '@vis.gl/react-google-maps/3d';
 import ControlPanel from './control-panel';
 import {MiniMap} from './minimap';
 

@@ -126,8 +126,7 @@ export function useDrawingManager(
 
       if (type === 'polygon' || type === 'polyline') {
         const editableOverlay = overlay as
-          | google.maps.Polygon
-          | google.maps.Polyline;
+          google.maps.Polygon | google.maps.Polyline;
 
         editableOverlay.setOptions({
           editable: false,
@@ -429,9 +428,7 @@ export function useDrawingManager(
         pathRef.current = [...pathRef.current, event.latLng];
 
         const overlay = inProgressOverlayRef.current as
-          | google.maps.Polygon
-          | google.maps.Polyline
-          | null;
+          google.maps.Polygon | google.maps.Polyline | null;
 
         if (!overlay) return;
 
@@ -472,9 +469,7 @@ export function useDrawingManager(
 
       if (mode === 'polygon' || mode === 'polyline') {
         const overlay = inProgressOverlayRef.current as
-          | google.maps.Polygon
-          | google.maps.Polyline
-          | null;
+          google.maps.Polygon | google.maps.Polyline | null;
 
         if (!overlay) return;
 
@@ -496,9 +491,7 @@ export function useDrawingManager(
       if (mode !== 'polygon' && mode !== 'polyline') return;
 
       const overlay = inProgressOverlayRef.current as
-        | google.maps.Polygon
-        | google.maps.Polyline
-        | null;
+        google.maps.Polygon | google.maps.Polyline | null;
 
       if (!overlay) return;
 

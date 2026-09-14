@@ -48,7 +48,13 @@
           "api-reference/components/static-map",
           "api-reference/components/map-3d",
           "api-reference/components/marker-3d",
-          "api-reference/components/popover"
+          "api-reference/components/popover",
+          "api-reference/components/3d-marker",
+          "api-reference/components/model-3d",
+          "api-reference/components/polyline-3d",
+          "api-reference/components/polygon-3d",
+          "api-reference/components/flattener",
+          "api-reference/components/circle-path"
         ]
       },
       {

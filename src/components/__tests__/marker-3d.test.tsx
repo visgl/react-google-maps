@@ -21,8 +21,7 @@ jest.mock('../../hooks/use-maps-library');
 declare global {
   var __marker3dFactory: ((instance: Marker3DElement) => void) | undefined;
   var __marker3dInteractiveFactory:
-    | ((instance: Marker3DInteractiveElement) => void)
-    | undefined;
+    ((instance: Marker3DInteractiveElement) => void) | undefined;
 }
 
 let useMap3DMock: jest.MockedFn<typeof useMap3D>;

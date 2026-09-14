@@ -1,29 +1,27 @@
 name: Website Test
 on: [push, pull_request]
 
+permissions:
+  contents: read
+
 jobs:
   build:
     name: Build Website
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
 
       - name: Setup node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: npm
 
-      - name: Install dependencies (main)
-        run: npm ci
-
-      - name: Install dependencies (website)
-        working-directory: ./website
+      - name: Install dependencies
         run: npm ci
 
       - name: Build website
-        working-directory: ./website
-        run: npm run build
+        run: npm run build --workspace=./website
         env:
           GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}

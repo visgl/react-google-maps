@@ -7,18 +7,13 @@ updates:
     schedule:
       interval: 'weekly'
     groups:
-      dependencies:
+      minor-and-patch:
         update-types:
           - 'minor'
           - 'patch'
 
-  - package-ecosystem: 'npm'
-    labels: ['dependencies', 'website']
-    directory: './website'
+  - package-ecosystem: 'github-actions'
+    labels: ['dependencies']
+    directory: '/'
     schedule:
       interval: 'weekly'
-    groups:
-      dependencies:
-        update-types:
-          - 'minor'
-          - 'patch'

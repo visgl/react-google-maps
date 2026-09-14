@@ -4,13 +4,31 @@
 // https://github.com/sanity-io/use-effect-event
 
 import * as React from 'react';
+import {useRef} from 'react';
 
-const {useLayoutEffect, useRef} = React;
+/**
+ * A clone of the React namespace for reading APIs that may be missing in older
+ * supported React versions. Bundlers can rewrite direct React.someNewApi reads
+ * into named imports, which breaks React 17. Reading from this cloned object
+ * keeps those lookups optional.
+ *
+ * @see https://github.com/mui/material-ui/issues/41190#issuecomment-2040873379
+ */
+const SafeReact = {...React} as typeof React;
 
-// useInsertionEffect was added in React 18; fall back to useLayoutEffect for
-// React 16/17. Both run before useEffect, so ref.current is always up-to-date
-// by the time any passive effect (or real event) reads it.
-const useBeforeEffect = React.useInsertionEffect ?? useLayoutEffect;
+const useInsertionEffect = SafeReact.useInsertionEffect;
+const useSafeInsertionEffect: (
+  effect: React.EffectCallback,
+  deps?: React.DependencyList
+) => void =
+  // React 17 doesn't have useInsertionEffect.
+  useInsertionEffect &&
+  // Preact replaces useInsertionEffect with useLayoutEffect and fires too late.
+  useInsertionEffect !== SafeReact.useLayoutEffect
+    ? useInsertionEffect
+    : (fn: React.EffectCallback) => {
+        fn();
+      };
 
 function forbiddenInRender() {
   throw new Error('useEffectEvent: invalid call during rendering.');
@@ -27,7 +45,7 @@ function useEffectEventPolyfill<const T extends (...args: any[]) => void>(
    */
   const ref = useRef(forbiddenInRender as T);
 
-  useBeforeEffect(() => {
+  useSafeInsertionEffect(() => {
     ref.current = fn;
   }, [fn]);
 

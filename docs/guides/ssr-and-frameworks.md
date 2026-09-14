@@ -38,7 +38,7 @@ export default function MyMap() {
 
 ## Remix
 
-Here is the best approach we found to use a map component in a Remix application. Checkout the example [code](https://github.com/visgl/react-google-maps/tree/main/examples/remix) on Github or play around with the [demo](https://codesandbox.io/s/github/visgl/react-google-maps/tree/main/examples/remix) on Codesandbox.
+Here is the best approach we found to use a map component in a Remix application.
 
 Wrap the map in a `<ClientOnly>` component from the [`remix-utils`](https://github.com/sergiodxa/remix-utils) package for it to be rendered only on the client.
 

@@ -1,16 +1,17 @@
 {
+  "private": true,
   "type": "module",
   "dependencies": {
-    "@vis.gl/react-google-maps": "latest",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "react-widgets": "^5.8.4",
-    "vite": "^8.0.0"
+    "@vis.gl/react-google-maps": "*",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-widgets": "^5.8.6",
+    "vite": "^8.2.1"
   },
   "scripts": {
     "start": "vite",
-    "start-local": "vite --config ../vite.config.local.js",
-    "build-local": "vite build --config ../vite.config.local.js",
+    "start-local": "vite --config ../vite.config.local.mjs",
+    "build-local": "vite build --config ../vite.config.local.mjs",
     "build": "vite build"
   }
 }

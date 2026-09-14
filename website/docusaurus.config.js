@@ -52,15 +52,15 @@ const config = {
         debug: true,
         resolve: {
           modules: [
-            resolve('node_modules'),
+            'node_modules',
             resolve('../node_modules'),
             ...globSync('../examples/*/node_modules')
           ],
           alias: {
             '@vis.gl/react-google-maps': resolve('../src'),
             'website-examples': resolve('../examples'),
-            react: resolve('node_modules/react'),
-            'react-dom': resolve('node_modules/react-dom')
+            react: resolve('../node_modules/react'),
+            'react-dom': resolve('../node_modules/react-dom')
           }
         },
         plugins: [new webpack.EnvironmentPlugin(['GOOGLE_MAPS_API_KEY'])],

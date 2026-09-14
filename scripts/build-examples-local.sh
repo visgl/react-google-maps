@@ -24,7 +24,7 @@ for d in "${examplesRoot}"/*/; do
     continue
   fi
 
-  if ! grep -q 'vite.config.local.js' "${packageJson}"; then
+  if ! grep -q 'vite.config.local.mjs' "${packageJson}"; then
     continue
   fi
 

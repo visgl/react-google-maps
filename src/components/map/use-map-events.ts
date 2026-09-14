@@ -63,7 +63,8 @@ export function useMapEvents(
         map,
         eventType,
         (ev?: google.maps.MapMouseEvent | google.maps.IconMouseEvent) => {
-          handler(createMapEvent(eventType, map, ev));
+          const mapEvent = createMapEvent(eventType, map, ev);
+          if (mapEvent) handler(mapEvent);
         }
       );
 
@@ -82,7 +83,7 @@ function createMapEvent(
   type: string,
   map: google.maps.Map,
   srcEvent?: google.maps.MapMouseEvent | google.maps.IconMouseEvent
-): MapEvent {
+): MapEvent | null {
   const ev: MapEvent = {
     type,
     map,
@@ -106,19 +107,16 @@ function createMapEvent(
           'returned undefined. This is not expected to happen. Please ' +
           'report an issue at https://github.com/visgl/react-google-maps/issues/new'
       );
+
+      return null;
     }
 
     camEvent.detail = {
-      center: center?.toJSON() || {lat: 0, lng: 0},
-      zoom: (zoom as number) || 0,
+      center: center.toJSON(),
+      zoom: zoom as number,
       heading: heading as number,
       tilt: tilt as number,
-      bounds: bounds?.toJSON() || {
-        north: 90,
-        east: 180,
-        south: -90,
-        west: -180
-      }
+      bounds: bounds.toJSON()
     };
 
     return camEvent;

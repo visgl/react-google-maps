@@ -203,6 +203,9 @@ marker will be clickable and will be interactive for accessibility purposes
 By default, this will automatically be set to true when the `onClick` prop
 is specified.
 
+It is also automatically set to true when `onKeyDown` or `onKeyUp` is
+specified.
+
 #### `draggable`: boolean
 
 Controls if the marker can be repositioned by dragging.
@@ -222,6 +225,14 @@ specified in the position can't be dragged.
 #### `onClick`: (e: [google.maps.marker.AdvancedMarkerClickEvent][gmp-adv-marker-click-ev]) => void
 
 This event is fired when the marker is clicked.
+
+#### `onKeyDown`: (e: KeyboardEvent) => void
+
+This event is fired when a key is pressed while the marker is focused.
+
+#### `onKeyUp`: (e: KeyboardEvent) => void
+
+This event is fired when a pressed key is released while the marker is focused.
 
 #### `onMouseEnter`: (e: [google.maps.MapMouseEvent['domEvent']][gmp-map-mouse-ev-dom]) => void
 

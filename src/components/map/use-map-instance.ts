@@ -124,6 +124,14 @@ export function useMapInstance(
     cameraState: CameraState;
   }>(undefined);
 
+  // kept up to date on every render so the effect below (which intentionally
+  // doesn't list reuseMaps as a dependency) always sees the latest value,
+  // both when creating a map and in its cleanup function on unmount.
+  const reuseMapsRef = useRef(reuseMaps);
+  useEffect(() => {
+    reuseMapsRef.current = reuseMaps;
+  }, [reuseMaps]);
+
   // create the map instance and register it in the context
   useEffect(
     () => {
@@ -138,9 +146,21 @@ export function useMapInstance(
       let mapDiv: HTMLElement;
       let map: google.maps.Map;
 
-      if (reuseMaps && CachedMapStack.has(cacheKey)) {
-        map = CachedMapStack.pop(cacheKey) as google.maps.Map;
-        mapDiv = map.getDiv();
+      // a cached map can end up in a broken state (e.g. when the initial
+      // map-creation failed because the Maps JavaScript API didn't load
+      // correctly). In that case `getDiv()` doesn't return a usable DOM node,
+      // so we have to discard the cached instance instead of trying to reuse it.
+      const cachedMap =
+        reuseMapsRef.current && CachedMapStack.has(cacheKey)
+          ? (CachedMapStack.pop(cacheKey) as google.maps.Map)
+          : null;
+      const cachedMapDiv = cachedMap?.getDiv();
+      const reusedMap =
+        cachedMap && cachedMapDiv instanceof Node ? cachedMap : null;
+
+      if (reusedMap) {
+        map = reusedMap;
+        mapDiv = cachedMapDiv as HTMLElement;
 
         container.appendChild(mapDiv);
         map.setOptions(mapOptions);
@@ -151,6 +171,9 @@ export function useMapInstance(
         // the map.
         setTimeout(() => map.moveCamera({}), 0);
       } else {
+        // discard a broken cached instance so it doesn't get pushed back
+        if (cachedMap) google.maps.event.clearInstanceListeners(cachedMap);
+
         mapDiv = document.createElement('div');
         mapDiv.style.height = '100%';
         container.appendChild(mapDiv);
@@ -166,7 +189,6 @@ export function useMapInstance(
         });
       }
 
-      // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional to sync the imperative instance with state
       setMap(map);
       addMapInstance(map, id);
 
@@ -199,7 +221,7 @@ export function useMapInstance(
         // detach the map-div from the dom
         mapDiv.remove();
 
-        if (reuseMaps) {
+        if (reuseMapsRef.current) {
           // push back on the stack
           CachedMapStack.push(cacheKey, map);
         } else {
