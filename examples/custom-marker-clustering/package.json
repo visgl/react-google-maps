@@ -8,7 +8,7 @@
     "@vis.gl/react-google-maps": "*",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "supercluster": "^9.0.0",
+    "supercluster": "^9.1.0",
     "vite": "^8.2.1"
   },
   "scripts": {
