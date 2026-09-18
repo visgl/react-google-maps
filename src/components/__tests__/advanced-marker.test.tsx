@@ -253,6 +253,54 @@ describe('map and marker-library loaded', () => {
       (google.maps as any).version = '3.62.9';
     });
 
+    // Regression test for issue #867: when the consumer provides only
+    // `anchorTop` (or only `anchorLeft`), the library must not assign
+    // `undefined` to the unspecified side. Doing so clobbers the
+    // default value the Google Maps JS API sets up, and combined with
+    // `gmpDraggable = true` the API subsequently throws
+    // `TypeError: Failed to execute 'appendChild' on 'Node'` while
+    // wiring up the drag handle.
+    test('only the provided anchor prop is assigned, the other side is left untouched (#867)', async () => {
+      // The mock AdvancedMarkerElement is a plain class extending the
+      // jest-mocks HTMLElement; it does not pre-define `anchorLeft` /
+      // `anchorTop` on instances. Therefore, when the library assigns
+      // `undefined` to the unprovided side, an own property with
+      // value `undefined` is created. After the fix, that own property
+      // must NOT exist because the library must not touch the side the
+      // consumer did not provide.
+      const {unmount} = render(
+        <AdvancedMarker position={{lat: 0, lng: 0}} anchorTop={'-90%'}>
+          <div />
+        </AdvancedMarker>
+      );
+
+      const marker = await waitForMockInstance(
+        google.maps.marker.AdvancedMarkerElement
+      );
+      expect(marker.anchorTop).toBe('-90%');
+      // After the fix: anchorLeft must remain unset (no own property).
+      expect(
+        Object.getOwnPropertyDescriptor(marker, 'anchorLeft')
+      ).toBeUndefined();
+
+      unmount();
+
+      render(
+        <AdvancedMarker position={{lat: 0, lng: 0}} anchorLeft={'10px'}>
+          <div />
+        </AdvancedMarker>
+      );
+
+      const marker2 = await waitForMockInstance(
+        google.maps.marker.AdvancedMarkerElement
+      );
+      expect(marker2.anchorLeft).toBe('10px');
+      // After the fix: anchorTop must remain unset (no own property).
+      expect(
+        Object.getOwnPropertyDescriptor(marker2, 'anchorTop')
+      ).toBeUndefined();
+    });
+
     test('anchorLeft/anchorTop should have precedence over anchorPoint', async () => {
       const consoleWarnSpy = jest
         .spyOn(console, 'warn')
