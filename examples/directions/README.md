@@ -4,7 +4,7 @@
 
 This is an example which shows how to use `useMapsLibrary` to load the `routes` library, and then use the modern `Route` class to compute and render routes on a map.
 
-It utilizes the modern client-side `Route.computeRoutes()` method combined with custom-styled React `<Polyline>` rendering, completely avoiding legacy services and CORS restrictions.
+It utilizes the modern client-side `Route.computeRoutes()` method combined with `createPolylines()` and `createWaypointAdvancedMarkers()` for rendering routes and markers on the map, completely avoiding legacy services and CORS restrictions.
 
 > [!IMPORTANT]
 >

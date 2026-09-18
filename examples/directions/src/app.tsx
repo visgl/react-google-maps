@@ -1,12 +1,11 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, {useEffect, useRef} from 'react';
 import {createRoot} from 'react-dom/client';
 
 import {
   APIProvider,
   Map,
-  useMapsLibrary,
   useMap,
-  AdvancedMarker
+  useMapsLibrary
 } from '@vis.gl/react-google-maps';
 import ControlPanel from './control-panel';
 
@@ -16,11 +15,12 @@ const API_KEY =
 const App = () => (
   <APIProvider apiKey={API_KEY}>
     <Map
-      defaultCenter={{ lat: -23.588363, lng: -46.658475 }}
+      mapId={'bf51a910020fa25a'}
+      defaultCenter={{lat: -23.588363, lng: -46.658475}}
       defaultZoom={15}
       gestureHandling={'greedy'}
       fullscreenControl={false}>
-      <RouteDisplay
+      <Directions
         origin="R. Dr. Diogo de Faria, 946, São Paulo"
         destination="R. Domingos Fernandes, 588, São Paulo"
         travelMode="DRIVING"
@@ -30,110 +30,96 @@ const App = () => (
   </APIProvider>
 );
 
-interface RouteDisplayProps {
+interface DirectionsProps {
   origin: string;
   destination: string;
-  travelMode: 'DRIVING' | 'WALKING' | 'BICYCLING' | 'TWO_WHEELER' | 'TRANSIT';
+  travelMode?: google.maps.TravelModeString;
 }
 
-interface RouteDetails {
-  distanceMeters: number;
-  durationMillis: number;
-  startCoords?: google.maps.LatLngLiteral;
-  endCoords?: google.maps.LatLngLiteral;
-  steps: Array<{
-    instructions: string;
-    distanceMeters: number;
-    durationMillis: number;
-    maneuver?: string;
-  }>;
-}
-
-export function RouteDisplay({
+export function Directions({
   origin,
   destination,
-  travelMode,
-}: RouteDisplayProps) {
+  travelMode = 'DRIVING'
+}: DirectionsProps) {
   const map = useMap();
   const routesLib = useMapsLibrary('routes');
+
+  // refs for the polylines and markers created with the Routes API
   const polylinesRef = useRef<google.maps.Polyline[]>([]);
-  const [routeDetails, setRouteDetails] = useState<RouteDetails | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const markersRef = useRef<google.maps.marker.AdvancedMarkerElement[]>([]);
 
   useEffect(() => {
     if (!routesLib || !map || !origin || !destination) return;
 
-    // Clean up previous route lines
+    // cancel async operations on unmount (no AbortSignal support in Routes API)
+    let isCancelled = false;
+
+    // Clean up previous polylines & markers
     polylinesRef.current.forEach(p => p.setMap(null));
     polylinesRef.current = [];
-    setError(null);
-    setLoading(true);
+    markersRef.current.forEach(m => {
+      m.map = null;
+    });
+    markersRef.current = [];
 
-    const request = {
-      origin: origin,
-      destination: destination,
-      travelMode: travelMode,
-      fields: ['path', 'distanceMeters', 'durationMillis', 'viewport', 'legs'],
+    const request: google.maps.routes.ComputeRoutesRequest = {
+      origin,
+      destination,
+      travelMode,
+      fields: ['path', 'distanceMeters', 'durationMillis', 'viewport', 'legs']
     };
 
-    // Access the modern client-side Route.computeRoutes class service
-    (routesLib.Route as any).computeRoutes(request)
-      .then(({ routes }: { routes: any[] }) => {
-        setLoading(false);
-        if (!routes || routes.length === 0) {
-          setError('No route found.');
-          return;
-        }
+    routesLib.Route.computeRoutes(request)
+      .then(async ({routes}) => {
+        if (isCancelled) return;
+        if (!routes || routes.length === 0) return;
 
-        const primaryRoute = routes[0];
+        const route = routes[0];
 
-        // Render polylines dynamically using modern Route.createPolylines()
-        const newPolylines = primaryRoute.createPolylines();
-        newPolylines.forEach((polyline: google.maps.Polyline) => {
+        // Render and append polylines
+        const newPolylines = route.createPolylines();
+        newPolylines.forEach(polyline => {
           polyline.setOptions({
-            strokeColor: '#3b82f6', // Stunning visual Tailwind Blue 500
+            strokeColor: '#3b82f6',
             strokeOpacity: 0.85,
-            strokeWeight: 6,
+            strokeWeight: 6
           });
           polyline.setMap(map);
         });
         polylinesRef.current = newPolylines;
 
-        if (primaryRoute.viewport) {
-          map.fitBounds(primaryRoute.viewport);
-        }
+        // Render waypoint advanced markers
+        const newMarkers = await route.createWaypointAdvancedMarkers();
 
-        const details: RouteDetails = {
-          distanceMeters: primaryRoute.distanceMeters ?? 0,
-          durationMillis: primaryRoute.durationMillis ?? 0,
-          steps: [],
-        };
-        setRouteDetails(details);
+        if (isCancelled) return;
+
+        newMarkers.forEach(marker => {
+          marker.map = map;
+        });
+        markersRef.current = newMarkers;
+
+        if (route.viewport) map.fitBounds(route.viewport);
       })
-      .catch((err: any) => {
-        setLoading(false);
+      .catch(err => {
+        if (isCancelled) return;
         console.error('Error computing routes:', err);
-        setError(err.message || 'Failed to compute route.');
       });
 
     return () => {
+      isCancelled = true;
+
+      // clear polylines and markers
       polylinesRef.current.forEach(p => p.setMap(null));
       polylinesRef.current = [];
+
+      markersRef.current.forEach(marker => {
+        marker.map = null;
+      });
+      markersRef.current = [];
     };
   }, [routesLib, map, origin, destination, travelMode]);
 
-  if (loading) return <div className="route-panel">Calculating route...</div>;
-  if (error) return <div className="route-panel error">{error}</div>;
-  if (!routeDetails) return null;
-
-  return (
-    <div className="route-panel">
-      <h2>Toronto Route Summary</h2>
-      <p>Distance: {(routeDetails.distanceMeters / 1000).toFixed(2)} km</p>
-      <p>Duration: {(routeDetails.durationMillis / 60000).toFixed(0)} mins</p>
-    </div>
-  );
+  return null;
 }
 
 export default App;

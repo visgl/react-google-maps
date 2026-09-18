@@ -17,11 +17,12 @@ function ControlPanel() {
       </p>
 
       <p className={'note'}>
-        <strong>Important:</strong> This example uses the new {' '}
+        <strong>Important:</strong> This example uses the new{' '}
         <a target={'_new'} href={GCP_ROUTES_API}>
           Routes API (Recommended)
-        </a>{' '},
-        the modern and current way to calculate directions. If you are using the{' '}
+        </a>{' '}
+        , the modern and current way to calculate directions. If you are using
+        the{' '}
         <a target={'_new'} href={GCP_DIRECTIONS_API}>
           Directions API (Legacy)
         </a>{' '}
