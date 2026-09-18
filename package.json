@@ -54,7 +54,7 @@
     "test:unit": "jest",
     "test:bundle": "npm run build && NODE_OPTIONS=--experimental-vm-modules jest --config jest.bundle.config.js",
     "lint:pub": "publint",
-    "test": "npm-run-all -p test:linter test:prettier test:tsc -s test:unit test:bundle",
+    "test": "npm-run-all -p test:linter test:prettier test:tsc -s test:unit test:bundle lint:pub",
     "prepublishOnly": "npm run test && npm run build",
     "prepack": "npm-run-all clean build"
   },

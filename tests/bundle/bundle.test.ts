@@ -11,6 +11,7 @@ describe('Bundle Integration', () => {
     expect(root.Map3D).toBe(threeD.Map3D);
     expect(root.Marker3D).toBe(threeD.Marker3D);
     expect(root.Popover).toBe(threeD.Popover);
+    expect(root.useMap3D).toBe(threeD.useMap3D);
   });
 
   test('<Map3D> from /3d renders inside <APIProvider> from root without throwing', () => {

@@ -14,7 +14,8 @@
 
     "skipLibCheck": true,
     "paths": {
-      "@vis.gl/react-google-maps": ["./src"]
+      "@vis.gl/react-google-maps": ["./src"],
+      "@vis.gl/react-google-maps/*": ["./src/*"]
     }
   },
   "include": ["./src/**/*", "./types/**/*"],

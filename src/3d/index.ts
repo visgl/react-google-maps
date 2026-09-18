@@ -12,3 +12,4 @@ export type * from '../components/3d/types';
 export * from '../components/map-3d';
 export * from '../components/marker-3d';
 export * from '../components/popover';
+export * from '../hooks/use-map-3d';
