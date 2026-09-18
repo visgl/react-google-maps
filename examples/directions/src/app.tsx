@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {createRoot} from 'react-dom/client';
 
 import {
   APIProvider,
   Map,
-  useMapsLibrary,
-  useMap
+  useMap,
+  useMapsLibrary
 } from '@vis.gl/react-google-maps';
 import ControlPanel from './control-panel';
 
@@ -15,106 +15,111 @@ const API_KEY =
 const App = () => (
   <APIProvider apiKey={API_KEY}>
     <Map
-      defaultCenter={{lat: 43.65, lng: -79.38}}
-      defaultZoom={9}
+      mapId={'bf51a910020fa25a'}
+      defaultCenter={{lat: -23.588363, lng: -46.658475}}
+      defaultZoom={15}
       gestureHandling={'greedy'}
       fullscreenControl={false}>
-      <Directions />
+      <Directions
+        origin="R. Dr. Diogo de Faria, 946, São Paulo"
+        destination="R. Domingos Fernandes, 588, São Paulo"
+        travelMode="DRIVING"
+      />
     </Map>
     <ControlPanel />
   </APIProvider>
 );
 
-function Directions() {
+interface DirectionsProps {
+  origin: string;
+  destination: string;
+  travelMode?: google.maps.TravelModeString;
+}
+
+export function Directions({
+  origin,
+  destination,
+  travelMode = 'DRIVING'
+}: DirectionsProps) {
   const map = useMap();
-  const routesLibrary = useMapsLibrary('routes');
-  const [directionsService, setDirectionsService] =
-    useState<google.maps.DirectionsService>();
-  const [directionsRenderer, setDirectionsRenderer] =
-    useState<google.maps.DirectionsRenderer>();
-  const [routes, setRoutes] = useState<google.maps.DirectionsRoute[]>([]);
-  const [routeIndex, setRouteIndex] = useState(0);
-  const selected = routes[routeIndex];
-  const leg = selected?.legs[0];
+  const routesLib = useMapsLibrary('routes');
 
-  // Initialize directions service and renderer
+  // refs for the polylines and markers created with the Routes API
+  const polylinesRef = useRef<google.maps.Polyline[]>([]);
+  const markersRef = useRef<google.maps.marker.AdvancedMarkerElement[]>([]);
+
   useEffect(() => {
-    if (!routesLibrary || !map) return;
-    setDirectionsService(new routesLibrary.DirectionsService());
-    setDirectionsRenderer(
-      new routesLibrary.DirectionsRenderer({
-        draggable: true, // Only necessary for draggable markers
-        map
+    if (!routesLib || !map || !origin || !destination) return;
+
+    // cancel async operations on unmount (no AbortSignal support in Routes API)
+    let isCancelled = false;
+
+    // Clean up previous polylines & markers
+    polylinesRef.current.forEach(p => p.setMap(null));
+    polylinesRef.current = [];
+    markersRef.current.forEach(m => {
+      m.map = null;
+    });
+    markersRef.current = [];
+
+    const request: google.maps.routes.ComputeRoutesRequest = {
+      origin,
+      destination,
+      travelMode,
+      fields: ['path', 'distanceMeters', 'durationMillis', 'viewport', 'legs']
+    };
+
+    routesLib.Route.computeRoutes(request)
+      .then(async ({routes}) => {
+        if (isCancelled) return;
+        if (!routes || routes.length === 0) return;
+
+        const route = routes[0];
+
+        // Render and append polylines
+        const newPolylines = route.createPolylines();
+        newPolylines.forEach(polyline => {
+          polyline.setOptions({
+            strokeColor: '#3b82f6',
+            strokeOpacity: 0.85,
+            strokeWeight: 6
+          });
+          polyline.setMap(map);
+        });
+        polylinesRef.current = newPolylines;
+
+        // Render waypoint advanced markers
+        const newMarkers = await route.createWaypointAdvancedMarkers();
+
+        if (isCancelled) return;
+
+        newMarkers.forEach(marker => {
+          marker.map = map;
+        });
+        markersRef.current = newMarkers;
+
+        if (route.viewport) map.fitBounds(route.viewport);
       })
-    );
-  }, [routesLibrary, map]);
-
-  // Add the following useEffect to make markers draggable
-  useEffect(() => {
-    if (!directionsRenderer) return;
-
-    // Add the listener to update routes when directions change
-    const listener = directionsRenderer.addListener(
-      'directions_changed',
-      () => {
-        const result = directionsRenderer.getDirections();
-        if (result) {
-          setRoutes(result.routes);
-        }
-      }
-    );
-
-    return () => google.maps.event.removeListener(listener);
-  }, [directionsRenderer]);
-
-  // Use directions service
-  useEffect(() => {
-    if (!directionsService || !directionsRenderer) return;
-
-    directionsService
-      .route({
-        origin: '100 Front St, Toronto ON',
-        destination: '500 College St, Toronto ON',
-        travelMode: google.maps.TravelMode.DRIVING,
-        provideRouteAlternatives: true
-      })
-      .then(response => {
-        directionsRenderer.setDirections(response);
-        setRoutes(response.routes);
+      .catch(err => {
+        if (isCancelled) return;
+        console.error('Error computing routes:', err);
       });
 
-    return () => directionsRenderer.setMap(null);
-  }, [directionsService, directionsRenderer]);
+    return () => {
+      isCancelled = true;
 
-  // Update direction route
-  useEffect(() => {
-    if (!directionsRenderer) return;
-    directionsRenderer.setRouteIndex(routeIndex);
-  }, [routeIndex, directionsRenderer]);
+      // clear polylines and markers
+      polylinesRef.current.forEach(p => p.setMap(null));
+      polylinesRef.current = [];
 
-  if (!leg) return null;
+      markersRef.current.forEach(marker => {
+        marker.map = null;
+      });
+      markersRef.current = [];
+    };
+  }, [routesLib, map, origin, destination, travelMode]);
 
-  return (
-    <div className="directions">
-      <h2>{selected.summary}</h2>
-      <p>
-        {leg.start_address.split(',')[0]} to {leg.end_address.split(',')[0]}
-      </p>
-      <p>Distance: {leg.distance?.text}</p>
-      <p>Duration: {leg.duration?.text}</p>
-
-      <h2>Other Routes</h2>
-      <ul>
-        {routes.map((route, index) => (
-          <li key={route.summary}>
-            <button onClick={() => setRouteIndex(index)}>
-              {route.summary}
-            </button>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
+  return null;
 }
 
 export default App;
