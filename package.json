@@ -12,18 +12,18 @@
   "module": "dist/index.modern.mjs",
   "exports": {
     ".": {
-      "require": "./dist/index.umd.js",
       "types": "./dist/index.d.ts",
+      "require": "./dist/index.umd.js",
       "default": "./dist/index.modern.mjs"
     },
     "./server": {
-      "require": "./dist/server/index.umd.js",
       "types": "./dist/server/index.d.ts",
+      "require": "./dist/server/index.umd.js",
       "default": "./dist/server/index.modern.mjs"
     },
     "./3d": {
-      "require": "./dist/3d/index.umd.js",
       "types": "./dist/3d/index.d.ts",
+      "require": "./dist/3d/index.umd.js",
       "default": "./dist/3d/index.modern.mjs"
     },
     "./examples.css": "./dist/examples.css"
@@ -52,7 +52,9 @@
     "test:tsc:examples": "bash ./scripts/typecheck-examples.sh",
     "test:prettier": "prettier --check ./src ./examples",
     "test:unit": "jest",
-    "test": "npm-run-all -p test:linter test:prettier test:tsc -s test:unit",
+    "test:bundle": "npm run build && NODE_OPTIONS=--experimental-vm-modules jest --config jest.bundle.config.js",
+    "lint:pub": "publint",
+    "test": "npm-run-all -p test:linter test:prettier test:tsc -s test:unit test:bundle",
     "prepublishOnly": "npm run test && npm run build",
     "prepack": "npm-run-all clean build"
   },
@@ -78,14 +80,15 @@
     "react-dom": ">=16.8.0 || ^19.0 || ^19.0.0-rc"
   },
   "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.5",
     "@eslint/js": "^9.39.1",
     "@googlemaps/jest-mocks": "^2.22.8",
     "@rollup/plugin-commonjs": "^29.0.3",
     "@rollup/plugin-node-resolve": "^16.0.3",
     "@rollup/plugin-replace": "^6.0.3",
     "@rollup/plugin-typescript": "^12.3.0",
-    "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.3",
     "@types/jest": "^30.0.0",
@@ -100,6 +103,7 @@
     "jest-environment-jsdom": "^30.4.1",
     "npm-run-all": "^4.1.5",
     "prettier": "^3.9.6",
+    "publint": "^0.3.24",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "rollup": "^4.62.4",

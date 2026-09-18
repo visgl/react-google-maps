@@ -3,7 +3,7 @@ const path = require('path');
 module.exports = {
   roots: ['<rootDir>'],
   testEnvironment: 'jsdom',
-  testPathIgnorePatterns: ['/node_modules/', '/dist/', '/__utils__/'],
+  testPathIgnorePatterns: ['/node_modules/', '/dist/', '/__utils__/', '/tests/'],
   transform: {
     '^.+.tsx?$': [
       'ts-jest',
