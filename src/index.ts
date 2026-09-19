@@ -21,7 +21,6 @@ export * from './hooks/use-api-loading-status';
 export * from './hooks/use-api-is-loaded';
 export * from './hooks/use-maps-library';
 export * from './hooks/use-map';
-export * from './hooks/use-map-3d';
 export * from './libraries/lat-lng-utils';
 export * from './libraries/api-loading-status';
 export {limitTiltRange} from './libraries/limit-tilt-range';

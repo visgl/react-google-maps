@@ -27,6 +27,7 @@ import type {
 } from './components/marker-3d';
 import {Popover as PopoverImpl} from './components/popover';
 import type {PopoverProps as PopoverPropsImpl} from './components/popover';
+import {useMap3D as useMap3DImpl} from './hooks/use-map-3d';
 
 /**
  * @deprecated Import from `@vis.gl/react-google-maps/3d` instead.
@@ -112,3 +113,7 @@ export const Popover = PopoverImpl;
  * @deprecated Import from `@vis.gl/react-google-maps/3d` instead.
  */
 export type PopoverProps = PopoverPropsImpl;
+/**
+ * @deprecated Import from `@vis.gl/react-google-maps/3d` instead.
+ */
+export const useMap3D = useMap3DImpl;

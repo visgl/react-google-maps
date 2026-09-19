@@ -26,46 +26,63 @@ const plugins = [
   })
 ];
 
-const createConfig = (input, outputBase) => [
-  // ESM and UMD builds
-  {
-    input,
-    output: [
-      {
-        file: `${outputBase}.modern.mjs`,
-        format: 'es',
-        sourcemap: true
-      },
-      {
-        file: `${outputBase}.umd.js`,
-        format: 'umd',
-        name: 'ReactGoogleMaps',
-        globals: {
-          react: 'React',
-          'react-dom': 'ReactDOM',
-          'react/jsx-runtime': 'React',
-          'fast-deep-equal': 'fastDeepEqual'
-        },
-        sourcemap: true
-      }
-    ],
-    external,
-    plugins
+const entries = {
+  index: './src/index.ts',
+  'server/index': './src/server/index.ts',
+  '3d/index': './src/3d/index.ts'
+};
+
+// One ESM build for every entry, so the modules they share (the APIProvider
+// and map contexts above all) are emitted once as chunks and each entry
+// imports the same instance. Built one entry at a time, `/3d` and the root
+// each carried their own `APIProviderContext`, and a `Map3D` imported from
+// `/3d` could not see the `APIProvider` imported from the root.
+const esmConfig = {
+  input: entries,
+  output: {
+    dir: 'dist',
+    format: 'es',
+    entryFileNames: '[name].modern.mjs',
+    chunkFileNames: 'chunks/[name]-[hash].mjs',
+    sourcemap: true
   },
-  // TypeScript declarations
-  {
-    input,
-    output: {
-      file: `${outputBase}.d.ts`,
-      format: 'es'
+  external,
+  plugins
+};
+
+// UMD cannot code-split; each entry stays self-contained.
+const umdConfig = (input, outputBase) => ({
+  input,
+  output: {
+    file: `${outputBase}.umd.js`,
+    format: 'umd',
+    name: 'ReactGoogleMaps',
+    globals: {
+      react: 'React',
+      'react-dom': 'ReactDOM',
+      'react/jsx-runtime': 'React',
+      'fast-deep-equal': 'fastDeepEqual'
     },
-    external,
-    plugins: [dts()]
-  }
-];
+    sourcemap: true
+  },
+  external,
+  plugins
+});
+
+const dtsConfig = (input, outputBase) => ({
+  input,
+  output: {
+    file: `${outputBase}.d.ts`,
+    format: 'es'
+  },
+  external,
+  plugins: [dts()]
+});
 
 export default [
-  ...createConfig('./src/index.ts', './dist/index'),
-  ...createConfig('./src/server/index.ts', './dist/server/index'),
-  ...createConfig('./src/3d/index.ts', './dist/3d/index')
+  esmConfig,
+  ...Object.entries(entries).flatMap(([name, input]) => [
+    umdConfig(input, `./dist/${name}`),
+    dtsConfig(input, `./dist/${name}`)
+  ])
 ];
