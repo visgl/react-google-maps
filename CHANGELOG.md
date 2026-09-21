@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.10.1](https://github.com/visgl/react-google-maps/compare/v1.10.0...v1.10.1) (2026-09-21)
+
+
+### Bug Fixes
+
+* **build:** share one ESM module graph across the root, /server and /3d entries ([#1075](https://github.com/visgl/react-google-maps/issues/1075)) ([39569cf](https://github.com/visgl/react-google-maps/commit/39569cffa3daf072d3fa346a110fa9958704397c))
+* skip writing props the consumer never provided ([#1074](https://github.com/visgl/react-google-maps/issues/1074)) ([8775224](https://github.com/visgl/react-google-maps/commit/8775224c02e00f8d10b97ceea4c49362c5798220))
+
 ## [1.10.0](https://github.com/visgl/react-google-maps/compare/v1.9.0...v1.10.0) (2026-09-05)
 
 

@@ -1,6 +1,6 @@
 {
   "name": "@vis.gl/react-google-maps",
-  "version": "1.10.0",
+  "version": "1.10.1",
   "workspaces": [
     "website",
     "examples/*",
