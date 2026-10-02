@@ -15,7 +15,7 @@
     "build": "vite build"
   },
   "devDependencies": {
-    "@types/node": "^26.6.2",
+    "@types/node": "^26.6.3",
     "@types/react-dom": "^19.2.4"
   }
 }
