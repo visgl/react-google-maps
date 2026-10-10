@@ -562,6 +562,90 @@ describe('map events and event-props', () => {
     });
 
     expect(handleCameraChanged).not.toHaveBeenCalled();
+    expect(console.warn).toHaveBeenCalledWith(
+      expect.stringContaining('[createEvent] the map returned an invalid zoom')
+    );
+  });
+
+  test('skips camera events dispatched before the camera is initialized', async () => {
+    const listeners: Record<string, Array<() => void>> = {};
+    google.maps.event.addListener = jest.fn((_, eventName, handler) => {
+      listeners[eventName] ??= [];
+      listeners[eventName].push(handler as () => void);
+      return {remove: jest.fn()};
+    });
+    const consoleWarn = jest
+      .spyOn(console, 'warn')
+      .mockImplementation(() => {});
+
+    const handleCenterChanged = jest.fn();
+    const handleHeadingChanged = jest.fn();
+    const handleTiltChanged = jest.fn();
+
+    render(
+      <GoogleMap
+        defaultBounds={{north: 45, east: 0, south: 0, west: 45}}
+        onCenterChanged={handleCenterChanged}
+        onHeadingChanged={handleHeadingChanged}
+        onTiltChanged={handleTiltChanged}
+      />,
+      {wrapper}
+    );
+
+    await waitFor(() => expect(screen.getByTestId('map')).toBeInTheDocument());
+
+    const mapInstance = jest.mocked(mockInstances.get(google.maps.Map).at(-1)!);
+
+    // when fitBounds() is called on a map without center and zoom, the
+    // tilt_changed and heading_changed events are dispatched before
+    // the center is set, and center_changed is dispatched before the zoom
+    // is set.
+    jest.mocked(mapInstance.getCenter).mockReturnValue(undefined);
+    jest.mocked(mapInstance.getBounds).mockReturnValue(undefined);
+    jest.mocked(mapInstance.getZoom).mockReturnValue(undefined);
+
+    act(() => {
+      listeners.tilt_changed.forEach(listener => listener());
+      listeners.heading_changed.forEach(listener => listener());
+    });
+
+    jest.mocked(mapInstance.getCenter).mockReturnValue({
+      toJSON: () => ({lat: 22.5, lng: 22.5})
+    } as google.maps.LatLng);
+
+    act(() => {
+      listeners.center_changed.forEach(listener => listener());
+    });
+
+    expect(handleTiltChanged).not.toHaveBeenCalled();
+    expect(handleHeadingChanged).not.toHaveBeenCalled();
+    expect(handleCenterChanged).not.toHaveBeenCalled();
+    expect(consoleWarn).not.toHaveBeenCalled();
+
+    // once the camera is fully initialized, events are emitted as usual
+    jest.mocked(mapInstance.getBounds).mockReturnValue({
+      toJSON: () => ({north: 45, east: 45, south: 0, west: 0})
+    } as google.maps.LatLngBounds);
+    jest.mocked(mapInstance.getZoom).mockReturnValue(3);
+
+    act(() => {
+      listeners.center_changed.forEach(listener => listener());
+    });
+
+    expect(handleCenterChanged).toHaveBeenCalledTimes(1);
+    expect(handleCenterChanged).toHaveBeenCalledWith(
+      expect.objectContaining({
+        type: 'center_changed',
+        detail: {
+          center: {lat: 22.5, lng: 22.5},
+          zoom: 3,
+          heading: 0,
+          tilt: 0,
+          bounds: {north: 45, east: 45, south: 0, west: 0}
+        }
+      })
+    );
+    expect(consoleWarn).not.toHaveBeenCalled();
   });
 });
 
