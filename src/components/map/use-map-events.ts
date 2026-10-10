@@ -101,11 +101,19 @@ function createMapEvent(
     const tilt = map.getTilt() || 0;
     const bounds = map.getBounds();
 
-    if (!center || !bounds || !Number.isFinite(zoom)) {
+    // While the initial viewport is being set up (e.g. when it is specified
+    // via `defaultBounds` and applied using `fitBounds()`), the map already
+    // dispatches tilt_changed, heading_changed and center_changed events
+    // before the center and zoom are known. Since these don't describe a
+    // complete camera state yet, they are skipped. The zoom_changed and
+    // bounds_changed events will follow once the map is fully initialized.
+    if (!center || !bounds || zoom === undefined) return null;
+
+    if (!Number.isFinite(zoom)) {
       console.warn(
-        '[createEvent] at least one of the values from the map ' +
-          'returned undefined. This is not expected to happen. Please ' +
-          'report an issue at https://github.com/visgl/react-google-maps/issues/new'
+        '[createEvent] the map returned an invalid zoom value. This is ' +
+          'not expected to happen. Please report an issue at ' +
+          'https://github.com/visgl/react-google-maps/issues/new'
       );
 
       return null;
