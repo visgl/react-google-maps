@@ -92,6 +92,70 @@ afterEach(() => {
 });
 
 describe('Map3D', () => {
+  test('defaults to ROADMAP when mode is explicitly undefined', async () => {
+    render(
+      <APIProviderContext.Provider value={createMockContextValue()}>
+        <Map3D mode={undefined} />
+      </APIProviderContext.Provider>
+    );
+
+    await waitFor(() => {
+      expect(createMap3DSpy).toHaveBeenCalled();
+      expect(createMap3DSpy.mock.calls[0][0].mode).toBe('ROADMAP');
+    });
+  });
+
+  test.each([MapMode.SATELLITE, MapMode.HYBRID])(
+    'defaults to ROADMAP, accepts %s, and restores the default when mode is removed',
+    async mode => {
+      const contextValue = createMockContextValue();
+      const {rerender} = render(
+        <APIProviderContext.Provider value={contextValue}>
+          <Map3D />
+        </APIProviderContext.Provider>
+      );
+
+      await waitFor(() => {
+        expect(createMap3DSpy).toHaveBeenCalled();
+      });
+      const map3dInstance = createMap3DSpy.mock.calls[0][0];
+      await waitFor(() => {
+        expect(map3dInstance.mode).toBe('ROADMAP');
+      });
+
+      const renderWithMode = (mode?: MapMode) => (
+        <APIProviderContext.Provider value={contextValue}>
+          <Map3D mode={mode} />
+        </APIProviderContext.Provider>
+      );
+
+      rerender(renderWithMode(mode));
+      await waitFor(() => {
+        expect(map3dInstance.mode).toBe(mode);
+      });
+
+      rerender(
+        <APIProviderContext.Provider value={contextValue}>
+          <Map3D />
+        </APIProviderContext.Provider>
+      );
+      await waitFor(() => {
+        expect(map3dInstance.mode).toBe('ROADMAP');
+      });
+
+      rerender(renderWithMode(mode));
+      await waitFor(() => {
+        expect(map3dInstance.mode).toBe(mode);
+      });
+
+      rerender(renderWithMode(undefined));
+      await waitFor(() => {
+        expect(map3dInstance.mode).toBe('ROADMAP');
+      });
+      expect(createMap3DSpy).toHaveBeenCalledTimes(1);
+    }
+  );
+
   test('accepts ROADMAP as a literal and a constant when updating the mode', async () => {
     const contextValue = createMockContextValue();
     const {rerender} = render(

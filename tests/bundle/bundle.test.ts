@@ -26,7 +26,7 @@ describe('Bundle Integration', () => {
         React.createElement(
           root.APIProvider,
           {apiKey: 'test-api-key'},
-          React.createElement(threeD.Map3D, {mode: 'ROADMAP'})
+          React.createElement(threeD.Map3D, {})
         )
       );
     }).not.toThrow();

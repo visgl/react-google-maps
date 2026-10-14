@@ -161,7 +161,9 @@ using the [`useMap3D()`](../hooks/use-map-3d.md) hook.
 #### `mode`: MapMode
 
 Specifies how the 3D map should be rendered. Can be `'HYBRID'`, `'ROADMAP'`, or
-`'SATELLITE'`, or use the `MapMode` constants.
+`'SATELLITE'`, or use the `MapMode` constants. This prop is optional and defaults
+to `'ROADMAP'`. Removing the prop or setting it to `undefined` restores the
+roadmap mode.
 
 ```tsx
 import {Map3D, MapMode} from '@vis.gl/react-google-maps';

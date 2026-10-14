@@ -33,7 +33,9 @@ export function useMap3DOptions(
   // Filter props to only include valid option keys, memoized to avoid
   // creating a new object on every render
   const options = useMemo(() => {
-    const result: Record<string, unknown> = {};
+    const result: Record<string, unknown> = {
+      mode: props.mode ?? 'ROADMAP'
+    };
     const keys = Object.keys(props);
 
     for (const key of keys) {

@@ -121,10 +121,10 @@ export type Map3DProps = PropsWithChildren<
       center?: google.maps.LatLngAltitude | google.maps.LatLngAltitudeLiteral;
 
       /**
-       * Specifies a mode the map should be rendered in.
+       * Specifies a mode the map should be rendered in. Defaults to ROADMAP.
        * Import MapMode from '@vis.gl/react-google-maps' to use this.
        */
-      mode: MapMode;
+      mode?: MapMode;
 
       /**
        * Specifies how gesture events should be handled on the map.
