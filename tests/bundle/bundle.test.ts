@@ -14,13 +14,19 @@ describe('Bundle Integration', () => {
     expect(root.useMap3D).toBe(threeD.useMap3D);
   });
 
+  test('ROADMAP mode is exported from both entrypoints', () => {
+    expect(root.MapMode.ROADMAP).toBe('ROADMAP');
+    expect(threeD.MapMode.ROADMAP).toBe('ROADMAP');
+    expect(root.MapMode).toBe(threeD.MapMode);
+  });
+
   test('<Map3D> from /3d renders inside <APIProvider> from root without throwing', () => {
     expect(() => {
       renderToString(
         React.createElement(
           root.APIProvider,
           {apiKey: 'test-api-key'},
-          React.createElement(threeD.Map3D, {mode: 'SATELLITE'})
+          React.createElement(threeD.Map3D, {})
         )
       );
     }).not.toThrow();

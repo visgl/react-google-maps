@@ -160,8 +160,10 @@ using the [`useMap3D()`](../hooks/use-map-3d.md) hook.
 
 #### `mode`: MapMode
 
-Specifies how the 3D map should be rendered. Can be `'HYBRID'` or `'SATELLITE'`,
-or use the `MapMode` constants.
+Specifies how the 3D map should be rendered. Can be `'HYBRID'`, `'ROADMAP'`, or
+`'SATELLITE'`, or use the `MapMode` constants. This prop is optional and defaults
+to `'ROADMAP'`. Removing the prop or setting it to `undefined` restores the
+roadmap mode.
 
 ```tsx
 import {Map3D, MapMode} from '@vis.gl/react-google-maps';
@@ -170,6 +172,8 @@ import {Map3D, MapMode} from '@vis.gl/react-google-maps';
 ```
 
 - **`HYBRID`**: Displays a transparent layer of major streets on satellite imagery.
+- **`ROADMAP`**: Displays a normal street map. Requires `<APIProvider version="beta">`
+  or `version="alpha"`, as described in the [Google Maps API reference](https://developers.google.com/maps/documentation/javascript/reference/3d-map#MapMode.ROADMAP).
 - **`SATELLITE`**: Displays satellite or photorealistic imagery.
 
 #### `gestureHandling`: GestureHandling
