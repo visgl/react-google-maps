@@ -30,9 +30,11 @@ export type {
 export const MapMode = {
   /** This map mode displays a transparent layer of major streets on satellite imagery. */
   HYBRID: 'HYBRID',
+  /** This map mode displays a normal street map. Available in the beta channel. */
+  ROADMAP: 'ROADMAP',
   /** This map mode displays satellite or photorealistic imagery. */
   SATELLITE: 'SATELLITE'
-} as const;
+} as const satisfies Record<string, google.maps.maps3d.MapModeString>;
 export type MapMode = (typeof MapMode)[keyof typeof MapMode];
 
 /**

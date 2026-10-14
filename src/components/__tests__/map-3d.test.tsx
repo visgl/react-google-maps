@@ -3,7 +3,7 @@ import {render, screen, waitFor} from '@testing-library/react';
 import '@testing-library/jest-dom';
 import React from 'react';
 
-import {Map3D} from '../map-3d';
+import {Map3D, MapMode} from '../map-3d';
 import {useMapsLibrary} from '../../hooks/use-maps-library';
 import {APIProviderContext} from '../api-provider';
 import {APILoadingStatus} from '../../libraries/api-loading-status';
@@ -92,6 +92,43 @@ afterEach(() => {
 });
 
 describe('Map3D', () => {
+  test('accepts ROADMAP as a literal and a constant when updating the mode', async () => {
+    const contextValue = createMockContextValue();
+    const {rerender} = render(
+      <APIProviderContext.Provider value={contextValue}>
+        <Map3D mode="ROADMAP" />
+      </APIProviderContext.Provider>
+    );
+
+    await waitFor(() => {
+      expect(createMap3DSpy).toHaveBeenCalled();
+    });
+
+    const map3dInstance = createMap3DSpy.mock.calls[0][0];
+    await waitFor(() => {
+      expect(map3dInstance.mode).toBe('ROADMAP');
+    });
+
+    rerender(
+      <APIProviderContext.Provider value={contextValue}>
+        <Map3D mode={MapMode.SATELLITE} />
+      </APIProviderContext.Provider>
+    );
+    await waitFor(() => {
+      expect(map3dInstance.mode).toBe('SATELLITE');
+    });
+
+    rerender(
+      <APIProviderContext.Provider value={contextValue}>
+        <Map3D mode={MapMode.ROADMAP} />
+      </APIProviderContext.Provider>
+    );
+    await waitFor(() => {
+      expect(map3dInstance.mode).toBe('ROADMAP');
+    });
+    expect(createMap3DSpy).toHaveBeenCalledTimes(1);
+  });
+
   test('creates gmp-map-3d element when rendered', async () => {
     render(
       <APIProviderContext.Provider value={createMockContextValue()}>
