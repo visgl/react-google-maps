@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.2](https://github.com/visgl/react-google-maps/compare/v1.10.1...v1.10.2) (2026-10-15)
+
+
+### Bug Fixes
+
+* support ROADMAP and make it the default Map3D mode ([#1094](https://github.com/visgl/react-google-maps/issues/1094)) ([196f65b](https://github.com/visgl/react-google-maps/commit/196f65b5521574cb56d7b9af579ddbbe19d73e46))
+
 ## [1.10.1](https://github.com/visgl/react-google-maps/compare/v1.10.0...v1.10.1) (2026-09-21)
 
 
