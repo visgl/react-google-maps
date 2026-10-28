@@ -66,6 +66,13 @@ export function useMapCameraParams(
 
     if (needsUpdate) {
       map.moveCamera(nextCamera);
+
+      // Keep the tracked state in sync with the values sent to the map. The
+      // map will normally emit a bounds_changed event shortly afterwards, but
+      // updating the ref here also covers renders that happen before that
+      // event. This is important for controlled camera props that are fed back
+      // from camera-change events.
+      Object.assign(cameraStateRef.current, nextCamera);
     }
   });
 }
