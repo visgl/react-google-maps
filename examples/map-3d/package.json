@@ -2,7 +2,9 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@turf/turf": "^7.4.0",
+    "@turf/destination": "^7.4.0",
+    "@turf/helpers": "^7.4.0",
+    "@turf/invariant": "^7.4.0",
     "@vis.gl/react-google-maps": "*",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
