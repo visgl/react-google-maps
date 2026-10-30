@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.10.2](https://github.com/visgl/react-google-maps/compare/v1.10.1...v1.10.2) (2026-10-30)
+
+
+### Bug Fixes
+
+* preserve map dragging with controlled camera props ([#1108](https://github.com/visgl/react-google-maps/issues/1108)) ([7758d7c](https://github.com/visgl/react-google-maps/commit/7758d7c1e9582e0bbe37eb2f23402e6f1d98cd69)), closes [#425](https://github.com/visgl/react-google-maps/issues/425)
+* support ROADMAP and make it the default Map3D mode ([#1094](https://github.com/visgl/react-google-maps/issues/1094)) ([196f65b](https://github.com/visgl/react-google-maps/commit/196f65b5521574cb56d7b9af579ddbbe19d73e46))
+
 ## [1.10.1](https://github.com/visgl/react-google-maps/compare/v1.10.0...v1.10.1) (2026-09-21)
 
 
