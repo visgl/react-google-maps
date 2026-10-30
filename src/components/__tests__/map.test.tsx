@@ -400,7 +400,28 @@ describe('camera configuration', () => {
 
   test.todo('initial camera state is passed via mapOptions, not moveCamera');
   test.todo('updated camera state is passed to moveCamera');
-  test.todo("re-renders with unchanged camera state don't trigger moveCamera");
+
+  test('does not repeatedly apply controlled camera props', async () => {
+    const view = render(
+      <GoogleMap center={{lat: 53.55, lng: 10.05}} defaultZoom={8} />,
+      {wrapper}
+    );
+
+    await waitFor(() => expect(screen.getByTestId('map')).toBeInTheDocument());
+
+    const mapInstance = jest.mocked(mockInstances.get(google.maps.Map).at(-1)!);
+    jest.mocked(mapInstance.moveCamera).mockClear();
+
+    view.rerender(<GoogleMap center={{lat: 54, lng: 11}} defaultZoom={8} />);
+
+    expect(mapInstance.moveCamera).toHaveBeenCalledWith({
+      center: {lat: 54, lng: 11}
+    });
+
+    view.rerender(<GoogleMap center={{lat: 54, lng: 11}} defaultZoom={8} />);
+
+    expect(mapInstance.moveCamera).toHaveBeenCalledTimes(1);
+  });
 
   test("invalid camera events don't overwrite the last known camera state", async () => {
     const listeners: Record<string, Array<() => void>> = {};
