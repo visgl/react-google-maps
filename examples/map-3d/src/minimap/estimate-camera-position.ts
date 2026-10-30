@@ -1,5 +1,7 @@
 import {Map3DCameraProps} from '../app';
-import {destination, getCoords, point} from '@turf/turf';
+import {destination} from '@turf/destination';
+import {point} from '@turf/helpers';
+import {getCoords} from '@turf/invariant';
 
 export function estimateCameraPosition(
   camera3dProps: Map3DCameraProps
