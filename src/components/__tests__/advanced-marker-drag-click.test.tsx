@@ -137,6 +137,7 @@ test.each([true, false])(
 
     dragEnd(event);
     expect(onDragEnd).toHaveBeenCalledTimes(withDragEndHandler ? 1 : 0);
+    now.mockReturnValue(1000 + MARKER_DRAG_CLICK_SUPPRESSION_MS / 2);
     otherClick(event);
     expect(onOtherMapClick).toHaveBeenCalledTimes(1);
     click(event);
@@ -149,8 +150,15 @@ test.each([true, false])(
     click(event);
     expect(onClick).toHaveBeenCalledTimes(2);
 
+    now.mockReturnValue(2000);
     dragEnd(event);
-    now.mockReturnValue(1000 + MARKER_DRAG_CLICK_SUPPRESSION_MS + 1);
+    now.mockReturnValue(2000 + MARKER_DRAG_CLICK_SUPPRESSION_MS);
+    click(event);
+    expect(onClick).toHaveBeenCalledTimes(2);
+
+    now.mockReturnValue(3000);
+    dragEnd(event);
+    now.mockReturnValue(3000 + MARKER_DRAG_CLICK_SUPPRESSION_MS + 1);
     click(event);
     click(event);
     expect(onClick).toHaveBeenCalledTimes(4);
