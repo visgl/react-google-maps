@@ -27,6 +27,7 @@ import {useDomEventListener} from '../hooks/use-dom-event-listener';
 import {CollisionBehavior} from '../constants';
 import {globalStyleManager} from '../libraries/global-style-manager';
 import {isVersionGreaterEqual} from '../libraries/version-utils';
+import {noteAdvancedMarkerDragEnded} from '../libraries/marker-drag-click-guard';
 
 export interface AdvancedMarkerContextValue {
   marker: google.maps.marker.AdvancedMarkerElement;
@@ -328,7 +329,14 @@ function useAdvancedMarker(props: AdvancedMarkerProps) {
 
   useMapsEventListener(marker, 'drag', onDrag);
   useMapsEventListener(marker, 'dragstart', onDragStart);
-  useMapsEventListener(marker, 'dragend', onDragEnd);
+  useMapsEventListener(
+    marker,
+    'dragend',
+    (event: google.maps.MapMouseEvent) => {
+      if (map) noteAdvancedMarkerDragEnded(map);
+      onDragEnd?.(event);
+    }
+  );
 
   useDomEventListener(marker, 'gmp-click', onClick);
   useDomEventListener(marker, 'keydown', onKeyDown);

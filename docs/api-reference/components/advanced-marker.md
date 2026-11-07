@@ -253,6 +253,7 @@ This event is repeatedly fired while the user drags the marker.
 #### `onDragEnd`: (e: [google.maps.MapMouseEvent][gmp-map-mouse-ev]) => void
 
 This event is fired when the user stops dragging the marker.
+The first map click within 100 ms after the drag ends is filtered from the parent `Map`'s `onClick`, even when no `onDragEnd` handler is provided.
 
 ## Context
 

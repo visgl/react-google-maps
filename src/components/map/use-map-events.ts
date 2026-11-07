@@ -1,4 +1,5 @@
 import {useEffect} from 'react';
+import {consumeMapClickSuppressedByMarkerDrag} from '../../libraries/marker-drag-click-guard';
 
 /**
  * Handlers for all events that could be emitted by map-instances.
@@ -63,6 +64,12 @@ export function useMapEvents(
         map,
         eventType,
         (ev?: google.maps.MapMouseEvent | google.maps.IconMouseEvent) => {
+          if (
+            eventType === 'click' &&
+            consumeMapClickSuppressedByMarkerDrag(map)
+          )
+            return;
+
           const mapEvent = createMapEvent(eventType, map, ev);
           if (mapEvent) handler(mapEvent);
         }
