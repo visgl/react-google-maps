@@ -320,6 +320,8 @@ Based on the specific event, there is also additional information in the
 
 #### Mapping of Maps JavaScript API Event names to React props
 
+For `click` / `onClick`, the first click within 100 ms after an `AdvancedMarker` drag ends on the same map is filtered out.
+
 | Google Maps Event                 | React Prop                              | Event Type              |
 | --------------------------------- | --------------------------------------- | ----------------------- |
 | `bounds_changed`                  | `onBoundsChanged` and `onCameraChanged` | `MapCameraChangedEvent` |
