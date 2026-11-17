@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@vis.gl/react-google-maps": "*",
-    "next": "^16.4.3"
+    "next": "^16.4.5"
   },
   "devDependencies": {
     "@types/node": "^26.6.5",
