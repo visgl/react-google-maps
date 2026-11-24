@@ -164,6 +164,46 @@ function usePolygon(props: PolygonProps) {
     }
   });
 
+  useEffect(() => {
+    if (!polygon) return;
+
+    setMapObjectOptions(polygon, polygonOptions);
+  }, [polygon, polygonOptions]);
+
+  // Sync controlled paths prop with the polygon instance
+  useEffect(() => {
+    if (!polygon || !paths) return;
+    if (!Array.isArray(paths)) return;
+
+    // Normalize to nested array for comparison
+    const firstPath = paths[0];
+    const normalizedPaths = Array.isArray(firstPath) ? paths : [paths];
+    const currentPaths = polygon.getPaths();
+
+    if (
+      !pathsEquals(
+        normalizedPaths as google.maps.LatLngLiteral[][],
+        currentPaths
+      )
+    ) {
+      isUpdatingRef.current = true;
+      polygon.setPaths(paths);
+      isUpdatingRef.current = false;
+    }
+  }, [polygon, paths]);
+
+  // Handle encoded paths
+  useEffect(() => {
+    if (!polygon || !encodedPaths || !geometryLibrary) return;
+
+    isUpdatingRef.current = true;
+    const decodedPaths = encodedPaths.map(encodedPath =>
+      geometryLibrary.encoding.decodePath(encodedPath)
+    );
+    polygon.setPaths(decodedPaths);
+    isUpdatingRef.current = false;
+  }, [polygon, encodedPaths, geometryLibrary]);
+
   // Subscribe to MVCArray events for vertex-level edits
   useEffect(() => {
     if (!polygon || !onPathsChanged) return;
@@ -230,49 +270,10 @@ function usePolygon(props: PolygonProps) {
     onPathsChanged,
     paths,
     encodedPaths,
+    geometryLibrary,
     polygonOptions.editable,
     polygonOptions.draggable
   ]);
-
-  useEffect(() => {
-    if (!polygon) return;
-
-    setMapObjectOptions(polygon, polygonOptions);
-  }, [polygon, polygonOptions]);
-
-  // Sync controlled paths prop with the polygon instance
-  useEffect(() => {
-    if (!polygon || !paths) return;
-    if (!Array.isArray(paths)) return;
-
-    // Normalize to nested array for comparison
-    const firstPath = paths[0];
-    const normalizedPaths = Array.isArray(firstPath) ? paths : [paths];
-    const currentPaths = polygon.getPaths();
-
-    if (
-      !pathsEquals(
-        normalizedPaths as google.maps.LatLngLiteral[][],
-        currentPaths
-      )
-    ) {
-      isUpdatingRef.current = true;
-      polygon.setPaths(paths);
-      isUpdatingRef.current = false;
-    }
-  }, [polygon, paths]);
-
-  // Handle encoded paths
-  useEffect(() => {
-    if (!polygon || !encodedPaths || !geometryLibrary) return;
-
-    isUpdatingRef.current = true;
-    const decodedPaths = encodedPaths.map(encodedPath =>
-      geometryLibrary.encoding.decodePath(encodedPath)
-    );
-    polygon.setPaths(decodedPaths);
-    isUpdatingRef.current = false;
-  }, [polygon, encodedPaths, geometryLibrary]);
 
   return polygon;
 }

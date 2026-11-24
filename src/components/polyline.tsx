@@ -150,37 +150,6 @@ function usePolyline(props: PolylineProps) {
     }
   });
 
-  // Subscribe to MVCArray events for vertex-level edits
-  useEffect(() => {
-    if (!polyline || !onPathChanged) return;
-
-    const mvcPath = polyline.getPath();
-    if (!mvcPath) return;
-
-    const handlePathChange = () => {
-      if (!isUpdatingRef.current) {
-        onPathChanged(mvcPath.getArray());
-      }
-    };
-
-    const listeners = [
-      google.maps.event.addListener(mvcPath, 'insert_at', handlePathChange),
-      google.maps.event.addListener(mvcPath, 'remove_at', handlePathChange),
-      google.maps.event.addListener(mvcPath, 'set_at', handlePathChange)
-    ];
-
-    return () => {
-      listeners.forEach(listener => listener.remove());
-    };
-  }, [
-    polyline,
-    onPathChanged,
-    path,
-    encodedPath,
-    polylineOptions.editable,
-    polylineOptions.draggable
-  ]);
-
   useEffect(() => {
     if (!polyline) return;
 
@@ -208,6 +177,38 @@ function usePolyline(props: PolylineProps) {
     polyline.setPath(decodedPath);
     isUpdatingRef.current = false;
   }, [polyline, encodedPath, geometryLibrary]);
+
+  // Subscribe to MVCArray events for vertex-level edits
+  useEffect(() => {
+    if (!polyline || !onPathChanged) return;
+
+    const mvcPath = polyline.getPath();
+    if (!mvcPath) return;
+
+    const handlePathChange = () => {
+      if (!isUpdatingRef.current) {
+        onPathChanged(mvcPath.getArray());
+      }
+    };
+
+    const listeners = [
+      google.maps.event.addListener(mvcPath, 'insert_at', handlePathChange),
+      google.maps.event.addListener(mvcPath, 'remove_at', handlePathChange),
+      google.maps.event.addListener(mvcPath, 'set_at', handlePathChange)
+    ];
+
+    return () => {
+      listeners.forEach(listener => listener.remove());
+    };
+  }, [
+    polyline,
+    onPathChanged,
+    path,
+    encodedPath,
+    geometryLibrary,
+    polylineOptions.editable,
+    polylineOptions.draggable
+  ]);
 
   return polyline;
 }
