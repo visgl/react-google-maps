@@ -4,9 +4,11 @@ import {cleanup, render} from '@testing-library/react';
 
 import {Polygon} from '../polygon';
 import {useMap} from '../../hooks/use-map';
+import {useMapsLibrary} from '../../hooks/use-maps-library';
 import MockedFunction = jest.MockedFunction;
 
 jest.mock('../../hooks/use-map');
+jest.mock('../../hooks/use-maps-library');
 
 let useMapMock: jest.MockedFn<typeof useMap>;
 let mapInstance: google.maps.Map;
@@ -19,6 +21,7 @@ beforeEach(() => {
   useMapMock = jest.mocked(useMap);
   mapInstance = new google.maps.Map(document.createElement('div'));
   useMapMock.mockReturnValue(mapInstance);
+  jest.mocked(useMapsLibrary).mockReturnValue(null);
 
   // overwrite polygon mock so we can spy on the constructor
   createPolygonSpy = jest.fn();
@@ -239,4 +242,138 @@ test('polygon should call onPathsChanged on dragend', () => {
     'dragend',
     expect.any(Function)
   );
+});
+
+type FakeMvcArray<T> = {
+  getLength: () => number;
+  getAt: (index: number) => T;
+  getArray: () => T[];
+};
+
+function createFakeMvcArray<T>(items: T[]): FakeMvcArray<T> {
+  return {
+    getLength: () => items.length,
+    getAt: (index: number) => items[index],
+    getArray: () => items
+  };
+}
+
+function createFakeMvcPaths(paths: google.maps.LatLngLiteral[][]) {
+  return createFakeMvcArray(paths.map(path => createFakeMvcArray(path)));
+}
+
+function trackPolygonPaths(initialPaths: google.maps.LatLngLiteral[][]) {
+  const state = {current: createFakeMvcPaths(initialPaths)};
+
+  google.maps.Polygon = class extends google.maps.Polygon {
+    constructor(opts?: google.maps.PolygonOptions | null) {
+      super(opts);
+      this.getPaths = jest.fn(
+        () =>
+          state.current as unknown as google.maps.MVCArray<
+            google.maps.MVCArray<google.maps.LatLng>
+          >
+      );
+      this.setPaths = jest.fn(newPaths => {
+        state.current = createFakeMvcPaths(
+          newPaths as google.maps.LatLngLiteral[][]
+        );
+      });
+    }
+  };
+
+  return state;
+}
+
+function getListener(target: unknown, eventName: string) {
+  const addListenerMock = jest.mocked(google.maps.event.addListener);
+  const call = addListenerMock.mock.calls
+    .filter(([t, name]) => t === target && name === eventName)
+    .at(-1);
+
+  return call?.[2] as (() => void) | undefined;
+}
+
+test('polygon should listen to the paths set by a controlled paths update', () => {
+  const handlePathsChanged = jest.fn();
+  const initialPaths = [
+    [
+      {lat: 1, lng: 2},
+      {lat: 3, lng: 4},
+      {lat: 5, lng: 6}
+    ]
+  ];
+  const updatedPaths = [
+    [
+      {lat: 7, lng: 8},
+      {lat: 9, lng: 10},
+      {lat: 11, lng: 12}
+    ]
+  ];
+  const state = trackPolygonPaths(initialPaths);
+
+  const {rerender} = render(
+    <Polygon
+      paths={initialPaths}
+      editable
+      onPathsChanged={handlePathsChanged}
+    />
+  );
+
+  rerender(
+    <Polygon
+      paths={updatedPaths}
+      editable
+      onPathsChanged={handlePathsChanged}
+    />
+  );
+
+  const [polygon] = mockInstances.get(google.maps.Polygon);
+  expect(polygon.setPaths).toHaveBeenCalledWith(updatedPaths);
+
+  const listener = getListener(state.current.getAt(0), 'set_at');
+  expect(listener).toBeDefined();
+
+  listener!();
+  expect(handlePathsChanged).toHaveBeenCalledWith([updatedPaths[0]]);
+});
+
+test('polygon should listen to the paths decoded once the geometry library loads', () => {
+  const handlePathsChanged = jest.fn();
+  const decodedPaths = [
+    {lat: 1, lng: 2},
+    {lat: 3, lng: 4},
+    {lat: 5, lng: 6}
+  ];
+  const encodedPaths = ['encoded'];
+  const state = trackPolygonPaths([]);
+
+  const {rerender} = render(
+    <Polygon
+      encodedPaths={encodedPaths}
+      editable
+      onPathsChanged={handlePathsChanged}
+    />
+  );
+
+  jest.mocked(useMapsLibrary).mockReturnValue({
+    encoding: {decodePath: jest.fn(() => decodedPaths)}
+  } as unknown as google.maps.GeometryLibrary);
+
+  rerender(
+    <Polygon
+      encodedPaths={encodedPaths}
+      editable
+      onPathsChanged={handlePathsChanged}
+    />
+  );
+
+  const [polygon] = mockInstances.get(google.maps.Polygon);
+  expect(polygon.setPaths).toHaveBeenCalledWith([decodedPaths]);
+
+  const listener = getListener(state.current.getAt(0), 'set_at');
+  expect(listener).toBeDefined();
+
+  listener!();
+  expect(handlePathsChanged).toHaveBeenCalledWith([decodedPaths]);
 });

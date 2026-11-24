@@ -4,9 +4,11 @@ import {cleanup, render} from '@testing-library/react';
 
 import {Polyline} from '../polyline';
 import {useMap} from '../../hooks/use-map';
+import {useMapsLibrary} from '../../hooks/use-maps-library';
 import MockedFunction = jest.MockedFunction;
 
 jest.mock('../../hooks/use-map');
+jest.mock('../../hooks/use-maps-library');
 
 let useMapMock: jest.MockedFn<typeof useMap>;
 let mapInstance: google.maps.Map;
@@ -19,6 +21,7 @@ beforeEach(() => {
   useMapMock = jest.mocked(useMap);
   mapInstance = new google.maps.Map(document.createElement('div'));
   useMapMock.mockReturnValue(mapInstance);
+  jest.mocked(useMapsLibrary).mockReturnValue(null);
 
   // overwrite polyline mock so we can spy on the constructor
   createPolylineSpy = jest.fn();
@@ -202,4 +205,110 @@ test('polyline should call onPathChanged on dragend', () => {
     'dragend',
     expect.any(Function)
   );
+});
+
+function createFakeMvcPath(path: google.maps.LatLngLiteral[]) {
+  return {
+    getLength: () => path.length,
+    getAt: (index: number) => path[index],
+    getArray: () => path
+  };
+}
+
+function trackPolylinePath(initialPath: google.maps.LatLngLiteral[]) {
+  const state = {current: createFakeMvcPath(initialPath)};
+
+  google.maps.Polyline = class extends google.maps.Polyline {
+    constructor(opts?: google.maps.PolylineOptions | null) {
+      super(opts);
+      this.getPath = jest.fn(
+        () =>
+          state.current as unknown as google.maps.MVCArray<google.maps.LatLng>
+      );
+      this.setPath = jest.fn(newPath => {
+        state.current = createFakeMvcPath(
+          newPath as google.maps.LatLngLiteral[]
+        );
+      });
+    }
+  };
+
+  return state;
+}
+
+function getListener(target: unknown, eventName: string) {
+  const addListenerMock = jest.mocked(google.maps.event.addListener);
+  const call = addListenerMock.mock.calls
+    .filter(([t, name]) => t === target && name === eventName)
+    .at(-1);
+
+  return call?.[2] as (() => void) | undefined;
+}
+
+test('polyline should listen to the path set by a controlled path update', () => {
+  const handlePathChanged = jest.fn();
+  const initialPath = [
+    {lat: 1, lng: 2},
+    {lat: 3, lng: 4}
+  ];
+  const updatedPath = [
+    {lat: 5, lng: 6},
+    {lat: 7, lng: 8}
+  ];
+  const state = trackPolylinePath(initialPath);
+
+  const {rerender} = render(
+    <Polyline path={initialPath} editable onPathChanged={handlePathChanged} />
+  );
+
+  rerender(
+    <Polyline path={updatedPath} editable onPathChanged={handlePathChanged} />
+  );
+
+  const [polyline] = mockInstances.get(google.maps.Polyline);
+  expect(polyline.setPath).toHaveBeenCalledWith(updatedPath);
+
+  const listener = getListener(state.current, 'set_at');
+  expect(listener).toBeDefined();
+
+  listener!();
+  expect(handlePathChanged).toHaveBeenCalledWith(updatedPath);
+});
+
+test('polyline should listen to the path decoded once the geometry library loads', () => {
+  const handlePathChanged = jest.fn();
+  const decodedPath = [
+    {lat: 1, lng: 2},
+    {lat: 3, lng: 4}
+  ];
+  const state = trackPolylinePath([]);
+
+  const {rerender} = render(
+    <Polyline
+      encodedPath="encoded"
+      editable
+      onPathChanged={handlePathChanged}
+    />
+  );
+
+  jest.mocked(useMapsLibrary).mockReturnValue({
+    encoding: {decodePath: jest.fn(() => decodedPath)}
+  } as unknown as google.maps.GeometryLibrary);
+
+  rerender(
+    <Polyline
+      encodedPath="encoded"
+      editable
+      onPathChanged={handlePathChanged}
+    />
+  );
+
+  const [polyline] = mockInstances.get(google.maps.Polyline);
+  expect(polyline.setPath).toHaveBeenCalledWith(decodedPath);
+
+  const listener = getListener(state.current, 'set_at');
+  expect(listener).toBeDefined();
+
+  listener!();
+  expect(handlePathChanged).toHaveBeenCalledWith(decodedPath);
 });
